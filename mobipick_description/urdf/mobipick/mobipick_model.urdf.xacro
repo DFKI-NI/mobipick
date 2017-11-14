@@ -25,10 +25,10 @@
   <xacro:structure prefix="" height="0.1" />
 
   <!-- arm -->
-  <xacro:ur5_robot prefix="" joint_limited="true"/>
+  <xacro:ur5_robot prefix="ur5_" joint_limited="true"/>
 
   <!-- sensor -->
-  <xacro:robotiq_ft_300 parent="tool0" prefix="" >
+  <xacro:robotiq_ft_300 parent="ur5_tool0" prefix="" >
       <pose xyz="0 0 0" rpy="0 0 0" />
       <!-- <pose xyz="0 0 0.009" rpy="0 0 0" /> -->
   </xacro:robotiq_ft_300>
@@ -51,7 +51,7 @@
 
   <joint name="${prefix}struct_ur5_joint" type="fixed">
     <parent link="StructBaseSupport" />
-    <child link = "base_link" />
+    <child link = "ur5_base_link" />
     <origin xyz="0.0 0.0 0.0025" rpy="0.0 0.0 0.0" />
   </joint>
 
