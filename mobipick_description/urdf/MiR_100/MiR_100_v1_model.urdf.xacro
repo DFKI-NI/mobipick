@@ -5,16 +5,5 @@
   <!-- structure -->
   <xacro:include filename="$(find mobipick_description)/urdf/MiR_100/MiR_100_v1.urdf.xacro" />
 
-  <link name="world" />
-
   <xacro:MiR_100 prefix=""/>
-
-
-  <joint name="world_joint" type="fixed">
-    <parent link="world" />
-    <child link="mir100_base" />
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint>
-
-
 </robot>

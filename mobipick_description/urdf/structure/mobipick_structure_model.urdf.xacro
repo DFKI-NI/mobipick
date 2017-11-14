@@ -5,16 +5,5 @@
   <!-- structure -->
   <xacro:include filename="$(find mobipick_description)/urdf/structure/mobipick_structure.urdf.xacro" />
 
-  <link name="world" />
-
   <xacro:structure prefix="" height="0.1" />
-
-
-  <joint name="world_joint" type="fixed">
-    <parent link="world" />
-    <child link="StructPartDown" />
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint>
-
-
 </robot>

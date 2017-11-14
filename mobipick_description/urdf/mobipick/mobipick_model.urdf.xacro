@@ -16,8 +16,6 @@
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
 
 
-  <link name="world" />
-
   <!-- mobile robot -->
   <xacro:MiR_100 prefix=""/>
 
@@ -36,12 +34,6 @@
   <!-- gripper -->
   <xacro:robotiq_arg2f_140 prefix=""/>
 
-
-  <joint name="world_joint" type="fixed">
-    <parent link="world" />
-    <child link = "mir100_base" />
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint>
 
   <joint name="mir100_struct_joint" type="fixed">
     <parent link="MiR100BaseSupport" />
