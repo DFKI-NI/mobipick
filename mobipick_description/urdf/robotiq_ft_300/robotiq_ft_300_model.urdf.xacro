@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="robotiq_ft_300" >
+
+  <!-- ft_300 -->
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_ft_300/robotiq_ft_300.urdf.xacro" />
+
+
+  <link name="world" />
+
+  <!-- sensor -->
+  <xacro:robotiq_ft_300 parent="world" prefix="" >
+      <pose xyz="0 0 0.009" rpy="0 0 0" />
+  </xacro:robotiq_ft_300>
+
+
+</robot>

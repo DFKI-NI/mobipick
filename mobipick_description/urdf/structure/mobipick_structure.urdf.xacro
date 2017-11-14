@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="pi" value="3.14159265" />
+
+  <xacro:macro name="structure" params="prefix height">
+    <link name="${prefix}StructPartDown">
+      <inertial>
+        <origin xyz="0 0 0.3278534031" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
+        <mass value="3.349376" />
+        <inertia
+            ixx="0.432077541"
+            ixy="0"
+            ixz="0"
+            iyy="0.369249471"
+            iyz="0"
+            izz="0.179676981" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/PartDown.stl" />
+        </geometry>
+        <material name="">
+          <color rgba="0.8 0.8 0.8 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/collision/PartDown.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}StructPartUp">
+      <inertial>
+        <origin xyz="0 0 0.3535849057" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
+        <mass value="4.64704" />
+        <inertia
+            ixx="0.549473755"
+            ixy="0"
+            ixz="0"
+            iyy="0.436580833"
+            iyz="0"
+            izz="0.245971089" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/PartUp.stl" />
+        </geometry>
+        <material name="">
+          <color rgba="0.8 0.8 0.8 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/collision/PartUp.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}StructTischaufbau">
+      <inertial>
+        <origin xyz="0 0 0.1532210441" rpy="${0.5 * pi} ${0.5 * pi} 0" />
+        <mass value="2.354023413" />
+        <inertia
+            ixx="0.049542988"
+            ixy="0"
+            ixz="0"
+            iyy="0.042530187"
+            iyz="0"
+            izz="0.020198776" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/Tischaufbau.stl" />
+        </geometry>
+        <material name="">
+          <color rgba="0.8 0.8 0.8 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/collision/Tischaufbau.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="${prefix}StructBaseSupport"/>
+
+    <!-- <joint name="${prefix}structure_vertical_joint" type="prismatic">
+      <origin xyz="0 0 ${0.04}" rpy="0 0 0" />
+      <parent link="${prefix}StructPartDown" />
+      <child link="${prefix}StructPartUp" />
+      <axis xyz="0 0 1" />
+      <limit effort="1000.0" lower="0.01" upper="0.25" velocity="0.01"/>
+    </joint> -->
+    <joint name="${prefix}structure_vertical_joint" type="fixed">
+      <origin xyz="0 0 ${0.04 + height}" rpy="0 0 0" />
+      <parent link="${prefix}StructPartDown" />
+      <child link="${prefix}StructPartUp" />
+      <axis xyz="0 0 1" />
+    </joint> 
+
+    <joint name="${prefix}Tischaufbau_joint" type="fixed">
+      <origin xyz="0 0 0.44" rpy="0 0 0" />
+      <parent link="${prefix}StructPartUp" />
+      <child link="${prefix}StructTischaufbau" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <joint name="${prefix}Tischaufbau_base_joint" type="fixed">
+      <origin xyz="0 0 0.25" rpy="0 0 0" />
+      <parent link="${prefix}StructTischaufbau" />
+      <child link="${prefix}StructBaseSupport" />
+      <axis xyz="0 0 1" />
+    </joint>
+  </xacro:macro>
+</robot>

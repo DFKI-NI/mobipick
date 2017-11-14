@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="robotiq_fingertip_65mm" params="prefix fingerprefix stroke">
+    <link name="${prefix}${fingerprefix}_robotiq_fingertip_65mm">
+      <inertial>
+        <!-- <origin xyz="0 32.3E-03 -3.4587E-03" rpy="0 0 0" /> -->
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <mass value="3.3455E-2" />
+        <inertia ixx="13.66E-6" 
+		 ixy="0" 
+		 ixz="0"  
+		 iyy="11.784E-6"  
+		 iyz="0"  
+		 izz="2.15E-6" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_fingertip_65mm.stl" />
+        </geometry>
+        <material name="">
+          <color rgba="0.5 0.5 0.5 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_fingertip_65mm.stl" />
+        </geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+
+
+  <xacro:macro name="fingertip_joint" params="prefix fingerprefix">
+    <joint name="${prefix}${fingerprefix}_fingertip_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}${fingerprefix}_inner_finger" />
+      <child link="${prefix}${fingerprefix}_robotiq_fingertip_65mm" />
+      <axis xyz="0 0 1" />
+    </joint>
+  </xacro:macro>
+
+
+</robot>
