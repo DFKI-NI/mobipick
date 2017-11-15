@@ -39,7 +39,7 @@
   </joint>
 
   <joint name="struct_ur5_joint" type="fixed">
-    <parent link="structure_pedestal" />
+    <parent link="structure_pedestal_surface" />
     <child link = "ur5_base_link" />
     <origin xyz="0.0 0.0 0.0025" rpy="0.0 0.0 0.0" />
   </joint>
