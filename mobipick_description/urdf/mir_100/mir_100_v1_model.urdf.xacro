@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
-       name="mir_100_v1" >
+       name="mir_100_v2" >
 
   <!-- structure -->
-  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v2.urdf.xacro" />
 
   <link name="world" />
 
