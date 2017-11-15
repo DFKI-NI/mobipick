@@ -64,17 +64,17 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        StructPartDown:
+        part_down:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        StructPartUp:
+        part_up:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        StructTischaufbau:
+        pedestal:
           Alpha: 1
           Show Axes: false
           Show Trail: false

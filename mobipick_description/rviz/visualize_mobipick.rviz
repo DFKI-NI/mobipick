@@ -59,21 +59,6 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ee_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        forearm_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         fts_robotside:
           Alpha: 1
           Show Axes: false
@@ -84,77 +69,122 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_finger:
+        gripper_left_inner_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_inner_knuckle:
+        gripper_left_inner_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_outer_finger:
+        gripper_left_outer_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_outer_knuckle:
+        gripper_left_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        mir100_base:
+        gripper_right_inner_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        MiR100BaseSupport:
+        gripper_right_inner_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_finger:
+        gripper_right_outer_finger:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_inner_knuckle:
+        gripper_right_outer_knuckle:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_outer_finger:
+        gripper_robotiq_arg2f_base_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_outer_knuckle:
+        gripper_robotiq_force_torque_frame_id:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_arg2f_base_link:
+        mir_base:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        robotiq_force_torque_frame_id:
+        mir_surface:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        shoulder_link:
+        structure_part_down:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        tool0:
+        structure_part_up:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        upper_arm_link:
+        structure_pedestal:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_ee_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_shoulder_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_forearm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_tool0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_upper_arm_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_wrist_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_wrist_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ur5_wrist_3_link:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -164,23 +194,6 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        wrist_1_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wrist_2_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        wrist_3_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-
-
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -225,7 +238,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.782706261
+      Distance: 3.77
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
@@ -234,15 +247,15 @@ Visualization Manager:
       Focal Point:
         X: 0
         Y: 0
-        Z: 0
+        Z: 0.33
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 0.0747964084
+      Pitch: 0.2
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 6.24540329
+      Yaw: 1.0
     Saved: ~
 Window Geometry:
   Displays:

@@ -4,7 +4,7 @@
   <xacro:property name="pi" value="3.14159265" />
 
   <xacro:macro name="structure" params="prefix height">
-    <link name="${prefix}StructPartDown">
+    <link name="${prefix}part_down">
       <inertial>
         <origin xyz="0 0 0.3278534031" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
         <mass value="3.349376" />
@@ -19,7 +19,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/PartDown.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/part_down.stl" />
         </geometry>
         <material name="">
           <color rgba="0.8 0.8 0.8 1" />
@@ -28,12 +28,12 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/PartDown.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/part_down.stl" />
         </geometry>
       </collision>
     </link>
 
-    <link name="${prefix}StructPartUp">
+    <link name="${prefix}part_up">
       <inertial>
         <origin xyz="0 0 0.3535849057" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
         <mass value="4.64704" />
@@ -48,7 +48,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/PartUp.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/part_up.stl" />
         </geometry>
         <material name="">
           <color rgba="0.8 0.8 0.8 1" />
@@ -57,12 +57,12 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/PartUp.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/part_up.stl" />
         </geometry>
       </collision>
     </link>
 
-    <link name="${prefix}StructTischaufbau">
+    <link name="${prefix}pedestal">
       <inertial>
         <origin xyz="0 0 0.1532210441" rpy="${0.5 * pi} ${0.5 * pi} 0" />
         <mass value="2.354023413" />
@@ -77,7 +77,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/Tischaufbau.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/pedestal.stl" />
         </geometry>
         <material name="">
           <color rgba="0.8 0.8 0.8 1" />
@@ -86,38 +86,38 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/Tischaufbau.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/pedestal.stl" />
         </geometry>
       </collision>
     </link>
 
-    <link name="${prefix}StructBaseSupport"/>
+    <link name="${prefix}pedestal_surface"/>
 
     <!-- <joint name="${prefix}structure_vertical_joint" type="prismatic">
       <origin xyz="0 0 ${0.04}" rpy="0 0 0" />
-      <parent link="${prefix}StructPartDown" />
-      <child link="${prefix}StructPartUp" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}part_up" />
       <axis xyz="0 0 1" />
       <limit effort="1000.0" lower="0.01" upper="0.25" velocity="0.01"/>
     </joint> -->
     <joint name="${prefix}structure_vertical_joint" type="fixed">
       <origin xyz="0 0 ${0.04 + height}" rpy="0 0 0" />
-      <parent link="${prefix}StructPartDown" />
-      <child link="${prefix}StructPartUp" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}part_up" />
       <axis xyz="0 0 1" />
     </joint> 
 
     <joint name="${prefix}Tischaufbau_joint" type="fixed">
       <origin xyz="0 0 0.44" rpy="0 0 0" />
-      <parent link="${prefix}StructPartUp" />
-      <child link="${prefix}StructTischaufbau" />
+      <parent link="${prefix}part_up" />
+      <child link="${prefix}pedestal" />
       <axis xyz="0 0 1" />
     </joint>
 
     <joint name="${prefix}Tischaufbau_base_joint" type="fixed">
       <origin xyz="0 0 0.25" rpy="0 0 0" />
-      <parent link="${prefix}StructTischaufbau" />
-      <child link="${prefix}StructBaseSupport" />
+      <parent link="${prefix}pedestal" />
+      <child link="${prefix}pedestal_surface" />
       <axis xyz="0 0 1" />
     </joint>
   </xacro:macro>

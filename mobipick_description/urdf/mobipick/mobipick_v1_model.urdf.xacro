@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro"
+       name="mobipick">
+
+  <!-- mir_100 -->
+  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
+  <!-- structure -->
+  <xacro:include filename="$(find mobipick_description)/urdf/structure/mobipick_structure.urdf.xacro" />
+  <!-- ur5 -->
+  <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur5.urdf.xacro" />
+  <!-- ft_300 -->
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_ft_300/robotiq_ft_300.urdf.xacro" />
+  <!-- 2f_140 -->
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
+
+
+  <!-- mobile robot -->
+  <xacro:mir_100 prefix="mir_"/>
+
+  <!-- structure -->
+  <xacro:structure prefix="structure_" height="0.1" />
+
+  <!-- arm -->
+  <xacro:ur5_robot prefix="ur5_" joint_limited="true"/>
+
+  <!-- sensor -->
+  <xacro:robotiq_ft_300 parent="ur5_tool0" prefix="" >
+      <pose xyz="0 0 0" rpy="0 0 0" />
+      <!-- <pose xyz="0 0 0.009" rpy="0 0 0" /> -->
+  </xacro:robotiq_ft_300>
+
+  <!-- gripper -->
+  <xacro:robotiq_arg2f_140 prefix="gripper_"/>
+
+  <joint name="mir_struct_joint" type="fixed">
+    <parent link="mir_surface" />
+    <child link = "structure_part_down" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <joint name="struct_ur5_joint" type="fixed">
+    <parent link="structure_pedestal" />
+    <child link = "ur5_base_link" />
+    <origin xyz="0.0 0.0 0.0025" rpy="0.0 0.0 0.0" />
+  </joint>
+
+  <joint name="ft300_2f140_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="fts_toolside" />
+    <child link="gripper_robotiq_arg2f_base_link" />
+    <axis xyz="0 0 1" />
+  </joint>
+
+
+</robot>

@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro"
-       name="MiR_100_v1" >
-
-  <!-- structure -->
-  <xacro:include filename="$(find mobipick_description)/urdf/MiR_100/MiR_100_v1.urdf.xacro" />
-
-  <xacro:MiR_100 prefix=""/>
-</robot>
