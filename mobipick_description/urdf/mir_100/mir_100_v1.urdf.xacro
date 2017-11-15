@@ -99,7 +99,7 @@
   <xacro:macro name="actuated_wheel_joint" params="prefix locationprefix locationright">
     <joint name="${prefix}base_${locationprefix}_act_wheel_joint" type="continuous">
       <origin xyz="-0.037646 ${-0.222604 * locationright} 0.0625" rpy="0 0 0" />
-      <parent link="${prefix}base" />
+      <parent link="base_link" />
       <child link="${prefix}${locationprefix}_act_wheel" />
       <axis xyz="0 1 0" />
     </joint>
@@ -109,7 +109,7 @@
   <xacro:macro name="front_caster_wheel_joints" params="prefix locationprefix locationright">
     <joint name="${prefix}base_front_${locationprefix}_wheel_base_joint" type="continuous">
       <origin xyz="0.3037 ${-0.203 * locationright} 0.1565" rpy="0 0 0" />
-      <parent link="${prefix}base" />
+      <parent link="base_link" />
       <child link="${prefix}front_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
     </joint>
@@ -124,7 +124,7 @@
   <xacro:macro name="back_caster_wheel_joints" params="prefix locationprefix locationright">
     <joint name="${prefix}base_back_${locationprefix}_wheel_base_joint" type="continuous">
       <origin xyz="-0.3078 ${-0.203 * locationright} 0.1565" rpy="0 0 0" />
-      <parent link="${prefix}base" />
+      <parent link="base_link" />
       <child link="${prefix}back_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
     </joint>
@@ -138,7 +138,7 @@
 
   <xacro:macro name="mir_100" params="prefix">
 
-    <link name="${prefix}base">
+    <link name="base_link">
       <inertial>
         <origin xyz="0 -0.2528237011 0.1623852639" rpy="${0.5 * pi} ${0.5 * pi} 0" />
         <mass value="60.0" />
@@ -184,7 +184,7 @@
 
     <joint name="${prefix}base_surface_joint" type="fixed">
       <origin xyz="0 0 0.352" rpy="0 0 0" />
-      <parent link="${prefix}base" />
+      <parent link="base_link" />
       <child link="${prefix}surface" />
       <axis xyz="0 0 1" />
     </joint>
