@@ -171,7 +171,7 @@
   </xacro:macro>
 
   <xacro:macro name="right_outer_knuckle_joint" params="prefix">
-    <joint name="right_outer_knuckle_joint" type="revolute">
+    <joint name="${prefix}right_outer_knuckle_joint" type="revolute">
       <origin xyz="0 0.030601 0.054905" rpy="${pi / 2 + .725} 0 ${pi}" />
       <parent link="${prefix}robotiq_arg2f_base_link" />
       <child link="${prefix}right_outer_knuckle" />
