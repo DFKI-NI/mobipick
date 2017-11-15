@@ -3,8 +3,18 @@
 <launch>
   <arg name="gui" default="True" />
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
-  <param name="use_gui" value="$(arg gui)"/>
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="$(arg gui)"/>
+    <rosparam>
+      zeros:
+        ur5_shoulder_pan_joint:   0.00
+        ur5_shoulder_lift_joint: -2.60
+        ur5_elbow_joint:          2.43
+        ur5_wrist_1_joint:       -2.05
+        ur5_wrist_2_joint:       -1.57
+        ur5_wrist_3_joint:        1.57
+    </rosparam>
+  </node>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mobipick_description)/rviz/visualize_mobipick_v1.rviz" required="true" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mobipick_description)/rviz/visualize_mobipick.rviz" required="true" />
 </launch>
