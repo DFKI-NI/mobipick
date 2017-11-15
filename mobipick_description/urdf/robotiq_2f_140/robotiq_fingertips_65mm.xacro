@@ -5,7 +5,7 @@
     <link name="${prefix}${fingerprefix}_robotiq_fingertip_65mm">
       <inertial>
         <!-- <origin xyz="0 32.3E-03 -3.4587E-03" rpy="0 0 0" /> -->
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0.0323 -0.003459" rpy="${pi} ${0.5 * pi} ${0.5 * pi}" />
         <mass value="3.3455E-2" />
         <inertia ixx="13.66E-6" 
 		 ixy="0" 
@@ -35,7 +35,7 @@
 
   <xacro:macro name="fingertip_joint" params="prefix fingerprefix">
     <joint name="${prefix}${fingerprefix}_fingertip_joint" type="fixed">
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="0 0.013513 -0.018469" rpy="0 0 0" />
       <parent link="${prefix}${fingerprefix}_inner_finger" />
       <child link="${prefix}${fingerprefix}_robotiq_fingertip_65mm" />
       <axis xyz="0 0 1" />
