@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:property name="pi" value="3.14159265" />
+
+  <xacro:macro name="mir_100" params="prefix">
+
+    <link name="${prefix}base">
+      <inertial>
+        <origin xyz="-7.8373351882E-004 0 0.2060599945" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
+        <mass value="62.5" />
+        <inertia
+            ixx="5.9"
+            ixy="0"
+            ixz="0"
+            iyy="4.55"
+            iyz="0"
+            izz="2.2" />
+      </inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/mir_100/visual/mir100_v_1_5.stl" />
+        </geometry>
+        <material name="">
+          <color rgba="0.8 0.8 0.8 1" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/mir_100/collision/mir100_v_1_5.stl" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${prefix}base_surface_joint" type="fixed">
+      <origin xyz="0 0 0.352" rpy="0 0 0" />
+      <parent link="${prefix}base" />
+      <child link="${prefix}surface" />
+      <axis xyz="0 0 1" />
+    </joint>
+
+    <link name="${prefix}surface"/>
+
+  </xacro:macro>
+</robot>
