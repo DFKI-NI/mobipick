@@ -52,4 +52,13 @@
   </joint>
 
 
+  <link name="base_link" />
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="mir_base" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
+
 </robot>
