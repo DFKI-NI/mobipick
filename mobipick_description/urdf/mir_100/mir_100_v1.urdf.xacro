@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:property name="pi" value="3.14159265" />
-
+  <!-- <xacro:property name="pi" value="3.14159265" /> -->
 
   <xacro:macro name="actuated_wheel_link" params="prefix locationprefix">
     <link name="${prefix}${locationprefix}_act_wheel">

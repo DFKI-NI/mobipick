@@ -4,7 +4,7 @@
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur.gazebo.xacro" />
 
-  <xacro:property name="pi" value="3.14159265" />
+  <!-- <xacro:property name="pi" value="3.14159265" /> -->
 
   <!-- Inertia parameters -->
   <xacro:property name="base_mass" value="4.0" />  <!-- This mass might be incorrect -->
