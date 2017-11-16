@@ -59,11 +59,6 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
-        StructBaseSupport:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         part_down:
           Alpha: 1
           Show Axes: false
@@ -79,7 +74,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        world:
+        pedestal_surface:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -107,7 +102,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: world
+    Fixed Frame: part_down
     Frame Rate: 30
   Name: root
   Tools:
