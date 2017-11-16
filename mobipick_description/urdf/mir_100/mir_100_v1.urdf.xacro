@@ -1,7 +1,26 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
+
+  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.transmission.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
+
   <!-- <xacro:property name="pi" value="3.14159265" /> -->
+  <xacro:property name="deg_to_rad" value="0.017453293" />
+
+  <xacro:property name="mir_100_act_wheel_dx" value="-0.037646" />
+  <xacro:property name="mir_100_act_wheel_dy" value="0.222604" />
+  <xacro:property name="mir_100_act_wheel_radius" value="0.0625" />
+
+  <xacro:property name="mir_100_caster_wheel_radius" value="${mir_100_act_wheel_radius}" />
+  <xacro:property name="mir_100_caster_wheel_dx" value="-0.0382" />
+  <xacro:property name="mir_100_caster_wheel_dy" value="0" />
+  <xacro:property name="mir_100_caster_wheel_dz" value="-0.094" />
+  <xacro:property name="mir_100_front_caster_wheel_base_dx" value="0.3037" />
+  <xacro:property name="mir_100_back_caster_wheel_base_dx" value="-0.3078" />
+  <xacro:property name="mir_100_caster_wheel_base_dy" value="0.203" />
+  <xacro:property name="mir_100_caster_wheel_base_dz" value="${mir_100_caster_wheel_radius-mir_100_caster_wheel_dz}" />
+
 
   <xacro:macro name="actuated_wheel_link" params="prefix locationprefix">
     <link name="${prefix}${locationprefix}_act_wheel">
@@ -38,7 +57,7 @@
   <xacro:macro name="caster_wheel_links" params="prefix locationprefix">
     <link name="${prefix}${locationprefix}_caster_wheel_base">
       <inertial>
-        <origin xyz="0 0 -0.042500000044" rpy="${0.5 * pi} ${24 / 180 * pi} ${1.5 * pi}" />
+        <origin xyz="0 0 -0.042500000044" rpy="${0.5 * pi} ${24 * deg_to_rad} ${1.5 * pi}" />
         <mass value="0.3097539019" />
         <inertia
             ixx="0.0005844517978"
@@ -97,8 +116,8 @@
 
   <xacro:macro name="actuated_wheel_joint" params="prefix locationprefix locationright">
     <joint name="${prefix}base_${locationprefix}_act_wheel_joint" type="continuous">
-      <origin xyz="-0.037646 ${-0.222604 * locationright} 0.0625" rpy="0 0 0" />
-      <parent link="base_link" />
+      <origin xyz="${mir_100_act_wheel_dx} ${-mir_100_act_wheel_dy * locationright} ${mir_100_act_wheel_radius}" rpy="0 0 0" />
+      <parent link="${prefix}base" />
       <child link="${prefix}${locationprefix}_act_wheel" />
       <axis xyz="0 1 0" />
     </joint>
@@ -107,13 +126,13 @@
 
   <xacro:macro name="front_caster_wheel_joints" params="prefix locationprefix locationright">
     <joint name="${prefix}base_front_${locationprefix}_wheel_base_joint" type="continuous">
-      <origin xyz="0.3037 ${-0.203 * locationright} 0.1565" rpy="0 0 0" />
-      <parent link="base_link" />
+      <origin xyz="${mir_100_front_caster_wheel_base_dx} ${-mir_100_caster_wheel_base_dy * locationright} ${mir_100_caster_wheel_base_dz}" rpy="0 0 0" />
+      <parent link="${prefix}base" />
       <child link="${prefix}front_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
     </joint>
     <joint name="${prefix}base_front_${locationprefix}_wheel_joint" type="continuous">
-      <origin xyz="-0.0382 0 -0.094" rpy="0 0 0" />
+      <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
       <parent link="${prefix}front_${locationprefix}_caster_wheel_base" />
       <child link="${prefix}front_${locationprefix}_caster_wheel" />
       <axis xyz="0 1 0" />
@@ -122,13 +141,13 @@
 
   <xacro:macro name="back_caster_wheel_joints" params="prefix locationprefix locationright">
     <joint name="${prefix}base_back_${locationprefix}_wheel_base_joint" type="continuous">
-      <origin xyz="-0.3078 ${-0.203 * locationright} 0.1565" rpy="0 0 0" />
-      <parent link="base_link" />
+      <origin xyz="${mir_100_back_caster_wheel_base_dx} ${-mir_100_caster_wheel_base_dy * locationright} ${mir_100_caster_wheel_base_dz}" rpy="0 0 0" />
+      <parent link="${prefix}base" />
       <child link="${prefix}back_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
     </joint>
     <joint name="${prefix}base_back_${locationprefix}_wheel_joint" type="continuous">
-      <origin xyz="-0.0382 0 -0.094" rpy="0 0 0" />
+      <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
       <parent link="${prefix}back_${locationprefix}_caster_wheel_base" />
       <child link="${prefix}back_${locationprefix}_caster_wheel" />
       <axis xyz="0 1 0" />
@@ -137,7 +156,7 @@
 
   <xacro:macro name="mir_100" params="prefix">
 
-    <link name="base_link">
+    <link name="${prefix}base">
       <inertial>
         <origin xyz="0 -0.2528237011 0.1623852639" rpy="${0.5 * pi} ${0.5 * pi} 0" />
         <mass value="60.0" />
@@ -183,12 +202,16 @@
 
     <joint name="${prefix}base_surface_joint" type="fixed">
       <origin xyz="0 0 0.352" rpy="0 0 0" />
-      <parent link="base_link" />
+      <parent link="${prefix}base" />
       <child link="${prefix}surface" />
       <axis xyz="0 0 1" />
     </joint>
 
     <link name="${prefix}surface"/>
+
+  
+    <xacro:mir_100_wheel_transmissions prefix="${prefix}"/>
+    <xacro:mir_100_gazebo prefix="${prefix}"/>
 
   </xacro:macro>
 </robot>
