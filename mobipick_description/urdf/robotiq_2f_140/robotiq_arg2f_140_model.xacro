@@ -1,5 +1,14 @@
 <?xml version="1.0"?>
 <robot name="robotiq_arg2f_140_model" xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
+
+  <link name="base_link" />
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="robotiq_arg2f_base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint> 
+ 
   <xacro:robotiq_arg2f_140 prefix=""/>
 </robot>
