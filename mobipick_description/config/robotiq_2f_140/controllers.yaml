@@ -8,7 +8,3 @@ gripper_controller:
   type: position_controllers/JointPositionController
   joint: finger_joint
   pid: {p: 100.0, i: 0.01, d: 10.0}
-#gripper_right_controller:
-#  type: position_controllers/JointPositionController
-#  joint: right_outer_knuckle_joint
-#  pid: {p: 100.0, i: 0.01, d: 10.0}
