@@ -1,8 +1,14 @@
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+# -----------------------------------
 mobile_base_controller:
   type        : "diff_drive_controller/DiffDriveController"
   left_wheel  : 'base_left_act_wheel_joint'
   right_wheel : 'base_right_act_wheel_joint'
-  publish_rate: 50.0               # default: 50
+  publish_rate: 1000.0               # default: 50
   pose_covariance_diagonal : [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
   twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
 
@@ -26,7 +32,7 @@ mobile_base_controller:
   # Whenever a min_* is unspecified, default to -max_*
   linear:
     x:
-      has_velocity_limits    : true
+      has_velocity_limits    : false
       max_velocity           : 1.0  # m/s
       min_velocity           : -0.5 # m/s
       has_acceleration_limits: true
@@ -36,7 +42,7 @@ mobile_base_controller:
       max_jerk               : 5.0  # m/s^3
   angular:
     z:
-      has_velocity_limits    : true
+      has_velocity_limits    : false
       max_velocity           : 1.7  # rad/s
       has_acceleration_limits: true
       max_acceleration       : 1.5  # rad/s^2
