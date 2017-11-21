@@ -11,7 +11,7 @@
     <parent link="base_link" />
     <child link="base" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint>
+  </joint> 
 
   <xacro:mir_100 prefix=""/>
 </robot>
