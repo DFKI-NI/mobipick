@@ -3,16 +3,21 @@
 
 
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.transmission.xacro" />
-  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
 
   <!-- <xacro:property name="pi" value="3.14159265" /> -->
   <xacro:property name="deg_to_rad" value="0.017453293" />
 
+  <xacro:property name="mir_100_base_mass" value="58.0" />
+
+  <xacro:property name="mir_100_act_wheel_radius" value="0.0625" /> 
+  <xacro:property name="mir_100_act_wheel_width" value="0.032" />
+  <xacro:property name="mir_100_act_wheel_mass" value="1.0" />
   <xacro:property name="mir_100_act_wheel_dx" value="-0.037646" />
   <xacro:property name="mir_100_act_wheel_dy" value="0.222604" />
-  <xacro:property name="mir_100_act_wheel_radius" value="0.0625" />
 
   <xacro:property name="mir_100_caster_wheel_radius" value="${mir_100_act_wheel_radius}" />
+  <xacro:property name="mir_100_caster_wheel_width" value="${mir_100_act_wheel_width}" />
+  <xacro:property name="mir_100_caster_wheel_mass" value="${mir_100_act_wheel_mass}" />
   <xacro:property name="mir_100_caster_wheel_dx" value="-0.0382" />
   <xacro:property name="mir_100_caster_wheel_dy" value="0" />
   <xacro:property name="mir_100_caster_wheel_dz" value="-0.094" />
@@ -21,19 +26,28 @@
   <xacro:property name="mir_100_caster_wheel_base_dy" value="0.203" />
   <xacro:property name="mir_100_caster_wheel_base_dz" value="${mir_100_caster_wheel_radius-mir_100_caster_wheel_dz}" />
 
+  <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertia ixx="${m*(3*r*r+h*h)/12}" ixy="0" ixz="0" iyy="${m*(3*r*r+h*h)/12}" iyz="0" izz="${m*r*r/2}"/>
+  </xacro:macro>
+
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertia ixx="${m*(y*y+z*z)/12}" ixy="0" ixz="0" iyy="${m*(x*x+z*z)/12}" iyz="0" izz="${m*(x*x+z*z)/12}"/>
+  </xacro:macro>
 
   <xacro:macro name="actuated_wheel_link" params="prefix locationprefix">
     <link name="${prefix}${locationprefix}_act_wheel">
       <inertial>
-        <origin xyz="0 0 0" rpy="${0.5 * pi} ${0.5 * pi} 0" />
-        <mass value="1.0" />
-        <inertia
+        <!-- <origin xyz="0 0 0" rpy="${0.5 * pi} ${0.5 * pi} 0" /> -->
+        <origin xyz="0 0 0" rpy="${0.5 * pi} 0 0" />
+        <mass value="${mir_100_act_wheel_mass}" />
+        <!-- <inertia
             ixx="0.0021285829616"
             ixy="0"
             ixz="0"
             iyy="0.0011566983393"
             iyz="0"
-            izz="0.0011566983393" />
+            izz="0.0011566983393" /> -->
+        <xacro:cylinder_inertia m="${mir_100_act_wheel_mass}" r="${mir_100_act_wheel_radius}" h="${mir_100_act_wheel_width}" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -50,6 +64,7 @@
           <mesh filename="package://mobipick_description/meshes/mir_100/collision/actuated_wheel.stl" />
         </geometry>
       </collision>
+
     </link>
   </xacro:macro>
 
@@ -57,7 +72,8 @@
   <xacro:macro name="caster_wheel_links" params="prefix locationprefix">
     <link name="${prefix}${locationprefix}_caster_wheel_base">
       <inertial>
-        <origin xyz="0 0 -0.042500000044" rpy="${0.5 * pi} ${24 * deg_to_rad} ${1.5 * pi}" />
+        <!-- <origin xyz="0 0 -0.042500000044" rpy="${0.5 * pi} ${24 * deg_to_rad} ${1.5 * pi}" /> -->
+	<origin xyz="0 0 -0.042500000044" rpy="${24 * deg_to_rad} 0 ${0.5 * pi} " />
         <mass value="0.3097539019" />
         <inertia
             ixx="0.0005844517978"
@@ -83,17 +99,20 @@
         </geometry>
       </collision>
     </link>
+
     <link name="${prefix}${locationprefix}_caster_wheel">
       <inertial>
-        <origin xyz="0 0 0" rpy="${0.5 * pi} ${0.5 * pi} 0" />
-        <mass value="1.0" />
-        <inertia
+        <!-- <origin xyz="0 0 0" rpy="${0.5 * pi} ${0.5 * pi} 0" /> -->
+        <origin xyz="0 0 0" rpy="${0.5 * pi} 0 0" />
+        <mass value="${mir_100_caster_wheel_mass}" />
+        <!-- <inertia
             ixx="0.0021285829616"
             ixy="0"
             ixz="0"
             iyy="0.0011566983393"
             iyz="0"
-            izz="0.0011566983393" />
+            izz="0.0011566983393" /> -->
+        <xacro:cylinder_inertia m="${mir_100_act_wheel_mass}" r="${mir_100_act_wheel_radius}" h="${mir_100_act_wheel_width}" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -110,6 +129,7 @@
           <mesh filename="package://mobipick_description/meshes/mir_100/collision/caster_wheel.stl" />
         </geometry>
       </collision>
+
     </link>
   </xacro:macro>
 
@@ -120,6 +140,7 @@
       <parent link="${prefix}base" />
       <child link="${prefix}${locationprefix}_act_wheel" />
       <axis xyz="0 1 0" />
+      <limit effort="100" velocity="20.0" />
     </joint>
   </xacro:macro>
 
@@ -130,6 +151,7 @@
       <parent link="${prefix}base" />
       <child link="${prefix}front_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
+      <joint_properties damping="0.0" friction="0.0"/>
     </joint>
     <joint name="${prefix}base_front_${locationprefix}_wheel_joint" type="continuous">
       <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
@@ -145,6 +167,7 @@
       <parent link="${prefix}base" />
       <child link="${prefix}back_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
+      <joint_properties damping="0.0" friction="0.0"/>
     </joint>
     <joint name="${prefix}base_back_${locationprefix}_wheel_joint" type="continuous">
       <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
@@ -158,15 +181,9 @@
 
     <link name="${prefix}base">
       <inertial>
-        <origin xyz="0 -0.2528237011 0.1623852639" rpy="${0.5 * pi} ${0.5 * pi} 0" />
-        <mass value="60.0" />
-        <inertia
-            ixx="2.104161731"
-            ixy="0"
-            ixz="0"
-            iyy="1.927704596"
-            iyz="0"
-            izz="0.194324673" />
+	 <origin xyz="0 0 0.1623852639" rpy="0 0 0" /> 
+        <mass value="${mir_100_base_mass}" />
+        <xacro:box_inertia m="${mir_100_base_mass}" x="0.9" y="0.58" z="0.3" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -208,10 +225,8 @@
     </joint>
 
     <link name="${prefix}surface"/>
-
   
     <xacro:mir_100_wheel_transmissions prefix="${prefix}"/>
-    <xacro:mir_100_gazebo prefix="${prefix}"/>
 
   </xacro:macro>
 </robot>
