@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot name="robotiq_arg2f_140_model" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/common.gazebo.xacro" />
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/robotiq_2f_140/robotiq_2f_140.gazebo.xacro" />
+
+  <link name="base_link" />
+
+  <joint name="base_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="pedestal" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint> 
+
+  <link name="pedestal">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.001"/>
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="50"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="5" ixy="0.0" ixz="0.0" iyy="5" iyz="0.0" izz="5"/>
+    </inertial>
+  </link>
+
+  <joint name="pedestal_joint" type="fixed">
+    <parent link="pedestal" />
+    <child link="robotiq_arg2f_base_link" />
+    <origin xyz="0.0 0.0 0.001" rpy="0.0 0.0 0.0" />
+  </joint> 
+
+  <xacro:robotiq_arg2f_140 prefix=""/>
+  <xacro:mimic_joint_plugins_gazebo prefix="" robot_namespace=""/>
+  <xacro:controller_plugin_gazebo robot_namespace=""/>
+
+</robot>

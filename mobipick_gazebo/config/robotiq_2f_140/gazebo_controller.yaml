@@ -1,0 +1,20 @@
+# Publish all joint states -----------------------------------
+gazebo_ros_control:
+  pid_gains:
+    finger_joint:
+      p: 500
+      i: 10 
+      d: 0.0001
+      i_clamp: 10
+      publish_state: true
+#    right_outer_knuckle_joint:
+#      p: 100
+#      i: 1 
+#      d: 0.00
+#      i_clamp: 10
+#      publish_state: true
+
+
+
+
+ 
