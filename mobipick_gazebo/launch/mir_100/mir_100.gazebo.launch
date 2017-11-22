@@ -4,15 +4,21 @@
   <arg name="gui" default="True" />
   <arg name="mir_100_ns" default="mir_100" />
   <arg name="diff_control_type" default="vel" />
+  <arg name="with_PID" default="true" />
 
   <!-- Load gazebo controller configurations from YAML file to parameter server -->
   <!-- has to be outside mir_100 namespace until https://github.com/ros-simulation/gazebo_ros_pkgs/pull/637 is merged -->
-  <rosparam if="$(eval diff_control_type == 'vel')" file="$(find mobipick_gazebo)/config/mir_100/gazebo_controller.yaml" command="load" />
+  <group if="$(arg with_PID)">
+  <!-- in theory, when not using the gazebo PID controller, the commanded velocity is bypassed to the joint state, and therefore the joint vel would be equal to the commanded one. In practice though that doesn't happen and the platform oscilates -->
+    <rosparam if="$(eval diff_control_type == 'vel')" file="$(find mobipick_gazebo)/config/mir_100/gazebo_controller.yaml" command="load" />
+  </group>
+  
 
 <group ns="$(arg mir_100_ns)">
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find mobipick_description)/config/mir_100/controllers.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/mir_100/joint_state_controller.yaml" command="load" />
+  <rosparam if="$(eval diff_control_type == 'vel')" file="$(find mobipick_description)/config/mir_100/diffdrive_controller.yaml" command="load" />
 
   <include file="$(find mobipick_gazebo)/launch/mir_100/spawn_mir_100.launch">
         <arg name="namespace" value="$(arg mir_100_ns)" /> 
@@ -23,8 +29,8 @@
   <node ns="mobile_base_controller" name="mir_teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py"/>
 
   <!-- load the controllers -->
-  <node if="$(eval diff_control_type == 'vel')" name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="mobile_base_controller joint_state_controller"/>
-  <node unless="$(eval diff_control_type == 'vel')" name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller"/>
+  <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller"/>
+  <node if="$(eval diff_control_type == 'vel')" name="diffdrive_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="mobile_base_controller"/>
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
