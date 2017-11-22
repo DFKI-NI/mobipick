@@ -1,0 +1,41 @@
+# Publish all joint states -----------------------------------
+gazebo_ros_control:
+  pid_gains:
+    shoulder_pan_joint:
+      p: 70.0
+      i: 1.50 
+      d: 5.00
+      i_clamp: 2
+      publish_state: true
+    shoulder_lift_joint:
+      p: 70.0
+      i: 1.50 
+      d: 5.00
+      i_clamp: 2
+      publish_state: true
+    elbow_joint:
+      p: 70.0
+      i: 1.50 
+      d: 5.00
+      i_clamp: 2
+      publish_state: true
+    wrist_1_joint:
+      p: 70.0
+      i: 1.50 
+      d: 5.00
+      i_clamp: 2
+      publish_state: true
+    wrist_2_joint:
+      p: 70.0
+      i: 1.50 
+      d: 5.00
+      i_clamp: 2
+      publish_state: true
+    wrist_3_joint:
+      p: 70.0
+      i: 1.50 
+      d: 5.00
+      i_clamp: 2
+      publish_state: true
+
+

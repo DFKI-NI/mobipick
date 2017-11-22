@@ -3,7 +3,7 @@
        name="ur5" >
 
   <!-- common stuff -->
-  <xacro:include filename="$(find mobipick_description)/urdf/ur5/common.gazebo.xacro" />
+  <!-- <xacro:include filename="$(find mobipick_description)/urdf/ur5/common.gazebo.xacro" /> -->
 
   <!-- ur5 -->
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur5.urdf.xacro" />
