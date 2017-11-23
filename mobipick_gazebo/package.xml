@@ -50,10 +50,6 @@
   <!--   <doc_depend>doxygen</doc_depend> -->
   <buildtool_depend>catkin</buildtool_depend>
 
-
-  <!-- The export tag contains other, unspecified, tags -->
-  <export>
-    <!-- Other tools can request additional information be placed here -->
-
-  </export>
+  <exec_depend>teleop_twist_keyboard</exec_depend>
+  <exec_depend>roboticsgroup_gazebo_plugins</exec_depend>  <!-- from https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins -->
 </package>
