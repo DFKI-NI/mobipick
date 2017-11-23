@@ -11,7 +11,7 @@
 <group ns="$(arg gripper_ns)">
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_state_controller.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" />
 
   <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/spawn_robotiq_2f_140.launch">

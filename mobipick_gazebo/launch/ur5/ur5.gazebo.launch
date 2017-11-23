@@ -17,7 +17,7 @@
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
-  <rosparam file="$(find mobipick_description)/config/ur5/joint_state_controller.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
 
 
   <include file="$(find mobipick_gazebo)/launch/ur5/spawn_ur5.launch">
