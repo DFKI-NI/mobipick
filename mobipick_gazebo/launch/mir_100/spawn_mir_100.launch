@@ -5,12 +5,7 @@
   <arg name="namespace" default="" />
   <arg name="diff_control_type" default="vel" />
 
-  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="world_name" value="$(find mobipick_gazebo)/worlds/empty.world"/>
-    <!-- <arg name="debug" value="true"/> -->
-    <!-- more default parameters can be changed here -->
-  </include>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
 
   <!-- Convert an xacro and put on parameter server -->
   <param unless="$(eval diff_control_type == 'vel')" name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_gazebo)/urdf/mir_100/mir_100_v1_model_sim1.urdf.xacro" />
