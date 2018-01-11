@@ -40,5 +40,4 @@
 
   <xacro:ur5_robot prefix="" joint_limited="true"/>
   <xacro:controller_plugin_gazebo robot_namespace=""/>
-
 </robot>

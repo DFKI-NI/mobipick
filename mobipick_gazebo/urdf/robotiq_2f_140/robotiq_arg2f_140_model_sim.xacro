@@ -11,7 +11,7 @@
     <parent link="base_link" />
     <child link="pedestal" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint> 
+  </joint>
 
   <link name="pedestal">
     <visual>
@@ -31,10 +31,9 @@
     <parent link="pedestal" />
     <child link="robotiq_arg2f_base_link" />
     <origin xyz="0.0 0.0 0.001" rpy="0.0 0.0 0.0" />
-  </joint> 
+  </joint>
 
   <xacro:robotiq_arg2f_140 prefix=""/>
   <xacro:mimic_joint_plugins_gazebo prefix="" robot_namespace=""/>
   <xacro:controller_plugin_gazebo robot_namespace=""/>
-
 </robot>

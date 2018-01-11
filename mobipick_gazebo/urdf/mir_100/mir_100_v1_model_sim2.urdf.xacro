@@ -1,6 +1,5 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro"
-       name="mir_100" >
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="mir_100" >
 
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
   <xacro:include filename="$(find mobipick_gazebo)/urdf/mir_100/mir_100.gazebo.xacro" />
@@ -12,10 +11,9 @@
     <parent link="base_link" />
     <child link="base" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint> 
+  </joint>
 
   <xacro:mir_100 prefix=""/>
   <xacro:set_all_wheel_frictions prefix=""/>
   <xacro:controller_plugin_gazebo robot_namespace=""/>
-
 </robot>
