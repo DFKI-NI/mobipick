@@ -60,5 +60,6 @@
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 
-
+  <!-- gazebo -->
+  <xacro:include filename="$(find mobipick_description)/urdf/mobipick/mobipick.gazebo.xacro" />
 </robot>
