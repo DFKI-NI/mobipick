@@ -2,8 +2,8 @@
 <robot name="robotiq_arg2f_140_model" xmlns:xacro="http://ros.org/wiki/xacro">
 
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
-  <xacro:include filename="$(find mobipick_gazebo)/urdf/common.gazebo.xacro" />
-  <xacro:include filename="$(find mobipick_gazebo)/urdf/robotiq_2f_140/robotiq_2f_140.gazebo.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/common.gazebo.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_2f_140.gazebo.xacro" />
 
   <link name="base_link" />
 
