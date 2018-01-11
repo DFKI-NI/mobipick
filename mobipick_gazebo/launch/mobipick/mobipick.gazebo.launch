@@ -3,28 +3,18 @@
 <launch>
   <arg name="gui" default="True" />
   <!--  <arg name="mir_100_ns" default="mir_100" /> -->
-  <arg name="diff_control_type" default="vel" />
 
   <!-- Load gazebo controller configurations from YAML file to parameter server -->
   <rosparam file="$(find mobipick_gazebo)/config/mir_100/gazebo_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" />
 
 
-  <!-- Load gazebo controller configurations from YAML file to parameter server -->
-  <!-- has to be outside mir_100 namespace until https://github.com/ros-simulation/gazebo_ros_pkgs/pull/637 is merged -->
-  <!-- In theory, when not setting configuration parameters for the gazebo PID
-       controller, the commanded velocity is bypassed to the joint state, and
-       therefore the joint vel would be equal to the commanded one. In practice
-       though that doesn't happen and the platform oscilates. This is why we have
-       to load proper PID controller parameters here. -->
-  <rosparam if="$(eval diff_control_type == 'vel')" file="$(find mobipick_gazebo)/config/mir_100/gazebo_controller.yaml" command="load" />
-
 <!-- <group ns="$(arg mir_100_ns)"> -->
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
-    <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
-    <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch" />
 
@@ -32,7 +22,7 @@
   <node ns="mobile_base_controller" name="mir_teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
 
   <!-- load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller mobile_base_controller arm_controller gripper_controller"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller arm_controller gripper_controller"/>
 
   <!-- </group> -->
 
