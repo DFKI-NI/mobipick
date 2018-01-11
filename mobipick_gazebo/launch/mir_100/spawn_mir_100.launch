@@ -3,13 +3,13 @@
 <launch>
 
   <arg name="namespace" default="" />
-  <arg name="diff_control_type" default="vel" />
+  <arg name="use_ros_control" default="false" />  <!-- false: use diff_controller, true: use ros_control -->
 
   <include file="$(find gazebo_ros)/launch/empty_world.launch" />
 
   <!-- Convert an xacro and put on parameter server -->
-  <param unless="$(eval diff_control_type == 'vel')" name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_gazebo)/urdf/mir_100/mir_100_v1_model_sim1.urdf.xacro" />
-  <param if="$(eval diff_control_type == 'vel')" name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_gazebo)/urdf/mir_100/mir_100_v1_model_sim2.urdf.xacro" />
+  <param unless="$(arg use_ros_control)" name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_gazebo)/urdf/mir_100/mir_100_v1_model_sim1.urdf.xacro" />
+  <param if="$(arg use_ros_control)" name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_gazebo)/urdf/mir_100/mir_100_v1_model_sim2.urdf.xacro" />
 
   <!-- Spawn a robot into Gazebo -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mir_100 -gazebo_namespace /$(arg namespace)/gazebo" />
