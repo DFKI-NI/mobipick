@@ -1,21 +1,16 @@
-# Publish all joint states -----------------------------------
+# Set PID gains to stop the platform from oscillating
 gazebo_ros_control:
   pid_gains:
     base_left_act_wheel_joint:
       p: 0.25
-      i: 0.001 
+      i: 0.001
       d: 0.00
       i_clamp: 0.00001
       publish_state: true
 
     base_right_act_wheel_joint:
       p: 0.25
-      i: 0.001 
+      i: 0.001
       d: 0.00
       i_clamp: 0.00001
       publish_state: true
-
-
-
-
- 
