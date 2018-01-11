@@ -4,15 +4,15 @@
   <arg name="gui" default="True" />
   <arg name="mir_100_ns" default="mir_100" />
   <arg name="diff_control_type" default="vel" />
-  <arg name="with_PID" default="true" />
 
   <!-- Load gazebo controller configurations from YAML file to parameter server -->
   <!-- has to be outside mir_100 namespace until https://github.com/ros-simulation/gazebo_ros_pkgs/pull/637 is merged -->
-  <group if="$(arg with_PID)">
-  <!-- in theory, when not using the gazebo PID controller, the commanded velocity is bypassed to the joint state, and therefore the joint vel would be equal to the commanded one. In practice though that doesn't happen and the platform oscilates -->
-    <rosparam if="$(eval diff_control_type == 'vel')" file="$(find mobipick_gazebo)/config/mir_100/gazebo_controller.yaml" command="load" />
-  </group>
-  
+  <!-- In theory, when not setting configuration parameters for the gazebo PID
+       controller, the commanded velocity is bypassed to the joint state, and
+       therefore the joint vel would be equal to the commanded one. In practice
+       though that doesn't happen and the platform oscilates. This is why we have
+       to load proper PID controller parameters here. -->
+  <rosparam if="$(eval diff_control_type == 'vel')" file="$(find mobipick_gazebo)/config/mir_100/gazebo_controller.yaml" command="load" />
 
 <group ns="$(arg mir_100_ns)">
 
@@ -26,7 +26,7 @@
    </include>
 
   <!-- load keyboard teleop -->
-  <node ns="mobile_base_controller" name="mir_teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py"/>
+  <node ns="mobile_base_controller" name="mir_teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
 
   <!-- load the controllers -->
   <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller"/>
