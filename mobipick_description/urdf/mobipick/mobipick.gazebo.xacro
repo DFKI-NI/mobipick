@@ -1,9 +1,12 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://ros.org/wiki/xacro" name="mir_100" >
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
-  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
+  <!-- Common -->
   <xacro:include filename="$(find mobipick_description)/urdf/common.gazebo.xacro" />
+  <xacro:controller_plugin_gazebo robot_namespace=""/>
+
+  <!-- MiR100 mobile base -->
+  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
 
   <xacro:set_all_wheel_frictions prefix="mir_"/>
   <xacro:diff_controller_plugin_gazebo prefix="mir_"
@@ -12,5 +15,14 @@
     wheel_separation="${2*mir_100_act_wheel_dy}"
     wheel_radius="${mir_100_act_wheel_radius}"/>
 
-  <xacro:controller_plugin_gazebo robot_namespace=""/>
+  <!-- UR5 arm -->
+  <!-- TODO -->
+
+  <!-- force torque sensor-->
+  <!-- TODO -->
+
+  <!-- Robotiq gripper -->
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_2f_140.gazebo.xacro" />
+
+  <xacro:mimic_joint_plugins_gazebo prefix="gripper_" robot_namespace=""/>
 </robot>
