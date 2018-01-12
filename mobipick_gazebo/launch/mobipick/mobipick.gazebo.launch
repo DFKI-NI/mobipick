@@ -22,7 +22,8 @@
   <node ns="mobile_base_controller" name="mir_teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
 
   <!-- load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller arm_controller gripper_controller"/>
+  <!-- <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller arm_controller gripper_controller"/> -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller"/>
 
   <!-- </group> -->
 
