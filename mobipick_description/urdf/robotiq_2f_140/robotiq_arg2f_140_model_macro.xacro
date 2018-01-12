@@ -111,7 +111,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_finger_ed.stl" />
+          <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_finger.stl" />
         </geometry>
         <material name="">
           <color rgba="0.1 0.1 0.1 1" />
@@ -120,7 +120,7 @@
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_finger_ed.stl" />
+          <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_finger.stl" />
         </geometry>
       </collision>
     </link>
@@ -196,7 +196,4 @@
     <xacro:fingertip_joint prefix="${prefix}" fingerprefix="left"/>
     <xacro:fingertip_joint prefix="${prefix}" fingerprefix="right"/>
   </xacro:macro>
-
-
-
 </robot>
