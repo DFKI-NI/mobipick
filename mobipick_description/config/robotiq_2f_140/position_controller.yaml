@@ -1,5 +1,5 @@
 # Position Controllers ---------------------------------------
 gripper_controller:
   type: position_controllers/JointPositionController
-  joint: finger_joint
+  joint: gripper_finger_joint
 #  pid: {p: 100.0, i: 0.01, d: 10.0}
