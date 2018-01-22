@@ -6,6 +6,5 @@
   <xacro:include filename="$(find mobipick_description)/urdf/common.gazebo.xacro" />
 
   <xacro:mir_100 prefix=""/>
-  <xacro:set_all_wheel_frictions prefix=""/>
   <xacro:controller_plugin_gazebo robot_namespace=""/>
 </robot>

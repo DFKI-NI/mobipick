@@ -28,7 +28,6 @@
 
   <xacro:macro name="set_wheel_friction" params="link friction">
     <gazebo reference="${link}">
-      <!-- Turtlebot: -->
       <mu1 value="${friction}"/>
       <mu2 value="${friction}"/>
       <kp value="10000000.0"/>
