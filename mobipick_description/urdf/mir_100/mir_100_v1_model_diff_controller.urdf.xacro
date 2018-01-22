@@ -15,8 +15,8 @@
   <xacro:mir_100 prefix=""/>
   <xacro:set_all_wheel_frictions prefix=""/>
   <xacro:diff_controller_plugin_gazebo prefix=""
-    left_wheel_joint="base_link_left_act_wheel_joint"
-    right_wheel_joint="base_link_right_act_wheel_joint"
+    left_wheel_joint="left_wheel_joint"
+    right_wheel_joint="right_wheel_joint"
     wheel_separation="${2*mir_100_act_wheel_dy}"
     wheel_radius="${mir_100_act_wheel_radius}"/>
 </robot>

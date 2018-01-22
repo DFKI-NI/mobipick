@@ -135,7 +135,7 @@
 
 
   <xacro:macro name="actuated_wheel_joint" params="prefix locationprefix locationright">
-    <joint name="${prefix}base_link_${locationprefix}_act_wheel_joint" type="continuous">
+    <joint name="${prefix}${locationprefix}_wheel_joint" type="continuous">
       <origin xyz="${mir_100_act_wheel_dx} ${-mir_100_act_wheel_dy * locationright} ${mir_100_act_wheel_radius}" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
       <child link="${prefix}${locationprefix}_act_wheel" />

@@ -1,8 +1,8 @@
 # -----------------------------------
 mobile_base_controller:
   type        : "diff_drive_controller/DiffDriveController"
-  left_wheel  : 'base_link_left_act_wheel_joint'
-  right_wheel : 'base_link_right_act_wheel_joint'
+  left_wheel  : 'left_wheel_joint'
+  right_wheel : 'right_wheel_joint'
   publish_rate: 41.2               # default: 50; value from real MiR
   # These covariances are exactly what the real MiR platform publishes
   pose_covariance_diagonal : [0.00001, 0.00001, 1000000.0, 1000000.0, 1000000.0, 1000.0]
