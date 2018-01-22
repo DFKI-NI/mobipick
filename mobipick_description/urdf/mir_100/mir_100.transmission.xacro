@@ -5,7 +5,7 @@
 
     <transmission name="${prefix}${locationprefix}_act_wheel_trans">
       <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}base_${locationprefix}_act_wheel_joint">
+      <joint name="${prefix}base_link_${locationprefix}_act_wheel_joint">
         <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
       <actuator name="${prefix}${locationprefix}_act_wheel_motor">

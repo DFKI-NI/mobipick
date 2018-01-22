@@ -16,7 +16,7 @@
         <odometryFrame>map</odometryFrame>
         <commandTopic>mobile_base_controller/cmd_vel</commandTopic>
         <odometryTopic>mobile_base_controller/odom</odometryTopic>
-        <robotBaseFrame>base_link</robotBaseFrame>
+        <robotBaseFrame>base_footprint</robotBaseFrame>
         <wheelAcceleration>2.8</wheelAcceleration>
         <publishWheelJointState>true</publishWheelJointState>
         <publishWheelTF>false</publishWheelTF>
