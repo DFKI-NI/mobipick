@@ -179,6 +179,14 @@
 
   <xacro:macro name="mir_100" params="prefix">
 
+  <link name="${prefix}base_footprint" />
+
+  <joint name="${prefix}base_joint" type="fixed">
+    <parent link="${prefix}base_footprint" />
+    <child link="${prefix}base_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </joint>
+
     <link name="${prefix}base_link">
       <inertial>
         <origin xyz="0 0 0.1623852639" rpy="0 0 0" /> 

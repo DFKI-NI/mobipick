@@ -2,16 +2,8 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="mir_100" >
 
-  <!-- structure -->
+  <!-- MiR100 base -->
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
-
-  <link name="base_footprint" />
-
-  <joint name="base_joint" type="fixed">
-    <parent link="base_footprint" />
-    <child link="base_link" />
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint> 
 
   <xacro:mir_100 prefix=""/>
 </robot>
