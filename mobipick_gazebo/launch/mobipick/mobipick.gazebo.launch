@@ -12,6 +12,7 @@
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/mir_100/diffdrive_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" />
 
@@ -27,7 +28,7 @@
   </node>
 
   <!-- load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller arm_controller gripper_controller"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller mobile_base_controller arm_controller gripper_controller"/>
 
   <!-- </group> -->
 
