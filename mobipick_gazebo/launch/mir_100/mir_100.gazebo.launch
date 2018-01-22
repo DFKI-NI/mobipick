@@ -11,8 +11,14 @@
         <arg name="use_ros_control" value="$(arg use_ros_control)" />
    </include>
 
-  <!-- load keyboard teleop -->
-  <node ns="mobile_base_controller" name="mir_teleop" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" />
+  <!-- load  teleop -->
+  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+    <param name="default_topic" value="mobile_base_controller/cmd_vel"/>
+    <param name="default_vx_max" value="1.0" />
+    <param name="default_vx_min" value="-1.0" />
+    <param name="default_vw_max" value="1.5" />
+    <param name="default_vw_min" value="-1.5" />
+  </node>
 
   <group if="$(arg use_ros_control)">
     <!-- Load controller configurations from YAML file to parameter server -->
