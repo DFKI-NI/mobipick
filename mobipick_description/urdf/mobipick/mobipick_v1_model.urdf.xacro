@@ -7,20 +7,20 @@
 
   <joint name="base_joint" type="fixed">
     <parent link="base_link" />
-    <child link="mir_base" />
+    <child link="base" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 
   <!-- ############# MIR100 BASE ############## -->
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
 
-  <xacro:mir_100 prefix="mir_"/>
+  <xacro:mir_100 prefix=""/>
 
   <!-- ############## STRUCTURE ############### -->
   <xacro:include filename="$(find mobipick_description)/urdf/structure/mobipick_structure.urdf.xacro" />
 
   <joint name="mir_struct_joint" type="fixed">
-    <parent link="mir_surface" />
+    <parent link="surface" />
     <child link = "structure_part_down" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
