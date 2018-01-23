@@ -38,7 +38,7 @@
         </link>
 
         <!-- virtual measurement frame -->
-        <joint name="${prefix}measurment_joint" type="fixed" >
+        <joint name="${prefix}measurement_joint" type="fixed" >
             <origin xyz="0 0 0.01625" rpy="0 0 0" />
             <parent link="${prefix}fts_robotside" />
             <child link="${prefix}robotiq_force_torque_frame_id" />
