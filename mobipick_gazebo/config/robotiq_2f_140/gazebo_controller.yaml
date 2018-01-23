@@ -1,7 +1,7 @@
 # Publish all joint states -----------------------------------
 gazebo_ros_control:
   pid_gains:
-    finger_joint:
+    gripper_finger_joint:
       p: 500
       i: 10 
       d: 0.0001

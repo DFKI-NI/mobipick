@@ -5,6 +5,7 @@
   <!--  <arg name="mir_100_ns" default="mir_100" /> -->
 
   <!-- Load gazebo controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find mobipick_gazebo)/config/ur5/gazebo_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" />
 
 
