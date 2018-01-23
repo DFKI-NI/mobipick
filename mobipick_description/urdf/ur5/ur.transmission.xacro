@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <!-- Note: You MUST load PID parameters (see gazebo_controller.yaml) for all
+       joints that are using the PositionJointInterface, otherwise the arm +
+       gripper will act like a giant parachute, counteracting gravity, and
+       causing some of the wheels to lose contact with the ground, so the robot
+       won't be able to properly navigate. See
+       https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
   <xacro:macro name="ur_arm_transmission" params="prefix">
 
     <transmission name="${prefix}shoulder_pan_trans">
