@@ -111,7 +111,7 @@
             iyy="0.0011566983393"
             iyz="0"
             izz="0.0011566983393" /> -->
-        <xacro:cylinder_inertia m="${mir_100_act_wheel_mass}" r="${mir_100_act_wheel_radius}" h="${mir_100_act_wheel_width}" />
+        <xacro:cylinder_inertia m="${mir_100_caster_wheel_mass}" r="${mir_100_caster_wheel_radius}" h="${mir_100_caster_wheel_width}" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
