@@ -150,7 +150,7 @@
       <parent link="${prefix}base_link" />
       <child link="${prefix}front_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
-      <joint_properties damping="0.0" friction="0.0"/>
+      <dynamics damping="0.01" friction="0.0"/>
     </joint>
     <joint name="${prefix}base_link_front_${locationprefix}_wheel_joint" type="continuous">
       <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
@@ -166,7 +166,7 @@
       <parent link="${prefix}base_link" />
       <child link="${prefix}back_${locationprefix}_caster_wheel_base" />
       <axis xyz="0 0 1" />
-      <joint_properties damping="0.0" friction="0.0"/>
+      <dynamics damping="0.01" friction="0.0"/>
     </joint>
     <joint name="${prefix}base_link_back_${locationprefix}_wheel_joint" type="continuous">
       <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
