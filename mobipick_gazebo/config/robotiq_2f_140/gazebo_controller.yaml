@@ -5,9 +5,47 @@
 # https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612
 gazebo_ros_control:
   pid_gains:
+    # these gains are used by the gazebo_ros_control plugin
     gripper_finger_joint:
-      p: 500
-      i: 10 
+      p: 100
+      i: 10
+      d: 0.001
+      i_clamp: 1.0
+      antiwindup: false
+      publish_state: true
+    # the following gains are used by the gazebo_mimic_joint plugin
+    gripper_right_outer_knuckle_joint:
+      p: 100
+      i: 10
+      d: 0.001
+      i_clamp: 1.0
+      antiwindup: false
+      publish_state: true
+    gripper_left_inner_knuckle_joint:
+      p: 100
+      i: 10
+      d: 0.001
+      i_clamp: 1.0
+      antiwindup: false
+      publish_state: true
+    gripper_right_inner_knuckle_joint:
+      p: 100
+      i: 10
+      d: 0.001
+      i_clamp: 1.0
+      antiwindup: false
+      publish_state: true
+    gripper_left_inner_finger_joint:
+      p: 50
+      i: 5
       d: 0.0001
-      i_clamp: 10
+      i_clamp: 0.5
+      antiwindup: false
+      publish_state: true
+    gripper_right_inner_finger_joint:
+      p: 50
+      i: 5
+      d: 0.0001
+      i_clamp: 0.5
+      antiwindup: false
       publish_state: true
