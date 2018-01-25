@@ -1,12 +1,14 @@
 <?xml version="1.0" ?>
 
 <launch>
-  <include file="$(find gazebo_ros)/launch/empty_world.launch" />
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="true" />
+  </include>
 
   <!-- Convert an xacro and put on parameter server -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
 
   <!-- Spawn a robot into Gazebo -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick" />
-
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
+    -J ur5_shoulder_pan_joint 0.00 -J ur5_shoulder_lift_joint -2.60 -J ur5_elbow_joint 2.43 -J ur5_wrist_1_joint -2.05 -J ur5_wrist_2_joint -1.57 -J ur5_wrist_3_joint 1.57" />
 </launch>
