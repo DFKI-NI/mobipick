@@ -30,6 +30,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}${fingerprefix}_robotiq_fingertip_65mm">
+      <material>Gazebo/Grey</material>
+    </gazebo>
   </xacro:macro>
 
 

@@ -11,12 +11,12 @@
         <origin xyz="-0.000200000000003065 0.0199435877845359 0.0292245259211331" rpy="0 0 0" />
         <mass value="0.00853198276973456" />
         <inertia
-            ixx="2.89328108496468E-06"
-            ixy="-1.57935047237397E-19"
-            ixz="-1.93980378593255E-19"
-            iyy="1.86719750325683E-06"
-            iyz="-1.21858577871576E-06"
-            izz="1.21905238907251E-06" />
+          ixx="2.89328108496468E-06"
+          ixy="-1.57935047237397E-19"
+          ixz="-1.93980378593255E-19"
+          iyy="1.86719750325683E-06"
+          iyz="-1.21858577871576E-06"
+          izz="1.21905238907251E-06" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -32,6 +32,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}${fingerprefix}_outer_knuckle">
+      <material>Gazebo/Grey</material>
+    </gazebo>
   </xacro:macro>
 
   <xacro:macro name="outer_finger" params="prefix fingerprefix stroke">
@@ -61,6 +64,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}${fingerprefix}_outer_finger">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
   </xacro:macro>
 
   <xacro:macro name="inner_knuckle" params="prefix fingerprefix stroke">
@@ -90,6 +96,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}${fingerprefix}_inner_knuckle">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
   </xacro:macro>
 
   <xacro:macro name="inner_finger" params="prefix fingerprefix stroke">
@@ -119,6 +128,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}${fingerprefix}_inner_finger">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
   </xacro:macro>
 
   <xacro:macro name="outer_finger_joint" params="prefix fingerprefix">
