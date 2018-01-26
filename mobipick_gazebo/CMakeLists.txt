@@ -7,7 +7,9 @@ project(mobipick_gazebo)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED COMPONENTS
+  roslaunch
+)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -193,3 +195,8 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+roslaunch_add_file_check(launch/mir_100)
+roslaunch_add_file_check(launch/mobipick)
+roslaunch_add_file_check(launch/robotiq_2f_140)
+roslaunch_add_file_check(launch/ur5)

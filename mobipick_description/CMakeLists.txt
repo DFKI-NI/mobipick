@@ -9,6 +9,7 @@ project(mobipick_description)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   urdf
+  roslaunch
 )
 
 ## System dependencies are found with CMake's conventions
@@ -195,3 +196,10 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+roslaunch_add_file_check(launch/mir_100)
+roslaunch_add_file_check(launch/mobipick)
+roslaunch_add_file_check(launch/robotiq_2f_140)
+roslaunch_add_file_check(launch/robotiq_ft_300)
+roslaunch_add_file_check(launch/structure)
+roslaunch_add_file_check(launch/ur5)
