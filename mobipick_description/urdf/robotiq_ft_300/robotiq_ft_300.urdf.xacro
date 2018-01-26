@@ -36,6 +36,10 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}fts_robotside">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
 
     <!-- virtual measurement frame -->
     <joint name="${prefix}measurement_joint" type="fixed" >
