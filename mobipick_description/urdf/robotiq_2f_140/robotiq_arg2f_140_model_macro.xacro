@@ -2,6 +2,9 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_transmission.xacro" />
 
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/materials.xacro" />
+  
   <xacro:macro name="outer_knuckle" params="prefix fingerprefix stroke">
     <link name="${prefix}${fingerprefix}_outer_knuckle">
       <inertial>
@@ -20,9 +23,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_outer_knuckle.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-        </material>
+        <material name="robotiq_silver" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -51,9 +52,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_outer_finger.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.1 0.1 0.1 1" />
-        </material>
+        <material name="robotiq_almost_black" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -82,9 +81,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_knuckle.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.1 0.1 0.1 1" />
-        </material>
+        <material name="robotiq_almost_black" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -113,9 +110,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_finger.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.1 0.1 0.1 1" />
-        </material>
+        <material name="robotiq_almost_black" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
