@@ -2,9 +2,23 @@
 
 <launch>
   <arg name="gui" default="True" />
+
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/ur5/ur5_joint_limited_robot.urdf.xacro" />
-  <param name="use_gui" value="$(arg gui)"/>
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <param name="use_gui" value="$(arg gui)"/>
+    <rosparam>
+      zeros:
+        shoulder_pan_joint:   0.00
+        shoulder_lift_joint: -2.60
+        elbow_joint:          2.43
+        wrist_1_joint:       -2.05
+        wrist_2_joint:       -1.57
+        wrist_3_joint:        1.57
+    </rosparam>
+  </node>
+
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find mobipick_description)/rviz/visualize_ur5.rviz" required="true" />
 </launch>
