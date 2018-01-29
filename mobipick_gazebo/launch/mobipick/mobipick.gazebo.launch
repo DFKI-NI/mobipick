@@ -11,7 +11,6 @@
        to lose contact with the ground, so the robot won't be able to properly
        navigate. See
        https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
-  <rosparam file="$(find mobipick_gazebo)/config/ur5/gazebo_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" />
 
 

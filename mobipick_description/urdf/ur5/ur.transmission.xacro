@@ -1,18 +1,12 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <!-- Note: You MUST load PID parameters (see gazebo_controller.yaml) for all
-       joints that are using the PositionJointInterface, otherwise the arm +
-       gripper will act like a giant parachute, counteracting gravity, and
-       causing some of the wheels to lose contact with the ground, so the robot
-       won't be able to properly navigate. See
-       https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
   <xacro:macro name="ur_arm_transmission" params="prefix">
 
     <transmission name="${prefix}shoulder_pan_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}shoulder_pan_joint">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
       <actuator name="${prefix}shoulder_pan_motor">
         <mechanicalReduction>1</mechanicalReduction>
@@ -22,7 +16,7 @@
     <transmission name="${prefix}shoulder_lift_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}shoulder_lift_joint">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
       <actuator name="${prefix}shoulder_lift_motor">
         <mechanicalReduction>1</mechanicalReduction>
@@ -32,7 +26,7 @@
     <transmission name="${prefix}elbow_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}elbow_joint">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
       <actuator name="${prefix}elbow_motor">
         <mechanicalReduction>1</mechanicalReduction>
@@ -42,7 +36,7 @@
     <transmission name="${prefix}wrist_1_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}wrist_1_joint">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
       <actuator name="${prefix}wrist_1_motor">
         <mechanicalReduction>1</mechanicalReduction>
@@ -52,7 +46,7 @@
     <transmission name="${prefix}wrist_2_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}wrist_2_joint">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
       <actuator name="${prefix}wrist_2_motor">
         <mechanicalReduction>1</mechanicalReduction>
@@ -62,7 +56,7 @@
     <transmission name="${prefix}wrist_3_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}wrist_3_joint">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
       </joint>
       <actuator name="${prefix}wrist_3_motor">
         <mechanicalReduction>1</mechanicalReduction>

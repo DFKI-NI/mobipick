@@ -3,6 +3,9 @@
 # parachute, counteracting gravity, and causing some of the wheels to lose
 # contact with the ground, so the robot won't be able to properly navigate. See
 # https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612
+#
+# WARNING: The PID gains below are much too high and will cause the arm to try
+# to move with maximum effort, unable to follow a trajectory.
 gazebo_ros_control:
   pid_gains:
     ur5_shoulder_pan_joint:
