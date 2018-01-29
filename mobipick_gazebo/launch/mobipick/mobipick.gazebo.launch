@@ -33,6 +33,8 @@
     <param name="default_vw_min" value="-1.5" />
   </node>
 
+  <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" />
+
   <!-- load the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller mobile_base_controller arm_controller gripper_controller"/>
 
