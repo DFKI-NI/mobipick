@@ -7,13 +7,13 @@
   <!-- <xacro:property name="pi" value="3.14159265" /> -->
 
   <!-- Inertia parameters -->
-  <xacro:property name="base_mass" value="4.0" />  <!-- This mass might be incorrect -->
+  <xacro:property name="base_mass" value="0.300" />  <!-- This mass might be incorrect, the others are from the UR5 FAQ -->
   <xacro:property name="shoulder_mass" value="3.7000" />
   <xacro:property name="upper_arm_mass" value="8.3930" />
-  <xacro:property name="forearm_mass" value="2.2750" />
+  <xacro:property name="forearm_mass" value="2.33" />
   <xacro:property name="wrist_1_mass" value="1.2190" />
   <xacro:property name="wrist_2_mass" value="1.2190" />
-  <xacro:property name="wrist_3_mass" value="0.1879" />
+  <xacro:property name="wrist_3_mass" value="0.1897" />
 
   <xacro:property name="shoulder_cog" value="0.0 0.00193 -0.02561" />
   <xacro:property name="upper_arm_cog" value="0.0 -0.024201 0.2125" />
@@ -94,7 +94,7 @@
           <mesh filename="package://mobipick_description/meshes/ur5/collision/base.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="0.06" length="0.05" mass="${base_mass}">
+      <xacro:cylinder_inertial radius="0.075" length="0.024" mass="${base_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -127,7 +127,7 @@
           <mesh filename="package://mobipick_description/meshes/ur5/collision/shoulder.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="0.06" length="0.15" mass="${shoulder_mass}">
+      <xacro:cylinder_inertial radius="0.06" length="0.14" mass="${shoulder_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -226,7 +226,7 @@
           <mesh filename="package://mobipick_description/meshes/ur5/collision/wrist1.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_1_mass}">
+      <xacro:cylinder_inertial radius="0.06" length="0.12" mass="${wrist_1_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -259,7 +259,7 @@
           <mesh filename="package://mobipick_description/meshes/ur5/collision/wrist2.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_2_mass}">
+      <xacro:cylinder_inertial radius="0.06" length="0.12" mass="${wrist_2_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
@@ -292,7 +292,7 @@
           <mesh filename="package://mobipick_description/meshes/ur5/collision/wrist3.stl" />
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="0.6" length="0.12" mass="${wrist_3_mass}">
+      <xacro:cylinder_inertial radius="0.04" length="0.04" mass="${wrist_3_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
