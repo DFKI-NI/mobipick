@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot>
+  <material name="mir_silver">
+    <color rgba="0.79 0.82 0.93 1" />
+  </material>
+
+  <material name="mir_dark_grey">
+    <color rgba="0.175 0.175 0.175 1" />
+  </material>
+
+  <material name="mir_white">
+    <color rgba="1 1 1 1" />
+  </material>
+</robot>

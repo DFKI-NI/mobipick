@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/structure/materials.xacro" />
 
   <!-- <xacro:property name="pi" value="3.14159265" /> -->
 
@@ -21,9 +22,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/structure/visual/part_down.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.8 0.8 0.8 1" />
-        </material>
+        <material name="structure_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -32,6 +31,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}part_down">
+      <material>Gazebo/Grey</material>
+    </gazebo>
 
     <link name="${prefix}part_up">
       <inertial>
@@ -50,9 +52,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/structure/visual/part_up.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.8 0.8 0.8 1" />
-        </material>
+        <material name="structure_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -61,6 +61,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}part_up">
+      <material>Gazebo/Grey</material>
+    </gazebo>
 
     <link name="${prefix}pedestal">
       <inertial>
@@ -79,9 +82,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/structure/visual/pedestal.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.8 0.8 0.8 1" />
-        </material>
+        <material name="structure_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -90,6 +91,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}pedestal">
+      <material>Gazebo/Grey</material>
+    </gazebo>
 
     <link name="${prefix}pedestal_surface"/>
 

@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/materials.xacro" />
 
   <!-- <xacro:property name="pi" value="3.14159265" /> -->
   <xacro:property name="deg_to_rad" value="0.017453293" />
@@ -53,9 +54,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/actuated_wheel.stl" />
         </geometry>
-        <material name="">
-          <color rgba="1.0 0.0 0.0 1" />
-        </material>
+        <material name="mir_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -63,8 +62,10 @@
           <mesh filename="package://mobipick_description/meshes/mir_100/collision/actuated_wheel.stl" />
         </geometry>
       </collision>
-
     </link>
+    <gazebo reference="${prefix}${locationprefix}_act_wheel">
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
   </xacro:macro>
 
 
@@ -87,9 +88,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/caster_wheel_base.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.4 0.4 0.4 1" />
-        </material>
+        <material name="mir_silver" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -98,6 +97,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}${locationprefix}_caster_wheel_base">
+      <material>Gazebo/Grey</material>
+    </gazebo>
 
     <link name="${prefix}${locationprefix}_caster_wheel">
       <inertial>
@@ -118,9 +120,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/caster_wheel.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.4 0.4 0.4 1" />
-        </material>
+        <material name="mir_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -128,8 +128,10 @@
           <mesh filename="package://mobipick_description/meshes/mir_100/collision/caster_wheel.stl" />
         </geometry>
       </collision>
-
     </link>
+    <gazebo reference="${prefix}${locationprefix}_caster_wheel">
+      <material>Gazebo/DarkGrey</material>
+    </gazebo>
   </xacro:macro>
 
 
@@ -197,9 +199,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/mir_100_base.stl" />
         </geometry>
-        <material name="">
-          <color rgba="0.8 0.8 0.8 1" />
-        </material>
+        <material name="mir_white" />
       </visual>
       <collision>
         <origin xyz="${mir_100_act_wheel_dx} 0 0" rpy="0 0 0" />
@@ -208,6 +208,9 @@
         </geometry>
       </collision>
     </link>
+    <gazebo reference="${prefix}base_link">
+      <material>Gazebo/White</material>
+    </gazebo>
 
     <xacro:actuated_wheel_link prefix="${prefix}" locationprefix="left"/>
     <xacro:actuated_wheel_link prefix="${prefix}" locationprefix="right"/>
