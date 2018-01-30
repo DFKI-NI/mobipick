@@ -44,10 +44,20 @@
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="fts_toolside" />
     <child link="gripper_robotiq_arg2f_base_link" />
-    <axis xyz="0 0 1" />
   </joint>
 
   <xacro:robotiq_arg2f_140 prefix="gripper_"/>
+
+  <!-- ############### SENSOR MOUNT + 3D CAM  ################ -->
+  <xacro:include filename="$(find mobipick_description)/urdf/sensors/gripper_cam.urdf.xacro" />
+
+  <joint name="sensor_mount_joint" type="fixed">
+    <origin xyz="0.0 0.0 0.01" rpy="0.0 ${-pi/2} ${pi/2}" />
+    <parent link="gripper_robotiq_arg2f_base_link" />
+    <child link="sensor_mount_link" />
+  </joint>
+
+  <gripper_cam />
 
   <!-- ################ GAZEBO ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/mobipick/mobipick.gazebo.xacro" />
