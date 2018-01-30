@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
-  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/materials.xacro" />
 
   <!-- <xacro:property name="pi" value="3.14159265" /> -->
   <xacro:property name="deg_to_rad" value="0.017453293" />
@@ -54,7 +54,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/actuated_wheel.stl" />
         </geometry>
-        <material name="mir_dark_grey" />
+        <xacro:insert_block name="material_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -88,7 +88,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/caster_wheel_base.stl" />
         </geometry>
-        <material name="mir_silver" />
+        <xacro:insert_block name="material_silver" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -120,7 +120,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/caster_wheel.stl" />
         </geometry>
-        <material name="mir_dark_grey" />
+        <xacro:insert_block name="material_dark_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -199,7 +199,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/mir_100/visual/mir_100_base.stl" />
         </geometry>
-        <material name="mir_white" />
+        <xacro:insert_block name="material_white" />
       </visual>
       <collision>
         <origin xyz="${mir_100_act_wheel_dx} 0 0" rpy="0 0 0" />

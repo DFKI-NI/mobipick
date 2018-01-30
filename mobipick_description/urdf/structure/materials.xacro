@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<robot>
-  <material name="structure_aluminum">
-    <color rgba="0.8 0.8 0.8 1" />
-  </material>
-</robot>

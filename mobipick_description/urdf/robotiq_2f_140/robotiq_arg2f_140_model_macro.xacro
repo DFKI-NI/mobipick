@@ -1,9 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_transmission.xacro" />
-
-  <!-- Import Rviz colors -->
-  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/materials.xacro" />
   
   <xacro:macro name="outer_knuckle" params="prefix fingerprefix stroke">
     <link name="${prefix}${fingerprefix}_outer_knuckle">
@@ -23,7 +21,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_outer_knuckle.stl" />
         </geometry>
-        <material name="robotiq_silver" />
+        <xacro:insert_block name="material_silver" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -55,7 +53,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_outer_finger.stl" />
         </geometry>
-        <material name="robotiq_almost_black" />
+        <xacro:insert_block name="material_black" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -87,7 +85,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_knuckle.stl" />
         </geometry>
-        <material name="robotiq_almost_black" />
+        <xacro:insert_block name="material_black" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -119,7 +117,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_inner_finger.stl" />
         </geometry>
-        <material name="robotiq_almost_black" />
+        <xacro:insert_block name="material_black" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />

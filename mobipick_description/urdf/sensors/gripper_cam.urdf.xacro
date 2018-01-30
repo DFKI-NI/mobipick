@@ -25,9 +25,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/sensors/sensor_mount.stl" scale="0.001 0.001 0.001" />
         </geometry>
-        <material name="almost_white">
-          <color rgba="0.9 0.9 0.9 1" />
-        </material>
+        <xacro:insert_block name="material_almost_white" />
       </visual>
       <collision>
         <geometry>
