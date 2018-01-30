@@ -10,12 +10,12 @@
         <origin xyz="0 0 0.3278534031" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
         <mass value="3.349376" />
         <inertia
-            ixx="0.432077541"
-            ixy="0"
-            ixz="0"
-            iyy="0.369249471"
-            iyz="0"
-            izz="0.179676981" />
+          ixx="0.432077541"
+          ixy="0"
+          ixz="0"
+          iyy="0.369249471"
+          iyz="0"
+          izz="0.179676981" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -40,12 +40,12 @@
         <origin xyz="0 0 0.3535849057" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
         <mass value="4.64704" />
         <inertia
-            ixx="0.549473755"
-            ixy="0"
-            ixz="0"
-            iyy="0.436580833"
-            iyz="0"
-            izz="0.245971089" />
+          ixx="0.549473755"
+          ixy="0"
+          ixz="0"
+          iyy="0.436580833"
+          iyz="0"
+          izz="0.245971089" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -70,12 +70,12 @@
         <origin xyz="0 0 0.1532210441" rpy="${0.5 * pi} ${0.5 * pi} 0" />
         <mass value="2.354023413" />
         <inertia
-            ixx="0.049542988"
-            ixy="0"
-            ixz="0"
-            iyy="0.042530187"
-            iyz="0"
-            izz="0.020198776" />
+          ixx="0.049542988"
+          ixy="0"
+          ixz="0"
+          iyy="0.042530187"
+          iyz="0"
+          izz="0.020198776" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -109,7 +109,7 @@
       <parent link="${prefix}part_down" />
       <child link="${prefix}part_up" />
       <axis xyz="0 0 1" />
-    </joint> 
+    </joint>
 
     <joint name="${prefix}Tischaufbau_joint" type="fixed">
       <origin xyz="0 0 0.44" rpy="0 0 0" />

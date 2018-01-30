@@ -7,12 +7,12 @@
         <!-- <origin xyz="0 32.3E-03 -3.4587E-03" rpy="0 0 0" /> -->
         <origin xyz="0 0.0323 -0.003459" rpy="${pi} ${0.5 * pi} ${0.5 * pi}" />
         <mass value="3.3455E-2" />
-        <inertia ixx="13.66E-6" 
-		 ixy="0" 
-		 ixz="0"  
-		 iyy="11.784E-6"  
-		 iyz="0"  
-		 izz="2.15E-6" />
+        <inertia ixx="13.66E-6"
+          ixy="0"
+          ixz="0"
+          iyy="11.784E-6"
+          iyz="0"
+          izz="2.15E-6" />
       </inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -35,7 +35,6 @@
     </gazebo>
   </xacro:macro>
 
-
   <xacro:macro name="fingertip_joint" params="prefix fingerprefix">
     <joint name="${prefix}${fingerprefix}_fingertip_joint" type="fixed">
       <origin xyz="0 0.013513 -0.018469" rpy="0 0 0" />
@@ -44,6 +43,4 @@
       <axis xyz="0 0 1" />
     </joint>
   </xacro:macro>
-
-
 </robot>
