@@ -4,7 +4,6 @@
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
 
-  <!-- <xacro:property name="pi" value="3.14159265" /> -->
   <xacro:property name="deg_to_rad" value="0.017453293" />
 
   <xacro:property name="mir_100_base_mass" value="58.0" />

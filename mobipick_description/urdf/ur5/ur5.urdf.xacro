@@ -4,8 +4,6 @@
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur.gazebo.xacro" />
 
-  <!-- <xacro:property name="pi" value="3.14159265" /> -->
-
   <!-- Inertia parameters -->
   <xacro:property name="base_mass" value="0.300" />  <!-- This mass might be incorrect, the others are from the UR5 FAQ -->
   <xacro:property name="shoulder_mass" value="3.7000" />
