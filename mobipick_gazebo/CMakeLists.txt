@@ -155,12 +155,11 @@ include_directories(
 # all install targets should use catkin DESTINATION variables
 # See http://ros.org/doc/api/catkin/html/adv_user_guide/variables.html
 
-## Mark executable scripts (Python etc.) for installation
-## in contrast to setup.py, you can choose the destination
-# install(PROGRAMS
-#   scripts/my_python_script
-#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+# Mark executable scripts (Python etc.) for installation
+install(PROGRAMS
+  nodes/move_arm_to_home
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 ## Mark executables and/or libraries for installation
 # install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
@@ -176,12 +175,12 @@ include_directories(
 #   PATTERN ".svn" EXCLUDE
 # )
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+# Mark other files for installation (e.g. launch and bag files, etc.)
+install(DIRECTORY
+  config
+  launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
 
 #############
 ## Testing ##
