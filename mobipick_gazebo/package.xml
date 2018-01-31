@@ -57,5 +57,6 @@
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>roboticsgroup_gazebo_plugins</exec_depend>  <!-- from https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins -->
   <exec_depend>rostopic</exec_depend>
+  <exec_depend>rqt_joint_trajectory_controller</exec_depend>
   <exec_depend>rqt_robot_steering</exec_depend>
 </package>
