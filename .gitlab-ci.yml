@@ -15,11 +15,7 @@ build:
     - apt-get install git
     - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR
     - git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
-    # This does NOT work any more, since the manifest.xml makes rosdep believe
-    # that the top-level directory "mobipick" is a ros package. This is why we
-    # have to list the paths explicitly now.
-    #- rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
-    - rosdep install --from-paths mobipick/mobipick_description mobipick/mobipick_gazebo roboticsgroup_gazebo_plugins -i -y --rosdistro $CI_ROS_DISTRO
+    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
     - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
     - catkin_init_workspace
     - cd $CATKIN_WS
@@ -39,6 +35,7 @@ software_catalogue_entry:
     - apt update
     - apt install -y wget
     - wget http://bob.dfki.uni-bremen.de/software_overview/generate.sh
+    - cd .ci
     - sh generate.sh $CI_PROJECT_NAMESPACE $CI_PROJECT_NAME $CI_PROJECT_URL
   only:
     - kinetic
