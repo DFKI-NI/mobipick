@@ -1,0 +1,38 @@
+image: ros:kinetic
+
+build:
+  stage: build
+  script:
+    - export LANG="en_US.UTF-8"
+    - export LC_ALL=$LANG
+    - export CI_ROS_DISTRO="kinetic"
+    - export CATKIN_WS=~/catkin_ws
+    - export CATKIN_WS_SRC=${CATKIN_WS}/src
+    - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
+    - mkdir -p $CATKIN_WS_SRC
+    - cd $CATKIN_WS_SRC/
+    - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR
+    - apt-get update -qq
+    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
+    - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
+    - catkin_init_workspace
+    - cd $CATKIN_WS
+    - catkin_make -DCMAKE_BUILD_TYPE=Release install
+
+    # NOTE on testing: `catkin_make run_tests` will show the output of the tests
+    # (gtest, nosetest, etc..) but always returns 0 (success) even if a test
+    # fails. Running `catkin_test_results` aggregates all the results and returns
+    # non-zero when a test fails (which notifies Gitlab CI that the build failed).
+    - catkin_make -DCMAKE_BUILD_TYPE=Release run_tests
+    - catkin_test_results
+
+software_catalogue_entry:
+  image: d-reg.hb.dfki.de:5000/ubuntu:overview_generator
+  stage: deploy
+  script:
+    - apt update
+    - apt install -y wget
+    - wget http://bob.dfki.uni-bremen.de/software_overview/generate.sh
+    - sh generate.sh $CI_PROJECT_NAMESPACE $CI_PROJECT_NAME $CI_PROJECT_URL
+  only:
+    - kinetic
