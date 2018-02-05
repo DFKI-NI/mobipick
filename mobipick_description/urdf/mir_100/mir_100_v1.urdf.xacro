@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/sensors/imu.gazebo.urdf.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
 
@@ -24,6 +25,8 @@
   <xacro:property name="mir_100_back_caster_wheel_base_dx" value="-0.270154" />
   <xacro:property name="mir_100_caster_wheel_base_dy" value="0.203" />
   <xacro:property name="mir_100_caster_wheel_base_dz" value="${mir_100_caster_wheel_radius-mir_100_caster_wheel_dz}" />
+
+  <xacro:property name="imu_stdev" value="0.00017" />
 
   <xacro:macro name="actuated_wheel_link" params="prefix locationprefix">
     <link name="${prefix}${locationprefix}_act_wheel">
@@ -181,6 +184,18 @@
       <material>Gazebo/White</material>
     </gazebo>
 
+    <!-- IMU -->
+    <joint name="${prefix}base_link_to_imu_joint" type="fixed">
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}imu_link" />
+      <origin xyz="0.0 0.0 0.25" rpy="0 0 0" />  <!-- same as real MiR -->
+    </joint>
+
+    <link name="${prefix}imu_link" />
+
+    <xacro:imu_gazebo link="${prefix}imu_link" imu_topic="imu_data" update_rate="50.0" stdev="${imu_stdev}" />
+
+    <!-- wheels -->
     <xacro:actuated_wheel_link prefix="${prefix}" locationprefix="left"/>
     <xacro:actuated_wheel_link prefix="${prefix}" locationprefix="right"/>
     <xacro:caster_wheel_links prefix="${prefix}" locationprefix="front_left"/>
@@ -194,7 +209,6 @@
     <xacro:front_caster_wheel_joints prefix="${prefix}" locationprefix="right" locationright="1"/>
     <xacro:back_caster_wheel_joints prefix="${prefix}" locationprefix="left" locationright="-1"/>
     <xacro:back_caster_wheel_joints prefix="${prefix}" locationprefix="right" locationright="1"/>
-
 
     <joint name="${prefix}base_link_surface_joint" type="fixed">
       <origin xyz="${mir_100_act_wheel_dx} 0 0.352" rpy="0 0 0" />
