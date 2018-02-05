@@ -71,11 +71,9 @@
           <box size="0.0325 0.12 0.0375" />
         </geometry>
       </collision>
-      <inertial>
-        <mass value="${astra_s_mass}" />
+      <xacro:box_inertial mass="${astra_s_mass}" x="0.0325" y="0.12" z="0.0375">
         <origin xyz="${-0.0325 / 2} ${-astra_cam_py} 0.0" />
-        <xacro:box_inertia m="${astra_s_mass}" x="0.0325" y="0.12" z="0.0375" />
-      </inertial>
+      </xacro:box_inertial>
     </link>
     <gazebo reference="${camera_name}_link">
       <material>Gazebo/FlatBlack</material>

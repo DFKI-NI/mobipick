@@ -25,29 +25,11 @@
   <xacro:property name="mir_100_caster_wheel_base_dy" value="0.203" />
   <xacro:property name="mir_100_caster_wheel_base_dz" value="${mir_100_caster_wheel_radius-mir_100_caster_wheel_dz}" />
 
-  <xacro:macro name="cylinder_inertia" params="m r h">
-    <inertia ixx="${m*(3*r*r+h*h)/12}" ixy="0" ixz="0" iyy="${m*(3*r*r+h*h)/12}" iyz="0" izz="${m*r*r/2}"/>
-  </xacro:macro>
-
-  <xacro:macro name="box_inertia" params="m x y z">
-    <inertia ixx="${m*(y*y+z*z)/12}" ixy="0" ixz="0" iyy="${m*(x*x+z*z)/12}" iyz="0" izz="${m*(x*x+y*y)/12}"/>
-  </xacro:macro>
-
   <xacro:macro name="actuated_wheel_link" params="prefix locationprefix">
     <link name="${prefix}${locationprefix}_act_wheel">
-      <inertial>
-        <!-- <origin xyz="0 0 0" rpy="${0.5 * pi} ${0.5 * pi} 0" /> -->
+      <xacro:cylinder_inertial mass="${mir_100_act_wheel_mass}" radius="${mir_100_act_wheel_radius}" length="${mir_100_act_wheel_width}">
         <origin xyz="0 0 0" rpy="${0.5 * pi} 0 0" />
-        <mass value="${mir_100_act_wheel_mass}" />
-        <!-- <inertia
-            ixx="0.0021285829616"
-            ixy="0"
-            ixz="0"
-            iyy="0.0011566983393"
-            iyz="0"
-            izz="0.0011566983393" /> -->
-        <xacro:cylinder_inertia m="${mir_100_act_wheel_mass}" r="${mir_100_act_wheel_radius}" h="${mir_100_act_wheel_width}" />
-      </inertial>
+      </xacro:cylinder_inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -101,19 +83,9 @@
     </gazebo>
 
     <link name="${prefix}${locationprefix}_caster_wheel">
-      <inertial>
-        <!-- <origin xyz="0 0 0" rpy="${0.5 * pi} ${0.5 * pi} 0" /> -->
+      <xacro:cylinder_inertial mass="${mir_100_caster_wheel_mass}" radius="${mir_100_caster_wheel_radius}" length="${mir_100_caster_wheel_width}">
         <origin xyz="0 0 0" rpy="${0.5 * pi} 0 0" />
-        <mass value="${mir_100_caster_wheel_mass}" />
-        <!-- <inertia
-            ixx="0.0021285829616"
-            ixy="0"
-            ixz="0"
-            iyy="0.0011566983393"
-            iyz="0"
-            izz="0.0011566983393" /> -->
-        <xacro:cylinder_inertia m="${mir_100_caster_wheel_mass}" r="${mir_100_caster_wheel_radius}" h="${mir_100_caster_wheel_width}" />
-      </inertial>
+      </xacro:cylinder_inertial>
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
@@ -188,11 +160,9 @@
     </joint>
 
     <link name="${prefix}base_link">
-      <inertial>
+      <xacro:box_inertial mass="${mir_100_base_mass}" x="0.9" y="0.58" z="0.3">
         <origin xyz="${mir_100_act_wheel_dx} 0 0.20" rpy="0 0 0" />
-        <mass value="${mir_100_base_mass}" />
-        <xacro:box_inertia m="${mir_100_base_mass}" x="0.9" y="0.58" z="0.3" />
-      </inertial>
+      </xacro:box_inertial>
       <visual>
         <origin xyz="${mir_100_act_wheel_dx} 0 0" rpy="0 0 0" />
         <geometry>

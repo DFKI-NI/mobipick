@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur.gazebo.xacro" />
 
@@ -64,17 +65,6 @@
   <xacro:property name="elbow_radius" value="0.060" />      <!-- manually measured -->
   <xacro:property name="forearm_radius" value="0.040" />    <!-- manually measured -->
   <xacro:property name="wrist_radius" value="0.045" />      <!-- manually measured -->
-
-  <xacro:macro name="cylinder_inertial" params="radius length mass *origin">
-    <inertial>
-      <mass value="${mass}" />
-      <xacro:insert_block name="origin" />
-      <inertia ixx="${0.0833333 * mass * (3 * radius * radius + length * length)}" ixy="0.0" ixz="0.0"
-        iyy="${0.0833333 * mass * (3 * radius * radius + length * length)}" iyz="0.0"
-        izz="${0.5 * mass * radius * radius}" />
-    </inertial>
-  </xacro:macro>
-
 
   <xacro:macro name="ur5_robot" params="prefix joint_limited">
 
