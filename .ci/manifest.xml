@@ -11,7 +11,9 @@
   <author>Martin Günther/martin.guenther@dfki.de, Santiago Focke/santiago.focke@dfki.de</author>
   <maintainer>Martin Günther/martin.guenther@dfki.de</maintainer>
   <license>BSD</license>
- 
+  <url>https://git.hb.dfki.de/mobipick/mobipick</url>
+  <logo>http://wiki.ros.org/custom/favicon.ico</logo>
+
   <keywords>
     <keyword>robot config</keyword>
     <keyword>ros</keyword>
@@ -25,7 +27,7 @@
     <keyword>robotiq 2-finger adaptive robot gripper 165</keyword>
     <keyword>orbbec astra mini s</keyword>
   </keywords>
- 
+
   <stage>-1</stage>
   <use>single project</use>
   <activity>active</activity>
