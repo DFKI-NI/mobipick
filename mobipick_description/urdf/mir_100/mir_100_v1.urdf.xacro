@@ -2,6 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/sensors/imu.gazebo.urdf.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/sensors/sick_s300.urdf.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.transmission.xacro" />
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100.gazebo.xacro" />
 
@@ -194,6 +195,25 @@
     <link name="${prefix}imu_link" />
 
     <xacro:imu_gazebo link="${prefix}imu_link" imu_topic="imu_data" update_rate="50.0" stdev="${imu_stdev}" />
+
+    <!-- Laser scanners -->
+    <joint name="${prefix}base_link_to_front_laser_joint" type="fixed">
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}front_laser_link" />
+      <!-- on real MiR (depends on calibration): <origin xyz="0.416 0.243 0.200" rpy="0.0 0.0 0.795" /> -->
+      <origin xyz="0.4288 0.2358 0.1914" rpy="${-pi} 0.0 ${pi/4}" />  <!-- from visually matching up the meshes of the MiR and the laser scanner -->
+    </joint>
+
+    <xacro:sick_s300 link="${prefix}front_laser_link" topic="f_scan" />
+
+    <joint name="${prefix}base_link_to_back_laser_joint" type="fixed">
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}back_laser_link" />
+      <!-- on real MiR: <origin xyz="-0.360 -0.252 0.200" rpy="0.0 0.0 -2.348" /> -->
+      <origin xyz="-0.3548 -0.2352 0.1914" rpy="${-pi} 0.0 ${-0.75 * pi}" />  <!-- from visually matching up the meshes of the MiR and the laser scanner -->
+    </joint>
+
+    <xacro:sick_s300 link="${prefix}back_laser_link" topic="b_scan" />
 
     <!-- wheels -->
     <xacro:actuated_wheel_link prefix="${prefix}" locationprefix="left"/>

@@ -9,6 +9,11 @@
       <color rgba="1 1 1 1"/>
     </material>
   </xacro:property>
+  <xacro:property name="material_yellow">
+    <material name="yellow">
+      <color rgba="${255/255} ${226/255} ${0/255} 1"/>
+    </material>
+  </xacro:property>
   <xacro:property name="material_almost_white">
     <material name="almost_white">
       <color rgba="0.9 0.9 0.9 1" />
