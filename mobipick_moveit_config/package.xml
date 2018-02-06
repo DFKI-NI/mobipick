@@ -1,5 +1,4 @@
 <package>
-
   <name>mobipick_moveit_config</name>
   <version>0.3.0</version>
   <description>
@@ -28,6 +27,4 @@
   <!-- <run_depend>warehouse_ros_mongo</run_depend> -->
   <build_depend>mobipick_description</build_depend>
   <run_depend>mobipick_description</run_depend>
-
-
 </package>
