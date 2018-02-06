@@ -26,7 +26,7 @@
 
   <!-- load  teleop -->
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-    <param name="default_topic" value="mobile_base_controller/cmd_vel"/>
+    <param name="default_topic" value="cmd_vel"/>
     <param name="default_vx_max" value="1.0" />
     <param name="default_vx_min" value="-1.0" />
     <param name="default_vw_max" value="1.5" />

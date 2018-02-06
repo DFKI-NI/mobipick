@@ -17,7 +17,7 @@
           <gaussianNoise>${stdev * stdev}</gaussianNoise>
           <xyzOffset>0 0 0</xyzOffset>
           <rpyOffset>0 0 0</rpyOffset>
-          <frameName>${link}</frameName>
+          <frameName>imu_frame</frameName>  <!-- from real MiR -->
         </plugin>
         <pose>0 0 0 0 0 0</pose>
       </sensor>

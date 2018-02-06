@@ -2,7 +2,9 @@
 
 <launch>
   <group>
-    <remap from="joint_states" to="mobipick/joint_states" />
+    <remap from="joint_states"                   to="mobipick/joint_states" />
+    <remap from="mobile_base_controller/cmd_vel" to="cmd_vel" />
+    <remap from="mobile_base_controller/odom"    to="odom_comb" />
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="paused" value="true" />
