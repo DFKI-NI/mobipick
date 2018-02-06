@@ -1,11 +1,21 @@
 <?xml version="1.0" ?>
 
 <launch>
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">
-    <arg name="paused" value="true" />
-  </include>
+  <group>
+    <remap from="joint_states" to="mobipick/joint_states" />
 
-  <!-- Convert an xacro and put on parameter server -->
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="paused" value="true" />
+    </include>
+  </group>
+
+  <!-- Add passive + mimic joints to joint_states topic -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <rosparam param="source_list">[mobipick/joint_states]</rosparam>
+    <param name="rate" value="200.0" />
+  </node>
+
+  <!-- Convert xacro to URDF and upload to parameter server -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
 
   <!-- Spawn a robot into Gazebo -->
