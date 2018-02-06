@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<launch>
+  # whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater
+  <arg name="use_pointcloud" default="false"/>
+
+  # The planning and execution components of MoveIt! configured to
+  # publish the current configuration of the robot (simulated or real)
+  # and the current state of the world as seen by the planner
+  <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
+    <arg name="publish_monitored_planning_scene" value="true" />
+    <arg name="info" value="true" />
+    <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
+  </include>
+  # The visualization component of MoveIt!
+  <!--include file="$(find mobipick_moveit_config)/launch/moveit_rviz.launch">
+    <arg name="config" value="true"/>
+  </include-->
+
+  # Needed as long as robot_pose_ekf isn't running
+  <!--node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 odom_comb base_footprint 100" /-->
+</launch>
