@@ -4,34 +4,34 @@
 joint_limits:
   ur5_shoulder_pan_joint:
     has_velocity_limits: true
-    max_velocity: 3.15
+    max_velocity: 0.45
     has_acceleration_limits: true
-    max_acceleration: 3.15
+    max_acceleration: 1.0
   ur5_shoulder_lift_joint:
     has_velocity_limits: true
-    max_velocity: 3.15
+    max_velocity: 0.45
     has_acceleration_limits: true
-    max_acceleration: 3.15
+    max_acceleration: 1.0
   ur5_elbow_joint:
     has_velocity_limits: true
-    max_velocity: 3.15
+    max_velocity: 0.45
     has_acceleration_limits: true
-    max_acceleration: 3.15
+    max_acceleration: 1.0
   ur5_wrist_1_joint:
     has_velocity_limits: true
-    max_velocity: 3.2
+    max_velocity: 0.45
     has_acceleration_limits: true
-    max_acceleration: 3.2
+    max_acceleration: 1.0
   ur5_wrist_2_joint:
     has_velocity_limits: true
-    max_velocity: 3.2
+    max_velocity: 0.45
     has_acceleration_limits: true
-    max_acceleration: 3.2
+    max_acceleration: 1.0
   ur5_wrist_3_joint:
     has_velocity_limits: true
-    max_velocity: 3.2
+    max_velocity: 0.45
     has_acceleration_limits: true
-    max_acceleration: 3.2
+    max_acceleration: 1.0
   gripper_finger_joint:
     has_velocity_limits: true
     max_velocity: 0.7
