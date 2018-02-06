@@ -46,18 +46,22 @@ def update(foo):
     times = []
     desired_positions = []
     actual_positions = []
+    errors = []
     with controller_states_lock:
         for state in controller_states:
             joint_index = state.joint_names.index(g_joint_name)
             times.append(state.header.stamp.to_sec())
             desired_positions.append(state.desired.positions[joint_index])
             actual_positions.append(state.actual.positions[joint_index])
+            errors.append(state.desired.positions[joint_index] - state.actual.positions[joint_index])
 
     desired_positions_line.set_xdata(np.array(times))
     desired_positions_line.set_ydata(np.array(desired_positions))
     actual_positions_line.set_xdata(np.array(times))
     actual_positions_line.set_ydata(np.array(actual_positions))
-    return planned_positions_line, desired_positions_line, actual_positions_line
+    errors_line.set_xdata(np.array(times))
+    errors_line.set_ydata(np.array(errors))
+    return planned_positions_line, desired_positions_line, actual_positions_line, errors_line
 
 base_topic = sys.argv[1]
 g_joint_name = sys.argv[2]
@@ -75,6 +79,7 @@ rospy.init_node('plot_trajectory', anonymous=True)
 planned_positions_line, = plt.plot([0.0], label='Planned positions')
 desired_positions_line, = plt.plot([0.0], label='Desired positions')
 actual_positions_line, = plt.plot([0.0], label='Actual positions')
+errors_line, = plt.plot([0.0], label='Errors')
 t_start = rospy.Time.now().to_sec()
 plt.xlim(t_start, t_start + 500.0)
 plt.ylim(-np.pi, np.pi)
