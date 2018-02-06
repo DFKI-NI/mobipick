@@ -18,6 +18,9 @@
   -->
   <arg name="use_gui" default="false" />
 
+  <!-- whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater -->
+  <arg name="use_pointcloud" default="false"/>
+
   <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
   <include file="$(find mobipick_moveit_config)/launch/planning_context.launch">
     <arg name="load_robot_description" value="true"/>
@@ -42,6 +45,7 @@
     <arg name="fake_execution" value="true"/>
     <arg name="info" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
+    <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
   </include>
 
   <!-- Run Rviz and load the default config to see the state of the move_group node -->

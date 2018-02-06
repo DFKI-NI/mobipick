@@ -1,0 +1,12 @@
+# This file configures the PointCloudOctomapUpdater. It's slower than the DepthImageOctomapUpdater, but it works in Gazebo.
+
+sensors:
+  - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+    point_cloud_topic: /gripper_cam/depth_registered/points
+    max_range: 1.0
+    frame_subsample: 1
+    point_subsample: 1
+    padding_offset: 0.1
+    padding_scale: 1.0
+#   filtered_cloud_topic: filtered_cloud
+# this last topic is just to debug, having it adds processing time
