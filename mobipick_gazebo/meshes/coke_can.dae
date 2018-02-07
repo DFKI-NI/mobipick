@@ -41,19 +41,19 @@
                             <color>0 0 0 1</color>
                         </emission>
                         <ambient>
-                            <color>0 0 0 1</color>
+                            <color>1 1 1 1</color>
                         </ambient>
                         <diffuse>
                             <texture texture="texture0" texcoord="UVSET0"/>
                         </diffuse>
                         <specular>
-                            <color>0 0 0 1</color>
+                            <color>1 1 1 1</color>
                         </specular>
                         <shininess>
-                            <float>0.3</float>
+                            <float>0.5</float>
                         </shininess>
                         <reflective>
-                            <color>0 0 0 1</color>
+                            <color>1 1 1 1</color>
                         </reflective>
                         <reflectivity>
                             <float>0.5</float>
