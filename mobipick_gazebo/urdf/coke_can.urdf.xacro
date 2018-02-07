@@ -1,0 +1,25 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="coke_can_model">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="mass" value="0.380" />
+  <xacro:property name="radius" value="0.0335" />
+  <xacro:property name="height" value="0.1239" />
+
+  <link name="coke_can">
+    <xacro:cylinder_inertial radius="${radius}" length="${height}" mass="${mass}">
+      <origin xyz="0 0 ${height/2}" rpy="0 0 0" />
+    </xacro:cylinder_inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mobipick_gazebo/meshes/coke_can.dae" scale="0.001 0.001 0.001" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mobipick_gazebo/meshes/coke_can.dae" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+  </link>
+</robot>

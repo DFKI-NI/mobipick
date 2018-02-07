@@ -24,4 +24,17 @@
   <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
     -J ur5_shoulder_pan_joint 0.00 -J ur5_shoulder_lift_joint -2.10 -J ur5_elbow_joint 2.43 -J ur5_wrist_1_joint -2.05 -J ur5_wrist_2_joint -1.57 -J ur5_wrist_3_joint 1.57" />
+
+  <!-- spawn coke can -->
+  <include file="$(find mobipick_gazebo)/launch/objects/coke_can.launch">
+    <arg name="x" value="0.85" />
+    <arg name="y" value="-0.20" />
+    <arg name="z" value="0.75" />
+  </include>
+
+  <!-- spawn table -->
+  <param name="table_description"
+    command="$(find xacro)/xacro.py '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
+  <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 1.0"
+    respawn="false" output="screen" />
 </launch>
