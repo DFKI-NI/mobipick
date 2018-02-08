@@ -50,6 +50,10 @@ add_executable(test_trajectory src/test_trajectory.cpp)
 add_dependencies(test_trajectory ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(test_trajectory ${catkin_LIBRARIES})
 
+add_executable(mobipick_pick_n_place src/mobipick_pick_n_place.cpp)
+add_dependencies(mobipick_pick_n_place ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(mobipick_pick_n_place ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
