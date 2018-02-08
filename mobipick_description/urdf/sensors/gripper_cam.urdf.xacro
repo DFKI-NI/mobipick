@@ -124,7 +124,7 @@
           </image>
           <clip>
             <near>0.05</near>
-            <far>1.0</far>
+            <far>3.50</far>  <!-- measured on real camera: 4.0 m on orthogonal surface, 3.5 m at 60 degrees angle -->
           </clip>
         </camera>
         <plugin name="kinect_${camera_name}_controller" filename="libgazebo_ros_openni_kinect.so">
@@ -143,7 +143,7 @@
           <distortion_k3>0.0</distortion_k3>
           <distortion_t1>0.0</distortion_t1>
           <distortion_t2>0.0</distortion_t2>
-          <pointCloudCutoff>0.25</pointCloudCutoff>  <!-- TODO: measure on real camera; 0.35 m according to data sheet -->
+          <pointCloudCutoff>0.35</pointCloudCutoff>  <!-- measured on real camera (same as data sheet) -->
         </plugin>
       </sensor>
     </gazebo>
