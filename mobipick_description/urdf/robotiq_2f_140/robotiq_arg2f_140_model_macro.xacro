@@ -213,4 +213,8 @@
     <xacro:fingertip_joint prefix="${prefix}" fingerprefix="left"/>
     <xacro:fingertip_joint prefix="${prefix}" fingerprefix="right"/>
   </xacro:macro>
+
+  <!-- GRASP HACK -->
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/gzplugin_grasp_fix.urdf.xacro"/>
+  <gzplugin_grasp_fix/>
 </robot>
