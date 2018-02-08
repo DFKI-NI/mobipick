@@ -29,7 +29,7 @@
   <include file="$(find mobipick_gazebo)/launch/objects/coke_can.launch">
     <arg name="x" value="0.85" />
     <arg name="y" value="-0.20" />
-    <arg name="z" value="0.75" />
+    <arg name="z" value="1.03" />
   </include>
 
   <!-- spawn table -->

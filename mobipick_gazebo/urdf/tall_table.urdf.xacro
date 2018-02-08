@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <robot name="table">
 
-  <property name="table_height" value="0.72" />
+  <property name="table_height" value="1.0" />
   <property name="table_width" value="1.0" />
   <property name="table_depth" value="2.0" />
   <property name="leg_radius" value="0.02" />
