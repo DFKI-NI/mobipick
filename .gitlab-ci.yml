@@ -13,6 +13,7 @@ build:
     - cd $CATKIN_WS_SRC/
     - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR
     - git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
+    - git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
     - git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
     - apt-get update -qq
     - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO
