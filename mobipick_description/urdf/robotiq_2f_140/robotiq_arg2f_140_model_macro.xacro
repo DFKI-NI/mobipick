@@ -212,6 +212,15 @@
     <xacro:robotiq_fingertip_65mm prefix="${prefix}" fingerprefix="right" stroke="140"/>
     <xacro:fingertip_joint prefix="${prefix}" fingerprefix="left"/>
     <xacro:fingertip_joint prefix="${prefix}" fingerprefix="right"/>
+
+    <!-- Tool Center Point: Center of the fingertips when gripper is closed -->
+    <joint name="${prefix}tcp_joint" type="fixed">
+      <origin xyz="0 0 0.1975" rpy="0 ${-pi/2} 0" />
+      <parent link="${prefix}robotiq_arg2f_base_link" />
+      <child link="${prefix}tcp" />
+    </joint>
+
+    <link name="${prefix}tcp" />
   </xacro:macro>
 
   <!-- GRASP HACK -->
