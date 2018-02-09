@@ -1,0 +1,11 @@
+# Position Controllers ---------------------------------------
+gripper_controller:
+  type: position_controllers/GripperActionController
+  joint: gripper_finger_joint
+  goal_tolerance: 0.01             # default: 0.01
+  max_effort: 1.0                  # default: 0.0
+  stall_velocity_threshold: 0.05   # default: 0.001
+  stall_timeout: 1.0               # default: 1.0
+  #stop_trajectory_duration: 0.5
+  #state_publish_rate:  125
+  action_monitor_rate: 10
