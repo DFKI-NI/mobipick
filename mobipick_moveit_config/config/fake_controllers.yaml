@@ -10,3 +10,9 @@ controller_list:
   - name: fake_gripper_controller
     joints:
       - gripper_finger_joint
+
+initial:
+  - group: arm
+    pose: home
+  - group: gripper
+    pose: open
