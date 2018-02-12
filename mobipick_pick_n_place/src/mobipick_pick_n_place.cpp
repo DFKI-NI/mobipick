@@ -45,62 +45,52 @@ static const std::string ROBOT_DESCRIPTION = "robot_description";
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
-  posture.joint_names.resize(6);
-  posture.joint_names[0] = "r_gripper_joint";
-  posture.joint_names[1] = "r_gripper_motor_screw_joint";
-  posture.joint_names[2] = "r_gripper_l_finger_joint";
-  posture.joint_names[3] = "r_gripper_r_finger_joint";
-  posture.joint_names[4] = "r_gripper_r_finger_tip_joint";
-  posture.joint_names[5] = "r_gripper_l_finger_tip_joint";
+  posture.joint_names.resize(1);
+  posture.joint_names[0] = "gripper_finger_joint";
 
   posture.points.resize(1);
-  posture.points[0].positions.resize(6);
-  posture.points[0].positions[0] = 1;
-  posture.points[0].positions[1] = 1.0;
-  posture.points[0].positions[2] = 0.477;
-  posture.points[0].positions[3] = 0.477;
-  posture.points[0].positions[4] = 0.477;
-  posture.points[0].positions[5] = 0.477;
+  posture.points[0].positions.resize(1);
+  posture.points[0].positions[0] = 0.0;
+
+  posture.points[0].time_from_start.fromSec(5.0);
 }
 
 void closedGripper(trajectory_msgs::JointTrajectory &posture)
 {
-  posture.joint_names.resize(6);
-  posture.joint_names[0] = "r_gripper_joint";
-  posture.joint_names[1] = "r_gripper_motor_screw_joint";
-  posture.joint_names[2] = "r_gripper_l_finger_joint";
-  posture.joint_names[3] = "r_gripper_r_finger_joint";
-  posture.joint_names[4] = "r_gripper_r_finger_tip_joint";
-  posture.joint_names[5] = "r_gripper_l_finger_tip_joint";
+  posture.joint_names.resize(1);
+  posture.joint_names[0] = "gripper_finger_joint";
 
   posture.points.resize(1);
-  posture.points[0].positions.resize(6);
-  posture.points[0].positions[0] = 0;
-  posture.points[0].positions[1] = 0;
-  posture.points[0].positions[2] = 0.002;
-  posture.points[0].positions[3] = 0.002;
-  posture.points[0].positions[4] = 0.002;
-  posture.points[0].positions[5] = 0.002;
+  posture.points[0].positions.resize(1);
+  posture.points[0].positions[0] = 0.48;   // closed around coke can: 0.48; fully closed: 0.76
+
+  posture.points[0].time_from_start.fromSec(5.0);
 }
 
-void pick(moveit::planning_interface::MoveGroupInterface &group)
+moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterface &group)
 {
   std::vector<moveit_msgs::Grasp> grasps;
 
+  // --- calculate desired pose of gripper_tcp when grasping
+  // pose of coke can
   geometry_msgs::PoseStamped p;
   p.header.frame_id = "base_footprint";
-  p.pose.position.x = 0.34;
-  p.pose.position.y = -0.7;
-  p.pose.position.z = 0.5;
+  p.pose.position.x = 1.05;
+  p.pose.position.y = -0.25;
+  p.pose.position.z = 1.0 + 0.1239 / 2.0;
+
+  // add z offset to grasp coke can a bit higher than center, to get the gripper away from the table
+  p.pose.position.z += 0.03;
+
   p.pose.orientation.x = 0;
   p.pose.orientation.y = 0;
   p.pose.orientation.z = 0;
-  p.pose.orientation.w = 1;
+  p.pose.orientation.w = 1.0;
   moveit_msgs::Grasp g;
   g.grasp_pose = p;
 
   g.pre_grasp_approach.direction.vector.x = 1.0;
-  g.pre_grasp_approach.direction.header.frame_id = "r_wrist_roll_link";
+  g.pre_grasp_approach.direction.header.frame_id = "gripper_tcp";
   g.pre_grasp_approach.min_distance = 0.2;
   g.pre_grasp_approach.desired_distance = 0.4;
 
@@ -115,29 +105,35 @@ void pick(moveit::planning_interface::MoveGroupInterface &group)
 
   grasps.push_back(g);
   group.setSupportSurfaceName("table");
-  group.pick("part", grasps);
+  return group.pick("coke_can", grasps);
 }
 
-void place(moveit::planning_interface::MoveGroupInterface &group)
+moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterface &group)
 {
   std::vector<moveit_msgs::PlaceLocation> loc;
 
+  // --- calculate desired pose of gripper_tcp when placing
+  // desired pose of coke can
   geometry_msgs::PoseStamped p;
   p.header.frame_id = "base_footprint";
-  p.pose.position.x = 0.7;
-  p.pose.position.y = 0.0;
-  p.pose.position.z = 0.5;
+  p.pose.position.x = 1.05;
+  p.pose.position.y = 0.25;  // only difference to grasping: 0.25 instead of -0.25
+  p.pose.position.z = 1.0 + 0.1239 / 2.0;
+
+  // add z offset to grasp coke can a bit higher than center, to get the gripper away from the table
+  p.pose.position.z += 0.03;
+
   p.pose.orientation.x = 0;
   p.pose.orientation.y = 0;
   p.pose.orientation.z = 0;
-  p.pose.orientation.w = 1;
+  p.pose.orientation.w = 1.0;
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
 
   g.pre_place_approach.direction.vector.z = -1.0;
   g.post_place_retreat.direction.vector.x = -1.0;
   g.post_place_retreat.direction.header.frame_id = "base_footprint";
-  g.pre_place_approach.direction.header.frame_id = "r_wrist_roll_link";
+  g.pre_place_approach.direction.header.frame_id = "gripper_tcp";
   g.pre_place_approach.min_distance = 0.1;
   g.pre_place_approach.desired_distance = 0.2;
   g.post_place_retreat.min_distance = 0.1;
@@ -152,7 +148,7 @@ void place(moveit::planning_interface::MoveGroupInterface &group)
   moveit_msgs::Constraints constr;
   constr.orientation_constraints.resize(1);
   moveit_msgs::OrientationConstraint &ocm = constr.orientation_constraints[0];
-  ocm.link_name = "r_wrist_roll_link";
+  ocm.link_name = "gripper_tcp";
   ocm.header.frame_id = p.header.frame_id;
   ocm.orientation.x = 0.0;
   ocm.orientation.y = 0.0;
@@ -162,15 +158,17 @@ void place(moveit::planning_interface::MoveGroupInterface &group)
   ocm.absolute_y_axis_tolerance = 0.2;
   ocm.absolute_z_axis_tolerance = M_PI;
   ocm.weight = 1.0;
-  //  group.setPathConstraints(constr);
+  group.setPathConstraints(constr);
   group.setPlannerId("RRTConnectkConfigDefault");
 
-  group.place("part", loc);
+  auto error_code = group.place("coke_can", loc);
+  group.clearPathConstraints();
+  return error_code;
 }
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "right_arm_pick_place");
+  ros::init(argc, argv, "mobipick_pick_n_place");
   ros::AsyncSpinner spinner(1);
   spinner.start();
 
@@ -180,12 +178,12 @@ int main(int argc, char **argv)
 
   ros::WallDuration(1.0).sleep();
 
-  moveit::planning_interface::MoveGroupInterface group("right_arm");
+  moveit::planning_interface::MoveGroupInterface group("arm");
   group.setPlanningTime(45.0);
 
   moveit_msgs::CollisionObject co;
   co.header.stamp = ros::Time::now();
-  co.header.frame_id = "base_footprint";
+  co.header.frame_id = "odom_comb";
 
   // remove pole
   co.id = "pole";
@@ -205,7 +203,7 @@ int main(int argc, char **argv)
   co.primitive_poses[0].position.y = -0.4;
   co.primitive_poses[0].position.z = 0.85;
   co.primitive_poses[0].orientation.w = 1.0;
-  pub_co.publish(co);
+  //TODO pub_co.publish(co);
 
   // remove table
   co.id = "table";
@@ -214,15 +212,15 @@ int main(int argc, char **argv)
 
   // add table
   co.operation = moveit_msgs::CollisionObject::ADD;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.5;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 1.5;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.35;
-  co.primitive_poses[0].position.x = 0.7;
-  co.primitive_poses[0].position.y = -0.2;
-  co.primitive_poses[0].position.z = 0.175;
+  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 1.0;
+  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 2.0;
+  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 1.0;
+  co.primitive_poses[0].position.x = 1.0;
+  co.primitive_poses[0].position.y = 0.0;
+  co.primitive_poses[0].position.z = 1.0 / 2.0;
   pub_co.publish(co);
 
-  co.id = "part";
+  co.id = "coke_can";
   co.operation = moveit_msgs::CollisionObject::REMOVE;
   pub_co.publish(co);
 
@@ -231,24 +229,91 @@ int main(int argc, char **argv)
   pub_aco.publish(aco);
 
   co.operation = moveit_msgs::CollisionObject::ADD;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.15;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.1;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.3;
+  co.primitives[0].type = shape_msgs::SolidPrimitive::CYLINDER;
+  co.primitives[0].dimensions.resize(
+          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CYLINDER>::value);
+  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::CYLINDER_HEIGHT] = 0.1239;
+  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS] = 0.0335;
 
-  co.primitive_poses[0].position.x = 0.6;
-  co.primitive_poses[0].position.y = -0.7;
-  co.primitive_poses[0].position.z = 0.5;
+  co.primitive_poses[0].position.x = 1.05;
+  co.primitive_poses[0].position.y = -0.25;
+  co.primitive_poses[0].position.z = 1.0 + 0.1239 / 2.0;
   pub_co.publish(co);
 
   // wait a bit for ros things to initialize
   ros::WallDuration(1.0).sleep();
 
-  pick(group);
+  // plan to observe the table
+  moveit::planning_interface::MoveGroupInterface::Plan plan;
+  group.setNamedTarget("observe100cm_front");
+  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Planning to observation pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Planning to observation pose FAILED");
+    return 1;
+  }
 
+  // move to observation pose
+  error_code = group.move();
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Moving to observation pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Moving to observation pose FAILED");
+    return 1;
+  }
+  ros::WallDuration(2.0).sleep();
+
+  // pick
+  error_code = pick(group);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Picking SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Picking FAILED");
+    return 1;
+  }
   ros::WallDuration(1.0).sleep();
 
-  place(group);
+  // place
+  error_code = place(group);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Placing SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Placing FAILED");
+    return 1;
+  }
 
+  // plan to go home
+  group.setNamedTarget("home");
+  error_code = group.plan(plan);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Planning to home pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Planning to home pose FAILED");
+    return 1;
+  }
+
+  // move to home
+  error_code = group.move();
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Moving to home pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Moving to home pose FAILED");
+    return 1;
+  }
+  ros::WallDuration(2.0).sleep();
   ros::waitForShutdown();
   return 0;
 }
