@@ -51,6 +51,8 @@
     <param name="max_safe_path_cost" value="$(arg max_safe_path_cost)"/>
     <param name="jiggle_fraction" value="$(arg jiggle_fraction)" />
 
+    <param name="arm_prefix" value="ur5_" />   <!-- needed until https://github.com/ros-industrial/universal_robot/pull/334 is merged -->
+
     <!-- load these non-default MoveGroup capabilities -->
     <!--
     <param name="capabilities" value="
