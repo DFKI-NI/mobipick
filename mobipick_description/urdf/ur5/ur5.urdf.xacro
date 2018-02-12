@@ -125,11 +125,14 @@
       <child link = "${prefix}upper_arm_link" />
       <origin xyz="0.0 ${shoulder_offset} 0.0" rpy="0.0 ${pi / 2.0} 0.0" />
       <axis xyz="0 1 0" />
+      <!-- Reachable joint angles are limited by the robot structure to these
+           values. It's important to restrict the joint angles, otherwise the
+           planning space is discontinuous. -->
       <xacro:unless value="${joint_limited}">
-        <limit lower="${-2.0 * pi}" upper="${2.0 * pi}" effort="150.0" velocity="3.15"/>
+        <limit lower="${-pi - 0.82}" upper="0.82" effort="150.0" velocity="3.15"/>
       </xacro:unless>
       <xacro:if value="${joint_limited}">
-        <limit lower="${-pi}" upper="${pi}" effort="150.0" velocity="3.15"/>
+        <limit lower="${-pi - 0.82}" upper="0.82" effort="150.0" velocity="3.15"/>
       </xacro:if>
       <dynamics damping="0.0" friction="0.0"/>
     </joint>
@@ -159,7 +162,10 @@
       <origin xyz="0.0 ${elbow_offset} ${upper_arm_length}" rpy="0.0 0.0 0.0" />
       <axis xyz="0 1 0" />
       <xacro:unless value="${joint_limited}">
-        <limit lower="${-2.0 * pi}" upper="${2.0 * pi}" effort="150.0" velocity="3.15"/>
+        <!-- This joint has to be limited to the reachable angles even in the
+             non-joint-limited version, otherwise the planning space is
+             discontinuous. -->
+        <limit lower="${-pi}" upper="${pi}" effort="150.0" velocity="3.15"/>
       </xacro:unless>
       <xacro:if value="${joint_limited}">
         <limit lower="${-pi}" upper="${pi}" effort="150.0" velocity="3.15"/>
