@@ -18,3 +18,30 @@ Package overview
 * `mobipick_gazebo`: simulation specific configuration + launch files
 * `mobipick_moveit_config`: MoveIt! configuration files
 * `mobipick_pick_n_place`: Some demo nodes that show off the MoveIt capabilities of the robot
+
+
+Installation
+------------
+
+See the build step in [`.gitlab-ci.yml`](.gitlab-ci.yml).
+
+
+Quick start
+-----------
+
+### Pick + Place demo (Gazebo)
+
+```bash
+roslaunch mobipick_gazebo mobipick.gazebo.launch
+rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
+roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true
+roslaunch mobipick_moveit_config moveit_rviz.launch config:=true   # not required, just for visualization
+rosrun mobipick_pick_n_place mobipick_pick_n_place
+```
+
+### Pick + Place demo (MoveIt! demo mode)
+
+```bash
+roslaunch mobipick_moveit_config demo.launch
+roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch
+```
