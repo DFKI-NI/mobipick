@@ -76,13 +76,11 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   // --- calculate desired pose of gripper_tcp when grasping
   // pose of coke can
   geometry_msgs::PoseStamped p;
-  p.header.frame_id = "base_footprint";
-  p.pose.position.x = 1.05;
-  p.pose.position.y = -0.25;
-  p.pose.position.z = 1.0 + 0.1239 / 2.0;
-
+  p.header.frame_id = "coke_can";
+  p.pose.position.x = 0.0;
+  p.pose.position.y = 0.0;
   // add z offset to grasp coke can a bit higher than center, to get the gripper away from the table
-  p.pose.position.z += 0.03;
+  p.pose.position.z = 0.03;
 
   p.pose.orientation.x = 0;
   p.pose.orientation.y = 0;
