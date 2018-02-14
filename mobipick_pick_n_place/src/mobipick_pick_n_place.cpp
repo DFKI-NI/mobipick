@@ -38,8 +38,8 @@
 #include <ros/ros.h>
 
 // MoveIt!
-#include <moveit/planning_scene_monitor/planning_scene_monitor.h>
 #include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <geometric_shapes/solid_primitive_dims.h>
 
 #include <vision_msgs/Detection3DArray.h>
@@ -175,14 +175,15 @@ int main(int argc, char **argv)
   spinner.start();
 
   ros::NodeHandle nh;
-  ros::Publisher pub_co = nh.advertise<moveit_msgs::CollisionObject>("collision_object", 10);
-  ros::Publisher pub_aco = nh.advertise<moveit_msgs::AttachedCollisionObject>("attached_collision_object", 10);
-
-  ros::WallDuration(1.0).sleep();
 
   moveit::planning_interface::MoveGroupInterface group("arm");
   group.setPlanningTime(45.0);
 
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+  /* ********************* UPDATE PLANNING SCENE ********************* */
+
+  // get objects from object detection
   vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
           "/detected_objects", nh, ros::Duration(10.0));
   if (!detections)
@@ -190,6 +191,9 @@ int main(int argc, char **argv)
     ROS_ERROR("Timed out while waiting for a message on topic /detected_objects!");
     return 1;
   }
+
+  // add objects to planning scene
+  std::vector<moveit_msgs::CollisionObject> collision_objects;
   for (auto &&det3d : detections->detections)
   {
     if (det3d.results.empty())
@@ -200,20 +204,9 @@ int main(int argc, char **argv)
     moveit_msgs::CollisionObject co;
     co.header = det3d.header;
     co.id = id_to_string(det3d.results[0].id);
-
-    // remove object in case it was already added
-    co.operation = moveit_msgs::CollisionObject::REMOVE;
-    pub_co.publish(co);
-
-    // detach object in case it was attached (will throw error message if not)
-    moveit_msgs::AttachedCollisionObject aco;
-    aco.object = co;
-    pub_aco.publish(aco);
-
-    // Now add it back
+    co.operation = moveit_msgs::CollisionObject::ADD;
     co.primitives.resize(1);
     co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-    co.operation = moveit_msgs::CollisionObject::ADD;
     co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
     co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x;
     co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y;
@@ -221,11 +214,18 @@ int main(int argc, char **argv)
     co.primitive_poses.resize(1);
     co.primitive_poses[0] = det3d.bbox.center;
 
-    pub_co.publish(co);
+    collision_objects.push_back(co);
+  }
+  planning_scene_interface.applyCollisionObjects(collision_objects);
+
+  // detach all objects
+  auto attached_objects = planning_scene_interface.getAttachedObjects();
+  for (auto &&object : attached_objects)
+  {
+    group.detachObject(object.first);
   }
 
-  // wait a bit for ros things to initialize
-  ros::WallDuration(1.0).sleep();
+  /* ********************* PLAN AND EXECUTE MOVES ********************* */
 
   // plan to observe the table
   moveit::planning_interface::MoveGroupInterface::Plan plan;
@@ -297,7 +297,5 @@ int main(int argc, char **argv)
     ROS_ERROR("Moving to home pose FAILED");
     return 1;
   }
-  ros::WallDuration(2.0).sleep();
-  ros::waitForShutdown();
   return 0;
 }
