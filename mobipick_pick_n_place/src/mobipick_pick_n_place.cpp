@@ -82,10 +82,12 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   // add z offset to grasp coke can a bit higher than center, to get the gripper away from the table
   p.pose.position.z = 0.03;
 
+  // pitch = pi/8
   p.pose.orientation.x = 0;
-  p.pose.orientation.y = 0;
+  p.pose.orientation.y = 0.19509032;
   p.pose.orientation.z = 0;
-  p.pose.orientation.w = 1.0;
+  p.pose.orientation.w = 0.98078528;
+
   moveit_msgs::Grasp g;
   g.grasp_pose = p;
 
