@@ -90,6 +90,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
   moveit_msgs::Grasp g;
   g.grasp_pose = p;
+  g.grasp_quality = 1.0;
 
   g.pre_grasp_approach.direction.vector.x = 1.0;
   g.pre_grasp_approach.direction.header.frame_id = "gripper_tcp";
@@ -106,6 +107,17 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   closedGripper(g.grasp_posture);
 
   grasps.push_back(g);
+
+  // Add a second grasp in case the first doesn't work
+  p.pose.orientation.x = 0;
+  p.pose.orientation.y = 0;
+  p.pose.orientation.z = 0;
+  p.pose.orientation.w = 1;
+  g.grasp_pose = p;
+  g.grasp_quality = 0.5;
+
+  grasps.push_back(g);
+
   group.setSupportSurfaceName("table");
   return group.pick("coke_can", grasps);
 }
