@@ -144,22 +144,21 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   loc.push_back(g);
   group.setSupportSurfaceName("table");
 
-  // add path constraints
-  moveit_msgs::Constraints constr;
-  constr.orientation_constraints.resize(1);
-  moveit_msgs::OrientationConstraint &ocm = constr.orientation_constraints[0];
-  ocm.link_name = "gripper_tcp";
-  ocm.header.frame_id = p.header.frame_id;
-  ocm.orientation.x = 0.0;
-  ocm.orientation.y = 0.0;
-  ocm.orientation.z = 0.0;
-  ocm.orientation.w = 1.0;
-  ocm.absolute_x_axis_tolerance = 0.2;
-  ocm.absolute_y_axis_tolerance = 0.2;
-  ocm.absolute_z_axis_tolerance = M_PI;
-  ocm.weight = 1.0;
-  group.setPathConstraints(constr);
-  group.setPlannerId("RRTConnectkConfigDefault");
+  // add path constraints - doesn't work for place :(
+  //  moveit_msgs::Constraints constr;
+  //  constr.orientation_constraints.resize(1);
+  //  moveit_msgs::OrientationConstraint &ocm = constr.orientation_constraints[0];
+  //  ocm.link_name = "gripper_tcp";
+  //  ocm.header.frame_id = p.header.frame_id;
+  //  ocm.orientation.x = 0.0;
+  //  ocm.orientation.y = 0.0;
+  //  ocm.orientation.z = 0.0;
+  //  ocm.orientation.w = 1.0;
+  //  ocm.absolute_x_axis_tolerance = 0.2;
+  //  ocm.absolute_y_axis_tolerance = 0.2;
+  //  ocm.absolute_z_axis_tolerance = M_PI;
+  //  ocm.weight = 1.0;
+  //  group.setPathConstraints(constr);
 
   auto error_code = group.place("coke_can", loc);
   group.clearPathConstraints();
@@ -176,6 +175,7 @@ int main(int argc, char **argv)
 
   moveit::planning_interface::MoveGroupInterface group("arm");
   group.setPlanningTime(45.0);
+  group.setPlannerId("RRTConnectkConfigDefault");
 
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
