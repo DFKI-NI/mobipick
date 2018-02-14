@@ -15,7 +15,7 @@
   <logo>http://wiki.ros.org/custom/favicon.ico</logo>
 
   <keywords>
-    <keyword>robot config</keyword>
+    <keyword>configuration</keyword>
     <keyword>ros</keyword>
     <keyword>urdf</keyword>
     <keyword>gazebo</keyword>
