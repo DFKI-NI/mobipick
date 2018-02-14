@@ -2,6 +2,7 @@
  * Software License Agreement (BSD License)
  *
  *  Copyright (c) 2012, Willow Garage, Inc.
+ *  Copyright (c) 2018, DFKI GmbH
  *  All rights reserved.
  *
  *  Redistribution and use in source and binary forms, with or without
@@ -32,7 +33,7 @@
  *  POSSIBILITY OF SUCH DAMAGE.
  *********************************************************************/
 
-/* Author: Ioan Sucan */
+/* Authors: Ioan Sucan, Martin Günther */
 
 #include <ros/ros.h>
 
@@ -41,7 +42,8 @@
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <geometric_shapes/solid_primitive_dims.h>
 
-static const std::string ROBOT_DESCRIPTION = "robot_description";
+#include <vision_msgs/Detection3DArray.h>
+#include "mobipick_pick_n_place/fake_object_recognition.h"
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
@@ -181,64 +183,46 @@ int main(int argc, char **argv)
   moveit::planning_interface::MoveGroupInterface group("arm");
   group.setPlanningTime(45.0);
 
-  moveit_msgs::CollisionObject co;
-  co.header.stamp = ros::Time::now();
-  co.header.frame_id = "odom_comb";
+  vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
+          "/detected_objects", nh, ros::Duration(10.0));
+  if (!detections)
+  {
+    ROS_ERROR("Timed out while waiting for a message on topic /detected_objects!");
+    return 1;
+  }
+  for (auto &&det3d : detections->detections)
+  {
+    if (det3d.results.empty())
+    {
+      ROS_ERROR("Detections3D message has empty results!");
+      return 1;
+    }
+    moveit_msgs::CollisionObject co;
+    co.header = det3d.header;
+    co.id = id_to_string(det3d.results[0].id);
 
-  // remove pole
-  co.id = "pole";
-  co.operation = moveit_msgs::CollisionObject::REMOVE;
-  pub_co.publish(co);
+    // remove object in case it was already added
+    co.operation = moveit_msgs::CollisionObject::REMOVE;
+    pub_co.publish(co);
 
-  // add pole
-  co.operation = moveit_msgs::CollisionObject::ADD;
-  co.primitives.resize(1);
-  co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-  co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.3;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.1;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 1.0;
-  co.primitive_poses.resize(1);
-  co.primitive_poses[0].position.x = 0.7;
-  co.primitive_poses[0].position.y = -0.4;
-  co.primitive_poses[0].position.z = 0.85;
-  co.primitive_poses[0].orientation.w = 1.0;
-  //TODO pub_co.publish(co);
+    // detach object in case it was attached (will throw error message if not)
+    moveit_msgs::AttachedCollisionObject aco;
+    aco.object = co;
+    pub_aco.publish(aco);
 
-  // remove table
-  co.id = "table";
-  co.operation = moveit_msgs::CollisionObject::REMOVE;
-  pub_co.publish(co);
+    // Now add it back
+    co.primitives.resize(1);
+    co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+    co.operation = moveit_msgs::CollisionObject::ADD;
+    co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z;
+    co.primitive_poses.resize(1);
+    co.primitive_poses[0] = det3d.bbox.center;
 
-  // add table
-  co.operation = moveit_msgs::CollisionObject::ADD;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 1.0;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 2.0;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 1.0;
-  co.primitive_poses[0].position.x = 1.0;
-  co.primitive_poses[0].position.y = 0.0;
-  co.primitive_poses[0].position.z = 1.0 / 2.0;
-  pub_co.publish(co);
-
-  co.id = "coke_can";
-  co.operation = moveit_msgs::CollisionObject::REMOVE;
-  pub_co.publish(co);
-
-  moveit_msgs::AttachedCollisionObject aco;
-  aco.object = co;
-  pub_aco.publish(aco);
-
-  co.operation = moveit_msgs::CollisionObject::ADD;
-  co.primitives[0].type = shape_msgs::SolidPrimitive::CYLINDER;
-  co.primitives[0].dimensions.resize(
-          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::CYLINDER>::value);
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::CYLINDER_HEIGHT] = 0.1239;
-  co.primitives[0].dimensions[shape_msgs::SolidPrimitive::CYLINDER_RADIUS] = 0.0335;
-
-  co.primitive_poses[0].position.x = 1.05;
-  co.primitive_poses[0].position.y = -0.25;
-  co.primitive_poses[0].position.z = 1.0 + 0.1239 / 2.0;
-  pub_co.publish(co);
+    pub_co.publish(co);
+  }
 
   // wait a bit for ros things to initialize
   ros::WallDuration(1.0).sleep();
