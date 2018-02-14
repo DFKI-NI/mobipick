@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   shape_msgs
   tf
+  vision_msgs
   visualization_msgs
 )
 
@@ -32,6 +33,7 @@ catkin_package(
     roscpp
     shape_msgs
     tf
+    vision_msgs
     visualization_msgs
 )
 
@@ -42,7 +44,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -53,6 +55,10 @@ target_link_libraries(test_trajectory ${catkin_LIBRARIES})
 add_executable(mobipick_pick_n_place src/mobipick_pick_n_place.cpp)
 add_dependencies(mobipick_pick_n_place ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(mobipick_pick_n_place ${catkin_LIBRARIES})
+
+add_executable(static_object_publisher src/static_object_publisher.cpp include/mobipick_pick_n_place/fake_object_recognition.h)
+add_dependencies(static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(static_object_publisher ${catkin_LIBRARIES})
 
 #############
 ## Install ##

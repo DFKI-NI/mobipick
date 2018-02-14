@@ -31,6 +31,7 @@
   <build_depend>roscpp</build_depend>
   <build_depend>shape_msgs</build_depend>
   <build_depend>tf</build_depend>
+  <build_depend>vision_msgs</build_depend>
   <build_depend>visualization_msgs</build_depend>
 
   <build_export_depend>actionlib</build_export_depend>
@@ -43,6 +44,7 @@
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>shape_msgs</build_export_depend>
   <build_export_depend>tf</build_export_depend>
+  <build_export_depend>vision_msgs</build_export_depend>
   <build_export_depend>visualization_msgs</build_export_depend>
 
   <exec_depend>actionlib</exec_depend>
@@ -55,5 +57,6 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>shape_msgs</exec_depend>
   <exec_depend>tf</exec_depend>
+  <exec_depend>vision_msgs</exec_depend>
   <exec_depend>visualization_msgs</exec_depend>
 </package>
