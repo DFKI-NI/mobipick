@@ -5,9 +5,6 @@
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "static_object_publisher");
-  ros::AsyncSpinner spinner(1);
-  spinner.start();
-
   ros::NodeHandle nh;
   ros::Publisher detection_pub = nh.advertise<vision_msgs::Detection3DArray>("detected_objects", 10);
 
