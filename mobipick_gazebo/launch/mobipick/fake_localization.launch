@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+
+<launch>
+  <node name="fake_localization" pkg="fake_localization" type="fake_localization" output="screen">
+    <param name="odom_frame_id" value="odom_comb" />
+    <param name="base_frame_id" value="base_footprint" />
+  </node>
+</launch>
