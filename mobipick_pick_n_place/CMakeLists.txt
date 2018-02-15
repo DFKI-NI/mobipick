@@ -6,6 +6,7 @@ add_compile_options(-std=c++11)
 find_package(catkin REQUIRED COMPONENTS
   actionlib
   control_msgs
+  gazebo_msgs
   geometry_msgs
   moveit_msgs
   moveit_ros_planning_interface
@@ -25,6 +26,7 @@ catkin_package(
   CATKIN_DEPENDS
     actionlib
     control_msgs
+    gazebo_msgs
     geometry_msgs
     moveit_msgs
     moveit_ros_planning_interface
@@ -59,6 +61,10 @@ target_link_libraries(mobipick_pick_n_place ${catkin_LIBRARIES})
 add_executable(static_object_publisher src/static_object_publisher.cpp include/mobipick_pick_n_place/fake_object_recognition.h)
 add_dependencies(static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(static_object_publisher ${catkin_LIBRARIES})
+
+add_executable(gazebo_object_publisher src/gazebo_object_publisher.cpp include/mobipick_pick_n_place/fake_object_recognition.h)
+add_dependencies(gazebo_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(gazebo_object_publisher ${catkin_LIBRARIES})
 
 #############
 ## Install ##
