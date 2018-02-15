@@ -20,7 +20,7 @@ int main(int argc, char **argv)
     det3d.bbox.size.x = 1.0;
     det3d.bbox.size.y = 2.0;
     det3d.bbox.size.z = 1.0;
-    det3d.bbox.center.position.x = 1.0;
+    det3d.bbox.center.position.x = 1.1;
     det3d.bbox.center.position.y = 0.0;
     det3d.bbox.center.position.z = det3d.bbox.size.z / 2.0;
     det3d.bbox.center.orientation.w = 1.0;

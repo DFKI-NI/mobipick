@@ -35,6 +35,6 @@
   <!-- spawn table -->
   <param name="table_description"
     command="$(find xacro)/xacro.py '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
-  <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 1.0"
+  <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 1.1"
     respawn="false" output="screen" />
 </launch>
