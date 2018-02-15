@@ -5,4 +5,6 @@
   </node>
 
   <node name="static_object_publisher" pkg="mobipick_pick_n_place" type="static_object_publisher" output="screen" />
+
+  <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
 </launch>

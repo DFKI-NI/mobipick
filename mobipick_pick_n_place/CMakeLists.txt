@@ -66,6 +66,10 @@ add_executable(gazebo_object_publisher src/gazebo_object_publisher.cpp include/m
 add_dependencies(gazebo_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(gazebo_object_publisher ${catkin_LIBRARIES})
 
+add_executable(camera_marker_publisher src/camera_marker_publisher.cpp)
+add_dependencies(camera_marker_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(camera_marker_publisher ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
