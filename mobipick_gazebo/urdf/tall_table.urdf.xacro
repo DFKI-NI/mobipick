@@ -38,8 +38,8 @@
   </link>
   <gazebo reference="table_top_link">
     <material>Gazebo/Wood</material>
-    <mu1>50.0</mu1>
-    <mu2>50.0</mu2>
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
     <kp>1000000.0</kp>
     <kd>1.0</kd>
   </gazebo>
@@ -72,10 +72,6 @@
   </link>
   <gazebo reference="leg1_link">
     <material>Gazebo/Red</material>
-    <mu1>1000.0</mu1>
-    <mu2>1000.0</mu2>
-    <kp>10000000.0</kp>
-    <kd>1.0</kd>
   </gazebo>
 
   <joint name="leg2_joint" type="fixed" >
@@ -106,10 +102,6 @@
   </link>
   <gazebo reference="leg2_link">
     <material>Gazebo/Red</material>
-    <mu1>1000.0</mu1>
-    <mu2>1000.0</mu2>
-    <kp>10000000.0</kp>
-    <kd>1.0</kd>
   </gazebo>
 
   <joint name="leg3_joint" type="fixed" >
@@ -140,10 +132,6 @@
   </link>
   <gazebo reference="leg3_link">
     <material>Gazebo/Red</material>
-    <mu1>1000.0</mu1>
-    <mu2>1000.0</mu2>
-    <kp>10000000.0</kp>
-    <kd>1.0</kd>
   </gazebo>
 
   <joint name="leg4_joint" type="fixed" >
@@ -174,10 +162,6 @@
   </link>
   <gazebo reference="leg4_link">
     <material>Gazebo/Red</material>
-    <mu1>1000.0</mu1>
-    <mu2>1000.0</mu2>
-    <kp>10000000.0</kp>
-    <kd>1.0</kd>
   </gazebo>
   <gazebo>
     <static>true</static>
