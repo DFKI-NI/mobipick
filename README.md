@@ -40,9 +40,18 @@ roslaunch mobipick_moveit_config moveit_rviz.launch config:=true   # not require
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch
 ```
 
+[![Mobipick pick + place demo (Gazebo)](https://i.vimeocdn.com/video/683635424.jpg?mw=640)](https://vimeo.com/256064111)
+
+(Click image to see video)
+
+
 ### Pick + Place demo (MoveIt! demo mode)
 
 ```bash
 roslaunch mobipick_moveit_config demo.launch
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch object_source:=static
 ```
+
+[![Mobipick pick + place demo (MoveIt! demo mode)](https://i.vimeocdn.com/video/683635444.jpg?mw=640)](https://vimeo.com/256064108) 
+
+(Click image to see video)
