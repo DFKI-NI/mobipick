@@ -141,14 +141,14 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
 
-  g.pre_place_approach.direction.vector.z = -1.0;
-  g.post_place_retreat.direction.vector.x = -1.0;
-  g.post_place_retreat.direction.header.frame_id = "base_footprint";
-  g.pre_place_approach.direction.header.frame_id = "gripper_tcp";
-  g.pre_place_approach.min_distance = 0.1;
+  g.pre_place_approach.direction.header.frame_id = "base_footprint";
   g.pre_place_approach.desired_distance = 0.2;
-  g.post_place_retreat.min_distance = 0.1;
+  g.pre_place_approach.direction.vector.z = -1.0;
+  g.pre_place_approach.min_distance = 0.1;
+  g.post_place_retreat.direction.header.frame_id = "gripper_tcp";
+  g.post_place_retreat.direction.vector.x = -1.0;
   g.post_place_retreat.desired_distance = 0.25;
+  g.post_place_retreat.min_distance = 0.1;
 
   openGripper(g.post_place_posture);
 
