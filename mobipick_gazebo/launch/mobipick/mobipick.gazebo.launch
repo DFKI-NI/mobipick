@@ -20,7 +20,7 @@
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/mir_100/diffdrive_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
-  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/gripper_action_controller.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch" />
 
