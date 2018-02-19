@@ -70,6 +70,10 @@ add_executable(camera_marker_publisher src/camera_marker_publisher.cpp)
 add_dependencies(camera_marker_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(camera_marker_publisher ${catkin_LIBRARIES})
 
+add_executable(moveit_kinematics_speed_and_validity_evaluator src/kinematics_speed_and_validity_evaluator.cpp)
+add_dependencies(moveit_kinematics_speed_and_validity_evaluator  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(moveit_kinematics_speed_and_validity_evaluator ${catkin_LIBRARIES})
+
 #############
 ## Install ##
 #############
