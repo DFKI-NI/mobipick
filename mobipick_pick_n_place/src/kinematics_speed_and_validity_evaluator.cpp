@@ -41,6 +41,34 @@
 
 static const std::string ROBOT_DESCRIPTION = "robot_description";
 
+// from https://stackoverflow.com/questions/1878907/the-smallest-difference-between-2-angles
+double angle_diff(double x, double y)
+{
+  return atan2(sin(x - y), cos(x - y));
+}
+
+double angle_diffs(std::vector<double> xs, std::vector<double> ys)
+{
+  double result = 0.0;
+  assert (xs.size() == ys.size());
+  for (size_t i = 0; i < xs.size(); ++i)
+  {
+    result += fabs(angle_diff(xs[i], ys[i])) / (double) xs.size();
+  }
+  return result;
+}
+
+double unnormalized_angle_diffs(std::vector<double> xs, std::vector<double> ys)
+{
+  double result = 0.0;
+  assert (xs.size() == ys.size());
+  for (size_t i = 0; i < xs.size(); ++i)
+  {
+    result += fabs(xs[i] - ys[i]) / (double) xs.size();
+  }
+  return result;
+}
+
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "inverse_kinematics_test");
@@ -91,7 +119,16 @@ int main(int argc, char** argv)
         {
           state.setToRandomPositions(jmg, rng);
           Eigen::Affine3d pose = state.getGlobalLinkTransform(tip);
+
           state.setToRandomPositions(jmg, rng);
+          std::vector<double> joint_positions_seed;
+          joint_positions_seed.push_back(state.getVariablePosition("ur5_shoulder_pan_joint"));
+          joint_positions_seed.push_back(state.getVariablePosition("ur5_shoulder_lift_joint"));
+          joint_positions_seed.push_back(state.getVariablePosition("ur5_elbow_joint"));
+          joint_positions_seed.push_back(state.getVariablePosition("ur5_wrist_1_joint"));
+          joint_positions_seed.push_back(state.getVariablePosition("ur5_wrist_2_joint"));
+          joint_positions_seed.push_back(state.getVariablePosition("ur5_wrist_3_joint"));
+
           moveit::tools::Profiler::Begin("IK");
           state.setFromIK(jmg, pose);
           moveit::tools::Profiler::End("IK");
@@ -99,12 +136,25 @@ int main(int argc, char** argv)
           Eigen::Affine3d diff = pose_upd * pose.inverse();
           double rot_err = (diff.rotation() - Eigen::Matrix3d::Identity()).norm();
           double trans_err = diff.translation().norm();
+
+          std::vector<double> joint_positions_ik;
+          joint_positions_ik.push_back(state.getVariablePosition("ur5_shoulder_pan_joint"));
+          joint_positions_ik.push_back(state.getVariablePosition("ur5_shoulder_lift_joint"));
+          joint_positions_ik.push_back(state.getVariablePosition("ur5_elbow_joint"));
+          joint_positions_ik.push_back(state.getVariablePosition("ur5_wrist_1_joint"));
+          joint_positions_ik.push_back(state.getVariablePosition("ur5_wrist_2_joint"));
+          joint_positions_ik.push_back(state.getVariablePosition("ur5_wrist_3_joint"));
+
           moveit::tools::Profiler::Average("Rotation error", rot_err);
           moveit::tools::Profiler::Average("Translation error", trans_err);
           if (rot_err < 1e-3 && trans_err < 1e-3)
           {
             moveit::tools::Profiler::Event("Valid IK");
             moveit::tools::Profiler::Average("Success Rate", 100);
+            moveit::tools::Profiler::Average("Normalized   angle distance IK seed - IK result",
+                                             angle_diffs(joint_positions_seed, joint_positions_ik));
+            moveit::tools::Profiler::Average("Unnormalized angle distance IK seed - IK result",
+                                             unnormalized_angle_diffs(joint_positions_seed, joint_positions_ik));
           }
           else
           {
