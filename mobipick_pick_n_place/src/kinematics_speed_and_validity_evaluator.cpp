@@ -83,12 +83,15 @@ int main(int argc, char** argv)
 
         ROS_INFO("Running %u tests", test_count);
 
+        // specify seed 0 for deterministic behavior
+        random_numbers::RandomNumberGenerator rng(0);
+
         moveit::tools::Profiler::Start();
         for (unsigned int i = 0; i < test_count; ++i)
         {
-          state.setToRandomPositions(jmg);
+          state.setToRandomPositions(jmg, rng);
           Eigen::Affine3d pose = state.getGlobalLinkTransform(tip);
-          state.setToRandomPositions(jmg);
+          state.setToRandomPositions(jmg, rng);
           moveit::tools::Profiler::Begin("IK");
           state.setFromIK(jmg, pose);
           moveit::tools::Profiler::End("IK");
