@@ -1,0 +1,2 @@
+base_global_planner: SBPLLatticePlanner
+base_local_planner: pose_follower/PoseFollower
