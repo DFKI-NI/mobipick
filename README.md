@@ -32,7 +32,7 @@ Quick start
 ### Pick + Place demo (Gazebo)
 
 ```bash
-roslaunch mobipick_gazebo mobipick.gazebo.launch
+roslaunch mobipick_gazebo mobipick_table_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mobipick_gazebo fake_localization.launch
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true

@@ -1,6 +1,8 @@
 <?xml version="1.0" ?>
 
 <launch>
+  <arg name="gui" default="true" />
+
   <group>
     <remap from="joint_states"                   to="mobipick/joint_states" />
     <remap from="mobile_base_controller/cmd_vel" to="cmd_vel" />
@@ -8,6 +10,7 @@
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="paused" value="true" />
+      <arg name="gui" value="$(arg gui)" />
     </include>
   </group>
 
@@ -17,13 +20,8 @@
     <param name="rate" value="200.0" />
   </node>
 
-  <!-- Convert xacro to URDF and upload to parameter server -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
-
-  <!-- Spawn a robot into Gazebo -->
-  <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
-    -J ur5_shoulder_pan_joint 0.00 -J ur5_shoulder_lift_joint -2.10 -J ur5_elbow_joint 2.43 -J ur5_wrist_1_joint -2.05 -J ur5_wrist_2_joint -1.57 -J ur5_wrist_3_joint 1.57" />
+  <!-- spawn robot and bring up controllers etc. -->
+  <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_gazebo_common.launch" />
 
   <!-- spawn coke can -->
   <include file="$(find mobipick_gazebo)/launch/objects/coke_can.launch">

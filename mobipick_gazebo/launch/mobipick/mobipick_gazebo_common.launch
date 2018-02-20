@@ -1,10 +1,9 @@
 <?xml version="1.0" ?>
-
 <launch>
-  <arg name="gui" default="True" />
-  <!--  <arg name="mir_100_ns" default="mir_100" /> -->
+  <!-- Load URDF -->
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
 
-  <!-- Load gazebo controller configurations from YAML file to parameter server -->
+  <!-- Load gazebo controller configurations -->
   <!-- Note: You MUST load these PID parameters for all joints that are using
        the PositionJointInterface, otherwise the arm + gripper will act like a
        giant parachute, counteracting gravity, and causing some of the wheels
@@ -13,18 +12,28 @@
        https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
   <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" />
 
+  <!-- Spawn the robot into Gazebo -->
+  <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
+    -J ur5_shoulder_pan_joint 0.00 -J ur5_shoulder_lift_joint -2.10 -J ur5_elbow_joint 2.43 -J ur5_wrist_1_joint -2.05 -J ur5_wrist_2_joint -1.57 -J ur5_wrist_3_joint 1.57" />
 
-<!-- <group ns="$(arg mir_100_ns)"> -->
-
-  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <!-- Load ros_control controller configurations -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/mir_100/diffdrive_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" />
 
-  <include file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch" />
+  <!-- Start the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
+    args="joint_state_controller mobile_base_controller arm_controller gripper_controller"/>
 
-  <!-- load  teleop -->
+  <!-- Fake calibration -->
+  <node pkg="rostopic" type="rostopic" name="fake_joint_calibration" args="pub /calibrated std_msgs/Bool true"/>
+
+  <!-- Robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
+
+  <!-- Load teleop -->
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
     <param name="default_topic" value="cmd_vel"/>
     <param name="default_vx_max" value="1.0" />
@@ -34,18 +43,4 @@
   </node>
 
   <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" />
-
-  <!-- load the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller mobile_base_controller arm_controller gripper_controller"/>
-
-  <!-- </group> -->
-
-    <node pkg="rostopic" type="rostopic" name="fake_joint_calibration" args="pub /calibrated std_msgs/Bool true"/>
-
-<!-- convert joint states to TF transforms for rviz, etc -->
-<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-  respawn="false" output="screen">
-</node>
-
 </launch>
-
