@@ -1,3 +1,4 @@
+base_local_planner: teb_local_planner/TebLocalPlannerROS
 TebLocalPlannerROS:
   # Robot configuration
   acc_lim_x: 1.0

@@ -1,3 +1,4 @@
+base_local_planner: base_local_planner/TrajectoryPlannerROS
 TrajectoryPlannerROS:
   # Robot configuration
   acc_lim_x: 0.1

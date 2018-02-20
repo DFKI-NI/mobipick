@@ -1,3 +1,4 @@
+base_local_planner: pose_follower/PoseFollower
 PoseFollower:
     k_trans: 2.0
     k_rot: 1.0

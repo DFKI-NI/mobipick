@@ -1,3 +1,4 @@
+base_global_planner: SBPLLatticePlanner
 SBPLLatticePlanner:
   environment_type: XYThetaLattice
   planner_type: ARAPlanner
