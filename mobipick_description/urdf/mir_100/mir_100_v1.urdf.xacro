@@ -196,6 +196,17 @@
 
     <xacro:imu_gazebo link="${prefix}imu_link" imu_topic="imu_data" update_rate="50.0" stdev="${imu_stdev}" />
 
+    <!-- Create an alias for imu_link. This is necessary because the real MiR's
+         TF has imu_link, but the imu_data topic is published in the imu_frame
+         frame. -->
+    <joint name="${prefix}imu_link_to_imu_frame_joint" type="fixed">
+      <parent link="${prefix}imu_link" />
+      <child link="${prefix}imu_frame" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+
+    <link name="${prefix}imu_frame" />
+
     <!-- Laser scanners -->
     <joint name="${prefix}base_link_to_front_laser_joint" type="fixed">
       <parent link="${prefix}base_link" />
