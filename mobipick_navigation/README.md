@@ -1,4 +1,4 @@
-bluebotics_navigation
+mobipick_navigation
 =====================
 
 Requires the branch `fix_ignored_footprint` from here:

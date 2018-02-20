@@ -6,12 +6,12 @@
     <arg name="map_file" default="$(find amparo_launch)/rosnav/map_airbus_mir_0.10.yaml"/>
     <arg name="virtual_walls_map_file" default="$(find amparo_launch)/rosnav/map_airbus_mir_virtual_walls_0.10.yaml"/>
 
-    <include file="$(find bluebotics_navigation)/launch/start_maps.launch">
+    <include file="$(find mobipick_navigation)/launch/start_maps.launch">
       <arg name="map_file" value="$(arg map_file)" />
       <arg name="virtual_walls_map_file" value="$(arg virtual_walls_map_file)" />
     </include>
 
-    <include file="$(find bluebotics_navigation)/launch/move_base.xml">
+    <include file="$(find mobipick_navigation)/launch/move_base.xml">
       <arg name="local_planner" value="$(arg local_planner)"/>
     </include>
 

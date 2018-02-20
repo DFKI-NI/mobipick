@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>bluebotics_navigation</name>
+  <name>mobipick_navigation</name>
   <version>0.0.0</version>
-  <description>The bluebotics_navigation package</description>
+  <description>The mobipick_navigation package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag --> 
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but mutiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/bluebotics_navigation</url> -->
+  <!-- <url type="website">http://wiki.ros.org/mobipick_navigation</url> -->
 
 
   <!-- Author tags are optional, mutiple are allowed, one per tag -->

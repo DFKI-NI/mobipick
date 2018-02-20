@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(bluebotics_navigation)
+project(mobipick_navigation)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -99,7 +99,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES bluebotics_navigation
+#  LIBRARIES mobipick_navigation
 #  CATKIN_DEPENDS move_base
 #  DEPENDS system_lib
 )
@@ -116,24 +116,24 @@ include_directories(
 )
 
 ## Declare a C++ library
-# add_library(bluebotics_navigation
-#   src/${PROJECT_NAME}/bluebotics_navigation.cpp
+# add_library(mobipick_navigation
+#   src/${PROJECT_NAME}/mobipick_navigation.cpp
 # )
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(bluebotics_navigation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(mobipick_navigation ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Declare a C++ executable
-# add_executable(bluebotics_navigation_node src/bluebotics_navigation_node.cpp)
+# add_executable(mobipick_navigation_node src/mobipick_navigation_node.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
-# add_dependencies(bluebotics_navigation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(mobipick_navigation_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-# target_link_libraries(bluebotics_navigation_node
+# target_link_libraries(mobipick_navigation_node
 #   ${catkin_LIBRARIES}
 # )
 
@@ -152,7 +152,7 @@ include_directories(
 # )
 
 ## Mark executables and/or libraries for installation
-# install(TARGETS bluebotics_navigation bluebotics_navigation_node
+# install(TARGETS mobipick_navigation mobipick_navigation_node
 #   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
 #   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -177,7 +177,7 @@ include_directories(
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_bluebotics_navigation.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_mobipick_navigation.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
