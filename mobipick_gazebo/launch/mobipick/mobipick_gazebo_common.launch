@@ -46,4 +46,8 @@
   </node>
 
   <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" />
+
+  <!-- create combined scan topic -->
+  <node pkg="topic_tools" type="relay" name="b_scan_relay" args="b_scan scan"/>
+  <node pkg="topic_tools" type="relay" name="f_scan_relay" args="f_scan scan"/>
 </launch>

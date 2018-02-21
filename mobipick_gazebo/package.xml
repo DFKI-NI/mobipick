@@ -62,4 +62,5 @@
   <exec_depend>rostopic</exec_depend>
   <exec_depend>rqt_joint_trajectory_controller</exec_depend>
   <exec_depend>rqt_robot_steering</exec_depend>
+  <exec_depend>topic_tools</exec_depend>
 </package>
