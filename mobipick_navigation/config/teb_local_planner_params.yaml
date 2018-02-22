@@ -1,11 +1,11 @@
 base_local_planner: teb_local_planner/TebLocalPlannerROS
 TebLocalPlannerROS:
   # Robot configuration
-  acc_lim_x: 1.0
+  acc_lim_x: 1.5
   acc_lim_theta: 2.0
-  max_vel_x: 0.3
-  max_vel_x_backwards: 0.3
-  max_vel_theta: 5.0
+  max_vel_x: 0.8
+  max_vel_x_backwards: 0.2
+  max_vel_theta: 1.0
 
   footprint_model: 
     type: "polygon"
