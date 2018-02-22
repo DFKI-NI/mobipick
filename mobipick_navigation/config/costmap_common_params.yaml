@@ -2,10 +2,8 @@ robot_base_frame: base_link
 transform_tolerance: 0.5
 update_frequency: 5.0
 publish_frequency: 1.0
-#footprint: [[4.0,0.35],[-4.0,0.35],[-4.0,-0.35],[4.0,-0.35]]
-footprint: [[4.2,0.15],[1.1,0.15],[1.1,0.35],[-1.1,0.35],[-1.1,0.15],[-3.6,0.15],[-3.6,-0.15],[-1.1,-0.15],[-1.1,-0.35],[1.1,-0.35],[1.1,-0.15],[4.2,-0.15]]
-#footprint: [[1.0,0.35],[-1.0,0.35],[-1.0,-0.35],[1.0,-0.35]]
-footprint_padding: 0.1
+footprint: [[0.506,-0.32],[0.506,0.32],[-0.454,0.32],[-0.454,-0.32]]
+footprint_padding: 0.0
 obstacle_range: 10.0
 raytrace_range: 20.0
 resolution: 0.1
