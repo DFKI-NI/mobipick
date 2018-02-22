@@ -13,7 +13,7 @@ z_resolution: 0.3
 z_voxels: 5
 #mark_threshold: 1
 publish_voxel_map: true
-static_map:
+navigation_map:
   map_topic: /map
   first_map_only: true
 obstacles:
