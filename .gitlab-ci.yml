@@ -41,6 +41,11 @@ build:
     - catkin_make -DCMAKE_BUILD_TYPE=Release run_tests
     - catkin_test_results
 
+    # catkin_lint
+    - apt-get install -y python-catkin-lint
+    - cd $CATKIN_PROJECT_DIR
+    - catkin_lint .
+
 software_catalogue_entry:
   image: d-reg.hb.dfki.de:5000/ubuntu:overview_generator
   stage: deploy
