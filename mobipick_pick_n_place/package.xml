@@ -2,64 +2,27 @@
 <package format="2">
   <name>mobipick_pick_n_place</name>
   <version>0.0.0</version>
-  <description>A pick and place behavior for Mobipick.</description>
+  <description>Some demo nodes that show off the MoveIt capabilities of the Mobipick robot.</description>
 
-  <author email="martin.guenther@dfki.de">Martin Günther</author>
   <maintainer email="martin.guenther@dfki.de">Martin Günther</maintainer>
-
+  <author email="martin.guenther@dfki.de">Martin Günther</author>
 
   <!-- One license tag required, multiple allowed, one license per tag -->
   <!-- Commonly used license strings: -->
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
   <license>TODO</license>
 
-
-  <!-- Url tags are optional, but multiple are allowed, one per tag -->
-  <!-- Optional attribute type can be: website, bugtracker, or repository -->
-  <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/mobipick_pick_n_place</url> -->
+  <url>https://git.hb.dfki.de/mobipick/mobipick</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <build_depend>actionlib</build_depend>
-  <build_depend>control_msgs</build_depend>
-  <build_depend>gazebo_msgs</build_depend>
-  <build_depend>geometry_msgs</build_depend>
-  <build_depend>moveit_msgs</build_depend>
-  <build_depend>moveit_ros_planning_interface</build_depend>
-  <build_depend>moveit_visual_tools</build_depend>
-  <build_depend>object_recognition_msgs</build_depend>
-  <build_depend>roscpp</build_depend>
-  <build_depend>shape_msgs</build_depend>
-  <build_depend>tf</build_depend>
-  <build_depend>vision_msgs</build_depend>
-  <build_depend>visualization_msgs</build_depend>
-
-  <build_export_depend>actionlib</build_export_depend>
-  <build_export_depend>control_msgs</build_export_depend>
-  <build_export_depend>gazebo_msgs</build_export_depend>
-  <build_export_depend>geometry_msgs</build_export_depend>
-  <build_export_depend>moveit_msgs</build_export_depend>
-  <build_export_depend>moveit_ros_planning_interface</build_export_depend>
-  <build_export_depend>moveit_visual_tools</build_export_depend>
-  <build_export_depend>object_recognition_msgs</build_export_depend>
-  <build_export_depend>roscpp</build_export_depend>
-  <build_export_depend>shape_msgs</build_export_depend>
-  <build_export_depend>tf</build_export_depend>
-  <build_export_depend>vision_msgs</build_export_depend>
-  <build_export_depend>visualization_msgs</build_export_depend>
-
-  <exec_depend>actionlib</exec_depend>
-  <exec_depend>control_msgs</exec_depend>
-  <exec_depend>gazebo_msgs</exec_depend>
-  <exec_depend>geometry_msgs</exec_depend>
-  <exec_depend>moveit_msgs</exec_depend>
-  <exec_depend>moveit_ros_planning_interface</exec_depend>
-  <exec_depend>moveit_visual_tools</exec_depend>
-  <exec_depend>object_recognition_msgs</exec_depend>
-  <exec_depend>roscpp</exec_depend>
-  <exec_depend>shape_msgs</exec_depend>
-  <exec_depend>tf</exec_depend>
-  <exec_depend>vision_msgs</exec_depend>
-  <exec_depend>visualization_msgs</exec_depend>
+  <depend>gazebo_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>moveit_msgs</depend>
+  <depend>moveit_ros_planning_interface</depend>
+  <depend>roscpp</depend>
+  <depend>shape_msgs</depend>
+  <depend>tf</depend>
+  <depend>vision_msgs</depend>
+  <depend>visualization_msgs</depend>
 </package>

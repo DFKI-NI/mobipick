@@ -4,14 +4,10 @@ project(mobipick_pick_n_place)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
-  actionlib
-  control_msgs
   gazebo_msgs
   geometry_msgs
   moveit_msgs
   moveit_ros_planning_interface
-  moveit_visual_tools
-  object_recognition_msgs
   roscpp
   shape_msgs
   tf
@@ -24,15 +20,10 @@ find_package(catkin REQUIRED COMPONENTS
 ###################################
 catkin_package(
   CATKIN_DEPENDS
-    actionlib
-    control_msgs
     gazebo_msgs
     geometry_msgs
     moveit_msgs
     moveit_ros_planning_interface
-    moveit_visual_tools
-    object_recognition_msgs
-    roscpp
     shape_msgs
     tf
     vision_msgs
@@ -50,29 +41,35 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-add_executable(test_trajectory src/test_trajectory.cpp)
-add_dependencies(test_trajectory ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(test_trajectory ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_test_trajectory src/test_trajectory.cpp)
+add_dependencies(${PROJECT_NAME}_test_trajectory ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_test_trajectory ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_test_trajectory PROPERTIES OUTPUT_NAME test_trajectory PREFIX "")
 
-add_executable(mobipick_pick_n_place src/mobipick_pick_n_place.cpp include/mobipick_pick_n_place/fake_object_recognition.h)
-add_dependencies(mobipick_pick_n_place ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(mobipick_pick_n_place ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_mobipick_pick_n_place src/mobipick_pick_n_place.cpp include/${PROJECT_NAME}/fake_object_recognition.h)
+add_dependencies(${PROJECT_NAME}_mobipick_pick_n_place ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_mobipick_pick_n_place ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_mobipick_pick_n_place PROPERTIES OUTPUT_NAME mobipick_pick_n_place PREFIX "")
 
-add_executable(static_object_publisher src/static_object_publisher.cpp include/mobipick_pick_n_place/fake_object_recognition.h)
-add_dependencies(static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(static_object_publisher ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_static_object_publisher src/static_object_publisher.cpp include/${PROJECT_NAME}/fake_object_recognition.h)
+add_dependencies(${PROJECT_NAME}_static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_static_object_publisher ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_static_object_publisher PROPERTIES OUTPUT_NAME static_object_publisher PREFIX "")
 
-add_executable(gazebo_object_publisher src/gazebo_object_publisher.cpp include/mobipick_pick_n_place/fake_object_recognition.h)
-add_dependencies(gazebo_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(gazebo_object_publisher ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_gazebo_object_publisher src/gazebo_object_publisher.cpp include/${PROJECT_NAME}/fake_object_recognition.h)
+add_dependencies(${PROJECT_NAME}_gazebo_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_gazebo_object_publisher ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_gazebo_object_publisher PROPERTIES OUTPUT_NAME gazebo_object_publisher PREFIX "")
 
-add_executable(camera_marker_publisher src/camera_marker_publisher.cpp)
-add_dependencies(camera_marker_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(camera_marker_publisher ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_camera_marker_publisher src/camera_marker_publisher.cpp)
+add_dependencies(${PROJECT_NAME}_camera_marker_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_camera_marker_publisher ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_camera_marker_publisher PROPERTIES OUTPUT_NAME camera_marker_publisher PREFIX "")
 
-add_executable(moveit_kinematics_speed_and_validity_evaluator src/kinematics_speed_and_validity_evaluator.cpp)
-add_dependencies(moveit_kinematics_speed_and_validity_evaluator  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(moveit_kinematics_speed_and_validity_evaluator ${catkin_LIBRARIES})
+add_executable(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator src/kinematics_speed_and_validity_evaluator.cpp)
+add_dependencies(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator PROPERTIES OUTPUT_NAME moveit_kinematics_speed_and_validity_evaluator PREFIX "")
 
 #############
 ## Install ##
@@ -88,26 +85,29 @@ target_link_libraries(moveit_kinematics_speed_and_validity_evaluator ${catkin_LI
 #   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 # )
 
-## Mark executables and/or libraries for installation
-# install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_node
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-# )
+# Mark executables and/or libraries for installation
+install(TARGETS
+    ${PROJECT_NAME}_camera_marker_publisher
+    ${PROJECT_NAME}_gazebo_object_publisher
+    ${PROJECT_NAME}_mobipick_pick_n_place
+    ${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator
+    ${PROJECT_NAME}_static_object_publisher
+    ${PROJECT_NAME}_test_trajectory
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
-## Mark cpp header files for installation
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-#   FILES_MATCHING PATTERN "*.h"
-#   PATTERN ".svn" EXCLUDE
-# )
+# Mark cpp header files for installation
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+  FILES_MATCHING PATTERN "*.h"
+)
 
-## Mark other files for installation (e.g. launch and bag files, etc.)
-# install(FILES
-#   # myfile1
-#   # myfile2
-#   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-# )
+# Mark other files for installation (e.g. launch and bag files, etc.)
+install(DIRECTORY launch
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
 
 #############
 ## Testing ##
