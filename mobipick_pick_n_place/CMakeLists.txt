@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_msgs
   moveit_ros_planning_interface
   roscpp
+  roslaunch
   shape_msgs
   tf
   vision_msgs
@@ -121,3 +122,5 @@ install(DIRECTORY launch
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+roslaunch_add_file_check(launch)

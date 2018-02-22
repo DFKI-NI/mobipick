@@ -16,6 +16,8 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <build_depend>roslaunch</build_depend>
+
   <exec_depend>move_base</exec_depend>
   <exec_depend>sbpl_lattice_planner</exec_depend>
 </package>

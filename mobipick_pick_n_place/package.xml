@@ -16,6 +16,8 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <build_depend>roslaunch</build_depend>
+
   <depend>gazebo_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>moveit_msgs</depend>
