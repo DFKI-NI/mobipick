@@ -42,6 +42,7 @@
   <buildtool_depend>catkin</buildtool_depend>
   <build_depend>move_base</build_depend>
   <run_depend>move_base</run_depend>
+  <run_depend>sbpl_lattice_planner</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
