@@ -29,11 +29,11 @@ DWAPlannerROS:
   xy_goal_tolerance: 0.08   # xy_goal_tolerance  > (sim_time * min_vel_x)   / 2
   latch_xy_goal_tolerance: true
 
-# Forward Simulation Parameters
-  sim_time: 6.0       # 1.7
-  vx_samples: 30      # 3
+  # Forward simulation
+  sim_time: 1.2
+  vx_samples: 15
   vy_samples: 1       # diff drive robot, there is only one sample
-  vtheta_samples: 40  # 20
+  vtheta_samples: 20
 
 # Trajectory Scoring Parameters
   path_distance_bias: 64.0      # 32.0   - weighting for how much it should stick to the global path plan
@@ -45,9 +45,9 @@ DWAPlannerROS:
   max_scaling_factor: 0.2       # 0.2    - how much to scale the robot's footprint when at speed.
   prune_plan: true
 
-# Oscillation Prevention Parameters
-  oscillation_reset_dist: 0.70  # 0.05   - how far to travel before resetting oscillation flags, in m
-  oscillation_reset_angle: 0.8  # 0.2    - the angle the robot must turn before resetting Oscillation flags, in rad
+  # Oscillation prevention
+  oscillation_reset_dist: 0.05  # 0.05   - how far to travel before resetting oscillation flags, in m
+  oscillation_reset_angle: 0.2  # 0.2    - the angle the robot must turn before resetting Oscillation flags, in rad
 
 # Debugging
   publish_traj_pc : true

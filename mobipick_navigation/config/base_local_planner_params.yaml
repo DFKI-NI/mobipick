@@ -18,10 +18,10 @@ TrajectoryPlannerROS:
   latch_xy_goal_tolerance: true
 
   # Forward simulaton parameters
-  sim_time: 1
-  sim_granularity: 0.1
+  sim_time: 1.2
+  sim_granularity: 0.025
   angular_sim_granularity: 0.04
-  vx_samples: 3
+  vx_samples: 15
   vtheta_samples: 20
   controller_frequency: 5
 
