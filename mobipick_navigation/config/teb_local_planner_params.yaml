@@ -12,8 +12,8 @@ TebLocalPlannerROS:
     vertices: [ [4.0,-0.35], [4.0,+0.35],[-4.0,+0.35], [-4.0,+0.35] ]
 
   # Goal tolerance
-  xy_goal_tolerance: 0.3
-  yaw_goal_tolerance: 0.4
+  xy_goal_tolerance: 0.03
+  yaw_goal_tolerance: 0.08
   free_goal_vel: false
 
   # Trajectory Configuration Parameter

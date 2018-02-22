@@ -24,9 +24,9 @@ DWAPlannerROS:
   acc_limit_trans: 1.5
   acc_lim_theta: 2.0
 
-# Goal Tolerance Parameters
-  yaw_goal_tolerance: 0.2  # yaw_goal_tolerance > (sim_time * min_rot_vel) / 2 (from Navigation Tuning Guide)
-  xy_goal_tolerance: 0.3   # xy_goal_tolerance  > (sim_time * min_vel_x)   / 2
+  # Goal tolerance
+  yaw_goal_tolerance: 0.03  # yaw_goal_tolerance > (sim_time * min_rot_vel) / 2 (from Navigation Tuning Guide)
+  xy_goal_tolerance: 0.08   # xy_goal_tolerance  > (sim_time * min_vel_x)   / 2
   latch_xy_goal_tolerance: true
 
 # Forward Simulation Parameters
