@@ -1,20 +1,18 @@
 <?xml version="1.0"?>
-<robot name="table">
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="table">
 
-  <property name="table_height" value="1.0" />
-  <property name="table_width" value="1.0" />
-  <property name="table_depth" value="2.0" />
-  <property name="leg_radius" value="0.02" />
-  <property name="table_x" value="0.0" />
-  <property name="table_y" value="0.0" />
-  <property name="table_z" value="0.0" />
+  <xacro:property name="table_height" value="1.0" />
+  <xacro:property name="table_width" value="1.0" />
+  <xacro:property name="table_depth" value="2.0" />
+  <xacro:property name="leg_radius" value="0.02" />
+  <xacro:property name="table_x" value="0.0" />
+  <xacro:property name="table_y" value="0.0" />
+  <xacro:property name="table_z" value="0.0" />
 
-  <property name="table_top_thickness" value="0.05"/>
+  <xacro:property name="table_top_thickness" value="0.05"/>
 
-  <property name="M_PI" value="3.1415926535897931" />
+  <xacro:property name="M_PI" value="3.1415926535897931" />
 
-
-  <!-- tabletop height is .55+.01+.025=.585 -->
   <link name="table_top_link">
     <inertial>
       <mass value="1.0" />
