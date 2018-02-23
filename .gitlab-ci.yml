@@ -1,5 +1,23 @@
 image: ros:kinetic
 
+before_script:
+  # Install ssh-agent if not already installed
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+
+  # Run ssh-agent (inside the build environment)
+  - eval $(ssh-agent -s)
+
+  # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+  # For Docker builds disable host key checking. Be aware that by adding that
+  # you are suspectible to man-in-the-middle attacks.
+  # WARNING: Use this only with the Docker executor, if you use it with shell
+  # you will overwrite your user's SSH config.
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+
 build:
   stage: build
   script:
@@ -26,6 +44,7 @@ build:
     - git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
     - git clone -b kinetic https://github.com/uos/uos_tools.git
     - git clone -b indigo-devel https://github.com/ricardo-samaniego/sbpl_lattice_planner.git
+    - git clone -b kinetic git@git.hb.dfki.de:mobipick/mir100_robot.git
     - apt-get update -qq
     - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=sbpl
     - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
