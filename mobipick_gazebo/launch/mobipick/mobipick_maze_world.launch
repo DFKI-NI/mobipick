@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="gui" default="true" />
+
+  <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
+    <arg name="gui" value="$(arg gui)" />
+  </include>
+
+  <include file="$(find mobipick_gazebo)/launch/objects/spawn_maze.launch" />
+</launch>
