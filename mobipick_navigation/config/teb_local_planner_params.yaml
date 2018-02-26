@@ -1,3 +1,6 @@
+# NOTE: When using the teb_local_planner, make sure to set the local costmap
+# resolution high (for example 0.1 m), otherwise the optimization will take
+# forever (around 10 minutes for each iteration).
 base_local_planner: teb_local_planner/TebLocalPlannerROS
 TebLocalPlannerROS:
   # Trajectory
@@ -37,7 +40,7 @@ TebLocalPlannerROS:
 
   # Obstacles
   min_obstacle_dist: 0.4                   # Minimum desired separation from obstacles
-  inflation_dist: 0.6                      # Buffer zone around obstacles with non-zero penalty costs (should be larger than min_obstacle_dist in order to take effect)
+  inflation_dist: 0.1                      # Buffer zone around obstacles with non-zero penalty costs (should be larger than min_obstacle_dist in order to take effect)
   dynamic_obstacle_inflation_dist: 0.6     # Buffer zone around predicted locations of dynamic obstacles with non-zero penalty costs (should be larger than min_obstacle_dist in order to take effect)
   include_dynamic_obstacles: false         # Specify whether the movement of dynamic obstacles should be predicted by a constant velocity model (this also changes the homotopy class search). If false, all obstacles are considered to be static.
   include_costmap_obstacles: true          # Specify whether the obstacles in the costmap should be taken into account directly (this is necessary if no seperate clustering and detection is implemented)
@@ -45,7 +48,7 @@ TebLocalPlannerROS:
   obstacle_association_force_inclusion_factor: 1.5  # The non-legacy obstacle association technique tries to connect only relevant obstacles with the discretized trajectory during optimization, all obstacles within a specifed distance are forced to be included (as a multiple of min_obstacle_dist), e.g. choose 2.0 in order to consider obstacles within a radius of 2.0*min_obstacle_dist.
   obstacle_association_cutoff_factor: 5.0           # See obstacle_association_force_inclusion_factor, but beyond a multiple of [value]*min_obstacle_dist all obstacles are ignored during optimization. obstacle_association_force_inclusion_factor is processed first.
   costmap_obstacles_behind_robot_dist: 1.5 # Limit the occupied local costmap obstacles taken into account for planning behind the robot (specify distance in meters)
-  obstacle_poses_affected: 30              # The obstacle position is attached to the closest pose on the trajectory to reduce computational effort, but take a number of neighbors into account as well
+  obstacle_poses_affected: 10              # The obstacle position is attached to the closest pose on the trajectory to reduce computational effort, but take a number of neighbors into account as well
   #costmap_converter_plugin: ""            #
   #costmap_converter_spin_thread: true     #
   #costmap_converter_rate: 5               #
@@ -77,7 +80,7 @@ TebLocalPlannerROS:
 #  enable_homotopy_class_planning: true    #
   enable_multithreading: true              # Activate multiple threading for planning multiple trajectories in parallel
 #  simple_exploration: false               #
-  max_number_classes: 5                    # Specify the maximum number of allowed alternative homotopy classes (limits computational effort)
+  max_number_classes: 2                    # Specify the maximum number of allowed alternative homotopy classes (limits computational effort)
   selection_cost_hysteresis: 1.0           # Specify how much trajectory cost must a new candidate have w.r.t. a previously selected trajectory in order to be selected (selection if new_cost < old_cost*factor)
   selection_prefer_initial_plan: 0.95      # Specify a cost reduction in the interval (0,1) for the trajectory in the equivalence class of the initial plan.)
   selection_obst_cost_scale: 100.0         # Extra scaling of obstacle cost terms just for selecting the 'best' candidate (new_obst_cost: obst_cost*factor)
