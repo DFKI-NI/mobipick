@@ -6,7 +6,9 @@
       <plugin name="${name_prefix}mimic_joint_plugin" filename="libroboticsgroup_gazebo_mimic_joint_plugin.so">
         <joint>${parent_joint}</joint>
         <mimicJoint>${mimic_joint}</mimicJoint>
-        <hasPID>${has_pid}</hasPID>                       <!-- if set to true, PID parameters from "/gazebo_ros_control/pid_gains/${mimic_joint}" are loaded -->
+        <xacro:if value="${has_pid}">                     <!-- if set to true, PID parameters from "/gazebo_ros_control/pid_gains/${mimic_joint}" are loaded -->
+          <hasPID />
+        </xacro:if>
         <multiplier>${multiplier}</multiplier>
         <offset>${offset}</offset>
         <sensitiveness>${sensitiveness}</sensitiveness>   <!-- if absolute difference between setpoint and process value is below this threshold, do nothing; 0.0 = disable [rad] -->
