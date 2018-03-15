@@ -2,7 +2,11 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
-  <xacro:macro name="structure" params="prefix height">
+  <!-- variant can be one of:
+       - v1: The original Mobipick in Bremen, built for the Hybr-iT project
+       - v2: The newer Mobipicks: one in Osnabrueck, two in Bremen for the UPLINX project
+  -->
+  <xacro:macro name="structure" params="prefix height variant='v1'">
     <link name="${prefix}part_down">
       <inertial>
         <origin xyz="0 0 0.3278534031" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
@@ -18,14 +22,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v1/part_down.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/${variant}/part_down.stl" />
         </geometry>
         <xacro:insert_block name="material_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/v1/part_down.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/${variant}/part_down.stl" />
         </geometry>
       </collision>
     </link>
@@ -48,14 +52,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v1/part_up.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/${variant}/part_up.stl" />
         </geometry>
         <xacro:insert_block name="material_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/v1/part_up.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/${variant}/part_up.stl" />
         </geometry>
       </collision>
     </link>
@@ -78,14 +82,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v1/pedestal.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/${variant}/pedestal.stl" />
         </geometry>
         <xacro:insert_block name="material_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/v1/pedestal.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/${variant}/pedestal.stl" />
         </geometry>
       </collision>
     </link>
@@ -116,8 +120,15 @@
       <axis xyz="0 0 1" />
     </joint>
 
+    <xacro:if value="${variant == 'v1'}">
+      <xacro:property name="pedestal_height" value="0.2492" />
+    </xacro:if>
+    <xacro:if value="${variant == 'v2'}">
+      <xacro:property name="pedestal_height" value="0.2291" />
+    </xacro:if>
+
     <joint name="${prefix}Tischaufbau_base_joint" type="fixed">
-      <origin xyz="0 0 0.25" rpy="0 0 0" />
+      <origin xyz="0 0 ${pedestal_height}" rpy="0 0 0" />
       <parent link="${prefix}pedestal" />
       <child link="${prefix}pedestal_surface" />
       <axis xyz="0 0 1" />
