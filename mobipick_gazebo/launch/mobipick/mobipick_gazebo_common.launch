@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
+  <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
+
   <!-- Load URDF -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
 
@@ -21,11 +23,21 @@
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/mir_100/diffdrive_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/ur5/arm_velocity_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" />
 
   <!-- Start the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
-    args="joint_state_controller mobile_base_controller arm_controller gripper_controller"/>
+    args="joint_state_controller mobile_base_controller gripper_controller"/>
+
+  <group unless="$(arg arm_velocity_controller)">
+    <node name="arm_controller_spawner"          pkg="controller_manager" type="spawner" output="screen" args="arm_controller"/>
+    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="--stopped arm_velocity_controller"/>
+  </group>
+  <group if="$(arg arm_velocity_controller)">
+    <node name="arm_controller_spawner"          pkg="controller_manager" type="spawner" output="screen" args="--stopped arm_controller"/>
+    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="arm_velocity_controller"/>
+  </group>
 
   <!-- Fake calibration -->
   <node pkg="rostopic" type="rostopic" name="fake_joint_calibration" args="pub /calibrated std_msgs/Bool true"/>

@@ -85,3 +85,45 @@ rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
 ```
 
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base. 
+
+
+### Using the arm velocity controller
+
+If you want to use the velocity controller for the arm, add
+`arm_velocity_controller:=true` to any of the launch files, like so:
+
+```bash
+roslaunch mobipick_gazebo mobipick_table_world.launch arm_velocity_controller:=true
+rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
+```
+
+Now you can send velocity commands to the arm directly, like this:
+
+```bash
+rostopic pub /arm_velocity_controller/command std_msgs/Float64MultiArray "data: [0.4, 0.1, -0.1, 0, 0, 0]"
+```
+
+In this configuration, MoveIt won't work however, since MoveIt requires the
+joint trajectory controller instead of the velocity controller (because MoveIt
+is a joint trajectory client).
+
+You can switch to the arm trajectory controller like this:
+
+```bash
+rosrun controller_manager controller_manager stop arm_velocity_controller
+rosrun controller_manager controller_manager start arm_controller
+```
+
+This also works the other way around, e.g. if you didn't add the
+`arm_velocity_controller:=true` argument to the launch file:
+
+```bash
+rosrun controller_manager controller_manager stop arm_controller
+rosrun controller_manager controller_manager start arm_velocity_controller
+```
+
+If you prefer a graphical interface, try this:
+
+```bash
+rosrun rqt_controller_manager rqt_controller_manager
+```
