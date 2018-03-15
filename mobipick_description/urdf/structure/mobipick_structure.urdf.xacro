@@ -18,14 +18,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/part_down.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v1/part_down.stl" />
         </geometry>
         <xacro:insert_block name="material_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/part_down.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/v1/part_down.stl" />
         </geometry>
       </collision>
     </link>
@@ -48,14 +48,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/part_up.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v1/part_up.stl" />
         </geometry>
         <xacro:insert_block name="material_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/part_up.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/v1/part_up.stl" />
         </geometry>
       </collision>
     </link>
@@ -78,14 +78,14 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/pedestal.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v1/pedestal.stl" />
         </geometry>
         <xacro:insert_block name="material_aluminum" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/collision/pedestal.stl" />
+          <mesh filename="package://mobipick_description/meshes/structure/collision/v1/pedestal.stl" />
         </geometry>
       </collision>
     </link>
