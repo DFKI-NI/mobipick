@@ -133,8 +133,17 @@
     <disable_collisions link1="back_laser_link" link2="front_right_caster_wheel" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="front_right_caster_wheel_base" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="fts_robotside" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_cam_link" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_left_inner_finger" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_left_inner_knuckle" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_left_outer_finger" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="gripper_left_outer_knuckle" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_left_robotiq_fingertip_65mm" reason="User" />
+    <disable_collisions link1="back_laser_link" link2="gripper_right_inner_finger" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_right_inner_knuckle" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_right_outer_finger" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="gripper_right_outer_knuckle" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="gripper_right_robotiq_fingertip_65mm" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="gripper_robotiq_arg2f_base_link" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="left_act_wheel" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="right_act_wheel" reason="Never" />
@@ -293,23 +302,36 @@
     <disable_collisions link1="base_link" link2="front_left_caster_wheel_base" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="front_right_caster_wheel" reason="Never" />
     <disable_collisions link1="base_link" link2="front_right_caster_wheel_base" reason="Adjacent" />
+    <disable_collisions link1="base_link" link2="fts_robotside" reason="Never" />
     <disable_collisions link1="base_link" link2="left_act_wheel" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="right_act_wheel" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="structure_part_down" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="structure_part_up" reason="Never" />
     <disable_collisions link1="base_link" link2="structure_pedestal" reason="Never" />
     <disable_collisions link1="base_link" link2="ur5_base_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="ur5_ee_link" reason="Never" />
     <disable_collisions link1="base_link" link2="ur5_forearm_link" reason="Never" />
     <disable_collisions link1="base_link" link2="ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="base_link" link2="ur5_upper_arm_link" reason="Never" />
     <disable_collisions link1="base_link" link2="ur5_wrist_1_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="ur5_wrist_2_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="front_left_caster_wheel" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="front_left_caster_wheel_base" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="front_right_caster_wheel" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="front_right_caster_wheel_base" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="fts_robotside" reason="Never" />
+    <disable_collisions link1="front_laser_link" link2="gripper_cam_link" reason="Never" />
+    <disable_collisions link1="front_laser_link" link2="gripper_left_inner_finger" reason="Never" />
+    <disable_collisions link1="front_laser_link" link2="gripper_left_inner_knuckle" reason="Never" />
+    <disable_collisions link1="front_laser_link" link2="gripper_left_outer_finger" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="gripper_left_outer_knuckle" reason="Never" />
+    <disable_collisions link1="front_laser_link" link2="gripper_left_robotiq_fingertip_65mm" reason="Never" />
+    <disable_collisions link1="front_laser_link" link2="gripper_right_inner_finger" reason="User" />
+    <disable_collisions link1="front_laser_link" link2="gripper_right_inner_knuckle" reason="User" />
+    <disable_collisions link1="front_laser_link" link2="gripper_right_outer_finger" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="gripper_right_outer_knuckle" reason="Never" />
+    <disable_collisions link1="front_laser_link" link2="gripper_right_robotiq_fingertip_65mm" reason="User" />
     <disable_collisions link1="front_laser_link" link2="gripper_robotiq_arg2f_base_link" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="left_act_wheel" reason="Never" />
     <disable_collisions link1="front_laser_link" link2="right_act_wheel" reason="Never" />
@@ -593,6 +615,7 @@
     <disable_collisions link1="gripper_right_outer_knuckle" link2="ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="gripper_right_outer_knuckle" link2="ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="gripper_right_robotiq_fingertip_65mm" link2="gripper_robotiq_arg2f_base_link" reason="Never" />
+    <disable_collisions link1="gripper_right_robotiq_fingertip_65mm" link2="left_act_wheel" reason="Never" />
     <disable_collisions link1="gripper_right_robotiq_fingertip_65mm" link2="right_act_wheel" reason="Never" />
     <disable_collisions link1="gripper_right_robotiq_fingertip_65mm" link2="sensor_mount_link" reason="Never" />
     <disable_collisions link1="gripper_right_robotiq_fingertip_65mm" link2="ur5_ee_link" reason="Never" />
