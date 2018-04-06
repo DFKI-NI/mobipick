@@ -14,7 +14,7 @@
         elbow_joint:          2.43
         wrist_1_joint:       -2.05
         wrist_2_joint:       -1.57
-        wrist_3_joint:        1.57
+        wrist_3_joint:        3.14
     </rosparam>
   </node>
 

@@ -33,7 +33,7 @@
         <joint name="ur5_elbow_joint" value="2.43" />
         <joint name="ur5_wrist_1_joint" value="-2.05" />
         <joint name="ur5_wrist_2_joint" value="-1.57" />
-        <joint name="ur5_wrist_3_joint" value="1.57" />
+        <joint name="ur5_wrist_3_joint" value="3.14" />
     </group_state>
     <!-- observation poses for a 100 cm high table directly adjacent to the robot -->
     <group_state name="observe100cm_front" group="arm">
@@ -42,7 +42,7 @@
         <joint name="ur5_elbow_joint" value="2.14" />
         <joint name="ur5_wrist_1_joint" value="0.44" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <group_state name="observe100cm_left" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="1.57" />
@@ -50,7 +50,7 @@
         <joint name="ur5_elbow_joint" value="2.14" />
         <joint name="ur5_wrist_1_joint" value="0.44" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <group_state name="observe100cm_right" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="-1.57" />
@@ -58,7 +58,7 @@
         <joint name="ur5_elbow_joint" value="2.14" />
         <joint name="ur5_wrist_1_joint" value="0.44" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <group_state name="observe100cm_back" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="3.14" />
@@ -66,7 +66,7 @@
         <joint name="ur5_elbow_joint" value="2.14" />
         <joint name="ur5_wrist_1_joint" value="0.44" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <!-- observation poses for a 70 cm high table directly adjacent to the robot -->
     <group_state name="observe70cm_front" group="arm">
@@ -75,7 +75,7 @@
         <joint name="ur5_elbow_joint" value="2.45" />
         <joint name="ur5_wrist_1_joint" value="0.0" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <group_state name="observe70cm_left" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="1.57" />
@@ -83,7 +83,7 @@
         <joint name="ur5_elbow_joint" value="2.45" />
         <joint name="ur5_wrist_1_joint" value="0.0" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <group_state name="observe70cm_right" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="-1.57" />
@@ -91,7 +91,7 @@
         <joint name="ur5_elbow_joint" value="2.45" />
         <joint name="ur5_wrist_1_joint" value="0.0" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <group_state name="observe70cm_back" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="3.14" />
@@ -99,7 +99,7 @@
         <joint name="ur5_elbow_joint" value="2.45" />
         <joint name="ur5_wrist_1_joint" value="0.0" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
-        <joint name="ur5_wrist_3_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="0.0" />
     </group_state>
     <group_state name="open" group="gripper">
         <joint name="gripper_finger_joint" value="0" />
