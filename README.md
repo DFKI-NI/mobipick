@@ -53,7 +53,7 @@ roslaunch mobipick_moveit_config demo.launch
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch object_source:=static
 ```
 
-[![Mobipick pick + place demo (MoveIt! demo mode)](https://i.vimeocdn.com/video/683635444.jpg?mw=640)](https://vimeo.com/256064108) 
+[![Mobipick pick + place demo (MoveIt! demo mode)](https://i.vimeocdn.com/video/683635444.jpg?mw=640)](https://vimeo.com/256064108)
 
 (Click image to see video)
 
@@ -71,7 +71,7 @@ roslaunch mobipick_navigation start_planner.launch \
 rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
 ```
 
-Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base. 
+Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
 
 
 ### move_base demo (AVZ world)
@@ -84,7 +84,7 @@ roslaunch mobipick_navigation start_planner.launch map_file:=$(rospack find uos_
 rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
 ```
 
-Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base. 
+Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
 
 
 ### Using the arm velocity controller
@@ -145,14 +145,14 @@ Troubleshooting
  make[1]: *** [gazebo-pkgs/gazebo_test_tools/CMakeFiles/cube_spawner.dir/all] Error 2
  make[1]: *** Waiting for unfinished jobs....
  ```
-    
+
  * Workaround: Delete the gazebo_test_tools package
 
 #####  Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"
 
 * Mobipick package is missing!
-* Solution: 
- 
+* Solution:
+
  ```bash
 git clone git@git.hb.dfki.de:mobipick/mobipick.git
 ```
@@ -165,8 +165,8 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
  ROS path [1]=/home/dfki.uni-bremen.de/dmronga/Workspace/catkin_ws/src
  ROS path [2]=/opt/ros/kinetic/share
  ```
- * Tried the following: 
- 
+ * Tried the following:
+
  ``` bash
  cd $CATKIN_WS_SRC
  rosdep install --from-paths ./ -i -y --rosdistro "kinetic" --skip-keys=sbpl
@@ -199,9 +199,9 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
  ```
 
  * Solution (from [here](https://answers.ros.org/question/91231/rqt-plugin-not-listedfound-in-list-returned-by-rqt-list-plugins/?answer=91386#post-id-91386)):
-  
- ```bash 
- rm ~/.config/ros.org/rqt_gui.ini 
+
+ ```bash
+ rm ~/.config/ros.org/rqt_gui.ini
  ```
 
 
@@ -212,8 +212,8 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
  [ERROR] [1523449370.789260021]: Use 'rosservice call controller_manager/list_controller_types' to get the available types
  ```
 
- * Solution: 
- 
+ * Solution:
+
  ```bash
  sudo apt-get install ros-kinetic-joint-trajectory-controller
  ```
