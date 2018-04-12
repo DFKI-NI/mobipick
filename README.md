@@ -179,9 +179,13 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
  mobipick_pick_n_place: Cannot locate rosdep definition for [vision_msgs]
  ```
 
- * Workaround: Install all dependencies by hand, uagh...
+ * Solution:
+
  ```bash
- sudo apt-get install ros-kinetic-controller-manager ros-kinetic-joint-state-publisher ros-kinetic-robot-pose-ekf ros-kinetic-robot-state-publisher ros-kinetic-rqt-robot-steering ros-kinetic-rqt-joint-trajectory-controller ros-kinetic-moveit-msgs ros-kinetic-moveit-ros-planning-interface ros-kinetic-turtlebot-description ros-kinetic-gazebo-ros-control ros-kinetic-vision-msgs ros-kinetic-diff-drive-controller ros-kinetic-velocity-controllers ros-kinetic-joint-state-controller ros-kinetic-position-controllers  .... and so on
+ cd $CATKIN_WS_SRC
+ sudo rosdep init
+ rosdep update
+ rosdep install --from-paths ./ -i -y --rosdistro "kinetic" --skip-keys=sbpl
  ```
 
 

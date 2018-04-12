@@ -46,6 +46,9 @@ build:
     - git clone -b indigo-devel https://github.com/ricardo-samaniego/sbpl_lattice_planner.git
     - git clone -b kinetic git@git.hb.dfki.de:mobipick/mir100_robot.git
     - apt-get update -qq
+    - apt-get install -qq -y python-rosdep
+    # - sudo rosdep init   # not needed in CI, because the Docker image already has rosdep initialized
+    - rosdep update
     - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=sbpl
     - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
     - catkin_init_workspace
