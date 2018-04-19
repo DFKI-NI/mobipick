@@ -24,8 +24,51 @@ Package overview
 Installation
 ------------
 
-See the build step in [`.gitlab-ci.yml`](.gitlab-ci.yml).
+```bash
+# install sbpl library from source
+cd $(mktemp -d)
+git clone -b master https://github.com/sbpl/sbpl.git
+cd sbpl
+mkdir build
+cd build
+cmake -DCMAKE_BUILD_TYPE=Release ..
+make install
 
+# create a catkin workspace and clone all required ROS packages
+mkdir -p ~/catkin_ws/src
+cd ~/catkin_ws/src/
+git clone -b kinetic git@git.hb.dfki.de:mobipick/mobipick.git
+git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
+git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
+git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
+git clone -b kinetic https://github.com/uos/uos_tools.git
+git clone -b indigo-devel https://github.com/ricardo-samaniego/sbpl_lattice_planner.git
+git clone -b kinetic git@git.hb.dfki.de:mobipick/mir100_robot.git
+
+# use rosdep to install all dependencies (including ROS itself)
+apt-get update -qq
+apt-get install -qq -y python-rosdep
+sudo rosdep init
+rosdep update
+rosdep install --from-paths ./ -i -y --rosdistro kinetic --skip-keys=sbpl
+
+# build all packages in the catkin workspace
+source /opt/ros/kinetic/setup.bash
+catkin_init_workspace
+cd ~/catkin_ws
+catkin_make -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+```
+
+In case you encounter problems, please compare the commands above to the build
+step in [`.gitlab-ci.yml`](.gitlab-ci.yml); that should always have the most
+recent list of commands.
+
+You should add the following line to the end of your `~/.bashrc`, and then
+close and reopen all terminals:
+
+```bash
+source ~/catkin_ws/devel/setup.bash
+```
 
 Quick start
 -----------
@@ -168,7 +211,7 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
  * Tried the following:
 
  ``` bash
- cd $CATKIN_WS_SRC
+ cd ~/catkin_ws/src
  rosdep install --from-paths ./ -i -y --rosdistro "kinetic" --skip-keys=sbpl
  ```
  * got the following error:
@@ -182,7 +225,7 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
  * Solution:
 
  ```bash
- cd $CATKIN_WS_SRC
+ cd ~/catkin_ws/src
  sudo rosdep init
  rosdep update
  rosdep install --from-paths ./ -i -y --rosdistro "kinetic" --skip-keys=sbpl
