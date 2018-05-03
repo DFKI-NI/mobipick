@@ -17,7 +17,7 @@
   <!-- Spawn the robot into Gazebo -->
   <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
-    -J ur5_shoulder_pan_joint 0.00 -J ur5_shoulder_lift_joint -2.10 -J ur5_elbow_joint 2.43 -J ur5_wrist_1_joint -2.05 -J ur5_wrist_2_joint -1.57 -J ur5_wrist_3_joint 3.14" />
+    " />
 
   <!-- Load ros_control controller configurations -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
