@@ -14,6 +14,7 @@
         ur5_wrist_1_joint:       -2.05
         ur5_wrist_2_joint:       -1.57
         ur5_wrist_3_joint:        3.14
+      source_list: ['/mobipick/joint_states']
     </rosparam>
   </node>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
