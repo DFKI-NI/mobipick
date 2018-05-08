@@ -7,7 +7,7 @@ static const double HFOV = 60.0 * M_PI / 180.0;
 static const double VFOV = 45.0 * M_PI / 180.0;
 static const double RANGE_MIN = 0.35;
 static const double RANGE_MAX = 1.0;
-static const std::string CAMERA_FRAME = "gripper_cam_depth_frame";
+static const std::string CAMERA_FRAME = "gripper_astra_depth_frame";
 
 static tf::Vector3 sphericalToCartesian(const double &range, const double &elevation, const double &azimuth)
 {

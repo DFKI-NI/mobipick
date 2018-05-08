@@ -9,13 +9,13 @@
 
   <xacro:macro name="gripper_cam" params="">
     <sensor_mount />
-    <joint name="gripper_cam_joint" type="fixed">
+    <joint name="gripper_astra_joint" type="fixed">
       <origin xyz="-0.032 0.033 -0.065" rpy="${pi/2} ${pi/2} ${-pi/2}" />
       <parent link="sensor_mount_link"/>
-      <child link="gripper_cam_link"/>
+      <child link="gripper_astra_link"/>
     </joint>
 
-    <sensor_astra_mini_s camera_name="gripper_cam" />
+    <sensor_astra_mini_s camera_name="gripper_astra" />
   </xacro:macro>
 
   <xacro:macro name="sensor_mount">

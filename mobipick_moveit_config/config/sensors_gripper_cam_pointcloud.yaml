@@ -2,7 +2,7 @@
 
 sensors:
   - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
-    point_cloud_topic: /gripper_cam/depth_registered/points
+    point_cloud_topic: /gripper_astra/depth_registered/points
     max_range: 1.0
     frame_subsample: 1
     point_subsample: 1

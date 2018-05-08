@@ -2,7 +2,7 @@
 
 sensors:
   - sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
-    image_topic: /gripper_cam/depth_registered/image_raw
+    image_topic: /gripper_astra/depth_registered/image_raw
     far_clipping_plane_distance: 1.0
     near_clipping_plane_distance: 0.25
     padding_scale: 1.0
