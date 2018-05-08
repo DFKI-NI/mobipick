@@ -5,6 +5,7 @@
   <xacro:property name="sensor_mount_bracket_mass" value="0.040" />
   <xacro:property name="sensor_mount_pico_holder_mass" value="0.020" />
   <xacro:property name="astra_s_mass" value="0.300" />
+  <xacro:property name="pico_flexx_mass" value="0.008" />
 
   <!-- distance between center of camera and camera_link -->
   <xacro:property name="astra_cam_py" value="0.0485"/>
@@ -18,6 +19,14 @@
     </joint>
 
     <sensor_astra_mini_s camera_name="gripper_astra" />
+
+    <joint name="gripper_pico_flexx_joint" type="fixed">
+      <origin xyz="0.011 0.106 0.008" rpy="${-pi/2} 0.0 -0.458" />
+      <parent link="sensor_mount_link"/>
+      <child link="gripper_pico_flexx_link"/>
+    </joint>
+
+    <sensor_pico_flexx camera_name="gripper_pico_flexx" />
   </xacro:macro>
 
   <xacro:macro name="sensor_mount">
@@ -115,8 +124,9 @@
     </gazebo>
   </xacro:macro>
 
-  <!-- Orbbec Astra Mini S -->
-
+  <!-- ##################################################################### -->
+  <!-- ######################## Orbbec Astra Mini S ######################## -->
+  <!-- ##################################################################### -->
   <xacro:macro name="sensor_astra_mini_s" params="camera_name">
     <link name="${camera_name}_link">
       <visual>
@@ -198,13 +208,96 @@
           <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
           <depthImageCameraInfoTopicName>depth_registered/camera_info</depthImageCameraInfoTopicName>
           <frameName>${camera_name}_depth_optical_frame</frameName>
-          <baseline>0.1</baseline>
           <distortion_k1>0.0</distortion_k1>
           <distortion_k2>0.0</distortion_k2>
           <distortion_k3>0.0</distortion_k3>
           <distortion_t1>0.0</distortion_t1>
           <distortion_t2>0.0</distortion_t2>
           <pointCloudCutoff>0.35</pointCloudCutoff>  <!-- measured on real camera (same as data sheet) -->
+          <pointCloudCutoffMax>3.50</pointCloudCutoffMax>
+        </plugin>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- ######################################################################### -->
+  <!-- ######################## PMD CamBoard pico flexx ######################## -->
+  <!-- ######################################################################### -->
+  <xacro:macro name="sensor_pico_flexx" params="camera_name">
+    <link name="${camera_name}_link">
+      <visual>
+        <origin xyz="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/pico_flexx.dae"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="${0.0072 / 2} 0.0 0.0" />
+        <geometry>
+          <box size="0.0072 0.068 0.017" />
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="${pico_flexx_mass}" x="0.0072" y="0.068" z="0.017">
+        <origin xyz="${0.0072 / 2} 0.0 0.0" />
+      </xacro:box_inertial>
+    </link>
+    <gazebo reference="${camera_name}_link">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <joint name="${camera_name}_depth_joint" type="fixed">
+      <origin xyz="0.0072 0.0081 0.0" rpy="0 0 0" />
+      <parent link="${camera_name}_link"/>
+      <child link="${camera_name}_frame" />
+    </joint>
+    <link name="${camera_name}_frame"/>
+
+    <joint name="${camera_name}_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+      <parent link="${camera_name}_frame" />
+      <child link="${camera_name}_optical_frame" />
+    </joint>
+    <link name="${camera_name}_optical_frame"/>
+
+    <sim_pico_flexx/>
+  </xacro:macro>
+
+  <xacro:macro name="sim_pico_flexx">
+    <gazebo reference="${camera_name}_frame">
+      <sensor type="depth" name="${camera_name}">
+        <always_on>true</always_on>
+        <update_rate>1.0</update_rate>
+        <camera>
+          <horizontal_fov>${60.0 * pi/180.0}</horizontal_fov>
+          <image>
+            <!-- <format>B8G8R8</format> -->
+            <format>L8</format>
+            <width>224</width>
+            <height>171</height>
+          </image>
+          <clip>
+            <near>0.10</near>
+            <far>4.0</far>
+          </clip>
+        </camera>
+        <plugin name="kinect_${camera_name}_controller" filename="libgazebo_ros_openni_kinect.so">
+          <cameraName>${camera_name}</cameraName>
+          <alwaysOn>true</alwaysOn>
+          <updateRate>1.0</updateRate>
+          <imageTopicName>image_mono8</imageTopicName>
+          <depthImageTopicName>image_depth</depthImageTopicName>
+          <pointCloudTopicName>points</pointCloudTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
+          <frameName>${camera_name}_optical_frame</frameName>
+          <distortion_k1>0.0</distortion_k1>
+          <distortion_k2>0.0</distortion_k2>
+          <distortion_k3>0.0</distortion_k3>
+          <distortion_t1>0.0</distortion_t1>
+          <distortion_t2>0.0</distortion_t2>
+          <pointCloudCutoff>0.10</pointCloudCutoff>
+          <pointCloudCutoffMax>4.0</pointCloudCutoffMax>
         </plugin>
       </sensor>
     </gazebo>
