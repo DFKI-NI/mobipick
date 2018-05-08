@@ -5,13 +5,12 @@
   <xacro:property name="astra_s_mass" value="0.300" />
 
   <!-- distance between center of camera and camera_link -->
-  <xacro:property name="astra_cam_py" value="0.057"/>
+  <xacro:property name="astra_cam_py" value="0.0485"/>
 
   <xacro:macro name="gripper_cam" params="">
     <sensor_mount />
-
     <joint name="gripper_cam_joint" type="fixed">
-      <origin xyz="0.01 0.10 ${-astra_cam_py}" rpy="${-pi/2} 0.0 ${-30 * (pi / 180)}" />
+      <origin xyz="-0.032 0.033 -0.065" rpy="${pi/2} ${pi/2} ${-pi/2}" />
       <parent link="sensor_mount_link"/>
       <child link="gripper_cam_link"/>
     </joint>
@@ -53,15 +52,9 @@
   <xacro:macro name="sensor_astra_mini_s" params="camera_name">
     <link name="${camera_name}_link">
       <visual>
-        <!--
-          <origin xyz="-0.01 -0.068 0" rpy="${-pi/2} -${pi} ${-pi/2}"/>
-          <geometry>
-            <mesh filename="package://turtlebot_description/meshes/sensors/astra.dae"/>
-          </geometry>
-        -->
-        <origin xyz="${-0.0325 / 2} ${-astra_cam_py} 0.0" />
+        <origin xyz="0 0 0" />
         <geometry>
-          <box size="0.0325 0.12 0.0375" />
+          <mesh filename="package://mobipick_description/meshes/sensors/astra_mini.stl"/>
         </geometry>
         <xacro:insert_block name="material_black" />
       </visual>
