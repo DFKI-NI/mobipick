@@ -20,6 +20,8 @@ before_script:
 
 build:
   stage: build
+  tags:
+    - docker
   script:
     - export LANG="en_US.UTF-8"
     - export LC_ALL=$LANG
@@ -77,6 +79,8 @@ build:
 software_catalogue_entry:
   image: d-reg.hb.dfki.de:5000/ubuntu:overview_generator
   stage: deploy
+  tags:
+    - docker
   script:
     - cd .ci
     - apt-get update -qq
