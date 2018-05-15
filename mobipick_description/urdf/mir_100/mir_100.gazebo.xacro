@@ -36,11 +36,11 @@
   </xacro:macro>
 
   <xacro:macro name="set_all_wheel_frictions" params="prefix">
-    <xacro:set_wheel_friction link="${prefix}left_act_wheel" friction="200"/>
-    <xacro:set_wheel_friction link="${prefix}right_act_wheel" friction="200"/>
-    <xacro:set_wheel_friction link="${prefix}front_left_caster_wheel" friction="1"/>
-    <xacro:set_wheel_friction link="${prefix}front_right_caster_wheel" friction="1"/>
-    <xacro:set_wheel_friction link="${prefix}back_left_caster_wheel" friction="1"/>
-    <xacro:set_wheel_friction link="${prefix}back_right_caster_wheel" friction="1"/>
+    <xacro:set_wheel_friction link="${prefix}left_wheel_link" friction="200"/>
+    <xacro:set_wheel_friction link="${prefix}right_wheel_link" friction="200"/>
+    <xacro:set_wheel_friction link="${prefix}fl_caster_wheel_link" friction="1"/>
+    <xacro:set_wheel_friction link="${prefix}fr_caster_wheel_link" friction="1"/>
+    <xacro:set_wheel_friction link="${prefix}bl_caster_wheel_link" friction="1"/>
+    <xacro:set_wheel_friction link="${prefix}br_caster_wheel_link" friction="1"/>
   </xacro:macro>
 </robot>

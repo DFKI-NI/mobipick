@@ -30,7 +30,7 @@
   <xacro:property name="imu_stdev" value="0.00017" />
 
   <xacro:macro name="actuated_wheel_link" params="prefix locationprefix">
-    <link name="${prefix}${locationprefix}_act_wheel">
+    <link name="${prefix}${locationprefix}_wheel_link">
       <xacro:cylinder_inertial mass="${mir_100_act_wheel_mass}" radius="${mir_100_act_wheel_radius}" length="${mir_100_act_wheel_width}">
         <origin xyz="0 0 0" rpy="${0.5 * pi} 0 0" />
       </xacro:cylinder_inertial>
@@ -48,14 +48,14 @@
         </geometry>
       </collision>
     </link>
-    <gazebo reference="${prefix}${locationprefix}_act_wheel">
+    <gazebo reference="${prefix}${locationprefix}_wheel_link">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
   </xacro:macro>
 
 
   <xacro:macro name="caster_wheel_links" params="prefix locationprefix">
-    <link name="${prefix}${locationprefix}_caster_wheel_base">
+    <link name="${prefix}${locationprefix}_caster_rotation_link">
       <inertial>
         <!-- <origin xyz="0 0 -0.042500000044" rpy="${0.5 * pi} ${24 * deg_to_rad} ${1.5 * pi}" /> -->
         <origin xyz="0 0 -0.042500000044" rpy="${24 * deg_to_rad} 0 ${0.5 * pi} " />
@@ -82,11 +82,11 @@
         </geometry>
       </collision>
     </link>
-    <gazebo reference="${prefix}${locationprefix}_caster_wheel_base">
+    <gazebo reference="${prefix}${locationprefix}_caster_rotation_link">
       <material>Gazebo/Grey</material>
     </gazebo>
 
-    <link name="${prefix}${locationprefix}_caster_wheel">
+    <link name="${prefix}${locationprefix}_caster_wheel_link">
       <xacro:cylinder_inertial mass="${mir_100_caster_wheel_mass}" radius="${mir_100_caster_wheel_radius}" length="${mir_100_caster_wheel_width}">
         <origin xyz="0 0 0" rpy="${0.5 * pi} 0 0" />
       </xacro:cylinder_inertial>
@@ -104,7 +104,7 @@
         </geometry>
       </collision>
     </link>
-    <gazebo reference="${prefix}${locationprefix}_caster_wheel">
+    <gazebo reference="${prefix}${locationprefix}_caster_wheel_link">
       <material>Gazebo/DarkGrey</material>
     </gazebo>
   </xacro:macro>
@@ -114,7 +114,7 @@
     <joint name="${prefix}${locationprefix}_wheel_joint" type="continuous">
       <origin xyz="0.0 ${-mir_100_act_wheel_dy * locationright} ${mir_100_act_wheel_radius}" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
-      <child link="${prefix}${locationprefix}_act_wheel" />
+      <child link="${prefix}${locationprefix}_wheel_link" />
       <axis xyz="0 1 0" />
       <limit effort="100" velocity="20.0" />
     </joint>
@@ -122,33 +122,33 @@
 
 
   <xacro:macro name="front_caster_wheel_joints" params="prefix locationprefix locationright">
-    <joint name="${prefix}base_link_front_${locationprefix}_wheel_base_joint" type="continuous">
+    <joint name="${prefix}${locationprefix}_caster_rotation_joint" type="continuous">
       <origin xyz="${mir_100_front_caster_wheel_base_dx} ${-mir_100_caster_wheel_base_dy * locationright} ${mir_100_caster_wheel_base_dz}" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
-      <child link="${prefix}front_${locationprefix}_caster_wheel_base" />
+      <child link="${prefix}${locationprefix}_caster_rotation_link" />
       <axis xyz="0 0 1" />
       <dynamics damping="0.01" friction="0.0"/>
     </joint>
-    <joint name="${prefix}base_link_front_${locationprefix}_wheel_joint" type="continuous">
+    <joint name="${prefix}${locationprefix}_caster_wheel_joint" type="continuous">
       <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
-      <parent link="${prefix}front_${locationprefix}_caster_wheel_base" />
-      <child link="${prefix}front_${locationprefix}_caster_wheel" />
+      <parent link="${prefix}${locationprefix}_caster_rotation_link" />
+      <child link="${prefix}${locationprefix}_caster_wheel_link" />
       <axis xyz="0 1 0" />
     </joint>
   </xacro:macro>
 
   <xacro:macro name="back_caster_wheel_joints" params="prefix locationprefix locationright">
-    <joint name="${prefix}base_link_back_${locationprefix}_wheel_base_joint" type="continuous">
+    <joint name="${prefix}${locationprefix}_caster_rotation_joint" type="continuous">
       <origin xyz="${mir_100_back_caster_wheel_base_dx} ${-mir_100_caster_wheel_base_dy * locationright} ${mir_100_caster_wheel_base_dz}" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
-      <child link="${prefix}back_${locationprefix}_caster_wheel_base" />
+      <child link="${prefix}${locationprefix}_caster_rotation_link" />
       <axis xyz="0 0 1" />
       <dynamics damping="0.01" friction="0.0"/>
     </joint>
-    <joint name="${prefix}base_link_back_${locationprefix}_wheel_joint" type="continuous">
+    <joint name="${prefix}${locationprefix}_caster_wheel_joint" type="continuous">
       <origin xyz="${mir_100_caster_wheel_dx} ${-mir_100_caster_wheel_dy * locationright} ${mir_100_caster_wheel_dz}" rpy="0 0 0" />
-      <parent link="${prefix}back_${locationprefix}_caster_wheel_base" />
-      <child link="${prefix}back_${locationprefix}_caster_wheel" />
+      <parent link="${prefix}${locationprefix}_caster_rotation_link" />
+      <child link="${prefix}${locationprefix}_caster_wheel_link" />
       <axis xyz="0 1 0" />
     </joint>
   </xacro:macro>
@@ -229,17 +229,17 @@
     <!-- wheels -->
     <xacro:actuated_wheel_link prefix="${prefix}" locationprefix="left"/>
     <xacro:actuated_wheel_link prefix="${prefix}" locationprefix="right"/>
-    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="front_left"/>
-    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="front_right"/>
-    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="back_left"/>
-    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="back_right"/>
+    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="fl"/>
+    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="fr"/>
+    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="bl"/>
+    <xacro:caster_wheel_links prefix="${prefix}" locationprefix="br"/>
 
     <xacro:actuated_wheel_joint prefix="${prefix}" locationprefix="left" locationright="-1"/>
     <xacro:actuated_wheel_joint prefix="${prefix}" locationprefix="right" locationright="1"/>
-    <xacro:front_caster_wheel_joints prefix="${prefix}" locationprefix="left" locationright="-1"/>
-    <xacro:front_caster_wheel_joints prefix="${prefix}" locationprefix="right" locationright="1"/>
-    <xacro:back_caster_wheel_joints prefix="${prefix}" locationprefix="left" locationright="-1"/>
-    <xacro:back_caster_wheel_joints prefix="${prefix}" locationprefix="right" locationright="1"/>
+    <xacro:front_caster_wheel_joints prefix="${prefix}" locationprefix="fl" locationright="-1"/>
+    <xacro:front_caster_wheel_joints prefix="${prefix}" locationprefix="fr" locationright="1"/>
+    <xacro:back_caster_wheel_joints prefix="${prefix}" locationprefix="bl" locationright="-1"/>
+    <xacro:back_caster_wheel_joints prefix="${prefix}" locationprefix="br" locationright="1"/>
 
     <joint name="${prefix}base_link_surface_joint" type="fixed">
       <origin xyz="${mir_100_act_wheel_dx} 0 0.352" rpy="0 0 0" />
