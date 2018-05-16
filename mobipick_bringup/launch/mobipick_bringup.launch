@@ -1,0 +1,46 @@
+<launch>
+  <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="mobipick" doc="TF prefix to use for all of Mobipick's TF frames"/>
+
+  <arg name="mir_hostname" default="192.168.12.20" />
+
+  <group ns="$(arg namespace)">
+    <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/>
+
+    <!-- URDF -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
+
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+    
+    <!-- MiR base -->
+    <node name="mir100_bridge" pkg="mir100_driver" type="mir100_bridge.py" output="screen">
+      <param name="hostname" value="$(arg mir_hostname)" />
+      <param name="tf_prefix" value="$(arg tf_prefix)" />
+      <remap from="rosout" to="/rosout" />
+      <remap from="tf" to="/tf" />
+    </node>
+
+    <node name="rep117_laser_filter" pkg="mir100_driver" type="rep117_filter.py" output="screen">
+      <remap from="scan_filtered" to="scan_rep117" />
+    </node>
+
+    <node name="fake_mir_joint_publisher" pkg="mir100_driver" type="fake_mir_joint_publisher.py" output="screen" />
+
+    <!-- Astra gripper camera -->
+
+    <include file="$(find astra_launch)/launch/astra.launch">
+      <arg name="camera"             value="gripper_astra" />
+      <arg name="depth_registration" value="true" />
+      <arg name="publish_tf"         value="false" />
+      <arg name="depth_frame_id"     value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" />
+      <arg name="rgb_frame_id"       value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame" />
+    </include>
+    <param name="gripper_astra/driver/data_skip" value="9" />
+
+    <!-- Pico Flexx gripper camera -->
+
+    <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
+      <arg name="base_name" value="gripper_pico_flexx" />
+    </include>
+  </group>
+</launch>
