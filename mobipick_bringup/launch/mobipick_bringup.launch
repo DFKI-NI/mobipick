@@ -35,8 +35,8 @@
       <arg name="camera"                value="gripper_astra" />
       <arg name="depth_registration"    value="false" />  <!-- depth_registration:=true leads to incorrect depth scaling! (objects in point cloud appear smaller than they are) -->
       <arg name="publish_tf"            value="false" />
-      <arg name="depth_frame_id"        value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" />
-      <arg name="rgb_frame_id"          value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame" />
+      <arg name="depth_frame_id"        value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" if="$(eval tf_prefix != '')" />
+      <arg name="rgb_frame_id"          value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame"   if="$(eval tf_prefix != '')" />
       <arg name="device_id"             value="$(arg astra_serial)" />
       <arg name="rgb_camera_info_url"   value="package://mobipick_bringup/camera_info/rgb_$(arg astra_serial).yaml" />
       <arg name="depth_camera_info_url" value="package://mobipick_bringup/camera_info/depth_$(arg astra_serial).yaml" />
