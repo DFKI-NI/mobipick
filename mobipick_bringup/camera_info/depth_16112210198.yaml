@@ -1,0 +1,24 @@
+# Orbbec Astra Mini S #1, Serial no. 16112210198
+#
+# Values calibrated using rosrun camera_calibration cameracalibrator.py --size 6x7 --square 0.0495 image:=/astra/rgb/image_raw camera:=/astra/rgb
+
+image_width: 640
+image_height: 480
+camera_name: depth_Astra_Orbbec
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [578.599386, 0.000000, 315.317156, 0.000000, 572.428845, 238.673432, 0.000000, 0.000000, 1.000000]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.067657, 0.116504, -0.006256, 0.000154, 0.000000]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [578.294617, 0.000000, 315.529778, 0.000000, 0.000000, 569.675354, 235.794055, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]

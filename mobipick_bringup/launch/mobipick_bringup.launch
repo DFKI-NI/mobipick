@@ -4,6 +4,9 @@
 
   <arg name="mir_hostname" default="192.168.12.20" />
 
+  <!-- 16112210198 = astra_mini_s_1 (OS); TODO: adjust to astra mini s on mobipick-hb -->
+  <arg name="astra_serial" default="16112210198" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
+
   <group ns="$(arg namespace)">
     <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/>
 
@@ -29,11 +32,14 @@
     <!-- Astra gripper camera -->
 
     <include file="$(find astra_launch)/launch/astra.launch">
-      <arg name="camera"             value="gripper_astra" />
-      <arg name="depth_registration" value="true" />
-      <arg name="publish_tf"         value="false" />
-      <arg name="depth_frame_id"     value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" />
-      <arg name="rgb_frame_id"       value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame" />
+      <arg name="camera"                value="gripper_astra" />
+      <arg name="depth_registration"    value="false" />  <!-- depth_registration:=true leads to incorrect depth scaling! (objects in point cloud appear smaller than they are) -->
+      <arg name="publish_tf"            value="false" />
+      <arg name="depth_frame_id"        value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" />
+      <arg name="rgb_frame_id"          value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame" />
+      <arg name="device_id"             value="$(arg astra_serial)" />
+      <arg name="rgb_camera_info_url"   value="package://mobipick_bringup/camera_info/rgb_$(arg astra_serial).yaml" />
+      <arg name="depth_camera_info_url" value="package://mobipick_bringup/camera_info/depth_$(arg astra_serial).yaml" />
     </include>
     <param name="gripper_astra/driver/data_skip" value="9" />
 
