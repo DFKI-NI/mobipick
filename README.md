@@ -15,7 +15,7 @@ Package overview
 ----------------
 
 * `mobipick_description`: URDF description of the robot
-* `mobipick_gazebo`: Smulation specific launch and configuration files
+* `mobipick_gazebo`: Simulation specific launch and configuration files
 * `mobipick_moveit_config`: MoveIt! launch and configuration files
 * `mobipick_navigation`: move_base launch and configuration files
 * `mobipick_pick_n_place`: Some demo nodes that show off the MoveIt capabilities of the robot
