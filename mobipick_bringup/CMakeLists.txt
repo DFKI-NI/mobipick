@@ -24,4 +24,4 @@ install(DIRECTORY
 ## Testing ##
 #############
 
-roslaunch_add_file_check(launch)
+#roslaunch_add_file_check(launch)   # disabled because of dependency on pico_flexx_driver

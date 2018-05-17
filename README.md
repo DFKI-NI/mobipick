@@ -59,6 +59,12 @@ cd ~/catkin_ws
 catkin_make -DCMAKE_BUILD_TYPE=RelWithDebugInfo
 ```
 
+If you have a physical pico flexx camera attached to this PC, also follow the
+installation instructions of the
+[pico_flexx_driver](https://github.com/code-iai/pico_flexx_driver). These
+cannot be integrated into the instructions above because they require a manual
+download step.
+
 In case you encounter problems, please compare the commands above to the build
 step in [`.gitlab-ci.yml`](.gitlab-ci.yml); that should always have the most
 recent list of commands.
