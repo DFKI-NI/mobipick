@@ -29,8 +29,17 @@
 
     <node name="fake_mir_joint_publisher" pkg="mir100_driver" type="fake_mir_joint_publisher.py" output="screen" />
 
-    <!-- Astra gripper camera -->
+    <!-- UR5 joint trajectory server -->
+    <node name="arm_joint_trajectory_forwarder" pkg="mobipick_pick_n_place" type="joint_trajectory_forwarder.py" output="screen">
+      <param name="controller_name" value="arm_controller" />
+    </node>
 
+    <!-- gripper joint trajectory server -->
+    <node name="gripper_joint_trajectory_forwarder" pkg="mobipick_pick_n_place" type="joint_trajectory_forwarder.py" output="screen">
+      <param name="controller_name" value="gripper_controller" />
+    </node>
+
+    <!-- Astra gripper camera -->
     <include file="$(find astra_launch)/launch/astra.launch">
       <arg name="camera"                value="gripper_astra" />
       <arg name="depth_registration"    value="false" />  <!-- depth_registration:=true leads to incorrect depth scaling! (objects in point cloud appear smaller than they are) -->
@@ -44,7 +53,6 @@
     <param name="gripper_astra/driver/data_skip" value="9" />
 
     <!-- Pico Flexx gripper camera -->
-
     <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
       <arg name="base_name" value="gripper_pico_flexx" />
     </include>
