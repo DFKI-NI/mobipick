@@ -194,10 +194,10 @@ int main(int argc, char **argv)
 
   // get objects from object detection
   vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
-          "/detected_objects", nh, ros::Duration(10.0));
+          "detected_objects", nh, ros::Duration(10.0));
   if (!detections)
   {
-    ROS_ERROR("Timed out while waiting for a message on topic /detected_objects!");
+    ROS_ERROR("Timed out while waiting for a message on topic detected_objects!");
     return 1;
   }
 
