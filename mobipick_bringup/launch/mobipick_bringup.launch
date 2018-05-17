@@ -1,6 +1,6 @@
 <launch>
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
-  <arg name="tf_prefix" default="mobipick" doc="TF prefix to use for all of Mobipick's TF frames"/>
+  <arg name="tf_prefix" default=""         doc="TF prefix to use for all of Mobipick's TF frames"/>
 
   <arg name="mir_hostname" default="192.168.12.20" />
 
