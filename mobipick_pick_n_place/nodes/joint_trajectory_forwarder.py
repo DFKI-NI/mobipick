@@ -4,6 +4,7 @@
 This node provides a joint trajectory action server that forwards the trajectory to Rock for execution.
 """
 
+import sys
 import rospy
 import actionlib
 from control_msgs.msg import (
@@ -20,9 +21,9 @@ class JointTrajectoryForwarder(object):
     _result = FollowJointTrajectoryResult()
 
     def __init__(self, name):
-        self._action_name = name
-        self._pub = rospy.Publisher('joint_trajectory_forwarder/trajectory', JointTrajectory, queue_size=1)
-        self._as = actionlib.SimpleActionServer(self._action_name, FollowJointTrajectoryAction,
+        self._pub = rospy.Publisher('~trajectory', JointTrajectory, queue_size=1)
+        action_name = name + '/follow_joint_trajectory'
+        self._as = actionlib.SimpleActionServer(action_name, FollowJointTrajectoryAction,
                                                 execute_cb=self.execute_cb, auto_start=False)
         self._as.start()
 
@@ -34,10 +35,10 @@ class JointTrajectoryForwarder(object):
         :type goal FollowJointTrajectoryGoal
         """
 
-        rospy.loginfo('%s: Received new goal with %d points', self._action_name, len(goal.trajectory.points))
+        rospy.loginfo('%s: Received new goal with %d points', rospy.get_name(), len(goal.trajectory.points))
 
         # start executing the action
-        rospy.loginfo('%s: Executing trajectory', self._action_name)
+        rospy.loginfo('%s: Executing trajectory', rospy.get_name())
         self._pub.publish(goal.trajectory)
 
         # the Rock side should now have received the trajectory and started executing it
@@ -61,13 +62,13 @@ class JointTrajectoryForwarder(object):
         while not rospy.is_shutdown():
             # check that preempt has not been requested by the client
             if self._as.is_preempt_requested():
-                rospy.loginfo('%s: Preempted' % self._action_name)
+                rospy.loginfo('%s: Preempted' % rospy.get_name())
                 self._as.set_preempted()
                 return  # return instead of break so that we don't call set_succeeded/set_aborted
 
             # check if the trajectory is supposed to have finished
             if rospy.Time.now() >= traj_end_time:
-                rospy.loginfo('%s: Trajectory end time reached' % self._action_name)
+                rospy.loginfo('%s: Trajectory end time reached' % rospy.get_name())
                 break
 
             # TODO: check somehow if the Rock side has finished and break if yes
@@ -82,12 +83,12 @@ class JointTrajectoryForwarder(object):
         success = True  # TODO: actually determine this from the Rock side
 
         if success:
-            rospy.loginfo('%s: Succeeded' % self._action_name)
+            rospy.loginfo('%s: Succeeded' % rospy.get_name())
             self._result.error_code = FollowJointTrajectoryResult.SUCCESSFUL
             self._result.error_string = "trajectory successfully executed"
             self._as.set_succeeded(self._result)
         else:
-            rospy.loginfo('%s: Failed' % self._action_name)
+            rospy.loginfo('%s: Failed' % rospy.get_name())
             self._result.error_code = FollowJointTrajectoryResult.PATH_TOLERANCE_VIOLATED  # TODO: or other error code
             self._result.error_string = "trajectory execution failed, because TODO"
             self._as.set_aborted(self._result)
@@ -95,7 +96,12 @@ class JointTrajectoryForwarder(object):
 
 def main():
     rospy.init_node('joint_trajectory_forwarder')
-    server = JointTrajectoryForwarder('arm_controller/follow_joint_trajectory')
+    try:
+        controller_name = rospy.get_param('~controller_name')   # for example 'arm_controller' or 'gripper_controller'
+    except KeyError:
+        rospy.logfatal('Parameter ~controller_name was not set!')
+        sys.exit(1)
+    server = JointTrajectoryForwarder(controller_name)
     rospy.spin()
 
 
