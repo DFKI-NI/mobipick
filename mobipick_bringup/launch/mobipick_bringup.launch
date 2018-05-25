@@ -19,7 +19,10 @@
     <node name="mir100_bridge" pkg="mir100_driver" type="mir100_bridge.py" output="screen">
       <param name="hostname" value="$(arg mir_hostname)" />
       <param name="tf_prefix" value="$(arg tf_prefix)" />
+      <remap from="map" to="/map" />
+      <remap from="map_metadata" to="/map_metadata" />
       <remap from="rosout" to="/rosout" />
+      <remap from="rosout_agg" to="/rosout_agg" />
       <remap from="tf" to="/tf" />
     </node>
 
