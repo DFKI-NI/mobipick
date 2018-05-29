@@ -191,16 +191,17 @@
       <parent link="${prefix}base_link" />
       <child link="${prefix}front_laser_link" />
       <!-- on real MiR (depends on calibration): <origin xyz="0.416 0.243 0.200" rpy="0.0 0.0 0.795" /> -->
-      <origin xyz="0.4288 0.2358 0.1914" rpy="${-pi} 0.0 ${pi/4}" />  <!-- from visually matching up the meshes of the MiR and the laser scanner -->
+      <!-- <origin xyz="0.4288 0.2358 0.1914" rpy="${-pi} 0.0 ${pi/4}" />  from visually matching up the meshes of the MiR and the laser scanner -->
+      <origin xyz="0.420 0.240 0.200" rpy="0.0 0.0 0.804" />  <!-- from the TFs published by the real mobipick-hb -->
     </joint>
-
     <xacro:sick_s300 link="${prefix}front_laser_link" topic="f_scan" />
 
     <joint name="${prefix}base_link_to_back_laser_joint" type="fixed">
       <parent link="${prefix}base_link" />
       <child link="${prefix}back_laser_link" />
       <!-- on real MiR: <origin xyz="-0.360 -0.252 0.200" rpy="0.0 0.0 -2.348" /> -->
-      <origin xyz="-0.3548 -0.2352 0.1914" rpy="${-pi} 0.0 ${-0.75 * pi}" />  <!-- from visually matching up the meshes of the MiR and the laser scanner -->
+      <!-- <origin xyz="-0.3548 -0.2352 0.1914" rpy="${-pi} 0.0 ${-0.75 * pi}" />  from visually matching up the meshes of the MiR and the laser scanner -->
+      <origin xyz="-0.364 -0.239 0.200" rpy="0.0 0.0 -2.349" />  <!-- from the TFs published by the real mobipick-hb -->
     </joint>
 
     <xacro:sick_s300 link="${prefix}back_laser_link" topic="b_scan" />

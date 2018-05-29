@@ -11,6 +11,7 @@
   <xacro:macro name="sick_s300" params="link topic">
     <link name="${link}">
       <visual>
+        <origin xyz="0.0 0.0 0.0" rpy="${pi} 0 0" />
         <geometry>
           <mesh filename="package://mobipick_description/meshes/sensors/sick_lms-100.stl" />
         </geometry>
@@ -18,6 +19,7 @@
         <xacro:insert_block name="material_black" />
       </visual>
       <collision>
+        <origin xyz="0.0 0.0 0.0" rpy="${pi} 0 0" />
         <geometry>
           <mesh filename="package://mobipick_description/meshes/sensors/sick_lms-100.stl" />
         </geometry>
