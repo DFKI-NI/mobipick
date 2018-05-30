@@ -1,0 +1,24 @@
+# Orbbec Astra Mini S on mobipick-hb, Serial no. 16112110432
+#
+# Values calibrated using rosrun camera_calibration cameracalibrator.py --size 6x7 --square 0.0495 image:=/astra/ir/image camera:=/astra/ir
+
+image_width: 640
+image_height: 480
+camera_name: depth_Astra_Orbbec
+camera_matrix:
+  rows: 3
+  cols: 3
+  data: [588.2548099622217, 0, 325.2527589971305, 0, 581.2020872771369, 236.2937542784242, 0, 0, 1]
+distortion_model: plumb_bob
+distortion_coefficients:
+  rows: 1
+  cols: 5
+  data: [-0.05078718445221765, 0.09834940335667042, -0.005218709640983228, 0.002870903671928677, 0]
+rectification_matrix:
+  rows: 3
+  cols: 3
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
+projection_matrix:
+  rows: 3
+  cols: 4
+  data: [589.0838623046875, 0, 326.8503615796362, 0, 0, 581.2031860351562, 233.9821949099587, 0, 0, 0, 1, 0]
