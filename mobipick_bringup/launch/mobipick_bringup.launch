@@ -4,8 +4,8 @@
 
   <arg name="mir_hostname" default="192.168.12.20" />
 
-  <!-- 16112210198 = astra_mini_s_1 (OS); TODO: adjust to astra mini s on mobipick-hb -->
-  <arg name="astra_serial" default="16112210198" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
+  <!-- 16112110432 = mobipick-hb -->
+  <arg name="astra_serial" default="16112110432" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
 
   <group ns="$(arg namespace)">
     <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/>
