@@ -16,7 +16,7 @@
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 
-  <xacro:structure prefix="structure_" height="0.065" variant="v1" />
+  <xacro:structure prefix="structure_" height="0.058" variant="v1" />
 
   <!-- ############### UR5 ARM ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur5.urdf.xacro" />
