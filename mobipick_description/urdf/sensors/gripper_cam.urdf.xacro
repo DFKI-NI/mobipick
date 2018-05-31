@@ -91,7 +91,7 @@
     </gazebo>
 
     <joint name="sensor_mount_pico_holder_joint" type="fixed">
-      <origin xyz="-0.00325 0.11187 0" rpy="0 0 ${-24.15 / 180.0 * pi}" /> <!-- angle can be adjusted from -15 to -50 degrees (corresponds to downward angle of the pico flexx) -->
+      <origin xyz="-0.00325 0.11187 0" rpy="0 0 ${-33.5 / 180.0 * pi}" /> <!-- angle can be adjusted from -15 to -50 degrees (corresponds to downward angle of the pico flexx) -->
       <parent link="sensor_mount_link"/>
       <child link="sensor_mount_pico_holder_link" />
     </joint>
