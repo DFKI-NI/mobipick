@@ -52,8 +52,8 @@
   <xacro:include filename="$(find mobipick_description)/urdf/sensors/gripper_cam.urdf.xacro" />
 
   <joint name="sensor_mount_joint" type="fixed">
-    <origin xyz="0.0 0.0 -0.005" rpy="0.0 ${-pi/2} ${pi/2}" />
-    <parent link="gripper_robotiq_arg2f_base_link" />
+    <origin xyz="0.0 0.0 -0.005" rpy="0.0 ${-pi/2} 0.0" />
+    <parent link="fts_toolside" />
     <child link="sensor_mount_link" />
   </joint>
 
