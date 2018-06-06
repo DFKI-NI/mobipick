@@ -55,7 +55,7 @@ build:
     - apt-get install -qq -y python-rosdep
     # - sudo rosdep init   # not needed in CI, because the Docker image already has rosdep initialized
     - rosdep update
-    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=sbpl
+    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=pico_flexx_driver --skip-keys=sbpl
 
     # build all packages in the catkin workspace
     - source /opt/ros/${CI_ROS_DISTRO}/setup.bash

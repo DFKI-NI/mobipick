@@ -18,6 +18,8 @@
   <exec_depend>astra_launch</exec_depend>
   <exec_depend>cv_bridge</exec_depend>  <!-- for normalize_image node -->
   <exec_depend>mir100_driver</exec_depend>
+  <exec_depend>mobipick_pick_n_place</exec_depend>
+  <exec_depend>pico_flexx_driver</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>rospy</exec_depend>  <!-- for normalize_image node -->
   <exec_depend>sensor_msgs</exec_depend>  <!-- for normalize_image node -->
