@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+"""
+Normalizes the range of a mono16 image. This is very useful for example with the IR image of the Orbbec Astra S, because
+it is incorrectly scaled to [0..255] (instead of [0..65536]), so converting it into a mono8 or RGB image will return
+values [0..1] if not normalized first.
+"""
+
+import rospy
+from cv_bridge import CvBridge
+from sensor_msgs.msg import Image
+
+
+def img_cb(imgmsg_in, (pub, bridge)):
+    """
+    :type imgmsg_in: sensor_msgs.msg.Image
+    :type pub: rospy.Publisher
+    """
+
+    img_in = bridge.imgmsg_to_cv2(imgmsg_in, desired_encoding='mono16')
+
+    cv_img_out = img_in[:, :] - img_in.min()
+    cv_img_out[:, :] *= 2 ** 16 / (img_in.max() - img_in.min())
+
+    imgmsg_out = bridge.cv2_to_imgmsg(cv_img_out, encoding='mono16')
+    imgmsg_out.header = imgmsg_in.header
+    pub.publish(imgmsg_out)
+
+
+def main():
+    rospy.init_node('normalize_image')
+    pub = rospy.Publisher('image_out', Image, queue_size=10)
+    bridge = CvBridge()
+    rospy.Subscriber('image_in', Image, img_cb, callback_args=[pub, bridge])
+    rospy.spin()
+
+
+if __name__ == '__main__':
+    main()

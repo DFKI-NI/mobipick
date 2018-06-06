@@ -21,6 +21,17 @@ install(DIRECTORY
 )
 
 #############
+## Install ##
+#############
+
+# Mark executable scripts (Python etc.) for installation
+# in contrast to setup.py, you can choose the destination
+install(PROGRAMS
+  nodes/normalize_image
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+#############
 ## Testing ##
 #############
 

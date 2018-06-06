@@ -58,6 +58,19 @@
     </include>
     <param name="gripper_astra/driver/data_skip" value="9" />
 
+    <!-- This fixes two bugs with astra_camera:
+         1. ir_processing expects the IR image at "ir/image_raw", but the
+            astra_camera driver publishes "ir/image" instead.
+         2. the astra_camera driver publishes "ir/image" as mono16, but it is
+            incorrectly scaled to [0..255] (instead of [0..65536]), so converting
+            it into a mono8 or RGB image will return values [0..1] (i.e., black
+            image). Therefore we normalize it first.
+    -->
+    <node name="normalize_image" pkg="mobipick_bringup" type="normalize_image" output="screen">
+      <remap from="image_in" to="gripper_astra/ir/image" />
+      <remap from="image_out" to="gripper_astra/ir/image_raw" />
+    </node>
+
     <!-- Pico Flexx gripper camera -->
     <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
       <arg name="base_name" value="gripper_pico_flexx" />

@@ -16,7 +16,10 @@
   <build_depend>roslaunch</build_depend>
 
   <exec_depend>astra_launch</exec_depend>
+  <exec_depend>cv_bridge</exec_depend>  <!-- for normalize_image node -->
   <exec_depend>mir100_driver</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rospy</exec_depend>  <!-- for normalize_image node -->
+  <exec_depend>sensor_msgs</exec_depend>  <!-- for normalize_image node -->
   <exec_depend>xacro</exec_depend>
 </package>
