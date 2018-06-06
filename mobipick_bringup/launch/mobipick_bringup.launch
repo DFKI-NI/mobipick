@@ -7,6 +7,8 @@
   <!-- 16112110432 = mobipick-hb -->
   <arg name="astra_serial" default="16112110432" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
 
+  <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
+
   <group ns="$(arg namespace)">
     <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/>
 
@@ -52,6 +54,7 @@
       <arg name="device_id"             value="$(arg astra_serial)" />
       <arg name="rgb_camera_info_url"   value="package://mobipick_bringup/camera_info/rgb_$(arg astra_serial).yaml" />
       <arg name="depth_camera_info_url" value="package://mobipick_bringup/camera_info/depth_$(arg astra_serial).yaml" />
+      <arg name="ir_processing"         value="$(arg ir_processing)" />
     </include>
     <param name="gripper_astra/driver/data_skip" value="9" />
 
