@@ -17,7 +17,7 @@
         </material>
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 ${pi / 2}" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_base_link_coarse.stl" />
         </geometry>
