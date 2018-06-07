@@ -66,7 +66,7 @@
             it into a mono8 or RGB image will return values [0..1] (i.e., black
             image). Therefore we normalize it first.
     -->
-    <node name="normalize_image" pkg="mobipick_bringup" type="normalize_image" output="screen">
+    <node if="$(arg ir_processing)" name="normalize_image" pkg="mobipick_bringup" type="normalize_image" output="screen">
       <remap from="image_in" to="gripper_astra/ir/image" />
       <remap from="image_out" to="gripper_astra/ir/image_raw" />
     </node>
