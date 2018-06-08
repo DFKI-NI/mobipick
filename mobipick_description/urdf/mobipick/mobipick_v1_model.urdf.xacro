@@ -40,9 +40,44 @@
   <!-- ############### GRIPPER ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
 
-  <joint name="ft300_2f140_joint" type="fixed">
-    <origin xyz="0 0 0" rpy="0 0 ${-pi/2}" />
+  <!-- gripper coupling (ISO 9409-1-50-4-M / Robotiq AGC-CPL-062-002_20171219) -->
+  <xacro:property name="coupling_radius" value="0.0375" />
+  <xacro:property name="coupling_outer_length" value="0.014" />
+  <xacro:property name="coupling_inner_length" value="0.008" />
+  <xacro:property name="coupling_mass" value="0.100" />
+
+  <joint name="ft300_coupling_joint" type="fixed">
+    <origin xyz="0 0 ${coupling_inner_length / 2}" rpy="0 0 ${-pi/2}" />
     <parent link="fts_toolside" />
+    <child link="gripper_coupling_link" />
+  </joint>
+
+  <link name="gripper_coupling_link">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="${coupling_radius}" length="${coupling_outer_length}" />
+      </geometry>
+      <xacro:insert_block name="material_black" />
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="${coupling_radius}" length="${coupling_outer_length}" />
+      </geometry>
+    </collision>
+    <xacro:cylinder_inertial radius="${coupling_radius}" length="${coupling_outer_length}" mass="${coupling_mass}">
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+    </xacro:cylinder_inertial>
+  </link>
+  <gazebo reference="gripper_coupling_link">
+    <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
+  <joint name="coupling_2f140_joint" type="fixed">
+    <origin xyz="0 0 ${coupling_inner_length / 2}" rpy="0 0 0" />
+    <parent link="gripper_coupling_link" />
     <child link="gripper_robotiq_arg2f_base_link" />
   </joint>
 
