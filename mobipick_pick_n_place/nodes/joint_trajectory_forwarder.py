@@ -29,19 +29,18 @@ class JointTrajectoryForwarder(object):
         self._sub_errorcode = rospy.Subscriber('/mobipick/arm_joint_trajectory_interface/error_code', Int32, self.callback_errorcode)
         self._sub_status = rospy.Subscriber('/mobipick/arm_joint_trajectory_interface/status', Int32, self.callback_status)
 
-        self.error_code = 0
+        self.error_code = 1
         self.status = 0
-        self.success = 0
         self._pub_cancel = rospy.Publisher('~cancel', Int32, queue_size=1)
 
         self._as.start()
 
     def callback_status(self, data):
-        rospy.loginfo('%s: Received new status code- %d', rospy.get_name(), data.data)
+        rospy.logdebug('%s: Received new status code- %d', rospy.get_name(), data.data)
         self.status = data.data
 
         if self.status == 0:
-            rospy.loginfo('%s: Executing trajectory', rospy.get_name())
+            rospy.logdebug('%s: Executing trajectory', rospy.get_name())
         elif self.status == 1:
             rospy.loginfo('%s: Reached intermediate waypoint', rospy.get_name())
         elif self.status == 2:
@@ -49,18 +48,11 @@ class JointTrajectoryForwarder(object):
         elif self.status == 3:
             rospy.loginfo('%s: Ready to execute next trajectory', rospy.get_name())
         else:
-            rospy.loginfo('%s: Error. Aborting trajectory', rospy.get_name())
-            self._pub_cancel = rospy.Publisher('~cancel', Int32, queue_size=1)
+            rospy.loginfo('%s: Error code: %d', rospy.get_name(), self.status)
 
     def callback_errorcode(self, data):
         rospy.loginfo('%s: Received new error code- %d', rospy.get_name(), data.data)
         self.error_code = data.data
-
-        if self.error_code == 0:
-            self.success = True
-        elif self.error_code <0:
-            self.success = False
-
 
     def execute_cb(self, goal):
         """
@@ -74,8 +66,7 @@ class JointTrajectoryForwarder(object):
 
         # start executing the action
         rospy.loginfo('%s: Executing trajectory', rospy.get_name())
-        self._pub_cancel.publish(0);
-        self.success = 0
+        self.error_code = 1
         self._pub.publish(goal.trajectory)
 
         # the Rock side should now have received the trajectory and started executing it
@@ -88,9 +79,11 @@ class JointTrajectoryForwarder(object):
         # TODO: actually receive some sort of feedback from the Rock side when the trajectory has finished
         # we fake this here by sleeping until the nominal end of the trajectory
         if goal.trajectory.header.stamp.is_zero():
-            traj_end_time = rospy.Time.now() + 2*(goal.trajectory.points[-1].time_from_start)
+            traj_end_time = rospy.Time.now() + 2 * (goal.trajectory.points[-1].time_from_start)
         else:
-            traj_end_time = goal.trajectory.header.stamp + 2*(goal.trajectory.points[-1].time_from_start)
+            traj_end_time = goal.trajectory.header.stamp + 2 * (goal.trajectory.points[-1].time_from_start)
+        rospy.logdebug("Original trajectory duration: %f s", goal.trajectory.points[-1].time_from_start.to_sec())
+        rospy.logdebug("Timeout: %f s", (traj_end_time - rospy.Time.now()).to_sec())
 
 
         # publish feedback at 100 Hz
@@ -104,18 +97,14 @@ class JointTrajectoryForwarder(object):
                 self._as.set_preempted()
                 return  # return instead of break so that we don't call set_succeeded/set_aborted
 
-            # check if the trajectory is supposed to have finished
-            if self.success:
+            # check if the trajectory is finished
+            if self.error_code <= 0:
                 rospy.loginfo('%s: Trajectory completed' % rospy.get_name())
                 break
             if rospy.Time.now() >= traj_end_time:
-                rospy.loginfo('%s: Trajectory end time reached' % rospy.get_name())
-                if self.success == False:
-                    rospy.loginfo('%s: Trajectory not completed' % rospy.get_name())
-                    self._pub_cancel.publish(1);
+                rospy.logerr('%s: Trajectory timed out!' % rospy.get_name())
+                self._pub_cancel.publish(1);
                 break
-
-            # TODO: check somehow if the Rock side has finished and break if yes
 
             # publish the feedback
             self._feedback.header.stamp = rospy.Time.now()
@@ -124,25 +113,21 @@ class JointTrajectoryForwarder(object):
 
             r.sleep()
 
-          # TODO: actually determine this from the Rock side
-
-        if self.success:
+        if self.error_code == 0:
             rospy.loginfo('%s: Succeeded' % rospy.get_name())
             self._result.error_code = FollowJointTrajectoryResult.SUCCESSFUL
             self._result.error_string = "trajectory successfully executed"
             self._as.set_succeeded(self._result)
         else:
             rospy.loginfo('%s: Failed' % rospy.get_name())
-            self._result.error_code = FollowJointTrajectoryResult.PATH_TOLERANCE_VIOLATED  # TODO: or other error code
+            self._result.error_code = self.error_code
             self._result.error_string = "trajectory execution failed, check rock side"
             self._as.set_aborted(self._result)
 
 
 def main():
     rospy.init_node('joint_trajectory_forwarder')
-    rospy.set_param('~controller_name', 'arm_controller')
     try:
-
         controller_name = rospy.get_param('~controller_name')   # for example 'arm_controller' or 'gripper_controller'
     except KeyError:
         rospy.logfatal('Parameter ~controller_name was not set!')
