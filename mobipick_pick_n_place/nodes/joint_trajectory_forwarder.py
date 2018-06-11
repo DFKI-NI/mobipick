@@ -26,8 +26,12 @@ class JointTrajectoryForwarder(object):
         self._as = actionlib.SimpleActionServer(action_name, FollowJointTrajectoryAction,
                                                 execute_cb=self.execute_cb, auto_start=False)
 
-        self._sub_errorcode = rospy.Subscriber('/mobipick/arm_joint_trajectory_interface/error_code', Int32, self.callback_errorcode)
-        self._sub_status = rospy.Subscriber('/mobipick/arm_joint_trajectory_interface/status', Int32, self.callback_status)
+        if name == 'arm_controller':
+            topic_name = 'arm'
+        elif name == 'gripper_controller':
+            topic_name = 'gripper'
+        self._sub_errorcode = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/error_code', Int32, self.callback_errorcode)
+        self._sub_status = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/status', Int32, self.callback_status)
 
         self.error_code = 1
         self.status = 0
