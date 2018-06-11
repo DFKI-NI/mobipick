@@ -8,12 +8,8 @@
     <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
   </include>
 
-  <!-- spawn coke can -->
-  <include file="$(find mobipick_gazebo)/launch/objects/coke_can.launch">
-    <arg name="x" value="1.05" />
-    <arg name="y" value="-0.25" />
-    <arg name="z" value="1.01" />
-  </include>
+  <!-- spawn power drill -->
+  <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch" />
 
   <!-- spawn table -->
   <param name="table_description"

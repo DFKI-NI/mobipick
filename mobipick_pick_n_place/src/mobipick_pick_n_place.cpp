@@ -64,7 +64,7 @@ void closedGripper(trajectory_msgs::JointTrajectory &posture)
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
-  posture.points[0].positions[0] = 0.48;   // closed around coke can: 0.48; fully closed: 0.76
+  posture.points[0].positions[0] = 0.65;   // closed around power drill: 0.65; fully closed: 0.76
 
   posture.points[0].time_from_start.fromSec(5.0);
 }
@@ -74,19 +74,24 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   std::vector<moveit_msgs::Grasp> grasps;
 
   // --- calculate desired pose of gripper_tcp when grasping
-  // pose of coke can
+  // pose of power drill
   geometry_msgs::PoseStamped p;
-  p.header.frame_id = "coke_can";
-  p.pose.position.x = 0.0;
+  p.header.frame_id = "power_drill";
+  p.pose.position.x = 0.04;
   p.pose.position.y = 0.0;
-  // add z offset to grasp coke can a bit higher than center, to get the gripper away from the table
-  p.pose.position.z = 0.03;
+  p.pose.position.z = 0.0;
 
-  // pitch = pi/8
-  p.pose.orientation.x = 0;
-  p.pose.orientation.y = 0.19509032;
-  p.pose.orientation.z = 0;
-  p.pose.orientation.w = 0.98078528;
+  // // pitch = pi/8
+  // p.pose.orientation.x = 0;
+  // p.pose.orientation.y = 0.19509032;
+  // p.pose.orientation.z = 0;
+  // p.pose.orientation.w = 0.98078528;
+
+  // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
+  p.pose.orientation.x = 0.0;
+  p.pose.orientation.y = -0.707106781;
+  p.pose.orientation.z = -0.707106781;
+  p.pose.orientation.w = 0.0;
 
   moveit_msgs::Grasp g;
   g.grasp_pose = p;
@@ -94,8 +99,8 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
   g.pre_grasp_approach.direction.vector.x = 1.0;
   g.pre_grasp_approach.direction.header.frame_id = "gripper_tcp";
-  g.pre_grasp_approach.min_distance = 0.2;
-  g.pre_grasp_approach.desired_distance = 0.4;
+  g.pre_grasp_approach.min_distance = 0.1;
+  g.pre_grasp_approach.desired_distance = 0.3;
 
   g.post_grasp_retreat.direction.header.frame_id = "base_footprint";
   g.post_grasp_retreat.direction.vector.z = 1.0;
@@ -119,7 +124,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   grasps.push_back(g);
 
   group.setSupportSurfaceName("table");
-  return group.pick("coke_can", grasps);
+  return group.pick("power_drill", grasps);
 }
 
 moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterface &group)
@@ -127,17 +132,18 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   std::vector<moveit_msgs::PlaceLocation> loc;
 
   // --- calculate desired pose of gripper_tcp when placing
-  // desired pose of coke can
+  // desired pose of power drill
   geometry_msgs::PoseStamped p;
   p.header.frame_id = "base_footprint";
-  p.pose.position.x = 1.05;
-  p.pose.position.y = 0.25;  // only difference to grasping: 0.25 instead of -0.25
-  p.pose.position.z = 1.0 + 0.1239 / 2.0;
+  p.pose.position.x = 0.90;
+  p.pose.position.y = 0.20;  // only difference to grasping: 0.20 instead of -0.20
+  p.pose.position.z = 1.10;
 
-  p.pose.orientation.x = 0;
-  p.pose.orientation.y = 0;
-  p.pose.orientation.z = 0;
-  p.pose.orientation.w = 1.0;
+  // quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
+  p.pose.orientation.x = 0.0;
+  p.pose.orientation.y = 0.707106781;
+  p.pose.orientation.z = 0.707106781;
+  p.pose.orientation.w = 0.0;
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
 
@@ -171,7 +177,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   //  ocm.weight = 1.0;
   //  group.setPathConstraints(constr);
 
-  auto error_code = group.place("coke_can", loc);
+  auto error_code = group.place("power_drill", loc);
   group.clearPathConstraints();
   return error_code;
 }

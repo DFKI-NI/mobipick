@@ -53,6 +53,24 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       det3d.results[0].score = 1.0;
       detections.detections.push_back(det3d);
     }
+    if (msg->name[i] == "powerdrill_1::powerdrill")
+    {
+      // add powerdrill
+      vision_msgs::Detection3D det3d;
+      det3d.header = detections.header;
+      det3d.bbox.size.x = 0.184208;
+      det3d.bbox.size.y = 0.187514;
+      det3d.bbox.size.z = 0.057294;
+      det3d.bbox.center = msg->pose[i];
+      det3d.bbox.center.position.x += 0.046;
+      det3d.bbox.center.position.y += 0.02545;
+      det3d.bbox.center.position.z += 0.01055;
+      det3d.results.resize(1);
+      det3d.results[0].id = ObjectID::POWER_DRILL;
+      det3d.results[0].pose.pose = det3d.bbox.center;
+      det3d.results[0].score = 1.0;
+      detections.detections.push_back(det3d);
+    }
   }
   detection_pub->publish(detections);
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="wait_for_table" default="true" />
+  <arg name="x" default="0.90" />
+  <arg name="y" default="-0.20" />
+  <arg name="z" default="1.10" />
+  <arg name="roll" default="$(eval pi / 2)" />
+  <arg name="pitch" default="0.0" />
+  <arg name="yaw" default="$(eval pi)" />
+
+  <param name="powerdrill_description"
+    command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/powerdrill.urdf.xacro'" />
+
+  <group if="$(arg wait_for_table)">
+    <node name="spawn_powerdrill1" pkg="gazebo_ros" type="spawn_model" args="-urdf
+      -param powerdrill_description -model powerdrill_1 -wait 'table_1'
+      -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />
+  </group>
+  <group unless="$(arg wait_for_table)">
+    <node name="spawn_powerdrill1" pkg="gazebo_ros" type="spawn_model" args="-urdf
+      -param powerdrill_description -model powerdrill_1
+      -x $(arg x) -y $(arg y) -z $(arg z)" respawn="false" output="screen" />
+  </group>
+</launch>
+
