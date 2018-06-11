@@ -83,9 +83,9 @@ class JointTrajectoryForwarder(object):
         # TODO: actually receive some sort of feedback from the Rock side when the trajectory has finished
         # we fake this here by sleeping until the nominal end of the trajectory
         if goal.trajectory.header.stamp.is_zero():
-            traj_end_time = rospy.Time.now() + 2 * (goal.trajectory.points[-1].time_from_start)
+            traj_end_time = rospy.Time.now() + 2 * (goal.trajectory.points[-1].time_from_start) + rospy.Duration(2.0)
         else:
-            traj_end_time = goal.trajectory.header.stamp + 2 * (goal.trajectory.points[-1].time_from_start)
+            traj_end_time = goal.trajectory.header.stamp + 2 * (goal.trajectory.points[-1].time_from_start) + rospy.Duration(2.0)
         rospy.logdebug("Original trajectory duration: %f s", goal.trajectory.points[-1].time_from_start.to_sec())
         rospy.logdebug("Timeout: %f s", (traj_end_time - rospy.Time.now()).to_sec())
 
