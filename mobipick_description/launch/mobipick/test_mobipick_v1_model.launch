@@ -3,7 +3,8 @@
 <launch>
   <arg name="gui" default="True" />
   <arg name="rviz" default="true" />
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
+  <arg name="robot" default="mobipick-hb" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro robot:=$(arg robot)" />
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="$(arg gui)"/>
     <rosparam>

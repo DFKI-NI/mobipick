@@ -2,6 +2,9 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="mobipick">
 
+  <xacro:arg name="robot" default="mobipick-hb" />      <!-- can be "mobipick-hb" or "mobipick-os" -->
+  <xacro:property name="robot" value="$(arg robot)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
+
   <!-- ############# MIR100 BASE ############## -->
   <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
 
@@ -16,7 +19,12 @@
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 
-  <xacro:structure prefix="structure_" height="0.058" variant="v1" />
+  <xacro:if value="${robot == 'mobipick-hb'}">
+    <xacro:structure prefix="structure_" height="0.058" variant="v1" />
+  </xacro:if>
+  <xacro:if value="${robot == 'mobipick-os'}">
+    <xacro:structure prefix="structure_" height="0.058" variant="v2" />
+  </xacro:if>
 
   <!-- ############### UR5 ARM ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur5.urdf.xacro" />
