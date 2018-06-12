@@ -80,7 +80,9 @@ class JointTrajectoryForwarder(object):
         self._feedback.header.frame_id = goal.trajectory.header.frame_id
         self._feedback.joint_names = goal.trajectory.joint_names
 
-        rospy.logdebug("Original trajectory duration: %f s", goal.trajectory.points[-1].time_from_start.to_sec())
+        # store traj_start_time for debug output
+        traj_start_time = rospy.Time.now()
+        rospy.logdebug("Planned trajectory duration: %f s", goal.trajectory.points[-1].time_from_start.to_sec())
 
         # publish feedback at 100 Hz
         r = rospy.Rate(100)
@@ -95,7 +97,9 @@ class JointTrajectoryForwarder(object):
 
             # check if the trajectory is finished
             if self.error_code <= 0:
-                rospy.loginfo('%s: Trajectory completed' % rospy.get_name())
+                rospy.loginfo('%s: Trajectory completed (planned duration: %f s, actual duration: %f s)',
+                              rospy.get_name(), goal.trajectory.points[-1].time_from_start.to_sec(),
+                              (rospy.Time.now() - traj_start_time).to_sec())
                 break
 
             # publish the feedback
