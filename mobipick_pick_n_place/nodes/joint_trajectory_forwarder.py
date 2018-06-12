@@ -80,15 +80,7 @@ class JointTrajectoryForwarder(object):
         self._feedback.header.frame_id = goal.trajectory.header.frame_id
         self._feedback.joint_names = goal.trajectory.joint_names
 
-        # TODO: actually receive some sort of feedback from the Rock side when the trajectory has finished
-        # we fake this here by sleeping until the nominal end of the trajectory
-        if goal.trajectory.header.stamp.is_zero():
-            traj_end_time = rospy.Time.now() + 2 * (goal.trajectory.points[-1].time_from_start) + rospy.Duration(2.0)
-        else:
-            traj_end_time = goal.trajectory.header.stamp + 2 * (goal.trajectory.points[-1].time_from_start) + rospy.Duration(2.0)
         rospy.logdebug("Original trajectory duration: %f s", goal.trajectory.points[-1].time_from_start.to_sec())
-        rospy.logdebug("Timeout: %f s", (traj_end_time - rospy.Time.now()).to_sec())
-
 
         # publish feedback at 100 Hz
         r = rospy.Rate(100)
@@ -104,10 +96,6 @@ class JointTrajectoryForwarder(object):
             # check if the trajectory is finished
             if self.error_code <= 0:
                 rospy.loginfo('%s: Trajectory completed' % rospy.get_name())
-                break
-            if rospy.Time.now() >= traj_end_time:
-                rospy.logerr('%s: Trajectory timed out!' % rospy.get_name())
-                self._pub_cancel.publish(1);
                 break
 
             # publish the feedback
