@@ -228,9 +228,9 @@ int main(int argc, char **argv)
     co.primitives.resize(1);
     co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
     co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x + 0.04;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y + 0.04;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z + 0.04;
     co.primitive_poses.resize(1);
     co.primitive_poses[0] = det3d.bbox.center;
 
@@ -272,7 +272,7 @@ int main(int argc, char **argv)
 
   // plan to observe the table
   moveit::planning_interface::MoveGroupInterface::Plan plan;
-  group.setNamedTarget("observe100cm_front");
+  group.setNamedTarget("observe100cm_right");
   moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
