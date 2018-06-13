@@ -2,6 +2,7 @@
 #include <gazebo_msgs/LinkStates.h>
 #include <vision_msgs/Detection3DArray.h>
 #include "mobipick_pick_n_place/fake_object_recognition.h"
+#include <eigen_conversions/eigen_msg.h>
 
 std::shared_ptr<ros::Publisher> detection_pub;
 
@@ -29,11 +30,17 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       det3d.bbox.size.x = 1.0;
       det3d.bbox.size.y = 2.0;
       det3d.bbox.size.z = 1.0;
-      det3d.bbox.center = msg->pose[i];
-      det3d.bbox.center.position.z += det3d.bbox.size.z / 2.0;
+
+      // shift to center of bbox
+      Eigen::Affine3d object_pose;
+      tf::poseMsgToEigen(msg->pose[i], object_pose);
+      Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
+      object_to_bbox.translation() = Eigen::Vector3d(0.0d, 0.0d, det3d.bbox.size.z / 2.0d);
+      tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
+
       det3d.results.resize(1);
       det3d.results[0].id = ObjectID::TABLE;
-      det3d.results[0].pose.pose = det3d.bbox.center;
+      det3d.results[0].pose.pose = msg->pose[i];
       det3d.results[0].score = 1.0;
       detections.detections.push_back(det3d);
     }
@@ -45,11 +52,17 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       det3d.bbox.size.x = 0.067;
       det3d.bbox.size.y = 0.067;
       det3d.bbox.size.z = 0.1239;
-      det3d.bbox.center = msg->pose[i];
-      det3d.bbox.center.position.z += det3d.bbox.size.z / 2.0;
+
+      // shift to center of bbox
+      Eigen::Affine3d object_pose;
+      tf::poseMsgToEigen(msg->pose[i], object_pose);
+      Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
+      object_to_bbox.translation() = Eigen::Vector3d(0.0d, 0.0d, det3d.bbox.size.z / 2.0d);
+      tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
+
       det3d.results.resize(1);
       det3d.results[0].id = ObjectID::COKE_CAN;
-      det3d.results[0].pose.pose = det3d.bbox.center;
+      det3d.results[0].pose.pose = msg->pose[i];
       det3d.results[0].score = 1.0;
       detections.detections.push_back(det3d);
     }
@@ -61,13 +74,17 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       det3d.bbox.size.x = 0.184208;
       det3d.bbox.size.y = 0.187514;
       det3d.bbox.size.z = 0.057294;
-      det3d.bbox.center = msg->pose[i];
-      det3d.bbox.center.position.x += 0.046;
-      det3d.bbox.center.position.y += 0.02545;
-      det3d.bbox.center.position.z += 0.01055;
+
+      // shift to center of bbox
+      Eigen::Affine3d object_pose;
+      tf::poseMsgToEigen(msg->pose[i], object_pose);
+      Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
+      object_to_bbox.translation() = Eigen::Vector3d(-0.046d, 0.01055d, 0.02545d);
+      tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
+
       det3d.results.resize(1);
       det3d.results[0].id = ObjectID::POWER_DRILL;
-      det3d.results[0].pose.pose = det3d.bbox.center;
+      det3d.results[0].pose.pose = msg->pose[i];
       det3d.results[0].score = 1.0;
       detections.detections.push_back(det3d);
     }

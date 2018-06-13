@@ -4,6 +4,7 @@ project(mobipick_pick_n_place)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
+  eigen_conversions
   gazebo_msgs
   geometry_msgs
   moveit_msgs
