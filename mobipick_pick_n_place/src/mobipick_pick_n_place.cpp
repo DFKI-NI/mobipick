@@ -208,6 +208,7 @@ int main(int argc, char **argv)
   }
 
   // add objects to planning scene
+  bool found_table = false;
   std::vector<moveit_msgs::CollisionObject> collision_objects;
   for (auto &&det3d : detections->detections)
   {
@@ -216,6 +217,10 @@ int main(int argc, char **argv)
       ROS_ERROR("Detections3D message has empty results!");
       return 1;
     }
+
+    if (det3d.results[0].id == ObjectID::TABLE)
+      found_table = true;
+
     moveit_msgs::CollisionObject co;
     co.header = det3d.header;
     co.id = id_to_string(det3d.results[0].id);
@@ -231,6 +236,29 @@ int main(int argc, char **argv)
 
     collision_objects.push_back(co);
   }
+  if (!found_table)
+  {
+    // Add table from MRK Lab
+    moveit_msgs::CollisionObject co;
+    co.header.stamp = detections->header.stamp;
+    co.header.frame_id = "map";
+    co.id = id_to_string(ObjectID::TABLE);
+    co.operation = moveit_msgs::CollisionObject::ADD;
+    co.primitives.resize(1);
+    co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+    co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.60;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.70;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.90;
+    co.primitive_poses.resize(1);
+    co.primitive_poses[0].position.x = 10.30;
+    co.primitive_poses[0].position.y = 8.65;
+    co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
+    co.primitive_poses[0].orientation.w = 1.0;
+
+    collision_objects.push_back(co);
+  }
+
   planning_scene_interface.applyCollisionObjects(collision_objects);
 
   // detach all objects
