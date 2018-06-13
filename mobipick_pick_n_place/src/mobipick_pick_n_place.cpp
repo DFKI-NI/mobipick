@@ -247,12 +247,12 @@ int main(int argc, char **argv)
     co.primitives.resize(1);
     co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
     co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.60;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.70;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.90;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.70;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.60;
+    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.87;
     co.primitive_poses.resize(1);
-    co.primitive_poses[0].position.x = 10.30;
-    co.primitive_poses[0].position.y = 8.65;
+    co.primitive_poses[0].position.x = 10.05;
+    co.primitive_poses[0].position.y = 11.50;
     co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
     co.primitive_poses[0].orientation.w = 1.0;
 
