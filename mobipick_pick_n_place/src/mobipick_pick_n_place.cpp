@@ -44,6 +44,7 @@
 
 #include <vision_msgs/Detection3DArray.h>
 #include "mobipick_pick_n_place/fake_object_recognition.h"
+#include <eigen_conversions/eigen_msg.h>
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
@@ -73,55 +74,72 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 {
   std::vector<moveit_msgs::Grasp> grasps;
 
-  // --- calculate desired pose of gripper_tcp when grasping
-  // pose of power drill
-  geometry_msgs::PoseStamped p;
-  p.header.frame_id = "power_drill";
-  p.pose.position.x = 0.04;
-  p.pose.position.y = 0.0;
-  p.pose.position.z = 0.0;
+  // --- calculate grasps
+  // this is using standard frame orientation: x forward, y left, z up, relative to object bounding box center
+  std::vector<Eigen::Affine3d> grasp_poses;
 
-  // // pitch = pi/8
-  // p.pose.orientation.x = 0;
-  // p.pose.orientation.y = 0.19509032;
-  // p.pose.orientation.z = 0;
-  // p.pose.orientation.w = 0.98078528;
+  {
+    // GRASP 1: pitch = pi/8  (grasp handle from upper back)
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
+    grasp_pose.translate(Eigen::Vector3d(0.04d, 0.0d, 0.0d));
+    grasp_pose.rotate(rotation);
+    grasp_poses.push_back(grasp_pose);
+  }
 
-  // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
-  p.pose.orientation.x = 0.0;
-  p.pose.orientation.y = -0.707106781;
-  p.pose.orientation.z = -0.707106781;
-  p.pose.orientation.w = 0.0;
+  {
+    // GRASP 2: pitch = 0 (grasp handle horizontally)
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
+    grasp_pose.translate(Eigen::Vector3d(0.04d, 0.0d, 0.0d));
+    grasp_pose.rotate(rotation);
+    grasp_poses.push_back(grasp_pose);
+  }
 
-  moveit_msgs::Grasp g;
-  g.grasp_pose = p;
-  g.grasp_quality = 1.0;
+  {
+    // GRASP 3: pitch = pi/2 (grasp top part from above)
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
+    grasp_pose.translate(Eigen::Vector3d(0.02d, 0.0d, 0.07d));
+    grasp_pose.rotate(rotation);
+    grasp_poses.push_back(grasp_pose);
+  }
 
-  g.pre_grasp_approach.direction.vector.x = 1.0;
-  g.pre_grasp_approach.direction.header.frame_id = "gripper_tcp";
-  g.pre_grasp_approach.min_distance = 0.1;
-  g.pre_grasp_approach.desired_distance = 0.3;
+  for (auto&& grasp_pose : grasp_poses)
+  {
+    // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
+    // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0)
+    // Eigen quaternion = wxyz, not xyzw
+    Eigen::Affine3d bbox_center_rotated = Eigen::Affine3d::Identity();
+    bbox_center_rotated.rotate(Eigen::Quaterniond(0.0d, 0.0d, -0.707106781d, -0.707106781d));
 
-  g.post_grasp_retreat.direction.header.frame_id = "base_footprint";
-  g.post_grasp_retreat.direction.vector.z = 1.0;
-  g.post_grasp_retreat.min_distance = 0.1;
-  g.post_grasp_retreat.desired_distance = 0.25;
+    // --- calculate desired pose of gripper_tcp when grasping
+    // pose of power drill
+    geometry_msgs::PoseStamped p;
+    p.header.frame_id = "power_drill";
+    tf::poseEigenToMsg(bbox_center_rotated * grasp_pose, p.pose);
+    ROS_DEBUG_STREAM("Grasp pose:\n" << p.pose);
 
-  openGripper(g.pre_grasp_posture);
+    moveit_msgs::Grasp g;
+    g.grasp_pose = p;
+    g.grasp_quality = 1.0;
 
-  closedGripper(g.grasp_posture);
+    g.pre_grasp_approach.direction.vector.x = 1.0;
+    g.pre_grasp_approach.direction.header.frame_id = "gripper_tcp";
+    g.pre_grasp_approach.min_distance = 0.1;
+    g.pre_grasp_approach.desired_distance = 0.3;
 
-  grasps.push_back(g);
+    g.post_grasp_retreat.direction.header.frame_id = "base_footprint";
+    g.post_grasp_retreat.direction.vector.z = 1.0;
+    g.post_grasp_retreat.min_distance = 0.1;
+    g.post_grasp_retreat.desired_distance = 0.25;
 
-  // Add a second grasp in case the first doesn't work
-  p.pose.orientation.x = 0;
-  p.pose.orientation.y = 0;
-  p.pose.orientation.z = 0;
-  p.pose.orientation.w = 1;
-  g.grasp_pose = p;
-  g.grasp_quality = 0.5;
+    openGripper(g.pre_grasp_posture);
 
-  grasps.push_back(g);
+    closedGripper(g.grasp_posture);
+
+    grasps.push_back(g);
+  }
 
   group.setSupportSurfaceName("table");
   return group.pick("power_drill", grasps);
@@ -139,7 +157,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   auto table = planning_scene_interface.getObjects(object_ids).at("table");
   double table_height =
       table.primitive_poses[0].position.z + table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
-  ROS_ERROR("Table height: %f", table_height);
+  ROS_DEBUG("Table height: %f", table_height);
 
   // --- calculate desired pose of gripper_tcp when placing
   // desired pose of power drill
