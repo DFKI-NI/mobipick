@@ -131,13 +131,23 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 {
   std::vector<moveit_msgs::PlaceLocation> loc;
 
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+  // get table height
+  std::vector<std::string> object_ids;
+  object_ids.push_back("table");
+  auto table = planning_scene_interface.getObjects(object_ids).at("table");
+  double table_height =
+      table.primitive_poses[0].position.z + table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
+  ROS_ERROR("Table height: %f", table_height);
+
   // --- calculate desired pose of gripper_tcp when placing
   // desired pose of power drill
   geometry_msgs::PoseStamped p;
   p.header.frame_id = "base_footprint";
   p.pose.position.x = 0.90;
-  p.pose.position.y = 0.20;  // only difference to grasping: 0.20 instead of -0.20
-  p.pose.position.z = 1.10;
+  p.pose.position.y = 0.20;
+  p.pose.position.z = table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
 
   // quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
   p.pose.orientation.x = 0.0;
