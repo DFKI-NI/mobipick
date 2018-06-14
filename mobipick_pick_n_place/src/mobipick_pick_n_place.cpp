@@ -207,59 +207,71 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  // add objects to planning scene
-  bool found_table = false;
-  std::vector<moveit_msgs::CollisionObject> collision_objects;
-  for (auto &&det3d : detections->detections)
+  bool found_power_drill = false;
+  while (!found_power_drill)
   {
-    if (det3d.results.empty())
+    if (!ros::ok())
+      return 0;
+
+    // add objects to planning scene
+    bool found_table = false;
+    std::vector<moveit_msgs::CollisionObject> collision_objects;
+    for (auto &&det3d : detections->detections)
     {
-      ROS_ERROR("Detections3D message has empty results!");
-      return 1;
+      if (det3d.results.empty())
+      {
+        ROS_ERROR("Detections3D message has empty results!");
+        return 1;
+      }
+
+      if (det3d.results[0].id == ObjectID::TABLE)
+        found_table = true;
+      else if (det3d.results[0].id == ObjectID::POWER_DRILL)
+        found_power_drill = true;
+
+      moveit_msgs::CollisionObject co;
+      co.header = det3d.header;
+      co.id = id_to_string(det3d.results[0].id);
+      co.operation = moveit_msgs::CollisionObject::ADD;
+      co.primitives.resize(1);
+      co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+      co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x + 0.04;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y + 0.04;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z + 0.04;
+      co.primitive_poses.resize(1);
+      co.primitive_poses[0] = det3d.bbox.center;
+
+      collision_objects.push_back(co);
+    }
+    if (!found_table)
+    {
+      // Add table from MRK Lab
+      moveit_msgs::CollisionObject co;
+      co.header.stamp = detections->header.stamp;
+      co.header.frame_id = "map";
+      co.id = id_to_string(ObjectID::TABLE);
+      co.operation = moveit_msgs::CollisionObject::ADD;
+      co.primitives.resize(1);
+      co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+      co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.70;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.60;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.93;
+      co.primitive_poses.resize(1);
+      co.primitive_poses[0].position.x = 10.05;
+      co.primitive_poses[0].position.y = 11.50;
+      co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
+      co.primitive_poses[0].orientation.w = 1.0;
+
+      collision_objects.push_back(co);
     }
 
-    if (det3d.results[0].id == ObjectID::TABLE)
-      found_table = true;
+    if (!found_power_drill)
+      ROS_INFO_THROTTLE(1.0, "Still waiting for power drill...");
 
-    moveit_msgs::CollisionObject co;
-    co.header = det3d.header;
-    co.id = id_to_string(det3d.results[0].id);
-    co.operation = moveit_msgs::CollisionObject::ADD;
-    co.primitives.resize(1);
-    co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-    co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x + 0.04;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y + 0.04;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z + 0.04;
-    co.primitive_poses.resize(1);
-    co.primitive_poses[0] = det3d.bbox.center;
-
-    collision_objects.push_back(co);
+    planning_scene_interface.applyCollisionObjects(collision_objects);
   }
-  if (!found_table)
-  {
-    // Add table from MRK Lab
-    moveit_msgs::CollisionObject co;
-    co.header.stamp = detections->header.stamp;
-    co.header.frame_id = "map";
-    co.id = id_to_string(ObjectID::TABLE);
-    co.operation = moveit_msgs::CollisionObject::ADD;
-    co.primitives.resize(1);
-    co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-    co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.70;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.60;
-    co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.93;
-    co.primitive_poses.resize(1);
-    co.primitive_poses[0].position.x = 10.05;
-    co.primitive_poses[0].position.y = 11.50;
-    co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
-    co.primitive_poses[0].orientation.w = 1.0;
-
-    collision_objects.push_back(co);
-  }
-
-  planning_scene_interface.applyCollisionObjects(collision_objects);
 
   // detach all objects
   auto attached_objects = planning_scene_interface.getAttachedObjects();
