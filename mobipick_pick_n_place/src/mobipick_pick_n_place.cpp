@@ -189,11 +189,10 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   p.pose.position.y = -0.969;
   p.pose.position.z = 1.137 ; //table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
 
-  // quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
-  p.pose.orientation.x =  0.0;
-  p.pose.orientation.y = 0.707106781;
-  p.pose.orientation.z = 0.707106781;
-  p.pose.orientation.w =  0.0;
+  p.pose.orientation.x = 0.5;
+  p.pose.orientation.y = 0.5;
+  p.pose.orientation.z = 0.5;
+  p.pose.orientation.w = 0.5;
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
 
