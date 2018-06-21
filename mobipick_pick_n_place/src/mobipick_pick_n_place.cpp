@@ -46,6 +46,9 @@
 #include "mobipick_pick_n_place/fake_object_recognition.h"
 #include <eigen_conversions/eigen_msg.h>
 
+#include "std_msgs/String.h"
+#include <sstream>
+
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
   posture.joint_names.resize(1);
@@ -82,7 +85,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     // GRASP 1: pitch = pi/8  (grasp handle from upper back)
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
-    grasp_pose.translate(Eigen::Vector3d(0.04d, 0.0d, 0.0d));
+    grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.0d));
     grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
   }
@@ -91,7 +94,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     // GRASP 2: pitch = 0 (grasp handle horizontally)
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
-    grasp_pose.translate(Eigen::Vector3d(0.04d, 0.0d, 0.0d));
+    grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.0d));
     grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
   }
@@ -100,18 +103,31 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     // GRASP 3: pitch = pi/2 (grasp top part from above)
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
-    grasp_pose.translate(Eigen::Vector3d(0.02d, 0.0d, 0.07d));
+    grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.08d));
     grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
   }
+
 
   for (auto&& grasp_pose : grasp_poses)
   {
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
     // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0)
     // Eigen quaternion = wxyz, not xyzw
-    Eigen::Affine3d bbox_center_rotated = Eigen::Affine3d::Identity();
-    bbox_center_rotated.rotate(Eigen::Quaterniond(0.0d, 0.0d, -0.707106781d, -0.707106781d));
+    Eigen::Affine3d bbox_center_rotated; // = Eigen::Affine3d::Identity();
+
+    geometry_msgs::Pose power_drill;
+    power_drill.orientation.x = 0.0;
+    power_drill.orientation.y = -0.707106781;
+    power_drill.orientation.z = -0.707106781;
+    power_drill.orientation.w = 0.0;
+
+    power_drill.position.x = 0.00;
+    power_drill.position.y = 0.00;
+    power_drill.position.z = 0.00;
+
+    tf::poseMsgToEigen(power_drill, bbox_center_rotated);
+    //bbox_center_rotated.rotate(Eigen::Quaterniond(0.0d, 0.0d, -0.707106781d, -0.707106781d));
 
     // --- calculate desired pose of gripper_tcp when grasping
     // pose of power drill
@@ -121,18 +137,24 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     ROS_DEBUG_STREAM("Grasp pose:\n" << p.pose);
 
     moveit_msgs::Grasp g;
+    // p.pose.orientation.x = 0.0;
+    // p.pose.orientation.y = -0.707106781;
+    // p.pose.orientation.z = -0.707106781;
+    // p.pose.orientation.w = 0.0;
+
     g.grasp_pose = p;
     g.grasp_quality = 1.0;
+    ROS_INFO_STREAM("Grasp pose:\n" << p.pose);
 
     g.pre_grasp_approach.direction.vector.x = 1.0;
     g.pre_grasp_approach.direction.header.frame_id = "gripper_tcp";
-    g.pre_grasp_approach.min_distance = 0.1;
-    g.pre_grasp_approach.desired_distance = 0.3;
+    g.pre_grasp_approach.min_distance = 0.08;
+    g.pre_grasp_approach.desired_distance = 0.25;
 
-    g.post_grasp_retreat.direction.header.frame_id = "base_footprint";
+    g.post_grasp_retreat.direction.header.frame_id = "base_link";
     g.post_grasp_retreat.direction.vector.z = 1.0;
     g.post_grasp_retreat.min_distance = 0.1;
-    g.post_grasp_retreat.desired_distance = 0.25;
+    g.post_grasp_retreat.desired_distance = 0.15;
 
     openGripper(g.pre_grasp_posture);
 
@@ -157,21 +179,21 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   auto table = planning_scene_interface.getObjects(object_ids).at("table");
   double table_height =
       table.primitive_poses[0].position.z + table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
-  ROS_DEBUG("Table height: %f", table_height);
+  ROS_INFO("Table height: %f", table_height);
 
   // --- calculate desired pose of gripper_tcp when placing
   // desired pose of power drill
   geometry_msgs::PoseStamped p;
   p.header.frame_id = "base_footprint";
-  p.pose.position.x = 0.90;
-  p.pose.position.y = 0.20;
-  p.pose.position.z = table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
+  p.pose.position.x = -0.142;
+  p.pose.position.y = -0.969;
+  p.pose.position.z = 1.137 ; //table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
 
   // quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
-  p.pose.orientation.x = 0.0;
+  p.pose.orientation.x =  0.0;
   p.pose.orientation.y = 0.707106781;
   p.pose.orientation.z = 0.707106781;
-  p.pose.orientation.w = 0.0;
+  p.pose.orientation.w =  0.0;
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
 
@@ -222,24 +244,60 @@ int main(int argc, char **argv)
   group.setPlanningTime(45.0);
   group.setPlannerId("RRTConnectkConfigDefault");
 
+  ros::Publisher pubGripper = nh.advertise<std_msgs::String>("/mobipick/gripper_control", 1);
+
+  std_msgs::String msgGripper;
+  std::stringstream ssGripper;
+
+
+  /* ********************* PLAN AND EXECUTE MOVES ********************* */
+
+  // plan to observe the table
+  moveit::planning_interface::MoveGroupInterface::Plan plan;
+  group.setNamedTarget("observe100cm_right");
+  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Planning to observation pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Planning to observation pose FAILED");
+    return 1;
+  }
+
+  // move to observation pose
+  error_code = group.move();
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Moving to observation pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Moving to observation pose FAILED");
+    return 1;
+  }
+  ros::WallDuration(2.0).sleep();
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
   /* ********************* UPDATE PLANNING SCENE ********************* */
 
   // get objects from object detection
-  vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
-          "detected_objects", nh, ros::Duration(10.0));
-  if (!detections)
-  {
-    ROS_ERROR("Timed out while waiting for a message on topic detected_objects!");
-    return 1;
-  }
 
   bool found_power_drill = false;
+  uint visionCounter = 0;
   while (!found_power_drill)
   {
     if (!ros::ok())
       return 0;
+
+      vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
+              "detected_objects", nh, ros::Duration(10.0));
+      if (!detections)
+      {
+        ROS_ERROR("Timed out while waiting for a message on topic detected_objects!");
+        return 1;
+      }
+
+
 
     // add objects to planning scene
     bool found_table = false;
@@ -284,11 +342,11 @@ int main(int argc, char **argv)
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
       co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.70;
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.60;
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.93;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.70;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.94;
       co.primitive_poses.resize(1);
       co.primitive_poses[0].position.x = 10.05;
-      co.primitive_poses[0].position.y = 11.50;
+      co.primitive_poses[0].position.y = 11.35;
       co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
       co.primitive_poses[0].orientation.w = 1.0;
 
@@ -307,47 +365,63 @@ int main(int argc, char **argv)
   {
     group.detachObject(object.first);
   }
+  // geometry_msgs::PoseStamped p;
+  // p.header.frame_id = "base_footprint";
+  // p.pose.position.x = -0.142;
+  // p.pose.position.y = -0.969;
+  // p.pose.position.z =  1.137;
+  //
+  // // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
+  // p.pose.orientation.x = 0.078;
+  // p.pose.orientation.y = -0.038;
+  // p.pose.orientation.z = 0.913;
+  // p.pose.orientation.w = -0.399;
+  //
+  // group.setPoseTarget(p, "gripper_tcp");
+  // error_code = group.plan(plan);
+  // if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  // {
+  //   ROS_INFO("Planning to pick1 pose SUCCESSFUL");
+  // } else
+  // {
+  //   ROS_ERROR("Planning to pick1 pose FAILED");
+  //   return 1;
+  // }
+  // // move to observation pose
+  // error_code = group.move();
+  // if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  // {
+  //   ROS_INFO("Moving to pick1 pose SUCCESSFUL");
+  // } else
+  // {
+  //   ROS_ERROR("Moving to pick1 pose FAILED");
+  //   return 1;
+  // }
+  //pick
+  uint pickPlanAttempts = 0;
+  do {
+    error_code = pick(group);
+    ++pickPlanAttempts;
+    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    {
+      ROS_INFO("Picking SUCCESSFUL");
+    }
+    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) && pickPlanAttempts <3  )
+    {
+      ROS_INFO("Planning for Picking FAILED");
+    }
+    else
+    {
+      ROS_ERROR("Picking FAILED");
+      return 1;
+    }
 
-  /* ********************* PLAN AND EXECUTE MOVES ********************* */
 
-  // plan to observe the table
-  moveit::planning_interface::MoveGroupInterface::Plan plan;
-  group.setNamedTarget("observe100cm_right");
-  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Planning to observation pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Planning to observation pose FAILED");
-    return 1;
-  }
+  } while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ) && pickPlanAttempts <3 );
 
-  // move to observation pose
-  error_code = group.move();
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Moving to observation pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Moving to observation pose FAILED");
-    return 1;
-  }
-  ros::WallDuration(2.0).sleep();
-
-  // pick
-  error_code = pick(group);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Picking SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Picking FAILED");
-    return 1;
-  }
   ros::WallDuration(1.0).sleep();
 
-  // place
+  //place
   error_code = place(group);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
