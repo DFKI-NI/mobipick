@@ -35,18 +35,22 @@
 
 /* Authors: Ioan Sucan, Martin Günther */
 
+#include "mobipick_pick_n_place/fake_object_recognition.h"
+
 #include <ros/ros.h>
 
 // MoveIt!
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
+#include <moveit/planning_scene_monitor/planning_scene_monitor.h>
 #include <geometric_shapes/solid_primitive_dims.h>
 
 #include <vision_msgs/Detection3DArray.h>
-#include "mobipick_pick_n_place/fake_object_recognition.h"
+#include <std_msgs/String.h>
+#include <std_srvs/Empty.h>
+
 #include <eigen_conversions/eigen_msg.h>
 
-#include "std_msgs/String.h"
 #include <sstream>
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
@@ -279,8 +283,12 @@ int main(int argc, char **argv)
 
   /* ********************* UPDATE PLANNING SCENE ********************* */
 
-  // get objects from object detection
+  // clear octomap
+  ros::ServiceClient clear_octomap = nh.serviceClient<std_srvs::Empty>("clear_octomap");
+  std_srvs::Empty srv;
+  clear_octomap.call(srv);
 
+  // get objects from object detection
   bool found_power_drill = false;
   uint visionCounter = 0;
   while (!found_power_drill)
