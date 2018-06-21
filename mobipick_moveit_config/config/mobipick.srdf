@@ -38,33 +38,33 @@
     <!-- observation poses for a 100 cm high table directly adjacent to the robot -->
     <group_state name="observe100cm_front" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="0.00" />
-        <joint name="ur5_shoulder_lift_joint" value="-2.37" />
-        <joint name="ur5_elbow_joint" value="2.37" />
-        <joint name="ur5_wrist_1_joint" value="-0.69" />
+        <joint name="ur5_shoulder_lift_joint" value="-2.30" />
+        <joint name="ur5_elbow_joint" value="2.44" />
+        <joint name="ur5_wrist_1_joint" value="-0.95" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
         <joint name="ur5_wrist_3_joint" value="-1.57" />
     </group_state>
     <group_state name="observe100cm_left" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="1.57" />
-        <joint name="ur5_shoulder_lift_joint" value="-2.37" />
-        <joint name="ur5_elbow_joint" value="2.37" />
-        <joint name="ur5_wrist_1_joint" value="-0.69" />
+        <joint name="ur5_shoulder_lift_joint" value="-2.30" />
+        <joint name="ur5_elbow_joint" value="2.44" />
+        <joint name="ur5_wrist_1_joint" value="-0.95" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
         <joint name="ur5_wrist_3_joint" value="-1.57" />
     </group_state>
     <group_state name="observe100cm_right" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="-1.57" />
-        <joint name="ur5_shoulder_lift_joint" value="-2.37" />
-        <joint name="ur5_elbow_joint" value="2.37" />
-        <joint name="ur5_wrist_1_joint" value="-0.69" />
+        <joint name="ur5_shoulder_lift_joint" value="-2.30" />
+        <joint name="ur5_elbow_joint" value="2.44" />
+        <joint name="ur5_wrist_1_joint" value="-0.95" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
         <joint name="ur5_wrist_3_joint" value="-1.57" />
     </group_state>
     <group_state name="observe100cm_back" group="arm">
         <joint name="ur5_shoulder_pan_joint" value="3.14" />
-        <joint name="ur5_shoulder_lift_joint" value="-2.37" />
-        <joint name="ur5_elbow_joint" value="2.37" />
-        <joint name="ur5_wrist_1_joint" value="-0.69" />
+        <joint name="ur5_shoulder_lift_joint" value="-2.30" />
+        <joint name="ur5_elbow_joint" value="2.44" />
+        <joint name="ur5_wrist_1_joint" value="-0.95" />
         <joint name="ur5_wrist_2_joint" value="1.57" />
         <joint name="ur5_wrist_3_joint" value="-1.57" />
     </group_state>
