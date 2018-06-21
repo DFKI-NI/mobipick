@@ -351,7 +351,27 @@ int main(int argc, char **argv)
 
       collision_objects.push_back(co);
     }
+    {
+      // Add monitors above table
+      moveit_msgs::CollisionObject co;
+      co.header.stamp = detections->header.stamp;
+      co.header.frame_id = "map";
+      co.id = "monitors";
+      co.operation = moveit_msgs::CollisionObject::ADD;
+      co.primitives.resize(1);
+      co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+      co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 1.00;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 1.80;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.90;
+      co.primitive_poses.resize(1);
+      co.primitive_poses[0].position.x = 9.9;
+      co.primitive_poses[0].position.y = 12.1;
+      co.primitive_poses[0].position.z = 2.35;
+      co.primitive_poses[0].orientation.w = 1.0;
 
+      collision_objects.push_back(co);
+    }
     if (!found_power_drill)
       ROS_INFO_THROTTLE(1.0, "Still waiting for power drill...");
 
