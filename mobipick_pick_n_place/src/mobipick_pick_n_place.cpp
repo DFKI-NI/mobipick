@@ -94,7 +94,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     // GRASP 2: pitch = 0 (grasp handle horizontally)
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
-    grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.0d));
+    grasp_pose.translate(Eigen::Vector3d(-0.065d, 0.0d, 0.0d));
     grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
   }
@@ -187,7 +187,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   p.header.frame_id = "base_footprint";
   p.pose.position.x = -0.142;
   p.pose.position.y = -0.969;
-  p.pose.position.z = 1.137 ; //table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
+  p.pose.position.z = table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
 
   p.pose.orientation.x = 0.5;
   p.pose.orientation.y = 0.5;
