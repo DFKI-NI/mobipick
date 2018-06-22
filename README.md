@@ -82,7 +82,7 @@ Quick start
 ### Pick + Place demo (Gazebo)
 
 ```bash
-roslaunch mobipick_gazebo mobipick_table_world.launch
+roslaunch mobipick_gazebo mobipick_mrk_lab_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mobipick_gazebo fake_localization.launch
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true
@@ -116,7 +116,22 @@ roslaunch mobipick_gazebo fake_localization.launch delta_x:=-10.0 delta_y:=-10.0
 roslaunch mobipick_navigation start_planner.launch \
     map_file:=$(rospack find mobipick_gazebo)/maps/maze.yaml \
     virtual_walls_map_file:=$(rospack find mobipick_gazebo)/maps/maze_virtual_walls.yaml \
-    local_planner:=dwa
+    local_planner:=eband
+rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
+```
+
+Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
+
+
+### move_base demo (MRK lab world)
+
+```bash
+roslaunch mobipick_gazebo mobipick_mrk_lab_world.launch
+rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
+roslaunch mobipick_gazebo fake_localization.launch
+roslaunch mobipick_navigation start_planner.launch \
+    map_file:=$(rospack find mobipick_gazebo)/maps/rh5_mrk_lab.yaml \
+    local_planner:=eband
 rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
 ```
 
@@ -129,7 +144,7 @@ Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for mov
 roslaunch mobipick_gazebo mobipick_avz_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mobipick_gazebo fake_localization.launch delta_x:=-14.70 delta_y:=-15.0 delta_yaw:=-1.57
-roslaunch mobipick_navigation start_planner.launch map_file:=$(rospack find uos_maps)/maps/avz5floor_gazebo.yaml local_planner:=dwa
+roslaunch mobipick_navigation start_planner.launch map_file:=$(rospack find uos_maps)/maps/avz5floor_gazebo.yaml local_planner:=eband
 rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
 ```
 
