@@ -96,10 +96,8 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
   {
     // GRASP 2: pitch = 0 (grasp handle horizontally)
-    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
     grasp_pose.translate(Eigen::Vector3d(-0.065d, 0.0d, 0.0d));
-    grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
   }
 
