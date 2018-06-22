@@ -244,6 +244,14 @@ int main(int argc, char **argv)
   moveit::planning_interface::MoveGroupInterface group("arm");
   group.setPlanningTime(45.0);
   group.setPlannerId("RRTConnectkConfigDefault");
+  // NOTE: You can replace this by "RRTstarkConfigDefault". This will have the following effects:
+  //   - RRT* is an (asymptotically) optimal planner, so the path with minimum path length
+  //     will be returned, which leads to much nicer trajectories without unnecessary reconfigurations.
+  //   - RRT* will always use the full planning time (see setPlanningTime()), even if an initial
+  //     plan is found earlier. If it runs out of time before finding an initial plan, planning will fail.
+  //   - Typical run times: RRT* between 1 and 30 seconds, RRTConnect 0.03 seconds
+  //   - also see: http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ompl_interface/ompl_interface_tutorial.html
+  //   - also see: https://ompl.kavrakilab.org/planners.html
 
   ros::Publisher pubGripper = nh.advertise<std_msgs::String>("/mobipick/gripper_control", 1);
 
