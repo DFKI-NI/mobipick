@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="table">
 
-  <xacro:property name="table_height" value="1.0" />
-  <xacro:property name="table_width" value="1.0" />
-  <xacro:property name="table_depth" value="2.0" />
+  <xacro:property name="table_height" value="0.94" />
+  <xacro:property name="table_width" value="0.70" />
+  <xacro:property name="table_depth" value="0.70" />
   <xacro:property name="leg_radius" value="0.02" />
   <xacro:property name="table_x" value="0.0" />
   <xacro:property name="table_y" value="0.0" />

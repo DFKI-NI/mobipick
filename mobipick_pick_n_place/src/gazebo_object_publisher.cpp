@@ -27,9 +27,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       // add table
       vision_msgs::Detection3D det3d;
       det3d.header = detections.header;
-      det3d.bbox.size.x = 1.0;
-      det3d.bbox.size.y = 2.0;
-      det3d.bbox.size.z = 1.0;
+      det3d.bbox.size.x = 0.70;
+      det3d.bbox.size.y = 0.70;
+      det3d.bbox.size.z = 0.94;
 
       // shift to center of bbox
       Eigen::Affine3d object_pose;
