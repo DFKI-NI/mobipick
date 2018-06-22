@@ -4,6 +4,10 @@
   <arg name="world_name" default="worlds/empty.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable, but can also be an absolute path -->
   <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
 
+  <arg name="robot_x"   default="0.0" />
+  <arg name="robot_y"   default="0.0" />
+  <arg name="robot_yaw" default="0.0" />
+
   <group>
     <remap from="joint_states"                   to="mobipick/joint_states" />
     <remap from="mobile_base_controller/cmd_vel" to="cmd_vel" />
@@ -25,5 +29,8 @@
   <!-- spawn robot and bring up controllers etc. -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_gazebo_common.launch">
     <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
+    <arg name="robot_x"   value="$(arg robot_x)" />
+    <arg name="robot_y"   value="$(arg robot_y)" />
+    <arg name="robot_yaw" value="$(arg robot_yaw)" />
   </include>
 </launch>

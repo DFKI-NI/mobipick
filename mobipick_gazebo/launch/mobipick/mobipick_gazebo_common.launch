@@ -2,6 +2,10 @@
 <launch>
   <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
 
+  <arg name="robot_x"   default="0.0" />
+  <arg name="robot_y"   default="0.0" />
+  <arg name="robot_yaw" default="0.0" />
+
   <!-- Load URDF -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
 
@@ -17,7 +21,7 @@
   <!-- Spawn the robot into Gazebo -->
   <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
-    " />
+    -x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) " />
 
   <!-- Load ros_control controller configurations -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
