@@ -23,10 +23,12 @@ install(PROGRAMS
 
 # Mark other files for installation (e.g. launch and bag files, etc.)
 install(DIRECTORY
+  Media
   config
   launch
   meshes
   urdf
+  worlds
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

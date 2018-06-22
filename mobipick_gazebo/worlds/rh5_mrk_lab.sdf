@@ -1,0 +1,45 @@
+<?xml version="1.0" ?> 
+<sdf version="1.5">
+  <world name="rh5_mrk_lab_world">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <model name="rh5_mrk_lab">
+      <static>true</static>
+      <link name="rh5_mrk_lab_link">
+        <pose>0 0 0 0 0 0</pose>
+        <collision name="rh5_mrk_lab_collision">
+          <geometry>
+            <mesh>
+              <uri>file://rh5_mrk_lab.stl</uri>
+              <scale>1.0 1.0 1.0</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="rh5_mrk_lab_visual">
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <mesh>
+              <uri>file://rh5_mrk_lab.stl</uri>
+              <scale>1.0 1.0 1.0</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>7.57702 7.49421 3.63634 0 0.543643 0.988194</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+  </world>
+</sdf>
