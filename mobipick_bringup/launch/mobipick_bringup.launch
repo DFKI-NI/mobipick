@@ -58,6 +58,19 @@
     </include>
     <param name="gripper_astra/driver/data_skip" value="9" />
 
+
+    <!-- reduced pointcloud to save same wifi bandwidth. -->
+    <node pkg="nodelet" type="nodelet" name="reduce_astra_scans" args="standalone pcl/VoxelGrid">
+      <remap from="~input" to="gripper_astra/depth/points" />
+      <remap from="~output" to="gripper_astra/depth/points_reduced" />
+      <rosparam>
+        leaf_size: 0.05
+        keep_organized: true
+        filter_limit_max: 1000.0
+      </rosparam>
+    </node>
+
+
     <!-- This fixes two bugs with astra_camera:
          1. ir_processing expects the IR image at "ir/image_raw", but the
             astra_camera driver publishes "ir/image" instead.
