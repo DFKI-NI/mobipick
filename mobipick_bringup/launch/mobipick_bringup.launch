@@ -15,7 +15,29 @@
     <!-- URDF -->
     <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
 
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+    <!-- Robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+      <remap from="/tf"        to="tf_mobipick" />
+      <remap from="/tf_static" to="tf_static_mobipick" />
+    </node>
+
+    <!-- remove those TFs that are also published by the MiR to avoid conflicts -->
+    <node name="tf_remove_child_frames" pkg="mir100_driver" type="tf_remove_child_frames.py" output="screen">
+      <remap from="tf_in"         to="tf_mobipick" />
+      <remap from="tf_out"        to="/tf" />
+      <remap from="tf_static_in"  to="tf_static_mobipick" />
+      <remap from="tf_static_out" to="/tf_static" />
+      <rosparam param="remove_frames">
+        - base_link
+        - front_laser_link
+        - back_laser_link
+        - camera_top_link
+        - camera_top_depth_optical_frame
+        - camera_floor_link
+        - camera_floor_depth_optical_frame
+        - imu_link
+      </rosparam>
+    </node>
     
     <!-- MiR base -->
     <node name="mir100_bridge" pkg="mir100_driver" type="mir100_bridge.py" output="screen">
