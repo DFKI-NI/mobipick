@@ -6,7 +6,7 @@
   <xacro:property name="robot" value="$(arg robot)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
 
   <!-- ############# MIR100 BASE ############## -->
-  <xacro:include filename="$(find mobipick_description)/urdf/mir_100/mir_100_v1.urdf.xacro" />
+  <xacro:include filename="$(find mir_description)/urdf/include/mir_100_v1.urdf.xacro" />
 
   <xacro:mir_100 prefix=""/>
 
