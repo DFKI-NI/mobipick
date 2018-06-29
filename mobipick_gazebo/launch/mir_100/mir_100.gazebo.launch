@@ -22,8 +22,8 @@
 
   <group if="$(arg use_ros_control)">
     <!-- Load controller configurations from YAML file to parameter server -->
-    <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
-    <rosparam file="$(find mobipick_description)/config/mir_100/diffdrive_controller.yaml" command="load" />
+    <rosparam file="$(find mir_description)/config/joint_state_controller.yaml" command="load" />
+    <rosparam file="$(find mir_description)/config/diffdrive_controller.yaml" command="load" />
 
     <!-- load the controllers -->
     <node name="joint_state_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller"/>
