@@ -22,7 +22,7 @@
     </node>
 
     <!-- remove those TFs that are also published by the MiR to avoid conflicts -->
-    <node name="tf_remove_child_frames" pkg="mir100_driver" type="tf_remove_child_frames.py" output="screen">
+    <node name="tf_remove_child_frames" pkg="mir_driver" type="tf_remove_child_frames.py" output="screen">
       <remap from="tf_in"         to="tf_mobipick" />
       <remap from="tf_out"        to="/tf" />
       <remap from="tf_static_in"  to="tf_static_mobipick" />
@@ -40,7 +40,7 @@
     </node>
     
     <!-- MiR base -->
-    <node name="mir100_bridge" pkg="mir100_driver" type="mir100_bridge.py" output="screen">
+    <node name="mir_bridge" pkg="mir_driver" type="mir_bridge.py" output="screen">
       <param name="hostname" value="$(arg mir_hostname)" />
       <param name="tf_prefix" value="$(arg tf_prefix)" />
       <remap from="map" to="/map" />
@@ -50,11 +50,11 @@
       <remap from="tf" to="/tf" />
     </node>
 
-    <node name="rep117_laser_filter" pkg="mir100_driver" type="rep117_filter.py" output="screen">
+    <node name="rep117_laser_filter" pkg="mir_driver" type="rep117_filter.py" output="screen">
       <remap from="scan_filtered" to="scan_rep117" />
     </node>
 
-    <node name="fake_mir_joint_publisher" pkg="mir100_driver" type="fake_mir_joint_publisher.py" output="screen" />
+    <node name="fake_mir_joint_publisher" pkg="mir_driver" type="fake_mir_joint_publisher.py" output="screen" />
 
     <!-- UR5 joint trajectory server -->
     <node name="arm_joint_trajectory_forwarder" pkg="mobipick_pick_n_place" type="joint_trajectory_forwarder.py" output="screen">
