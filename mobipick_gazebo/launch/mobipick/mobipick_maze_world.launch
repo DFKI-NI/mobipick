@@ -8,5 +8,5 @@
     <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
   </include>
 
-  <include file="$(find mobipick_gazebo)/launch/objects/spawn_maze.launch" />
+  <include file="$(find mir_gazebo)/launch/includes/spawn_maze.launch.xml" />
 </launch>

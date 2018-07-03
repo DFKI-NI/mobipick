@@ -26,6 +26,7 @@ install(DIRECTORY
   Media
   config
   launch
+  maps
   meshes
   urdf
   worlds
