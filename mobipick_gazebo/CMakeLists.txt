@@ -37,7 +37,6 @@ install(DIRECTORY
 ## Testing ##
 #############
 
-roslaunch_add_file_check(launch/mir_100)
 roslaunch_add_file_check(launch/mobipick)
 roslaunch_add_file_check(launch/objects)
 roslaunch_add_file_check(launch/robotiq_2f_140)

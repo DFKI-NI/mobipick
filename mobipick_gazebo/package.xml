@@ -20,11 +20,9 @@
   <build_depend>roslaunch</build_depend>
 
   <exec_depend>controller_manager</exec_depend>
-  <exec_depend>fake_localization</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>mir_gazebo</exec_depend>
-  <exec_depend>robot_pose_ekf</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>roboticsgroup_gazebo_plugins</exec_depend>  <!-- from https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins -->
   <exec_depend>rostopic</exec_depend>
