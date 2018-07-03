@@ -4,7 +4,7 @@ mobipick
 [![pipeline status](https://git.hb.dfki.de/mobipick/mobipick/badges/kinetic/pipeline.svg)](https://git.hb.dfki.de/mobipick/mobipick/commits/kinetic)
 
 This repo contains ROS configuration files (URDF description, Gazebo launch
-files, MoveIt config, move_base config, bringup launch files) for the Mobipick
+files, MoveIt config, bringup launch files) for the Mobipick
 robot (MiR 100 base, UR5 arm, Robotiq 2 Finger Gripper + Force-Torque Sensor,
 Orbbec Astra Mini S 3D camera).
 
@@ -14,10 +14,10 @@ Orbbec Astra Mini S 3D camera).
 Package overview
 ----------------
 
+* `mobipick_bringup`: Launch and configuration files for the real Mobipick robot
 * `mobipick_description`: URDF description of the robot
 * `mobipick_gazebo`: Simulation specific launch and configuration files
 * `mobipick_moveit_config`: MoveIt! launch and configuration files
-* `mobipick_navigation`: move_base launch and configuration files
 * `mobipick_pick_n_place`: Some demo nodes that show off the MoveIt capabilities of the robot
 
 
@@ -113,11 +113,11 @@ roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch object_source:=stat
 roslaunch mobipick_gazebo mobipick_maze_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mobipick_gazebo fake_localization.launch delta_x:=-10.0 delta_y:=-10.0
-roslaunch mobipick_navigation start_planner.launch \
+roslaunch mir_navigation start_planner.launch \
     map_file:=$(rospack find mobipick_gazebo)/maps/maze.yaml \
     virtual_walls_map_file:=$(rospack find mobipick_gazebo)/maps/maze_virtual_walls.yaml \
     local_planner:=eband
-rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
+rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
 ```
 
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
@@ -129,10 +129,10 @@ Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for mov
 roslaunch mobipick_gazebo mobipick_mrk_lab_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mobipick_gazebo fake_localization.launch
-roslaunch mobipick_navigation start_planner.launch \
+roslaunch mir_navigation start_planner.launch \
     map_file:=$(rospack find mobipick_gazebo)/maps/rh5_mrk_lab.yaml \
     local_planner:=eband
-rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
+rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
 ```
 
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
@@ -144,8 +144,8 @@ Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for mov
 roslaunch mobipick_gazebo mobipick_avz_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mobipick_gazebo fake_localization.launch delta_x:=-14.70 delta_y:=-15.0 delta_yaw:=-1.57
-roslaunch mobipick_navigation start_planner.launch map_file:=$(rospack find uos_maps)/maps/avz5floor_gazebo.yaml local_planner:=eband
-rviz -d $(rospack find mobipick_navigation)/rviz/navigation.rviz
+roslaunch mir_navigation start_planner.launch map_file:=$(rospack find uos_maps)/maps/avz5floor_gazebo.yaml local_planner:=eband
+rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
 ```
 
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
