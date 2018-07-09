@@ -286,7 +286,7 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
  sudo apt-get install ros-kinetic-joint-trajectory-controller
  ```
  
- #### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch arm_velocity_controller:=true"
+##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch arm_velocity_controller:=true"
 
  ```bash
  [Err] [Plugin.hh:165] Failed to load plugin libgazebo_ros_control.so: libgazebo_ros_control.so: cannot open shared object file: No such file or directory
@@ -297,3 +297,16 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
   ```bash
 sudo apt-get install ros-kinetic-gazebo-ros-control 
  ```
+ 
+##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch arm_velocity_controller:=true"
+
+```bash
+[ERROR] [1531143358.907155735]: Could not load controller 'arm_controller' because controller type 'velocity_controllers/JointTrajectoryController' does not exist.
+[ERROR] [1531143358.907247601]: Use 'rosservice call controller_manager/list_controller_types' to get the available types
+```
+
+Solution:
+
+```bash
+sudo apt-get install ros-kinetic-joint-trajectory-controller
+```
