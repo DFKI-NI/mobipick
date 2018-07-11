@@ -255,58 +255,56 @@ git clone git@git.hb.dfki.de:mobipick/mobipick.git
 
 ##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"
 
- ```bash
- [rqt_joint_trajectory_controller-13] process has died [pid 30256, exit code 1, cmd /opt/ros/kinetic/lib/rqt_joint_trajectory_controller/rqt_joint_trajectory_controller __name:=rqt_joint_trajectory_controller __log:=/home/dfki.uni-bremen.de/dmronga/.ros/log/0b98ae40-3d82-11e8-a99f-f46d04cef46e/rqt_joint_trajectory_controller-13.log].
- log file: /home/dfki.uni-bremen.de/dmronga/.ros/log/0b98ae40-3d82-11e8-a99f-f46d04cef46e/rqt_joint_trajectory_controller-13*.log
- ```
+```bash
+[rqt_joint_trajectory_controller-13] process has died [pid 30256, exit code 1, cmd /opt/ros/kinetic/lib/rqt_joint_trajectory_controller/rqt_joint_trajectory_controller __name:=rqt_joint_trajectory_controller __log:=/home/dfki.uni-bremen.de/dmronga/.ros/log/0b98ae40-3d82-11e8-a99f-f46d04cef46e/rqt_joint_trajectory_controller-13.log].
+log file: /home/dfki.uni-bremen.de/dmronga/.ros/log/0b98ae40-3d82-11e8-a99f-f46d04cef46e/rqt_joint_trajectory_controller-13*.log
+```
 
- The log file then says:
+The log file then says:
 
- ```bash
- qt_gui_main() found no plugin matching "rqt_joint_trajectory_controller"
- ```
+```bash
+qt_gui_main() found no plugin matching "rqt_joint_trajectory_controller"
+```
 
- * Solution (from [here](https://answers.ros.org/question/91231/rqt-plugin-not-listedfound-in-list-returned-by-rqt-list-plugins/?answer=91386#post-id-91386)):
+* Solution (from [here](https://answers.ros.org/question/91231/rqt-plugin-not-listedfound-in-list-returned-by-rqt-list-plugins/?answer=91386#post-id-91386)):
 
- ```bash
- rm ~/.config/ros.org/rqt_gui.ini
- ```
+```bash
+rm ~/.config/ros.org/rqt_gui.ini
+```
 
 
-##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"
+##### Errors related to missing packages
 
- ```bash
- [ERROR] [1523449370.789220962]: Could not load controller 'gripper_controller' because controller type 'position_controllers/JointTrajectoryController' does not exist.
- [ERROR] [1523449370.789260021]: Use 'rosservice call controller_manager/list_controller_types' to get the available types
- ```
+```bash
+[ERROR] [1523449370.789220962]: Could not load controller 'gripper_controller' because controller type 'position_controllers/JointTrajectoryController' does not exist.
+[ERROR] [1523449370.789260021]: Use 'rosservice call controller_manager/list_controller_types' to get the available types
+```
 
- * Solution:
+... or:
 
- ```bash
- sudo apt-get install ros-kinetic-joint-trajectory-controller
- ```
- 
-##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch arm_velocity_controller:=true"
 
- ```bash
- [Err] [Plugin.hh:165] Failed to load plugin libgazebo_ros_control.so: libgazebo_ros_control.so: cannot open shared object file: No such file or directory
- ```
- 
- Solution: 
- 
-  ```bash
-sudo apt-get install ros-kinetic-gazebo-ros-control 
- ```
- 
-##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch arm_velocity_controller:=true"
+```bash
+[Err] [Plugin.hh:165] Failed to load plugin libgazebo_ros_control.so: libgazebo_ros_control.so: cannot open shared object file: No such file or directory
+```
+
+... or:
 
 ```bash
 [ERROR] [1531143358.907155735]: Could not load controller 'arm_controller' because controller type 'velocity_controllers/JointTrajectoryController' does not exist.
 [ERROR] [1531143358.907247601]: Use 'rosservice call controller_manager/list_controller_types' to get the available types
 ```
 
-Solution:
+* Solution:
 
-```bash
-sudo apt-get install ros-kinetic-joint-trajectory-controller
-```
+ ```bash
+ sudo apt-get install ros-kinetic-joint-trajectory-controller
+ sudo apt-get install ros-kinetic-gazebo-ros-control 
+ sudo apt-get install ros-kinetic-joint-trajectory-controller
+ ```
+
+ or better: Add an `exec_depend` to the `package.xml` of the package that uses the missing package (e.g., `mobipick_description`), and then:
+
+ ```bash
+ rosdep update
+ rosdep install -i --from-paths .
+ ```
