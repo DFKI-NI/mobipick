@@ -43,7 +43,6 @@ git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
 git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
 git clone -b kinetic https://github.com/uos/uos_tools.git
 git clone -b indigo-devel https://github.com/ricardo-samaniego/sbpl_lattice_planner.git
-git clone -b kinetic https://github.com/dfki-ric/mir_robot.git
 
 # use rosdep to install all dependencies (including ROS itself)
 apt-get update -qq
