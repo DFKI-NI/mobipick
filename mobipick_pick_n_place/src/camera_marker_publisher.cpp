@@ -24,6 +24,7 @@ int main(int argc, char **argv)
 {
   ros::init(argc, argv, "camera_marker_publisher");
   ros::NodeHandle nh;
+  ros::NodeHandle nh_priv("~");
   ros::Publisher pub = nh.advertise<visualization_msgs::MarkerArray>("camera_markers", 10);
 
   visualization_msgs::MarkerArray markers;
@@ -32,7 +33,7 @@ int main(int argc, char **argv)
   marker.type = visualization_msgs::Marker::LINE_LIST;
   marker.action = visualization_msgs::Marker::ADD;
   marker.scale.x = 0.005;
-  marker.header.frame_id = CAMERA_FRAME;
+  nh_priv.param<std::string>("camera_frame", marker.header.frame_id, CAMERA_FRAME);
   marker.frame_locked = 1;
   double lr = HFOV / 2.0;
   double td = VFOV / 2.0;
@@ -44,7 +45,7 @@ int main(int argc, char **argv)
   marker.color.b = 1.0;
   marker.color.a = 1.0;
   marker.id = 0;
-  marker.ns = "camera_fov";
+  marker.ns = marker.header.frame_id;
   // p_ftl = far top left etc.
   geometry_msgs::Point p_ftl, p_fbl, p_fbr, p_ftr;
   tf::pointTFToMsg(sphericalToCartesian(RANGE_MAX, td, lr), p_ftl);
