@@ -37,6 +37,7 @@ build:
     - wget http://packages.ros.org/ros.key -O - | apt-key add -
     - apt-get update -qq
     - apt-get install -qq -y python-rosdep python-catkin-tools git build-essential cmake git
+    - apt-get install -qq -y ros-$CI_ROS_DISTRO-rosbash   # otherwise "source /opt/ros..." fails
     - rosdep init
     - rosdep update
 
