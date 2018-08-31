@@ -2,7 +2,7 @@ image: ubuntu:xenial
 
 before_script:
   # Install ssh-agent if not already installed
-  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+  - 'which ssh-agent || ( apt-get update -qq && apt-get install openssh-client -y )'
 
   # Run ssh-agent (inside the build environment)
   - eval $(ssh-agent -s)
@@ -32,11 +32,11 @@ build:
 
     # set up ROS repo
     # Install wget if not already installed
-    - 'which wget || ( apt-get update -y && apt-get install wget -y )'
+    - 'which wget || ( apt-get update -qq && apt-get install wget -y )'
     - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
     - wget http://packages.ros.org/ros.key -O - | apt-key add -
     - apt-get update -qq
-    - apt-get install -qq -y python-rosdep python-catkin-tools git build-essential cmake git
+    - apt-get install -qq -y python-rosdep git build-essential cmake
     - apt-get install -qq -y ros-$CI_ROS_DISTRO-rosbash   # otherwise "source /opt/ros..." fails
     - rosdep init
     - rosdep update
