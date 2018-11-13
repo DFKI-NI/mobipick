@@ -12,43 +12,49 @@
   <xacro:property name="xtion_cam_py" value="0.069"/>
 
   <xacro:macro name="dual_xtions" params="">
-    <dual_xtion_mount />
+    <link name="dual_xtion_mount_link" />
+
+    <joint name="dual_xtion_left_mount" type="fixed">
+      <parent link="dual_xtion_mount_link" />
+      <child link="dual_xtion_left_mount_link" />
+      <origin xyz="0 0.06 0" rpy="0.0 1.571 0.0" />
+    </joint>
+    <dual_xtion_mount side="left" />
+
+    <joint name="dual_xtion_right_mount" type="fixed">
+      <parent link="dual_xtion_mount_link" />
+      <child link="dual_xtion_right_mount_link" />
+      <origin xyz="0 -0.06 0" rpy="0.0 -1.571 3.142" />
+    </joint>
+    <dual_xtion_mount side="right" />
 
     <joint name="dual_xtion_bottom_joint" type="fixed">
-      <origin xyz="0.04 ${xtion_cam_py} ${dual_xtion_mount_z - 0.04}" rpy="0 ${22.0 / 180.0 * pi} 0" />   <!-- TODO HENDRIK -->
-      <parent link="dual_xtion_mount_link"/>
-      <child link="dual_xtion_bottom_link"/>
+      <parent link="dual_xtion_mount_link" />
+      <child link="dual_xtion_bottom_link" />
+      <origin xyz="0.045 0.069 0.032" rpy="0 -0.262 0" />
     </joint>
 
     <sensor_xtion camera_name="dual_xtion_bottom" />
 
     <joint name="dual_xtion_top_joint" type="fixed">
-      <origin xyz="0.04 ${xtion_cam_py} ${dual_xtion_mount_z + 0.02}" rpy="0 ${-22.0 / 180.0 * pi} 0" />   <!-- TODO HENDRIK -->
-      <parent link="dual_xtion_mount_link"/>
-      <child link="dual_xtion_top_link"/>
+      <parent link="dual_xtion_mount_link" />
+      <child link="dual_xtion_top_link" />
+      <origin xyz="0.045 0.069 -0.032" rpy="0 0.262 0" />
     </joint>
 
     <sensor_xtion camera_name="dual_xtion_top" />
+
   </xacro:macro>
 
-  <xacro:macro name="dual_xtion_mount">
-    <link name="dual_xtion_mount_link">
+  <xacro:macro name="dual_xtion_mount" params="side">
+    <link name="dual_xtion_${side}_mount_link">
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <visual>
-        <origin xyz="0 0 ${dual_xtion_mount_z / 2}" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <box size="${dual_xtion_mount_x} ${dual_xtion_mount_y} ${dual_xtion_mount_z}" />
+          <mesh scale="0.001 0.001 0.001" filename="package://mobipick_description/meshes/sensors/peotrac_mount.stl" />
         </geometry>
-        <xacro:insert_block name="material_black" />
       </visual>
-      <collision>
-        <origin xyz="0 0 ${dual_xtion_mount_z / 2}" />
-        <geometry>
-          <box size="${dual_xtion_mount_x} ${dual_xtion_mount_y} ${dual_xtion_mount_z}" />
-        </geometry>
-      </collision>
-      <xacro:box_inertial mass="${dual_xtion_mount_mass}" x="${dual_xtion_mount_x}" y="${dual_xtion_mount_y}" z="${dual_xtion_mount_z}">
-        <origin xyz="0 0 ${dual_xtion_mount_z / 2}" />
-      </xacro:box_inertial>
     </link>
     <gazebo reference="dual_xtion_mount_link">
       <material>Gazebo/FlatBlack</material>

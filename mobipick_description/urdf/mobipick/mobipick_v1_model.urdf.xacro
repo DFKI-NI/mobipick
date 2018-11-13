@@ -106,7 +106,7 @@
   <xacro:include filename="$(find mobipick_description)/urdf/sensors/dual_xtions.urdf.xacro" />
 
   <joint name="dual_xtion_mount_joint" type="fixed">
-    <origin xyz="0.35 -0.18 0.0" rpy="0.0 0.0 ${-45.0 / 180.0 * pi}" />   <!-- TODO HENDRIK -->
+    <origin xyz="0.37 0.0 -0.02" rpy="0 0 0" />
     <parent link="structure_pedestal" />
     <child link="dual_xtion_mount_link" />
   </joint>
