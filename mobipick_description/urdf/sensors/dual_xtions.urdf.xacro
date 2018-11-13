@@ -31,7 +31,7 @@
     <joint name="dual_xtion_bottom_joint" type="fixed">
       <parent link="dual_xtion_mount_link" />
       <child link="dual_xtion_bottom_link" />
-      <origin xyz="0.045 0.069 0.032" rpy="0 -0.262 0" />
+      <origin xyz="0.045 ${xtion_cam_py} 0.032" rpy="0 -0.262 0" />
     </joint>
 
     <sensor_xtion camera_name="dual_xtion_bottom" />
@@ -39,7 +39,7 @@
     <joint name="dual_xtion_top_joint" type="fixed">
       <parent link="dual_xtion_mount_link" />
       <child link="dual_xtion_top_link" />
-      <origin xyz="0.045 0.069 -0.032" rpy="0 0.262 0" />
+      <origin xyz="0.045 ${xtion_cam_py} -0.032" rpy="0 0.262 0" />
     </joint>
 
     <sensor_xtion camera_name="dual_xtion_top" />
