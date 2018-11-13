@@ -1,0 +1,114 @@
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="dual_xtion_mount_mass" value="0.060" />
+  <xacro:property name="dual_xtion_mount_x" value="0.02" />   <!-- TODO HENDRIK -->
+  <xacro:property name="dual_xtion_mount_y" value="0.02" />   <!-- TODO HENDRIK -->
+  <xacro:property name="dual_xtion_mount_z" value="0.10" />   <!-- TODO HENDRIK -->
+
+  <xacro:property name="xtion_mass" value="0.170" />
+
+  <!-- distance between center of camera and camera_link -->
+  <xacro:property name="xtion_cam_py" value="0.069"/>
+
+  <xacro:macro name="dual_xtions" params="">
+    <dual_xtion_mount />
+
+    <joint name="dual_xtion_bottom_joint" type="fixed">
+      <origin xyz="0.04 ${xtion_cam_py} ${dual_xtion_mount_z - 0.04}" rpy="0 ${22.0 / 180.0 * pi} 0" />   <!-- TODO HENDRIK -->
+      <parent link="dual_xtion_mount_link"/>
+      <child link="dual_xtion_bottom_link"/>
+    </joint>
+
+    <sensor_xtion camera_name="dual_xtion_bottom" />
+
+    <joint name="dual_xtion_top_joint" type="fixed">
+      <origin xyz="0.04 ${xtion_cam_py} ${dual_xtion_mount_z + 0.02}" rpy="0 ${-22.0 / 180.0 * pi} 0" />   <!-- TODO HENDRIK -->
+      <parent link="dual_xtion_mount_link"/>
+      <child link="dual_xtion_top_link"/>
+    </joint>
+
+    <sensor_xtion camera_name="dual_xtion_top" />
+  </xacro:macro>
+
+  <xacro:macro name="dual_xtion_mount">
+    <link name="dual_xtion_mount_link">
+      <visual>
+        <origin xyz="0 0 ${dual_xtion_mount_z / 2}" />
+        <geometry>
+          <box size="${dual_xtion_mount_x} ${dual_xtion_mount_y} ${dual_xtion_mount_z}" />
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${dual_xtion_mount_z / 2}" />
+        <geometry>
+          <box size="${dual_xtion_mount_x} ${dual_xtion_mount_y} ${dual_xtion_mount_z}" />
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="${dual_xtion_mount_mass}" x="${dual_xtion_mount_x}" y="${dual_xtion_mount_y}" z="${dual_xtion_mount_z}">
+        <origin xyz="0 0 ${dual_xtion_mount_z / 2}" />
+      </xacro:box_inertial>
+    </link>
+    <gazebo reference="dual_xtion_mount_link">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+  </xacro:macro>
+
+  <!-- ##################################################################### -->
+  <!-- ######################## ASUS Xtion Pro Live ######################## -->
+  <!-- ##################################################################### -->
+  <xacro:macro name="sensor_xtion" params="camera_name">
+    <link name="${camera_name}_link">
+      <visual>
+        <origin xyz="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/xtion_pro_live.dae"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="${-0.036 / 2} ${-xtion_cam_py} 0.0" />
+        <geometry>
+          <box size="0.036 0.18 0.024" />
+        </geometry>
+      </collision>
+      <xacro:box_inertial mass="${xtion_mass}" x="0.036" y="0.18" z="0.024">
+        <origin xyz="${-0.036 / 2} ${-xtion_cam_py} 0.0" />
+      </xacro:box_inertial>
+    </link>
+    <gazebo reference="${camera_name}_link">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+    <joint name="${camera_name}_rgb_joint" type="fixed">
+      <origin xyz="0 -0.045 0" rpy="0 0 0" />
+      <parent link="${camera_name}_link"/>
+      <child link="${camera_name}_rgb_frame" />
+    </joint>
+    <link name="${camera_name}_rgb_frame"/>
+
+    <joint name="${camera_name}_rgb_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+      <parent link="${camera_name}_rgb_frame" />
+      <child link="${camera_name}_rgb_optical_frame" />
+    </joint>
+    <link name="${camera_name}_rgb_optical_frame"/>
+
+    <joint name="${camera_name}_depth_joint" type="fixed">
+      <origin xyz="0 -0.02 0" rpy="0 0 0" />
+      <parent link="${camera_name}_link"/>
+      <child link="${camera_name}_depth_frame" />
+    </joint>
+    <link name="${camera_name}_depth_frame"/>
+
+    <joint name="${camera_name}_depth_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
+      <parent link="${camera_name}_depth_frame" />
+      <child link="${camera_name}_depth_optical_frame" />
+    </joint>
+    <link name="${camera_name}_depth_optical_frame"/>
+
+    <sim_3dsensor/>  <!-- NOTE: sim_3dsensor macro from gripper_cam is used here -->
+  </xacro:macro>
+</robot>
