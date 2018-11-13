@@ -56,7 +56,7 @@
         </geometry>
       </visual>
     </link>
-    <gazebo reference="dual_xtion_mount_link">
+    <gazebo reference="dual_xtion_${side}_mount_link">
       <material>Gazebo/FlatBlack</material>
     </gazebo>
   </xacro:macro>
