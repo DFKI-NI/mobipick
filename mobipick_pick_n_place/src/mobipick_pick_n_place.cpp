@@ -243,8 +243,8 @@ int main(int argc, char **argv)
 
   moveit::planning_interface::MoveGroupInterface group("arm");
   group.setPlanningTime(45.0);
-  group.setPlannerId("RRTConnectkConfigDefault");
-  // NOTE: You can replace this by "RRTstarkConfigDefault". This will have the following effects:
+  group.setPlannerId("RRTConnect");
+  // NOTE: You can replace this by "RRTstar". This will have the following effects:
   //   - RRT* is an (asymptotically) optimal planner, so the path with minimum path length
   //     will be returned, which leads to much nicer trajectories without unnecessary reconfigurations.
   //   - RRT* will always use the full planning time (see setPlanningTime()), even if an initial
