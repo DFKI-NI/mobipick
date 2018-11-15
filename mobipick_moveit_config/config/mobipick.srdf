@@ -94,6 +94,10 @@
     <disable_collisions link1="back_laser_link" link2="bl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="br_caster_rotation_link" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="br_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="dual_xtion_bottom_link" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="dual_xtion_left_mount_link" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="dual_xtion_right_mount_link" reason="Never" />
+    <disable_collisions link1="back_laser_link" link2="dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="back_laser_link" link2="fr_caster_rotation_link" reason="Never" />
@@ -134,6 +138,10 @@
     <disable_collisions link1="base_link" link2="bl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="base_link" link2="br_caster_rotation_link" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="br_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="dual_xtion_bottom_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="dual_xtion_left_mount_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="dual_xtion_right_mount_link" reason="Never" />
+    <disable_collisions link1="base_link" link2="dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="base_link" link2="fl_caster_rotation_link" reason="Adjacent" />
     <disable_collisions link1="base_link" link2="fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="base_link" link2="fr_caster_rotation_link" reason="Adjacent" />
@@ -158,6 +166,10 @@
     <disable_collisions link1="bl_caster_rotation_link" link2="bl_caster_wheel_link" reason="Adjacent" />
     <disable_collisions link1="bl_caster_rotation_link" link2="br_caster_rotation_link" reason="Never" />
     <disable_collisions link1="bl_caster_rotation_link" link2="br_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="bl_caster_rotation_link" link2="dual_xtion_bottom_link" reason="Never" />
+    <disable_collisions link1="bl_caster_rotation_link" link2="dual_xtion_left_mount_link" reason="Never" />
+    <disable_collisions link1="bl_caster_rotation_link" link2="dual_xtion_right_mount_link" reason="Never" />
+    <disable_collisions link1="bl_caster_rotation_link" link2="dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="bl_caster_rotation_link" link2="fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="bl_caster_rotation_link" link2="fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="bl_caster_rotation_link" link2="fr_caster_rotation_link" reason="Never" />
@@ -196,6 +208,10 @@
     <disable_collisions link1="bl_caster_rotation_link" link2="ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="bl_caster_wheel_link" link2="br_caster_rotation_link" reason="Never" />
     <disable_collisions link1="bl_caster_wheel_link" link2="br_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="bl_caster_wheel_link" link2="dual_xtion_bottom_link" reason="Never" />
+    <disable_collisions link1="bl_caster_wheel_link" link2="dual_xtion_left_mount_link" reason="Never" />
+    <disable_collisions link1="bl_caster_wheel_link" link2="dual_xtion_right_mount_link" reason="Never" />
+    <disable_collisions link1="bl_caster_wheel_link" link2="dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="bl_caster_wheel_link" link2="fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="bl_caster_wheel_link" link2="fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="bl_caster_wheel_link" link2="fr_caster_rotation_link" reason="Never" />
@@ -233,6 +249,10 @@
     <disable_collisions link1="bl_caster_wheel_link" link2="ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="bl_caster_wheel_link" link2="ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="br_caster_rotation_link" link2="br_caster_wheel_link" reason="Adjacent" />
+    <disable_collisions link1="br_caster_rotation_link" link2="dual_xtion_bottom_link" reason="Never" />
+    <disable_collisions link1="br_caster_rotation_link" link2="dual_xtion_left_mount_link" reason="Never" />
+    <disable_collisions link1="br_caster_rotation_link" link2="dual_xtion_right_mount_link" reason="Never" />
+    <disable_collisions link1="br_caster_rotation_link" link2="dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="br_caster_rotation_link" link2="fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="br_caster_rotation_link" link2="fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="br_caster_rotation_link" link2="fr_caster_rotation_link" reason="Never" />
@@ -269,6 +289,10 @@
     <disable_collisions link1="br_caster_rotation_link" link2="ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="br_caster_rotation_link" link2="ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="br_caster_rotation_link" link2="ur5_wrist_3_link" reason="Never" />
+    <disable_collisions link1="br_caster_wheel_link" link2="dual_xtion_bottom_link" reason="Never" />
+    <disable_collisions link1="br_caster_wheel_link" link2="dual_xtion_left_mount_link" reason="Never" />
+    <disable_collisions link1="br_caster_wheel_link" link2="dual_xtion_right_mount_link" reason="Never" />
+    <disable_collisions link1="br_caster_wheel_link" link2="dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="br_caster_wheel_link" link2="fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="br_caster_wheel_link" link2="fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="br_caster_wheel_link" link2="fr_caster_rotation_link" reason="Never" />
@@ -305,6 +329,61 @@
     <disable_collisions link1="br_caster_wheel_link" link2="ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="br_caster_wheel_link" link2="ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="br_caster_wheel_link" link2="ur5_wrist_3_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="dual_xtion_left_mount_link" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="dual_xtion_right_mount_link" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="dual_xtion_top_link" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="fl_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="fl_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="fr_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="fr_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="front_laser_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="left_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="right_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="structure_part_down" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="structure_part_up" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="structure_pedestal" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="ur5_base_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="ur5_shoulder_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_bottom_link" link2="ur5_upper_arm_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="dual_xtion_right_mount_link" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="dual_xtion_top_link" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="fl_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="fl_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="fr_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="fr_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="front_laser_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="left_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="right_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="structure_part_down" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="structure_part_up" reason="Default" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="structure_pedestal" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="ur5_base_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_left_mount_link" link2="ur5_shoulder_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="dual_xtion_top_link" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="fl_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="fl_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="fr_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="fr_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="front_laser_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="left_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="right_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="structure_part_down" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="structure_part_up" reason="Default" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="structure_pedestal" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="ur5_base_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_right_mount_link" link2="ur5_shoulder_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="fl_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="fl_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="fr_caster_rotation_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="fr_caster_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="front_laser_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="left_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="right_wheel_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="structure_part_down" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="structure_part_up" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="structure_pedestal" reason="Adjacent" />
+    <disable_collisions link1="dual_xtion_top_link" link2="ur5_base_link" reason="Never" />
+    <disable_collisions link1="dual_xtion_top_link" link2="ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="fl_caster_rotation_link" link2="fl_caster_wheel_link" reason="Adjacent" />
     <disable_collisions link1="fl_caster_rotation_link" link2="fr_caster_rotation_link" reason="Never" />
     <disable_collisions link1="fl_caster_rotation_link" link2="fr_caster_wheel_link" reason="Never" />
