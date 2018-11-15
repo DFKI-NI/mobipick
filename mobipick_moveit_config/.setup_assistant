@@ -1,10 +1,11 @@
 moveit_setup_assistant_config:
   URDF:
     package: mobipick_description
-    relative_path: urdf/mobipick/mobipick_v1_model.urdf
+    relative_path: urdf/mobipick/mobipick_v1_model.urdf.xacro
+    xacro_args: --inorder
   SRDF:
     relative_path: config/mobipick.srdf
   CONFIG:
     author_name: Martin Günther
     author_email: martin.guenther@dfki.de
-    generated_timestamp: 1542278624
+    generated_timestamp: 1542279826
