@@ -42,33 +42,33 @@ int main(int argc, char **argv)
     detections.detections.push_back(det3d);
   }
 
-  {
-    // add coke_can
-    geometry_msgs::Pose object_pose_msg;
-    object_pose_msg.position.x = 1.05;
-    object_pose_msg.position.y = -0.25;
-    object_pose_msg.position.z = 1.0;
-    object_pose_msg.orientation.w = 1.0;
-
-    vision_msgs::Detection3D det3d;
-    det3d.header = detections.header;
-    det3d.bbox.size.x = 0.067;
-    det3d.bbox.size.y = 0.067;
-    det3d.bbox.size.z = 0.1239;
-
-    // shift to center of bbox
-    Eigen::Affine3d object_pose;
-    tf::poseMsgToEigen(object_pose_msg, object_pose);
-    Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
-    object_to_bbox.translation() = Eigen::Vector3d(0.0d, 0.0d, det3d.bbox.size.z / 2.0d);
-    tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
-
-    det3d.results.resize(1);
-    det3d.results[0].id = ObjectID::COKE_CAN;
-    det3d.results[0].pose.pose = object_pose_msg;
-    det3d.results[0].score = 1.0;
-    detections.detections.push_back(det3d);
-  }
+//  {
+//    // add coke_can
+//    geometry_msgs::Pose object_pose_msg;
+//    object_pose_msg.position.x = 1.05;
+//    object_pose_msg.position.y = -0.25;
+//    object_pose_msg.position.z = 1.0;
+//    object_pose_msg.orientation.w = 1.0;
+//
+//    vision_msgs::Detection3D det3d;
+//    det3d.header = detections.header;
+//    det3d.bbox.size.x = 0.067;
+//    det3d.bbox.size.y = 0.067;
+//    det3d.bbox.size.z = 0.1239;
+//
+//    // shift to center of bbox
+//    Eigen::Affine3d object_pose;
+//    tf::poseMsgToEigen(object_pose_msg, object_pose);
+//    Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
+//    object_to_bbox.translation() = Eigen::Vector3d(0.0d, 0.0d, det3d.bbox.size.z / 2.0d);
+//    tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
+//
+//    det3d.results.resize(1);
+//    det3d.results[0].id = ObjectID::COKE_CAN;
+//    det3d.results[0].pose.pose = object_pose_msg;
+//    det3d.results[0].score = 1.0;
+//    detections.detections.push_back(det3d);
+//  }
 
   {
     // add powerdrill
