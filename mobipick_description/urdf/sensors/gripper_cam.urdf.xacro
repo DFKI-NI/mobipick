@@ -172,7 +172,7 @@
     <link name="${camera_name}_depth_frame"/>
 
     <joint name="${camera_name}_depth_optical_joint" type="fixed">
-      <origin xyz="-0.0314828066046 -0.000433828244333 0.00121080854987" rpy="0.01174712568115136 0.010416276323763485 -0.0028859908965827175" />   <!-- calibrated 2018-06-07 on mobipick-hb (16112110432) -->
+      <origin xyz="-0.025 0 0" rpy="0 0 0" />   <!-- calibration not necessary, depth_ir_offset used instead -->
       <parent link="${camera_name}_rgb_optical_frame" />
       <child link="${camera_name}_depth_optical_frame" />
     </joint>

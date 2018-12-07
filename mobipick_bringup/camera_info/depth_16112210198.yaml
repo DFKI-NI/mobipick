@@ -1,6 +1,6 @@
-# Orbbec Astra Mini S #1, Serial no. 16112210198
+# Orbbec Astra Mini S #1 on mobipick-os, Serial no. 16112210198
 #
-# Values calibrated using rosrun camera_calibration cameracalibrator.py --size 6x7 --square 0.0495 image:=/astra/rgb/image_raw camera:=/astra/rgb
+# Values calibrated using rosrun camera_calibration cameracalibrator.py --size 6x7 --square 0.0495 image:=/astra/ir/image camera:=/astra/ir
 
 image_width: 640
 image_height: 480
@@ -8,17 +8,19 @@ camera_name: depth_Astra_Orbbec
 camera_matrix:
   rows: 3
   cols: 3
-  data: [578.599386, 0.000000, 315.317156, 0.000000, 572.428845, 238.673432, 0.000000, 0.000000, 1.000000]
+  #data: [578.599386, 0, 315.317156, 0, 572.428845, 238.673432, 0, 0, 1]  # original
+  data: [578.599386, 0, 315.317156, 0, 572.428845, 265.673432, 0, 0, 1]   # manually modified: depth_ir_offset_x should be -20, but cannot go so low; so we leave it at +5 (the default) and add 25 here (replaces extrinsic calib)
 distortion_model: plumb_bob
 distortion_coefficients:
   rows: 1
   cols: 5
-  data: [-0.067657, 0.116504, -0.006256, 0.000154, 0.000000]
+  data: [-0.067657, 0.116504, -0.006256, 0.000154, 0]
 rectification_matrix:
   rows: 3
   cols: 3
-  data: [1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000]
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
 projection_matrix:
   rows: 3
   cols: 4
-  data: [578.294617, 0.000000, 315.529778, 0.000000, 0.000000, 569.675354, 235.794055, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
+  #data: [578.294617, 0, 315.529778, 0, 0, 569.675354, 235.794055, 0, 0, 0, 1, 0]  # original
+  data: [578.294617, 0, 315.529778, 0, 0, 569.675354, 260.794055, 0, 0, 0, 1, 0]   # manually modified

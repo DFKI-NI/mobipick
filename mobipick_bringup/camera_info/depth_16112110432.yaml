@@ -8,7 +8,8 @@ camera_name: depth_Astra_Orbbec
 camera_matrix:
   rows: 3
   cols: 3
-  data: [588.2548099622217, 0, 325.2527589971305, 0, 581.2020872771369, 236.2937542784242, 0, 0, 1]
+  #data: [588.2548099622217, 0, 325.2527589971305, 0, 581.2020872771369, 236.2937542784242, 0, 0, 1]  # original
+  data: [588.2548099622217, 0, 325.2527589971305, 0, 581.2020872771369, 261.2937542784242, 0, 0, 1]   # manually modified: depth_ir_offset_x should be -20, but cannot go so low; so we leave it at +4 (the default) and add 24 here (replaces extrinsic calib)
 distortion_model: plumb_bob
 distortion_coefficients:
   rows: 1
@@ -21,4 +22,5 @@ rectification_matrix:
 projection_matrix:
   rows: 3
   cols: 4
-  data: [589.0838623046875, 0, 326.8503615796362, 0, 0, 581.2031860351562, 233.9821949099587, 0, 0, 0, 1, 0]
+  #data: [589.0838623046875, 0, 326.8503615796362, 0, 0, 581.2031860351562, 233.9821949099587, 0, 0, 0, 1, 0]  # original
+  data: [589.0838623046875, 0, 326.8503615796362, 0, 0, 581.2031860351562, 258.9821949099587, 0, 0, 0, 1, 0]   # manually modified

@@ -5,7 +5,8 @@
   <arg name="mir_hostname" default="192.168.12.20" />
 
   <!-- 16112110432 = mobipick-hb -->
-  <arg name="astra_serial" default="16112110432" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
+  <!-- 16112210198 = mobipick-os -->
+  <arg name="astra_serial" default="16112210198" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
 
   <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 

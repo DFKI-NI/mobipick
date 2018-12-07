@@ -1,4 +1,4 @@
-# Orbbec Astra Mini S #1, Serial no. 16112210198
+# Orbbec Astra Mini S #1 on mobipick-os, Serial no. 16112210198
 #
 # Values calibrated using rosrun camera_calibration cameracalibrator.py --size 6x7 --square 0.0495 image:=/astra/rgb/image_raw camera:=/astra/rgb
 
@@ -8,17 +8,17 @@ camera_name: rgb_Astra_Orbbec
 camera_matrix:
   rows: 3
   cols: 3
-  data: [519.640913, 0.000000, 322.400966, 0.000000, 514.602436, 244.341752, 0.000000, 0.000000, 1.000000]
+  data: [519.640913, 0, 322.400966, 0, 514.602436, 244.341752, 0, 0, 1]
 distortion_model: plumb_bob
 distortion_coefficients:
   rows: 1
   cols: 5
-  data: [0.006279, -0.092594, 0.000626, -0.000627, 0.000000]
+  data: [0.006279, -0.092594, 0.000626, -0.000627, 0]
 rectification_matrix:
   rows: 3
   cols: 3
-  data: [1.000000, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000, 0.000000, 0.000000, 1.000000]
+  data: [1, 0, 0, 0, 1, 0, 0, 0, 1]
 projection_matrix:
   rows: 3
   cols: 4
-  data: [513.656311, 0.000000, 322.131319, 0.000000, 0.000000, 513.004517, 244.622857, 0.000000, 0.000000, 0.000000, 1.000000, 0.000000]
+  data: [513.656311, 0, 322.131319, 0, 0, 513.004517, 244.622857, 0, 0, 0, 1, 0]
