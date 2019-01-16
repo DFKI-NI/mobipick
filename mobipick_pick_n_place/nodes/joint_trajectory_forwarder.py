@@ -32,6 +32,7 @@ class JointTrajectoryForwarder(object):
             topic_name = 'gripper'
         self._sub_errorcode = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/error_code', Int32, self.callback_errorcode)
         self._sub_status = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/status', Int32, self.callback_status)
+        self._sub_preempt_ext = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/cancel_goal', Int32, self.callback_preempt_external)
 
         self.error_code = 1
         self.status = 0
@@ -40,7 +41,7 @@ class JointTrajectoryForwarder(object):
         self._as.start()
 
     def callback_status(self, data):
-        rospy.logdebug('%s: Received new status code- %d', rospy.get_name(), data.data)
+        rospy.logdebug('%s: Received new status code: %d', rospy.get_name(), data.data)
         self.status = data.data
 
         if self.status == 0:
@@ -53,6 +54,12 @@ class JointTrajectoryForwarder(object):
             rospy.loginfo('%s: Ready to execute next trajectory', rospy.get_name())
         else:
             rospy.loginfo('%s: Error code: %d', rospy.get_name(), self.status)
+
+    def callback_preempt_external(self, data):      
+        rospy.loginfo('%s: Received explicit request for preempting the goal- %d', rospy.get_name(), data.data)
+        if data.data == 1:
+            rospy.loginfo('%s: Received explicit request for preempting the goal- %d', rospy.get_name(), data.data)
+            self._as.preempt_request = True   # TODO: `self._as.set_preempted()` would probably be better
 
     def callback_errorcode(self, data):
         rospy.loginfo('%s: Received new error code- %d', rospy.get_name(), data.data)
@@ -93,6 +100,7 @@ class JointTrajectoryForwarder(object):
                 rospy.loginfo('%s: Preempted' % rospy.get_name())
                 self._pub_cancel.publish(1);
                 self._as.set_preempted()
+                self._as.preempt_request = False   # TODO: not necessary with `self._as.set_preempted()` above
                 return  # return instead of break so that we don't call set_succeeded/set_aborted
 
             # check if the trajectory is finished
