@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="wait_for_table" default="true" />
+  <arg name="wait_for_table_name" default="table_1" />
   <arg name="x" default="0.90" />
   <arg name="y" default="-0.20" />
   <arg name="z" default="1.10" />
@@ -13,7 +14,7 @@
 
   <group if="$(arg wait_for_table)">
     <node name="spawn_powerdrill1" pkg="gazebo_ros" type="spawn_model" args="-urdf
-      -param powerdrill_description -model powerdrill_1 -wait 'table_1'
+      -param powerdrill_description -model powerdrill_1 -wait '$(arg wait_for_table_name)'
       -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />
   </group>
   <group unless="$(arg wait_for_table)">
