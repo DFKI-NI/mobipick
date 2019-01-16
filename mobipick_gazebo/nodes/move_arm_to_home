@@ -136,7 +136,8 @@ def main():
     print("Initializing node... ")
     rospy.init_node("ur5_joint_trajectory_client")
     print("Getting robot state... ")
-    joint_state = rospy.wait_for_message('joint_states', JointState, timeout=10.0)
+    paramTimeout = rospy.get_param("~timeout", 10.0)
+    joint_state = rospy.wait_for_message('joint_states', JointState, timeout=paramTimeout)
     print("Running. Ctrl-c to quit")
 
     traj = Trajectory()
