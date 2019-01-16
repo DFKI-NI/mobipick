@@ -8,6 +8,8 @@
   <arg name="robot_y"   default="0.0" />
   <arg name="robot_yaw" default="0.0" />
 
+  <arg name="start_paused" default="true" />
+
   <group>
     <remap from="joint_states"                   to="mobipick/joint_states" />
     <remap from="mobile_base_controller/cmd_vel" to="cmd_vel" />
@@ -15,7 +17,7 @@
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="$(arg world_name)"/>
-      <arg name="paused" value="true" />
+      <arg name="paused" value="$(arg start_paused)" />
       <arg name="gui" value="$(arg gui)" />
     </include>
   </group>
