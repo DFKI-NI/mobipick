@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="name" default="powerdrill_1" />
+  <arg name="relative_to" default="" />
+
+  <!-- if relative_to is set, include a "-wait '...'" parameter. -->
+  <arg name="wait_param" default=""                           if="$(eval relative_to == '')" />
+  <arg name="wait_param" default="-wait '$(arg relative_to)'" unless="$(eval relative_to == '')" />
+
+  <!-- if relative_to is set: use it as the refrence frame, else world -->
+  <arg name="reference_frame" default="$(arg relative_to)" unless="$(eval relative_to == '')" />
+  <arg name="reference_frame" default="world"              if="$(eval relative_to == '')" />
+
+  <!-- pose arguments -->
+  <arg name="x" default="0" />
+  <arg name="y" default="0" />
+  <arg name="z" default="1.10" />
+  <arg name="roll" default="$(eval pi / 2)" />
+  <arg name="pitch" default="0.0" />
+  <arg name="yaw" default="$(eval pi)" />
+
+  <param name="powerdrill_description"
+    command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/powerdrill.urdf.xacro'" />
+
+  <node name="spawn_powerdrill_$(arg name)" pkg="gazebo_ros" type="spawn_model" args="-urdf
+    -param powerdrill_description -model $(arg name)
+    $(arg wait_param)
+    -reference_frame '$(arg reference_frame)'
+    -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />
+</launch>
+
