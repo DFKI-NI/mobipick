@@ -72,7 +72,7 @@ void closedGripper(trajectory_msgs::JointTrajectory &posture)
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
-  posture.points[0].positions[0] = 0.65;   // closed around power drill: 0.65; fully closed: 0.76
+  posture.points[0].positions[0] = 0.65;   // closed around power drill: 0.65; fully closed: 0.76  TODO: should be 0.42 for top grasp
 
   posture.points[0].time_from_start.fromSec(5.0);
 }
@@ -105,7 +105,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     // GRASP 3: pitch = pi/2 (grasp top part from above)
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
-    grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.08d));
+    grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.06d));
     grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
   }
