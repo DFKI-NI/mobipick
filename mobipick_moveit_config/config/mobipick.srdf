@@ -68,6 +68,46 @@
         <joint name="ur5_wrist_2_joint" value="1.57" />
         <joint name="ur5_wrist_3_joint" value="-1.57" />
     </group_state>
+    <group_state name="transport" group="arm">
+        <joint name="ur5_shoulder_pan_joint" value="-1.504" />
+        <joint name="ur5_shoulder_lift_joint" value="-1.550898853932516" />
+        <joint name="ur5_elbow_joint" value="2.00" />
+        <joint name="ur5_wrist_1_joint" value="1.0124" />
+        <joint name="ur5_wrist_2_joint" value="1.477" />
+        <joint name="ur5_wrist_3_joint" value="0.0347" />
+    </group_state>
+    <group_state name="place_1" group="arm">
+        <joint name="ur5_shoulder_pan_joint" value="-1.72" />
+        <joint name="ur5_shoulder_lift_joint" value="-1.836" />
+        <joint name="ur5_elbow_joint" value="1.76" />
+        <joint name="ur5_wrist_1_joint" value="-1.52" />
+        <joint name="ur5_wrist_2_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="2.89" />
+    </group_state>
+    <group_state name="above" group="arm">
+        <joint name="ur5_shoulder_pan_joint" value="-1.72" />
+        <joint name="ur5_shoulder_lift_joint" value="-0.79" />
+        <joint name="ur5_elbow_joint" value="0.71" />
+        <joint name="ur5_wrist_1_joint" value="-1.52" />
+        <joint name="ur5_wrist_2_joint" value="-1.57" />
+        <joint name="ur5_wrist_3_joint" value="1.1" />
+    </group_state>
+    <group_state name="tucked" group="arm">
+        <joint name="ur5_shoulder_pan_joint" value="0.0" />
+        <joint name="ur5_shoulder_lift_joint" value="-2.37" />
+        <joint name="ur5_elbow_joint" value="2.37" />
+        <joint name="ur5_wrist_1_joint" value="-1.15" />
+        <joint name="ur5_wrist_2_joint" value="1.57" />
+        <joint name="ur5_wrist_3_joint" value="-1.57" />
+    </group_state>
+    <group_state name="pick" group="arm">
+        <joint name="ur5_shoulder_pan_joint" value="-1.4668672720538538" />
+        <joint name="ur5_shoulder_lift_joint" value="0.05980873107910156" />
+        <joint name="ur5_elbow_joint" value="-1.440704647694723" />
+        <joint name="ur5_wrist_1_joint" value="-0.3296421209918421" />
+        <joint name="ur5_wrist_2_joint" value="-1.6553095022784632" />
+        <joint name="ur5_wrist_3_joint" value="2.775566339492798" />
+    </group_state>
     <group_state name="open" group="gripper">
         <joint name="gripper_finger_joint" value="0" />
     </group_state>
