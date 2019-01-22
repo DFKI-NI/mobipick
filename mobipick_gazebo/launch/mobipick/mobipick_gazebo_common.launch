@@ -32,16 +32,16 @@
   <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" />
 
   <!-- Start the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
-    args="joint_state_controller mobile_base_controller gripper_controller"/>
+  <node name="controller_spawner" pkg="controller_manager" type="controller_manager" output="screen"
+        args="spawn joint_state_controller mobile_base_controller gripper_controller"/>
 
   <group unless="$(arg arm_velocity_controller)">
-    <node name="arm_controller_spawner"          pkg="controller_manager" type="spawner" output="screen" args="arm_controller"/>
-    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="--stopped arm_velocity_controller"/>
+    <node name="arm_controller_spawner"          pkg="controller_manager" type="controller_manager" output="screen" args="spawn arm_controller"/>
+    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="controller_manager" output="screen" args="load arm_velocity_controller"/>
   </group>
   <group if="$(arg arm_velocity_controller)">
-    <node name="arm_controller_spawner"          pkg="controller_manager" type="spawner" output="screen" args="--stopped arm_controller"/>
-    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="spawner" output="screen" args="arm_velocity_controller"/>
+    <node name="arm_controller_spawner"          pkg="controller_manager" type="controller_manager" output="screen" args="load arm_controller"/>
+    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="controller_manager" output="screen" args="arm_velocity_controller"/>
   </group>
 
   <!-- Fake calibration -->
