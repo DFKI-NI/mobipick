@@ -32,10 +32,15 @@
 
   <!-- Load ros_control controller configurations -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
-  <rosparam file="$(find mir_description)/config/diffdrive_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_velocity_controller.yaml" command="load" />
   <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" />
+  <rosparam file="$(find mir_description)/config/diffdrive_controller.yaml" command="load" />
+  <!-- The diffdrive-controller needs some adjustments to output the odometry with the tf_prefix -->
+  <group if="$(eval tf_prefix != '')">
+      <param name="mobile_base_controller/base_frame_id" value="$(arg tf_prefix)/base_footprint" />
+      <param name="mobile_base_controller/odom_frame_id" value="$(arg tf_prefix)/odom_comb" />
+  </group>
 
   <!-- Start the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="spawner" output="screen"
