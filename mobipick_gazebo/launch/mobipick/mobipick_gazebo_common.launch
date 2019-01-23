@@ -6,8 +6,11 @@
   <arg name="robot_y"   default="0.0" />
   <arg name="robot_yaw" default="0.0" />
 
+  <arg name="tf_prefix" default="" doc="tf_prefix to be used by gazebo plugins etc. To be used in addition to the tf_prefix-parameter" />
+  <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
+
   <!-- Load URDF -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix)" />
 
   <!-- Load gazebo controller configurations -->
   <!-- Note: You MUST load these PID parameters for all joints that are using
@@ -20,7 +23,7 @@
 
   <!-- Spawn the robot into Gazebo -->
   <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg robot_name)
     -J ur5_shoulder_pan_joint 0.00 -J ur5_shoulder_lift_joint -2.10 -J ur5_elbow_joint 2.43 -J ur5_wrist_1_joint -2.05 -J ur5_wrist_2_joint -1.57 -J ur5_wrist_3_joint 3.14
     -x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) " />
 
