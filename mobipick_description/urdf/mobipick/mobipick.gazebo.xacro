@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
+  <xacro:arg name="robot_namespace" default="" />
+
   <!-- Common -->
   <xacro:include filename="$(find mobipick_description)/urdf/common.gazebo.xacro" />
-  <xacro:controller_plugin_gazebo robot_namespace=""/>
+  <xacro:controller_plugin_gazebo robot_namespace="$(arg robot_namespace)"/>
 
   <!-- MiR100 mobile base -->
 
