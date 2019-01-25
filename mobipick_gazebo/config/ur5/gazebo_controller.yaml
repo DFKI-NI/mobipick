@@ -8,37 +8,37 @@
 # to move with maximum effort, unable to follow a trajectory.
 gazebo_ros_control:
   pid_gains:
-    ur5_shoulder_pan_joint:
+    $(arg prefix)ur5_shoulder_pan_joint:
       p: 70.0
       i: 1.50 
       d: 5.00
       i_clamp: 2
       publish_state: true
-    ur5_shoulder_lift_joint:
+    $(arg prefix)ur5_shoulder_lift_joint:
       p: 70.0
       i: 1.50 
       d: 5.00
       i_clamp: 2
       publish_state: true
-    ur5_elbow_joint:
+    $(arg prefix)ur5_elbow_joint:
       p: 70.0
       i: 1.50 
       d: 5.00
       i_clamp: 2
       publish_state: true
-    ur5_wrist_1_joint:
+    $(arg prefix)ur5_wrist_1_joint:
       p: 70.0
       i: 1.50 
       d: 5.00
       i_clamp: 2
       publish_state: true
-    ur5_wrist_2_joint:
+    $(arg prefix)ur5_wrist_2_joint:
       p: 70.0
       i: 1.50 
       d: 5.00
       i_clamp: 2
       publish_state: true
-    ur5_wrist_3_joint:
+    $(arg prefix)ur5_wrist_3_joint:
       p: 70.0
       i: 1.50 
       d: 5.00

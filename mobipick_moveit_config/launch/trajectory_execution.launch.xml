@@ -6,6 +6,9 @@
   <arg name="moveit_manage_controllers" default="true"/>
   <param name="moveit_manage_controllers" value="$(arg moveit_manage_controllers)"/>
 
+  <!-- Prefix for the joints specified for the controllers -->
+  <arg name="prefix" default="" />
+
   <!-- When determining the expected duration of a trajectory, this multiplicative factor is applied to get the allowed duration of execution -->
   <param name="trajectory_execution/allowed_execution_duration_scaling" value="2.0"/> <!-- default 1.2 -->
   <!-- Allow more than the expected execution time before triggering a trajectory cancel (applied after scaling) -->
@@ -15,6 +18,8 @@
 
   <!-- Load the robot specific controller manager; this sets the moveit_controller_manager ROS parameter -->
   <arg name="moveit_controller_manager" default="mobipick" />
-  <include file="$(find mobipick_moveit_config)/launch/$(arg moveit_controller_manager)_moveit_controller_manager.launch.xml" />
+  <include file="$(find mobipick_moveit_config)/launch/$(arg moveit_controller_manager)_moveit_controller_manager.launch.xml">
+      <arg name="prefix" value="$(arg prefix)" />
+  </include>
 
 </launch>

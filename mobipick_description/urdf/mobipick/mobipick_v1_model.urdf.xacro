@@ -5,42 +5,51 @@
   <xacro:arg name="robot" default="mobipick-hb" />      <!-- can be "mobipick-hb" or "mobipick-os" -->
   <xacro:property name="robot" value="$(arg robot)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
 
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:property name="tf_prefix_" value="$(arg tf_prefix)" />
+  <xacro:if value="${tf_prefix_ == ''}">
+    <xacro:property name="prefix" value="" />
+  </xacro:if>
+  <xacro:unless value="${tf_prefix_ == ''}">
+    <xacro:property name="prefix" value="${tf_prefix_}/" />
+  </xacro:unless>
+
   <!-- ############# MIR100 BASE ############## -->
   <xacro:include filename="$(find mir_description)/urdf/include/mir_100_v1.urdf.xacro" />
 
-  <xacro:mir_100 prefix=""/>
+  <xacro:mir_100 prefix="${prefix}"/>
 
   <!-- ############## STRUCTURE ############### -->
   <xacro:include filename="$(find mobipick_description)/urdf/structure/mobipick_structure.urdf.xacro" />
 
-  <joint name="mir_struct_joint" type="fixed">
-    <parent link="surface" />
-    <child link = "structure_part_down" />
+  <joint name="${prefix}mir_struct_joint" type="fixed">
+    <parent link="${prefix}surface" />
+    <child link="${prefix}structure_part_down" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
   </joint>
 
   <xacro:if value="${robot == 'mobipick-hb'}">
-    <xacro:structure prefix="structure_" height="0.058" variant="v1" />
+    <xacro:structure prefix="${prefix}structure_" height="0.058" variant="v1" />
   </xacro:if>
   <xacro:if value="${robot == 'mobipick-os'}">
-    <xacro:structure prefix="structure_" height="0.058" variant="v2" />
+    <xacro:structure prefix="${prefix}structure_" height="0.058" variant="v2" />
   </xacro:if>
 
   <!-- ############### UR5 ARM ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/ur5/ur5.urdf.xacro" />
 
-  <joint name="struct_ur5_joint" type="fixed">
-    <parent link="structure_pedestal_surface" />
-    <child link = "ur5_base_link" />
+  <joint name="${prefix}struct_ur5_joint" type="fixed">
+      <parent link="${prefix}structure_pedestal_surface" />
+      <child link="${prefix}ur5_base_link" />
     <origin xyz="0.0 0.0 0.0025" rpy="0.0 0.0 0.0" />
   </joint>
 
-  <xacro:ur5_robot prefix="ur5_" joint_limited="true"/>
+  <xacro:ur5_robot prefix="${prefix}ur5_" joint_limited="true"/>
 
   <!-- ############## FT SENSOR ############### -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_ft_300/robotiq_ft_300.urdf.xacro" />
 
-  <xacro:robotiq_ft_300 parent="ur5_tool0" prefix="" >
+  <xacro:robotiq_ft_300 parent="${prefix}ur5_tool0" prefix="${prefix}" >
       <pose xyz="0 0 0" rpy="0 0 0" />
       <!-- <pose xyz="0 0 0.009" rpy="0 0 0" /> -->
   </xacro:robotiq_ft_300>
@@ -54,13 +63,13 @@
   <xacro:property name="coupling_inner_length" value="0.008" />
   <xacro:property name="coupling_mass" value="0.100" />
 
-  <joint name="ft300_coupling_joint" type="fixed">
+  <joint name="${prefix}ft300_coupling_joint" type="fixed">
     <origin xyz="0 0 ${coupling_inner_length / 2}" rpy="0 0 ${-pi/2}" />
-    <parent link="fts_toolside" />
-    <child link="gripper_coupling_link" />
+    <parent link="${prefix}fts_toolside" />
+    <child link="${prefix}gripper_coupling_link" />
   </joint>
 
-  <link name="gripper_coupling_link">
+  <link name="${prefix}gripper_coupling_link">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -79,40 +88,41 @@
       <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
     </xacro:cylinder_inertial>
   </link>
-  <gazebo reference="gripper_coupling_link">
+  <gazebo reference="${prefix}gripper_coupling_link">
     <material>Gazebo/FlatBlack</material>
   </gazebo>
 
-  <joint name="coupling_2f140_joint" type="fixed">
+  <joint name="${prefix}coupling_2f140_joint" type="fixed">
     <origin xyz="0 0 ${coupling_inner_length / 2}" rpy="0 0 0" />
-    <parent link="gripper_coupling_link" />
-    <child link="gripper_robotiq_arg2f_base_link" />
+    <parent link="${prefix}gripper_coupling_link" />
+    <child link="${prefix}gripper_robotiq_arg2f_base_link" />
   </joint>
 
-  <xacro:robotiq_arg2f_140 prefix="gripper_"/>
+  <xacro:robotiq_arg2f_140 prefix="${prefix}gripper_"/>
 
   <!-- ############### SENSOR MOUNT + 3D CAM  ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/sensors/gripper_cam.urdf.xacro" />
 
-  <joint name="sensor_mount_joint" type="fixed">
+  <joint name="${prefix}sensor_mount_joint" type="fixed">
     <origin xyz="0.0 0.0 -0.005" rpy="0.0 ${-pi/2} 0.0" />
-    <parent link="fts_toolside" />
-    <child link="sensor_mount_link" />
+    <parent link="${prefix}fts_toolside" />
+    <child link="${prefix}sensor_mount_link" />
   </joint>
 
-  <gripper_cam />
+  <gripper_cam prefix="${prefix}" />
 
   <!-- ############### DUAL XTION MOUNT + XTIONS ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/sensors/dual_xtions.urdf.xacro" />
 
-  <joint name="dual_xtion_mount_joint" type="fixed">
+  <joint name="${prefix}dual_xtion_mount_joint" type="fixed">
     <origin xyz="0.37 0.0 -0.02" rpy="0 0 0" />
-    <parent link="structure_pedestal" />
-    <child link="dual_xtion_mount_link" />
+    <parent link="${prefix}structure_pedestal" />
+    <child link="${prefix}dual_xtion_mount_link" />
   </joint>
 
-  <dual_xtions />
+  <dual_xtions prefix="${prefix}" />
 
   <!-- ################ GAZEBO ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/mobipick/mobipick.gazebo.xacro" />
+  <xacro:mobipick_gazebo prefix="${prefix}" robot_namespace="" />
 </robot>

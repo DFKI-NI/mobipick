@@ -1,6 +1,11 @@
 <launch>
 
-  <include file="$(find mobipick_moveit_config)/launch/planning_context.launch" />
+  <!-- A prefix for all joints and links of the robot -->
+  <arg name="prefix" default="" />
+
+  <include file="$(find mobipick_moveit_config)/launch/planning_context.launch">
+    <arg name="prefix" value="$(arg prefix)" />
+  </include>
 
   <!-- GDB Debug Option -->
   <arg name="debug" default="false" />
@@ -44,7 +49,8 @@
 
   <!-- Planning Functionality -->
   <include ns="move_group" file="$(find mobipick_moveit_config)/launch/planning_pipeline.launch.xml">
-    <arg name="pipeline" value="ompl" />
+      <arg name="pipeline" value="ompl" />
+      <arg name="prefix" value="$(arg prefix)/" />
   </include>
 
   <!-- Trajectory Execution Functionality -->
@@ -52,6 +58,7 @@
     <arg name="moveit_manage_controllers" value="true" />
     <arg name="moveit_controller_manager" value="mobipick" unless="$(arg fake_execution)"/>
     <arg name="moveit_controller_manager" value="fake" if="$(arg fake_execution)"/>
+    <arg name="prefix" value="$(arg prefix)/" />
   </include>
 
   <!-- Sensors Functionality -->
@@ -71,7 +78,7 @@
     <param name="capabilities" value="$(arg capabilities)"/>
     <param name="disable_capabilities" value="$(arg disable_capabilities)"/>
 
-    <param name="arm_prefix" value="ur5_" />   <!-- needed until https://github.com/ros-industrial/universal_robot/pull/334 is merged -->
+    <param name="arm_prefix" value="$(arg prefix)/ur5_" />   <!-- needed until https://github.com/ros-industrial/universal_robot/pull/334 is merged -->
 
 
     <!-- Publish the planning scene of the physical robot so that rviz plugin can know actual robot -->

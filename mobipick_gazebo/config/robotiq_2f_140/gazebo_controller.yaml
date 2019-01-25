@@ -6,7 +6,7 @@
 gazebo_ros_control:
   pid_gains:
     # these gains are used by the gazebo_ros_control plugin
-    gripper_finger_joint:
+    $(arg prefix)gripper_finger_joint:
       p: 20.0
       i: 0.1
       d: 0.0
