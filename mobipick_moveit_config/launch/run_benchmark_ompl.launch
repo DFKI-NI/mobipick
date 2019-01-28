@@ -3,6 +3,9 @@
   <!-- This argument must specify the list of .cfg files to process for benchmarking -->
   <arg name="cfg" />
 
+  <!-- prefix for joints, links, frames in the config -->
+  <arg name="prefix" default="" />
+
   <!-- Load URDF -->
   <include file="$(find mobipick_moveit_config)/launch/planning_context.launch">
     <arg name="load_robot_description" value="true"/>
@@ -17,7 +20,7 @@
   <node name="$(anon moveit_benchmark)" pkg="moveit_ros_benchmarks" type="moveit_run_benchmark" args="$(arg cfg) --benchmark-planners" respawn="false" output="screen">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml"/>
     <param name="arm_prefix" value="ur5_" />   <!-- needed until https://github.com/ros-industrial/universal_robot/pull/334 is merged -->
-    <rosparam command="load" file="$(find mobipick_moveit_config)/config/ompl_planning.yaml"/>
+    <rosparam command="load" file="$(find mobipick_moveit_config)/config/ompl_planning.yaml" subst_value="true" />
   </node>
 
 </launch>

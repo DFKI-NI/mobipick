@@ -9,7 +9,8 @@
   <arg name="tf_prefix" default="" doc="tf_prefix to be used by gazebo plugins and in the robots urdf etc." />
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
-  <arg name="prefix" value="$(arg tf_prefix)/" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
+  <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
+  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
 
   <!-- Load URDF -->
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix)" />

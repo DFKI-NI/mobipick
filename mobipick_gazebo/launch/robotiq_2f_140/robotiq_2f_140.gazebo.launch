@@ -4,6 +4,8 @@
   <arg name="gui" default="True" />
   <arg name="gripper_ns" default="gripper" />
 
+  <arg name="prefix" default="" /> <!-- prefix for joints, links, frames in the config files -->
+
 <!-- Load gazebo controller configurations from YAML file to parameter server -->
 <!-- has to be outside mir_100 namespace until https://github.com/ros-simulation/gazebo_ros_pkgs/pull/637 is merged -->
 <!-- Note: You MUST load these PID parameters for all joints that are using
@@ -12,13 +14,13 @@
      to lose contact with the ground, so the robot won't be able to properly
      navigate. See
      https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
-<rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" />
+<rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" subst_value="true" />
 
 <group ns="$(arg gripper_ns)">
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
-  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" subst_value="true" />
 
   <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/spawn_robotiq_2f_140.launch">
         <arg name="namespace" value="$(arg gripper_ns)" /> 
