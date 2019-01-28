@@ -207,7 +207,11 @@
           <pointCloudTopicName>depth_registered/points</pointCloudTopicName>
           <cameraInfoTopicName>rgb/camera_info</cameraInfoTopicName>
           <depthImageCameraInfoTopicName>depth_registered/camera_info</depthImageCameraInfoTopicName>
-          <frameName>${prefix}${camera_name}_depth_optical_frame</frameName>
+          <!-- since it is not possible to prevent the plugin from using a tf_prefix even if none is set,
+               lets leave out the prefix here so we can set it as a tf_prefix.
+               The plugin uses robotNamespace if no tf_prefix is set. Trying to set the tf_prefix to "/"
+               leads to tf2 errors, since frame ids must not start with "/". -->
+          <frameName>${camera_name}_depth_optical_frame</frameName>
           <distortion_k1>0.0</distortion_k1>
           <distortion_k2>0.0</distortion_k2>
           <distortion_k3>0.0</distortion_k3>
@@ -290,7 +294,8 @@
           <pointCloudTopicName>points</pointCloudTopicName>
           <cameraInfoTopicName>camera_info</cameraInfoTopicName>
           <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
-          <frameName>${prefix}${camera_name}_optical_frame</frameName>
+          <!-- no prefix, see above -->
+          <frameName>${camera_name}_optical_frame</frameName>
           <distortion_k1>0.0</distortion_k1>
           <distortion_k2>0.0</distortion_k2>
           <distortion_k3>0.0</distortion_k3>
