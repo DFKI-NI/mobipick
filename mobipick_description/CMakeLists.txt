@@ -29,7 +29,6 @@ install(DIRECTORY
 #############
 
 roslaunch_add_file_check(launch/mobipick)
-roslaunch_add_file_check(launch/robotiq_2f_140)
 roslaunch_add_file_check(launch/robotiq_ft_300)
 roslaunch_add_file_check(launch/structure)
 roslaunch_add_file_check(launch/ur5)
