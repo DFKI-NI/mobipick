@@ -15,7 +15,9 @@
   <arg name="use_controller_manager" default="false" />
   <param name="use_controller_manager" value="$(arg use_controller_manager)" />
 
+  <!-- prefix for the joints specified in the controllers.yaml -->
+  <arg name="prefix" default="" />
   <!-- load controller_list and controller_manager_ns -->
-  <rosparam file="$(find mobipick_moveit_config)/config/controllers.yaml"/>
+  <rosparam file="$(find mobipick_moveit_config)/config/controllers.yaml" subst_value="true" />
 
 </launch>

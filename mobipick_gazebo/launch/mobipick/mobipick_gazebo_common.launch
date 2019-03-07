@@ -6,8 +6,14 @@
   <arg name="robot_y"   default="0.0" />
   <arg name="robot_yaw" default="0.0" />
 
+  <arg name="tf_prefix" default="" doc="tf_prefix to be used by gazebo plugins and in the robots urdf etc." />
+  <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
+
+  <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
+  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
+
   <!-- Load URDF -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix)" />
 
   <!-- Load gazebo controller configurations -->
   <!-- Note: You MUST load these PID parameters for all joints that are using
@@ -16,20 +22,33 @@
        to lose contact with the ground, so the robot won't be able to properly
        navigate. See
        https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
-  <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" />
+  <!-- Note: Must be put into the root namespace, see: https://github.com/ros-simulation/gazebo_ros_pkgs/pull/637 -->
+  <rosparam ns="/" file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" subst_value="true" />
+  <!-- Note: mimic joints use a different plugin and expect the parameters in the robot namespace -->
+  <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_mimic_joint.yaml" command="load" subst_value="true" />
 
   <!-- Spawn the robot into Gazebo -->
   <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
-  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model mobipick
-    -J ur5_shoulder_pan_joint 0.00 -J ur5_shoulder_lift_joint -2.10 -J ur5_elbow_joint 2.43 -J ur5_wrist_1_joint -2.05 -J ur5_wrist_2_joint -1.57 -J ur5_wrist_3_joint 3.14
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg robot_name)
+    -J $(arg prefix)ur5_shoulder_pan_joint 0.00
+    -J $(arg prefix)ur5_shoulder_lift_joint -2.10
+    -J $(arg prefix)ur5_elbow_joint 2.43
+    -J $(arg prefix)ur5_wrist_1_joint -2.05
+    -J $(arg prefix)ur5_wrist_2_joint -1.57
+    -J $(arg prefix)ur5_wrist_3_joint 3.14
     -x $(arg robot_x) -y $(arg robot_y) -Y $(arg robot_yaw) " />
 
   <!-- Load ros_control controller configurations -->
-  <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
-  <rosparam file="$(find mir_description)/config/diffdrive_controller.yaml" command="load" />
-  <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
-  <rosparam file="$(find mobipick_description)/config/ur5/arm_velocity_controller.yaml" command="load" />
-  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" subst_value="true" />
+  <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" subst_value="true" />
+  <rosparam file="$(find mobipick_description)/config/ur5/arm_velocity_controller.yaml" command="load" subst_value="true" />
+  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" subst_value="true" />
+  <rosparam file="$(find mir_description)/config/diffdrive_controller.yaml" command="load" subst_value="true" />
+  <!-- The diffdrive-controller needs some adjustments to output the odometry with the tf_prefix -->
+  <group if="$(eval tf_prefix != '')">
+      <param name="mobile_base_controller/base_frame_id" value="$(arg tf_prefix)/base_footprint" />
+      <param name="mobile_base_controller/odom_frame_id" value="$(arg tf_prefix)/odom_comb" />
+  </group>
 
   <!-- Start the controllers -->
   <node name="controller_spawner" pkg="controller_manager" type="controller_manager" output="screen"
@@ -48,7 +67,9 @@
   <node pkg="rostopic" type="rostopic" name="fake_joint_calibration" args="pub /calibrated std_msgs/Bool true"/>
 
   <!-- EKF -->
-  <include file="$(find mir_gazebo)/launch/includes/ekf.launch.xml"/>
+  <include file="$(find mir_gazebo)/launch/includes/ekf.launch.xml">
+      <arg name="tf_prefix" value="$(arg prefix)" />
+  </include>
 
   <!-- Robot state publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />

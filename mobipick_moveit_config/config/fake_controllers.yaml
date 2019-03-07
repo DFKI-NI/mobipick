@@ -1,15 +1,15 @@
 controller_list:
   - name: fake_arm_controller
     joints:
-      - ur5_shoulder_pan_joint
-      - ur5_shoulder_lift_joint
-      - ur5_elbow_joint
-      - ur5_wrist_1_joint
-      - ur5_wrist_2_joint
-      - ur5_wrist_3_joint
+      - $(arg prefix)ur5_shoulder_pan_joint
+      - $(arg prefix)ur5_shoulder_lift_joint
+      - $(arg prefix)ur5_elbow_joint
+      - $(arg prefix)ur5_wrist_1_joint
+      - $(arg prefix)ur5_wrist_2_joint
+      - $(arg prefix)ur5_wrist_3_joint
   - name: fake_gripper_controller
     joints:
-      - gripper_finger_joint
+      - $(arg prefix)gripper_finger_joint
 
 initial:
   - group: arm

@@ -5,20 +5,24 @@
   <!-- The name of the parameter under which the URDF is loaded -->
   <arg name="robot_description" default="robot_description"/>
 
+  <!-- A prefix for all joints and links in the robot -->
+  <arg name="prefix" default="" />
+
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro --inorder '$(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro'"/>
+  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro --inorder '$(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro' tf_prefix:=$(arg prefix)"/>
 
   <!-- The semantic description that corresponds to the URDF -->
-  <param name="$(arg robot_description)_semantic" textfile="$(find mobipick_moveit_config)/config/mobipick.srdf" />
+  <param name="$(arg robot_description)_semantic" 
+         command="xacro --inorder $(find mobipick_moveit_config)/config/mobipick.srdf.xacro tf_prefix:=$(arg prefix)" />
 
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
-    <rosparam command="load" file="$(find mobipick_moveit_config)/config/joint_limits.yaml"/>
+    <rosparam command="load" file="$(find mobipick_moveit_config)/config/joint_limits.yaml" subst_value="true" />
   </group>
 
   <!-- Load padding; this is using the private node handle of move_group! :( -->
   <group ns="move_group/$(arg robot_description)_planning">
-    <rosparam command="load" file="$(find mobipick_moveit_config)/config/paddings.yaml"/>
+    <rosparam command="load" file="$(find mobipick_moveit_config)/config/paddings.yaml" subst_value="true" />
   </group>
 
   <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->

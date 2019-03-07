@@ -1,7 +1,7 @@
 # Position Controllers ---------------------------------------
 gripper_controller:
   type: position_controllers/GripperActionController
-  joint: gripper_finger_joint
+  joint: $(arg prefix)gripper_finger_joint
   goal_tolerance: 0.2              # default: 0.01
   max_effort: 1.0                  # default: 0.0
   stall_velocity_threshold: 0.05   # default: 0.001

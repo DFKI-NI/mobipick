@@ -7,43 +7,43 @@
   <!-- distance between center of camera and camera_link -->
   <xacro:property name="xtion_cam_py" value="0.069"/>
 
-  <xacro:macro name="dual_xtions" params="">
-    <link name="dual_xtion_mount_link" />
+  <xacro:macro name="dual_xtions" params="prefix">
+    <link name="${prefix}dual_xtion_mount_link" />
 
-    <joint name="dual_xtion_left_mount" type="fixed">
-      <parent link="dual_xtion_mount_link" />
-      <child link="dual_xtion_left_mount_link" />
+    <joint name="${prefix}dual_xtion_left_mount" type="fixed">
+      <parent link="${prefix}dual_xtion_mount_link" />
+      <child link="${prefix}dual_xtion_left_mount_link" />
       <origin xyz="0 0.06 0" rpy="0.0 1.571 0.0" />
     </joint>
-    <dual_xtion_mount side="left" />
+    <dual_xtion_mount side="left" prefix="${prefix}" />
 
-    <joint name="dual_xtion_right_mount" type="fixed">
-      <parent link="dual_xtion_mount_link" />
-      <child link="dual_xtion_right_mount_link" />
+    <joint name="${prefix}dual_xtion_right_mount" type="fixed">
+      <parent link="${prefix}dual_xtion_mount_link" />
+      <child link="${prefix}dual_xtion_right_mount_link" />
       <origin xyz="0 -0.06 0" rpy="0.0 -1.571 3.142" />
     </joint>
-    <dual_xtion_mount side="right" />
+    <dual_xtion_mount side="right" prefix="${prefix}" />
 
-    <joint name="dual_xtion_bottom_joint" type="fixed">
-      <parent link="dual_xtion_mount_link" />
-      <child link="dual_xtion_bottom_link" />
+    <joint name="${prefix}dual_xtion_bottom_joint" type="fixed">
+      <parent link="${prefix}dual_xtion_mount_link" />
+      <child link="${prefix}dual_xtion_bottom_link" />
       <origin xyz="0.045 ${xtion_cam_py} -0.032" rpy="0 0.262 0" />
     </joint>
 
-    <sensor_xtion camera_name="dual_xtion_bottom" />
+    <sensor_xtion camera_name="dual_xtion_bottom" prefix="${prefix}" />
 
-    <joint name="dual_xtion_top_joint" type="fixed">
-      <parent link="dual_xtion_mount_link" />
-      <child link="dual_xtion_top_link" />
+    <joint name="${prefix}dual_xtion_top_joint" type="fixed">
+      <parent link="${prefix}dual_xtion_mount_link" />
+      <child link="${prefix}dual_xtion_top_link" />
       <origin xyz="0.045 ${xtion_cam_py} 0.032" rpy="0 -0.262 0" />
     </joint>
 
-    <sensor_xtion camera_name="dual_xtion_top" />
+    <sensor_xtion camera_name="dual_xtion_top" prefix="${prefix}" />
 
   </xacro:macro>
 
-  <xacro:macro name="dual_xtion_mount" params="side">
-    <link name="dual_xtion_${side}_mount_link">
+  <xacro:macro name="dual_xtion_mount" params="side prefix">
+    <link name="${prefix}dual_xtion_${side}_mount_link">
       <origin xyz="0 0 0" rpy="0 0 0" />
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
@@ -69,7 +69,7 @@
                  izz="${dual_xtion_mount_mass * 0.0008327177}" />
       </inertial>
     </link>
-    <gazebo reference="dual_xtion_${side}_mount_link">
+    <gazebo reference="${prefix}dual_xtion_${side}_mount_link">
       <material>Gazebo/FlatBlack</material>
     </gazebo>
   </xacro:macro>
@@ -77,8 +77,8 @@
   <!-- ##################################################################### -->
   <!-- ######################## ASUS Xtion Pro Live ######################## -->
   <!-- ##################################################################### -->
-  <xacro:macro name="sensor_xtion" params="camera_name">
-    <link name="${camera_name}_link">
+  <xacro:macro name="sensor_xtion" params="camera_name prefix">
+    <link name="${prefix}${camera_name}_link">
       <visual>
         <origin xyz="0 0 0" />
         <geometry>
@@ -96,38 +96,38 @@
         <origin xyz="${-0.036 / 2} ${-xtion_cam_py} 0.0" />
       </xacro:box_inertial>
     </link>
-    <gazebo reference="${camera_name}_link">
+    <gazebo reference="${prefix}${camera_name}_link">
       <material>Gazebo/FlatBlack</material>
     </gazebo>
 
-    <joint name="${camera_name}_rgb_joint" type="fixed">
+    <joint name="${prefix}${camera_name}_rgb_joint" type="fixed">
       <origin xyz="0 -0.045 0" rpy="0 0 0" />
-      <parent link="${camera_name}_link"/>
-      <child link="${camera_name}_rgb_frame" />
+      <parent link="${prefix}${camera_name}_link"/>
+      <child link="${prefix}${camera_name}_rgb_frame" />
     </joint>
-    <link name="${camera_name}_rgb_frame"/>
+    <link name="${prefix}${camera_name}_rgb_frame"/>
 
-    <joint name="${camera_name}_rgb_optical_joint" type="fixed">
+    <joint name="${prefix}${camera_name}_rgb_optical_joint" type="fixed">
       <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
-      <parent link="${camera_name}_rgb_frame" />
-      <child link="${camera_name}_rgb_optical_frame" />
+      <parent link="${prefix}${camera_name}_rgb_frame" />
+      <child link="${prefix}${camera_name}_rgb_optical_frame" />
     </joint>
-    <link name="${camera_name}_rgb_optical_frame"/>
+    <link name="${prefix}${camera_name}_rgb_optical_frame"/>
 
-    <joint name="${camera_name}_depth_joint" type="fixed">
+    <joint name="${prefix}${camera_name}_depth_joint" type="fixed">
       <origin xyz="0 -0.02 0" rpy="0 0 0" />
-      <parent link="${camera_name}_link"/>
-      <child link="${camera_name}_depth_frame" />
+      <parent link="${prefix}${camera_name}_link"/>
+      <child link="${prefix}${camera_name}_depth_frame" />
     </joint>
-    <link name="${camera_name}_depth_frame"/>
+    <link name="${prefix}${camera_name}_depth_frame"/>
 
-    <joint name="${camera_name}_depth_optical_joint" type="fixed">
+    <joint name="${prefix}${camera_name}_depth_optical_joint" type="fixed">
       <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}" />
-      <parent link="${camera_name}_depth_frame" />
-      <child link="${camera_name}_depth_optical_frame" />
+      <parent link="${prefix}${camera_name}_depth_frame" />
+      <child link="${prefix}${camera_name}_depth_optical_frame" />
     </joint>
-    <link name="${camera_name}_depth_optical_frame"/>
+    <link name="${prefix}${camera_name}_depth_optical_frame"/>
 
-    <sim_3dsensor/>  <!-- NOTE: sim_3dsensor macro from gripper_cam is used here -->
+    <sim_3dsensor prefix="${prefix}" />  <!-- NOTE: sim_3dsensor macro from gripper_cam is used here -->
   </xacro:macro>
 </robot>

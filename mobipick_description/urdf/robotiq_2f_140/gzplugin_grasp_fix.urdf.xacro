@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <xacro:macro name="gzplugin_grasp_fix">
+  <xacro:macro name="gzplugin_grasp_fix" params="prefix">
     <gazebo>
       <plugin name="gazebo_grasp_fix" filename="libgazebo_grasp_fix.so">
         <arm>
           <arm_name>arm</arm_name>
-          <palm_link>ur5_wrist_3_link</palm_link>
+          <palm_link>${prefix}ur5_wrist_3_link</palm_link>
 
           <!-- NOTE: the commented-out links have fixed joints with other
                links, so they are not present in the SDF any more. -->
-          <gripper_link>gripper_left_outer_knuckle          </gripper_link>
+          <gripper_link>${prefix}gripper_left_outer_knuckle          </gripper_link>
           <!-- <gripper_link>gripper_left_outer_finger           </gripper_link> -->
-          <gripper_link>gripper_left_inner_finger           </gripper_link>
+          <gripper_link>${prefix}gripper_left_inner_finger           </gripper_link>
           <!-- <gripper_link>gripper_left_robotiq_fingertip_65mm </gripper_link> -->
-          <gripper_link>gripper_left_inner_knuckle          </gripper_link>
-          <gripper_link>gripper_right_inner_knuckle         </gripper_link>
-          <gripper_link>gripper_right_outer_knuckle         </gripper_link>
+          <gripper_link>${prefix}gripper_left_inner_knuckle          </gripper_link>
+          <gripper_link>${prefix}gripper_right_inner_knuckle         </gripper_link>
+          <gripper_link>${prefix}gripper_right_outer_knuckle         </gripper_link>
           <!-- <gripper_link>gripper_right_outer_finger          </gripper_link> -->
-          <gripper_link>gripper_right_inner_finger          </gripper_link>
+          <gripper_link>${prefix}gripper_right_inner_finger          </gripper_link>
           <!-- <gripper_link>gripper_right_robotiq_fingertip_65mm</gripper_link> -->
         </arm>
         <forces_angle_tolerance>100</forces_angle_tolerance>

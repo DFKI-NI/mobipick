@@ -5,12 +5,14 @@
   <arg name="gripper_ns" default="gripper" />
   <arg name="paused" default="true" />
 
+  <arg name="prefix" default="" /> <!-- prefix for joints, links, frames in the config files -->
+
 <!-- <include file="$(find ur_gazebo)/launch/ur5_joint_limited.launch" />  -->
 
 <group ns="$(arg gripper_ns)">
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
-  <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" />
+  <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" subst_value="true" />
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
 
 
