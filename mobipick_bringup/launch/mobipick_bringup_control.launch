@@ -1,0 +1,47 @@
+<!--
+    Launches drivers for the UR5, force torque sensor and the gripper.
+    Use this on the mobipick-os-control pc, as only this has a connection to
+    the UR5-pc.
+-->
+<launch>
+    <!-- launch the driver for the UR5. 
+         This is mostly copied from ur_modern_driver/launch/ur5_ros_control.launch,
+         but adjusted for our mobipick:
+         Nodes that are already started on the sensor pc (e.g. robot_state_publisher)
+         are left out, as well as loading a robot description.
+         Also, the "mobipick" and "ur5_" prefixes have been added.
+    -->
+    <arg name="robot_ip" default="192.168.100.64" />
+    <arg name="min_payload" default="0.0" />
+    <arg name="max_payload" default="3.0" />
+    <arg name="max_velocity" default="10" /> <!-- [rad/s] -->
+    <arg name="shutdown_on_disconnect" default="true" />
+
+    <arg name="prefix" default="mobipick/" />
+    <arg name="base_frame" default="$(arg prefix)base" />
+    <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
+
+    <group ns="$(arg prefix)">
+        <!-- Load hardware interface -->
+        <node name="ur_hardware_interface" pkg="ur_modern_driver" type="ur_driver" output="log">
+            <param name="robot_ip_address" type="str" value="$(arg robot_ip)" />
+            <param name="min_payload" type="double" value="$(arg min_payload)" />
+            <param name="max_payload" type="double" value="$(arg max_payload)" />
+            <param name="max_velocity" type="double" value="$(arg max_velocity)" />
+            <param name="use_ros_control" type="bool" value="True" />
+            <param name="servoj_gain" type="double" value="750" />
+            <param name="prefix" value="$(arg prefix)" />
+            <param name="base_frame" type="str" value="$(arg base_frame)" />
+            <param name="tool_frame" type="str" value="$(arg tool_frame)" />
+            <param name="shutdown_on_disconnect" type="bool" value="$(arg shutdown_on_disconnect)" />
+        </node>
+
+        <!-- TODO substvalue, prefix -->
+        <rosparam command="load" file="$(find ur_modern_driver)/config/ur5_controllers.yaml" />
+
+        <!-- spawn controllers -->
+        <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller force_torque_sensor_controller pos_based_pos_traj_controller" />
+        <node name="ros_control_controller_manager" pkg="controller_manager" type="controller_manager" respawn="false" output="screen" args="load vel_based_pos_traj_controller" />
+
+    </group>
+</launch>
