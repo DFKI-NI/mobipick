@@ -17,11 +17,12 @@
     <arg name="max_velocity" default="10" /> <!-- [rad/s] -->
     <arg name="shutdown_on_disconnect" default="true" />
 
-    <arg name="prefix" default="mobipick/" />
+    <arg name="ns" default="mobipick" />
+    <arg name="prefix" default="$(arg ns)/ur5_" />
     <arg name="base_frame" default="$(arg prefix)base" />
     <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
 
-    <group ns="$(arg prefix)">
+    <group ns="$(arg ns)">
         <!-- Load hardware interface -->
         <node name="ur_hardware_interface" pkg="ur_modern_driver" type="ur_driver" output="log">
             <param name="robot_ip_address" type="str" value="$(arg robot_ip)" />
@@ -37,7 +38,7 @@
         </node>
 
         <!-- TODO substvalue, prefix -->
-        <rosparam command="load" file="$(find ur_modern_driver)/config/ur5_controllers.yaml" />
+        <rosparam command="load" file="$(find mobipick_bringup)/config/ur5_controllers.yaml" subst_value="True" />
 
         <!-- spawn controllers -->
         <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="joint_state_controller force_torque_sensor_controller pos_based_pos_traj_controller" />
