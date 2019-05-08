@@ -8,7 +8,7 @@ This package contains launch- and config-files to start the most important syste
 - [ ] **TODO**: The cameras mounted at the grippers are running and integrated into moveit
 - [ ] **TODO**: The pico flexx cameras mounted at the MIR are running and integrated into move base and moveit
 
-This package does not provide any other demo capabilities. For high level planning, environment representation etc, take a look at `pbr_mobipick_demo` from which you can run the `mobipick_ico_real.launch` _instead_ of `mobipick_bringup.launch`, and `autonomy.launch` to run environment representation, task planning and object recognition.
+This package does not provide any other demo capabilities. For high level planning, environment representation etc, take a look at `pbr_mobipick_demo` from which you can run the `mobipick_ico_real.launch` _instead_ of `mobipick_bringup_both.launch`, and `autonomy.launch` to run environment representation, task planning and object recognition.
 
 ## Usage
 
@@ -21,6 +21,10 @@ The robot version can be switched between `hb` (Bremen) ans `os` (Osnabrück) us
 > _Note: Be aware that the default setting for_ **robot_version** _is_ **hb** _. The prefixes defaults are_ **mobipick** _._
 
 **mobipick_bringup_control.launch** needs to be started on the `mobipick-os-control` pc. It creates the connection to the UR5, the robotiq gripper and force torque sensor. Both the grippers and the force torque sensors serial cables are led into the UR control box, where their are connected to the power supply, but their data lines are converted to USB there and must be connected to the `mobipick-os-control` pc. Make sure that the matching of device to usb2serial-converter is not messed up, as the udev-rules on the control pc detect the converters, not the devices. Else you might end up addressing the gripper as `/dev/ft_sensor` instead of `/dev/gripper`, and vice versa.
+
+**mobipick_bringup_both.launch** wraps both steps above into one single launchfile. Start this from the mobipick-os-sensor pc and it will automatically run mobipick_bringup_control.launch on the mobipick-os-control pc.
+
+> _Note: Since only the os-version of the mobipick uses the mobipick\_bringup_control.launch script (the hb-version runs rock for the control part), the mobipick\_bringup\_both.launch script sets the_ **robot_version** _to_ **os** _._
 
 
 
