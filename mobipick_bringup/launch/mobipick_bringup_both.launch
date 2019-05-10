@@ -1,0 +1,30 @@
+<launch>
+    <!-- This launchfile is supposed to be run on mobipick-os-sensor.
+         It launches mobipick_bringup.launch locally,
+         and         mobipick_bringup_control.launch on mobipick-os-control. -->
+
+    
+    <!-- arguments are simply passed down to the other include files -->
+    <!-- Note: Not all arguments have been added here. For more see the included files -->
+    <arg name="namespace" default="mobipick" /> <!-- node namespace -->
+
+    <!-- locally (mobipick-os-sensor) -->
+    <group>
+        <arg name="tf_prefix" default="mobipick" /> <!-- tf namespace (not a rosparam!) -->
+        <arg name="robot_version" default="os" /> <!-- hb or os, default to os as only the os mobipick runs ros on both sensor- and control-pc. -->
+        <arg name="mir_hostname" default="192.168.12.20" />
+        <include file="$(find mobipick_bringup)/launch/mobipick_bringup.launch"
+                 pass_all_args="true" />
+    </group>
+
+    <!-- from now on: everything remotely -->
+    <machine name="control" address="mobipick-os-control" user="robot" default="true" 
+      env-loader="/home/robot/ros/devel/env.sh" />
+
+    <!-- remotely (mobipick-os-control) -->
+    <group>
+        <arg name="robot_ip" default="192.168.100.64" /> <!-- UR5 -->
+        <include file="$(find mobipick_bringup)/launch/mobipick_bringup_control.launch"
+                 pass_all_args="true" />
+    </group>
+</launch>
