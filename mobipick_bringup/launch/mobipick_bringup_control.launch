@@ -63,8 +63,7 @@
         </include>
         
         <!-- activate the gripper -->
-        <node pkg="rostopic" type="rostopic" name="activate_gripper" 
-              args="pub --once gripper_hw/output robotiq_2f_gripper_control/Robotiq2FGripper_robot_output '{rACT: 1, rGTO: 1, rATR: 0, rPR: 0, rSP: 255, rFR: 150}'" />
+        <node name="gripper_initialization" pkg="mobipick_bringup" type="initialize_gripper.sh" />
     </group>
 
 
