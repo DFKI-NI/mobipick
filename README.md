@@ -68,6 +68,8 @@ source ~/catkin_ws/devel/setup.bash
 Quick start
 -----------
 
+The following examples describe how to use the robot in simulation. For more information on how to use the real mobipick robot have a look at the README.md in `mobipick_bringup`.
+
 ### Pick + Place demo (Gazebo)
 
 ```bash
@@ -211,7 +213,7 @@ Troubleshooting
 
  ```bash
 git clone git@git.hb.dfki.de:mobipick/mobipick.git
-```
+ ```
 
 ##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"
 
