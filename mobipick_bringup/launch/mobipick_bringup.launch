@@ -1,20 +1,29 @@
 <launch>
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
-  <arg name="tf_prefix" default=""         doc="TF prefix to use for all of Mobipick's TF frames"/>
+  <arg name="tf_prefix" default="mobipick" doc="TF prefix to use for all of Mobipick's TF frames"/>
+
+  <arg name="robot_version" default="hb" doc="Can be hb or os, changes some parts in the urdf" />
+
+  <!-- $(arg prefix) is used in most of the config files, whenever subst_value=true -->
+  <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />
+  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
 
   <arg name="mir_hostname" default="192.168.12.20" />
 
   <!-- 16112110432 = mobipick-hb -->
   <!-- 16112210198 = mobipick-os -->
-  <arg name="astra_serial" default="16112210198" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
+  <arg name="astra_serial" default="16112210198" if="$(eval robot_version=='os')" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
+  <arg name="astra_serial" default="16112110432" if="$(eval robot_version=='hb')" />
 
   <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 
   <group ns="$(arg namespace)">
-    <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/>
+    <!-- not needed, use xacro and rosparam with subst_value instead
+    <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/> 
+    -->
 
     <!-- URDF -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix) robot:=mobipick-$(arg robot_version)" />
 
     <!-- Robot state publisher -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
@@ -61,7 +70,9 @@
       <remap from="scan_filtered" to="f_scan_rep117" />
     </node>
 
+    <!-- TODO: If this one is really needed, modify it to accept a prefix for the joint names!
     <node name="fake_mir_joint_publisher" pkg="mir_driver" type="fake_mir_joint_publisher.py" output="screen" />
+    -->
 
     <!-- UR5 joint trajectory server -->
     <node name="arm_joint_trajectory_forwarder" pkg="mobipick_pick_n_place" type="joint_trajectory_forwarder.py" output="screen">
@@ -74,9 +85,10 @@
     </node>
 
     <!-- Astra gripper camera -->
+    <!--
     <include file="$(find astra_launch)/launch/astra.launch">
       <arg name="camera"                value="gripper_astra" />
-      <arg name="depth_registration"    value="false" />  <!-- depth_registration:=true leads to incorrect depth scaling! (objects in point cloud appear smaller than they are) -->
+      <arg name="depth_registration"    value="false" />  
       <arg name="publish_tf"            value="false" />
       <arg name="depth_frame_id"        value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" if="$(eval tf_prefix != '')" />
       <arg name="rgb_frame_id"          value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame"   if="$(eval tf_prefix != '')" />
@@ -86,6 +98,7 @@
       <arg name="ir_processing"         value="$(arg ir_processing)" />
     </include>
     <param name="gripper_astra/driver/data_skip" value="9" />
+    -->
 
 
     <!-- reduced pointcloud to save same wifi bandwidth. -->
@@ -114,9 +127,12 @@
     </node>
 
     <!-- Pico Flexx gripper camera -->
+    <!--
     <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
       <arg name="base_name" value="gripper_pico_flexx" />
       <arg name="max_noise" value="0.015" />
     </include>
+    -->
+
   </group>
 </launch>
