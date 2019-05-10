@@ -8,7 +8,7 @@
   <arg name="prefix_" default="$(arg prefix)/" unless="$(eval prefix == '')" />
 
   <include file="$(find mobipick_moveit_config)/launch/planning_context.launch">
-    <arg name="prefix" value="$(arg prefix)" />
+    <arg name="tf_prefix" value="$(arg prefix)" />
   </include>
 
   <!-- GDB Debug Option -->
