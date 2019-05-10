@@ -17,13 +17,13 @@
     <arg name="max_velocity" default="10" /> <!-- [rad/s] -->
     <arg name="shutdown_on_disconnect" default="true" />
 
-    <arg name="ns" default="mobipick" />
-    <arg name="prefix" default="$(arg ns)/ur5_" />
+    <arg name="namespace" default="mobipick" />
+    <arg name="prefix" default="$(arg namespace)/ur5_" />
     <arg name="base_frame" default="$(arg prefix)base" />
     <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
     
 
-    <group ns="$(arg ns)">
+    <group ns="$(arg namespace)">
         <!-- Load hardware interface -->
         <node name="ur_hardware_interface" pkg="ur_modern_driver" type="ur_driver" output="log">
             <param name="robot_ip_address" type="str" value="$(arg robot_ip)" />
@@ -48,7 +48,7 @@
 
     <!-- launch the driver for the robotiq 2f gripper -->
     <arg name="gripper_device" default="/dev/gripper" />
-    <group ns="$(arg ns)">
+    <group ns="$(arg namespace)">
         <!-- the node that actually talks to the hardware via USB -->
         <node name="gripper_hw" pkg="robotiq_2f_gripper_control" type="Robotiq2FGripperRtuNode.py" args="$(arg gripper_device)">
             <remap from="Robotiq2FGripperRobotInput" to="~/input" />
@@ -68,7 +68,7 @@
 
 
     <!-- launch the driver for the force torque sensor -->
-    <group ns="$(arg ns)">
+    <group ns="$(arg namespace)">
         <node name="ft_sensor" pkg="robotiq_ft_sensor" type="rq_sensor" output="screen">
           <param name="serial_id" value="ft_sensor" />
           <remap from="robotiq_ft_sensor" to="~sensor" />
