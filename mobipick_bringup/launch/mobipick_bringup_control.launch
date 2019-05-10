@@ -21,6 +21,7 @@
     <arg name="prefix" default="$(arg ns)/ur5_" />
     <arg name="base_frame" default="$(arg prefix)base" />
     <arg name="tool_frame" default="$(arg prefix)tool0_controller" />
+    
 
     <group ns="$(arg ns)">
         <!-- Load hardware interface -->
@@ -64,5 +65,17 @@
         <!-- activate the gripper -->
         <node pkg="rostopic" type="rostopic" name="activate_gripper" 
               args="pub --once gripper_hw/output robotiq_2f_gripper_control/Robotiq2FGripper_robot_output '{rACT: 1, rGTO: 1, rATR: 0, rPR: 0, rSP: 255, rFR: 150}'" />
+    </group>
+
+
+    <!-- launch the driver for the force torque sensor -->
+    <group ns="$(arg ns)">
+        <node name="ft_sensor" pkg="robotiq_ft_sensor" type="rq_sensor" output="screen">
+          <param name="serial_id" value="ft_sensor" />
+          <remap from="robotiq_ft_sensor" to="~sensor" />
+          <remap from="robotiq_ft_wrench" to="~wrench" />
+          <remap from="robotiq_ft_sensor_acc" to="~sensor_acc" />
+          <!-- param name="frame_id" value="???" -->
+        </node>
     </group>
 </launch>
