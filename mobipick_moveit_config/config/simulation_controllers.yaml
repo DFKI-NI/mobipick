@@ -1,0 +1,20 @@
+controller_manager_ns: ""
+controller_list:
+  - name: arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - $(arg prefix)ur5_elbow_joint
+      - $(arg prefix)ur5_shoulder_lift_joint
+      - $(arg prefix)ur5_shoulder_pan_joint
+      - $(arg prefix)ur5_wrist_1_joint
+      - $(arg prefix)ur5_wrist_2_joint
+      - $(arg prefix)ur5_wrist_3_joint
+
+  - name: gripper_controller #robotiq_2f_gripper_action_server
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: true
+    joints:
+      - $(arg prefix)gripper_finger_joint

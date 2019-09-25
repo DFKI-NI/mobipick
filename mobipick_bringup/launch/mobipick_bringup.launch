@@ -17,6 +17,8 @@
 
   <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 
+  <arg name="simulation" default="false" doc="Whether a gazebo simulation of the real robot is used."/>
+
   <group ns="$(arg namespace)">
     <!-- not needed, use xacro and rosparam with subst_value instead
     <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/> 
@@ -146,6 +148,7 @@
     <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
         <arg name="prefix" value="$(arg tf_prefix)" />
         <arg name="use_pointcloud" value="false" />
+        <arg name="simulation" value="$(arg simulation)" />
     </include>
   </group>
 </launch>
