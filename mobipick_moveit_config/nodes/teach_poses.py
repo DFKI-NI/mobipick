@@ -4,13 +4,26 @@ import rospy
 import rospkg
 import threading
 import yaml
+
+import actionlib
+import control_msgs.msg
+
 from pbr_msgs.srv import SaveArmPose, SetArmPose
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from std_srvs.srv import Empty, EmptyResponse
 
 class PoseTeacher(object):
     def __init__(self):
         rospy.loginfo("initializing...")
+
+        # create an action client for the gripper
+        self.gripperClient = actionlib.SimpleActionClient("gripper", control_msgs.msg.GripperCommandAction)
+        self.gripperClient.wait_for_server()
+
+        # create services to open and close the gripper
+        self.openGripperServer = rospy.Service("~open_gripper", Empty, self.openGripper)
+        self.closeGripperServer = rospy.Service("~close_gripper", Empty, self.closeGripper)
 
         # get a filename to save the poses to
         rospack = rospkg.RosPack()
@@ -35,6 +48,20 @@ class PoseTeacher(object):
         self.pubJointTrajectory = rospy.Publisher("command", JointTrajectory, queue_size=5)
 
         rospy.loginfo("done.")
+
+    def openGripper(self, request):
+        goal = control_msgs.msg.GripperCommandGoal()
+        goal.command.max_effort = 100.
+        goal.command.position = 0.1
+        self.gripperClient.send_goal_and_wait(goal)
+        return EmptyResponse()
+        
+    def closeGripper(self, request):
+        goal = control_msgs.msg.GripperCommandGoal()
+        goal.command.max_effort = 100.
+        goal.command.position = 0.0
+        self.gripperClient.send_goal_and_wait(goal)
+        return EmptyResponse()
 
     def setLatestJointState(self, jointState):
         with self.jointStateLock:
