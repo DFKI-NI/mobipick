@@ -1,7 +1,7 @@
 mobipick
 ========
 
-[![pipeline status](https://git.hb.dfki.de/mobipick/mobipick/badges/kinetic/pipeline.svg)](https://git.hb.dfki.de/mobipick/mobipick/commits/kinetic)
+[![pipeline status](https://git.ni.dfki.de/mobipick/mobipick/badges/kinetic/pipeline.svg)](https://git.ni.dfki.de/mobipick/mobipick/commits/kinetic)
 
 This repo contains ROS configuration files (URDF description, Gazebo launch
 files, MoveIt config, bringup launch files) for the Mobipick
@@ -28,7 +28,7 @@ Installation
 # create a catkin workspace and clone all required ROS packages
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
-git clone -b kinetic git@git.hb.dfki.de:mobipick/mobipick.git
+git clone -b kinetic git@git.ni.dfki.de:mobipick/mobipick.git
 git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
 git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
 git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
@@ -212,7 +212,7 @@ Troubleshooting
 * Solution:
 
  ```bash
-git clone git@git.hb.dfki.de:mobipick/mobipick.git
+git clone git@git.ni.dfki.de:mobipick/mobipick.git
  ```
 
 ##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"

@@ -13,7 +13,7 @@
   <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
   <license>TODO</license>
 
-  <url>https://git.hb.dfki.de/mobipick/mobipick</url>
+  <url>https://git.ni.dfki.de/mobipick/mobipick</url>
 
   <buildtool_depend>catkin</buildtool_depend>
 
