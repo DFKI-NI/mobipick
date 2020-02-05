@@ -1,12 +1,9 @@
 <?xml version="1.0" ?>
 
 <launch>
-  <arg name="gui" default="True" />
-
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/ur5/ur5_joint_limited_robot.urdf.xacro" />
 
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <param name="use_gui" value="$(arg gui)"/>
+  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
     <rosparam>
       zeros:
         shoulder_pan_joint:   0.00
