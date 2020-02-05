@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro"
        name="mobipick">
 
-  <xacro:arg name="robot" default="mobipick-hb" />      <!-- can be "mobipick-hb" or "mobipick-os" -->
+  <xacro:arg name="robot" default="mobipick-os" />      <!-- can be "mobipick-hb" or "mobipick-os" -->
   <xacro:property name="robot" value="$(arg robot)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
 
   <xacro:arg name="tf_prefix" default="" />
