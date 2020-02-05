@@ -112,15 +112,17 @@
   <gripper_cam prefix="${prefix}" />
 
   <!-- ############### DUAL XTION MOUNT + XTIONS ################ -->
-  <xacro:include filename="$(find mobipick_description)/urdf/sensors/dual_xtions.urdf.xacro" />
+  <xacro:if value="${robot == 'mobipick-hb'}">
+    <xacro:include filename="$(find mobipick_description)/urdf/sensors/dual_xtions.urdf.xacro" />
 
-  <joint name="${prefix}dual_xtion_mount_joint" type="fixed">
-    <origin xyz="0.37 0.0 -0.02" rpy="0 0 0" />
-    <parent link="${prefix}structure_pedestal" />
-    <child link="${prefix}dual_xtion_mount_link" />
-  </joint>
+    <joint name="${prefix}dual_xtion_mount_joint" type="fixed">
+      <origin xyz="0.37 0.0 -0.02" rpy="0 0 0" />
+      <parent link="${prefix}structure_pedestal" />
+      <child link="${prefix}dual_xtion_mount_link" />
+    </joint>
 
-  <dual_xtions prefix="${prefix}" />
+    <dual_xtions prefix="${prefix}" />
+  </xacro:if>
 
   <!-- ################ GAZEBO ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/mobipick/mobipick.gazebo.xacro" />

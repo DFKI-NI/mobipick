@@ -147,10 +147,6 @@
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}bl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}br_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}br_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}dual_xtion_bottom_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}dual_xtion_left_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
@@ -191,10 +187,6 @@
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}bl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}br_caster_rotation_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}br_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}dual_xtion_bottom_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}dual_xtion_left_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Adjacent" />
@@ -219,10 +211,6 @@
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}bl_caster_wheel_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}br_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}br_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}dual_xtion_bottom_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}dual_xtion_left_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
@@ -261,10 +249,6 @@
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}br_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}br_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}dual_xtion_bottom_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}dual_xtion_left_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
@@ -302,10 +286,6 @@
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}br_caster_wheel_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}dual_xtion_bottom_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}dual_xtion_left_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
@@ -342,10 +322,6 @@
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}dual_xtion_bottom_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}dual_xtion_left_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}dual_xtion_top_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
@@ -382,61 +358,6 @@
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}dual_xtion_left_mount_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}dual_xtion_top_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}front_laser_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}left_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}right_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}structure_part_down" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}structure_part_up" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}structure_pedestal" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_bottom_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}dual_xtion_right_mount_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}dual_xtion_top_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}front_laser_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}left_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}right_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}structure_part_down" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}structure_part_up" reason="Default" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}structure_pedestal" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_left_mount_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}dual_xtion_top_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}front_laser_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}left_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}right_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}structure_part_down" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}structure_part_up" reason="Default" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}structure_pedestal" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_right_mount_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}front_laser_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}left_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}right_wheel_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}structure_part_down" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}structure_part_up" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}structure_pedestal" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}dual_xtion_top_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never" />
