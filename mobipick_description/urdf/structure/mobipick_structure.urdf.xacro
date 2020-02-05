@@ -110,14 +110,12 @@
       <origin xyz="0 0 ${0.04 + height}" rpy="0 0 0" />
       <parent link="${prefix}part_down" />
       <child link="${prefix}part_up" />
-      <axis xyz="0 0 1" />
     </joint>
 
     <joint name="${prefix}Tischaufbau_joint" type="fixed">
       <origin xyz="0 0 0.44" rpy="0 0 0" />
       <parent link="${prefix}part_up" />
       <child link="${prefix}pedestal" />
-      <axis xyz="0 0 1" />
     </joint>
 
     <xacro:if value="${variant == 'v1'}">
@@ -131,7 +129,6 @@
       <origin xyz="0 0 ${pedestal_height}" rpy="0 0 0" />
       <parent link="${prefix}pedestal" />
       <child link="${prefix}pedestal_surface" />
-      <axis xyz="0 0 1" />
     </joint>
   </xacro:macro>
 </robot>
