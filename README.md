@@ -104,11 +104,11 @@ roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch object_source:=stat
 roslaunch mobipick_gazebo mobipick_maze_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mir_gazebo fake_localization.launch delta_x:=-10.0 delta_y:=-10.0
+# or alternatively: roslaunch mir_gazebo fake_localization.launch delta_x:=-10.0 delta_y:=-10.0
 rosrun mobipick_gazebo move_arm_to_home
 roslaunch mir_navigation start_planner.launch \
     map_file:=$(rospack find mir_gazebo)/maps/maze.yaml \
-    virtual_walls_map_file:=$(rospack find mir_gazebo)/maps/maze_virtual_walls.yaml \
-    local_planner:=eband
+    virtual_walls_map_file:=$(rospack find mir_gazebo)/maps/maze_virtual_walls.yaml
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
 ```
 
