@@ -2,7 +2,7 @@
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="tf_prefix" default="mobipick" doc="TF prefix to use for all of Mobipick's TF frames"/>
 
-  <arg name="robot_version" default="hb" doc="Can be hb or os, changes some parts in the urdf" />
+  <arg name="robot_version" default="os" doc="Can be hb or os, changes some parts in the urdf" />
 
   <!-- $(arg prefix) is used in most of the config files, whenever subst_value=true -->
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />
@@ -15,6 +15,8 @@
   <arg name="astra_serial" default="16112210198" if="$(eval robot_version=='os')" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
   <arg name="astra_serial" default="16112110432" if="$(eval robot_version=='hb')" />
 
+  <arg name="ur5_kinematics_file" default="$(find mobipick_description)/config/ur5_calibration.yaml" />
+
   <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 
   <arg name="simulation" default="false" doc="Whether a gazebo simulation of the real robot is used."/>
@@ -25,10 +27,10 @@
     -->
 
     <!-- URDF -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix) robot:=mobipick-$(arg robot_version)" />
+    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix) robot:=mobipick-$(arg robot_version) kinematics_config:=$(arg ur5_kinematics_file)" />
 
     <!-- ur5 controller configs -->
-    <rosparam command="load" file="$(find mobipick_bringup)/config/ur5_controllers.yaml" subst_value="True" />
+    <!-- <rosparam command="load" file="$(find mobipick_bringup)/config/ur5_controllers.yaml" subst_value="True" /> -->
 
 
     <!-- Robot state publisher -->
