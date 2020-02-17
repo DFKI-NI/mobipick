@@ -50,6 +50,13 @@
             <arg name="max_gap" value="0.140" /> <!-- meters. we have th 140mm version, default is 85mm -->
             <arg name="gripper_name" value="gripper_hw" /> <!-- connect to hw node -->
         </include>
+
+        <!-- add a node that translates the gripper data into a joint state -->
+        <node name="gripper_joint_state_publisher" pkg="mobipick_bringup" type="gripper_joint_state_publisher.py">
+          <param name="prefix" value="$(arg namespace)/" />
+          <remap from="input" to="gripper_hw/input" />
+          <remap from="joint_states" to="gripper_joint_states" />
+        </node>
         
         <!-- activate the gripper -->
         <node name="gripper_initialization" pkg="mobipick_bringup" type="initialize_gripper.sh" />
