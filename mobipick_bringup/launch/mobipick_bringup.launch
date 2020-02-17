@@ -78,9 +78,9 @@
       <remap from="scan_filtered" to="f_scan_rep117" />
     </node>
 
-    <!-- TODO: If this one is really needed, modify it to accept a prefix for the joint names!
-    <node name="fake_mir_joint_publisher" pkg="mir_driver" type="fake_mir_joint_publisher.py" output="screen" />
-    -->
+    <node name="fake_mir_joint_publisher" pkg="mir_driver" type="fake_mir_joint_publisher.py" output="screen">
+      <param name="prefix" value="$(arg prefix)" />
+    </node>
 
     <!-- a joint state publisher to get the mimic joints of the gripper, too! -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
