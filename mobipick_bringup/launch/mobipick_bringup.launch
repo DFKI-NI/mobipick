@@ -82,6 +82,12 @@
     <node name="fake_mir_joint_publisher" pkg="mir_driver" type="fake_mir_joint_publisher.py" output="screen" />
     -->
 
+    <!-- a joint state publisher to get the mimic joints of the gripper, too! -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <rosparam param="source_list">[joint_states, gripper_joint_states]</rosparam>
+      <param name="rate" value="200." />
+    </node>
+
     <!-- MIR changed the name of the odometry frame, so a quick hack is to provide a static transform between old and new name -->
     <node name="odom_tf_name_fix" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 $(arg prefix)odom $(arg prefix)odom_comb 100" />
 
