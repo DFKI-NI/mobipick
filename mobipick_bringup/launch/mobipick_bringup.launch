@@ -102,7 +102,6 @@
     </node>
 
     <!-- Astra gripper camera -->
-    <!--
     <include file="$(find astra_launch)/launch/astra.launch">
       <arg name="camera"                value="gripper_astra" />
       <arg name="depth_registration"    value="false" />  
@@ -115,7 +114,6 @@
       <arg name="ir_processing"         value="$(arg ir_processing)" />
     </include>
     <param name="gripper_astra/driver/data_skip" value="9" />
-    -->
 
 
     <!-- reduced pointcloud to save same wifi bandwidth. -->
@@ -144,12 +142,10 @@
     </node>
 
     <!-- Pico Flexx gripper camera -->
-    <!--
     <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
       <arg name="base_name" value="gripper_pico_flexx" />
       <arg name="max_noise" value="0.015" />
     </include>
-    -->
 
 
     <!-- start moveit -->
