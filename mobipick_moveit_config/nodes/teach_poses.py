@@ -8,7 +8,7 @@ import yaml
 import actionlib
 import control_msgs.msg
 
-from pbr_msgs.srv import SaveArmPose, SetArmPose
+from environment_msgs.srv import SaveArmPose, SetArmPose
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from std_srvs.srv import Empty, EmptyResponse
@@ -20,6 +20,7 @@ class PoseTeacher(object):
         # create an action client for the gripper
         self.gripperClient = actionlib.SimpleActionClient("gripper", control_msgs.msg.GripperCommandAction)
         self.gripperClient.wait_for_server()
+        rospy.loginfo("connected to gripper server...")
 
         # create services to open and close the gripper
         self.openGripperServer = rospy.Service("~open_gripper", Empty, self.openGripper)
@@ -58,7 +59,7 @@ class PoseTeacher(object):
         
     def closeGripper(self, request):
         goal = control_msgs.msg.GripperCommandGoal()
-        goal.command.max_effort = 100.
+        goal.command.max_effort = 50.
         goal.command.position = 0.0
         self.gripperClient.send_goal_and_wait(goal)
         return EmptyResponse()
