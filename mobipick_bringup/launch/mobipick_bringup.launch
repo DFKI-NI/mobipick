@@ -2,18 +2,13 @@
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="tf_prefix" default="mobipick" doc="TF prefix to use for all of Mobipick's TF frames"/>
 
-  <arg name="robot_version" default="os" doc="Can be hb or os, changes some parts in the urdf" />
+  <arg name="robot_version" default="os" doc="Can be hb or os, changes some parts in the urdf, hardware serials etc." />
 
   <!-- $(arg prefix) is used in most of the config files, whenever subst_value=true -->
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />
   <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
 
   <arg name="mir_hostname" default="192.168.12.20" />
-
-  <!-- 16112110432 = mobipick-hb -->
-  <!-- 16112210198 = mobipick-os -->
-  <arg name="astra_serial" default="16112210198" if="$(eval robot_version=='os')" doc="serial number of the camera (see back of camera, or `rosrun astra_camera astra_list_devices`)" />
-  <arg name="astra_serial" default="16112110432" if="$(eval robot_version=='hb')" />
 
   <arg name="ur5_kinematics_file" default="$(find mobipick_description)/config/ur5_calibration.yaml" />
 
@@ -56,7 +51,7 @@
         - imu_link
       </rosparam>
     </node>
-    
+
     <!-- MiR base -->
     <node name="mir_bridge" pkg="mir_driver" type="mir_bridge.py" output="screen">
       <param name="hostname" value="$(arg mir_hostname)" />
@@ -102,44 +97,11 @@
     </node>
 
     <!-- Astra gripper camera -->
-    <include file="$(find astra_launch)/launch/astra.launch">
-      <arg name="camera"                value="gripper_astra" />
-      <arg name="depth_registration"    value="false" />  
-      <arg name="publish_tf"            value="false" />
-      <arg name="depth_frame_id"        value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" if="$(eval tf_prefix != '')" />
-      <arg name="rgb_frame_id"          value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame"   if="$(eval tf_prefix != '')" />
-      <arg name="device_id"             value="$(arg astra_serial)" />
-      <arg name="rgb_camera_info_url"   value="package://mobipick_bringup/camera_info/rgb_$(arg astra_serial).yaml" />
-      <arg name="depth_camera_info_url" value="package://mobipick_bringup/camera_info/depth_$(arg astra_serial).yaml" />
-      <arg name="ir_processing"         value="$(arg ir_processing)" />
+    <include file="$(find mobipick_bringup)/launch/includes/gripper_astra.launch.xml">
+      <arg name="tf_prefix"     value="$(arg tf_prefix)" />
+      <arg name="robot_version" value="$(arg robot_version)" />
+      <arg name="ir_processing" value="$(arg ir_processing)" />
     </include>
-    <param name="gripper_astra/driver/data_skip" value="9" />
-
-
-    <!-- reduced pointcloud to save same wifi bandwidth. -->
-    <node pkg="nodelet" type="nodelet" name="reduce_astra_scans" args="standalone pcl/VoxelGrid">
-      <remap from="~input" to="gripper_astra/depth/points" />
-      <remap from="~output" to="gripper_astra/depth/points_reduced" />
-      <rosparam>
-        leaf_size: 0.05
-        keep_organized: true
-        filter_limit_max: 1000.0
-      </rosparam>
-    </node>
-
-
-    <!-- This fixes two bugs with astra_camera:
-         1. ir_processing expects the IR image at "ir/image_raw", but the
-            astra_camera driver publishes "ir/image" instead.
-         2. the astra_camera driver publishes "ir/image" as mono16, but it is
-            incorrectly scaled to [0..255] (instead of [0..65536]), so converting
-            it into a mono8 or RGB image will return values [0..1] (i.e., black
-            image). Therefore we normalize it first.
-    -->
-    <node if="$(arg ir_processing)" name="normalize_image" pkg="mobipick_bringup" type="normalize_image" output="screen">
-      <remap from="image_in" to="gripper_astra/ir/image" />
-      <remap from="image_out" to="gripper_astra/ir/image_raw" />
-    </node>
 
     <!-- Pico Flexx gripper camera -->
     <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
@@ -150,10 +112,10 @@
 
     <!-- start moveit -->
     <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
-        <arg name="prefix" value="$(arg tf_prefix)" />
-        <arg name="use_pointcloud" value="false" />
-        <arg name="simulation" value="$(arg simulation)" />
-      </include>
+      <arg name="prefix" value="$(arg tf_prefix)" />
+      <arg name="use_pointcloud" value="false" />
+      <arg name="simulation" value="$(arg simulation)" />
+    </include>
 
     <!-- start pose teaching node. nice to open/close the gripper, and, well, teach poses -->
     <node name="PoseTeacher" pkg="mobipick_moveit_config" type="teach_poses.py">
