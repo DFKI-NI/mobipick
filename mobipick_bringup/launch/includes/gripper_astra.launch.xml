@@ -9,7 +9,7 @@
   <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 
   <!-- Astra gripper camera -->
-  <include file="$(find astra_launch)/launch/astra.launch">
+  <include file="$(find mobipick_bringup)/launch/includes/astra.launch.xml">
     <arg name="camera"                value="gripper_astra" />
     <arg name="depth_registration"    value="false" />
     <arg name="publish_tf"            value="false" />

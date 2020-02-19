@@ -49,6 +49,7 @@ build:
     - git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
     - git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
     - git clone -b kinetic https://github.com/uos/uos_tools.git
+    - git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git
 
     # use rosdep to install all dependencies (including ROS itself)
     - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=pico_flexx_driver

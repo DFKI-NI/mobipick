@@ -15,6 +15,7 @@
 
   <build_depend>roslaunch</build_depend>
 
+  <exec_depend>astra_depth_filters</exec_depend>
   <exec_depend>astra_launch</exec_depend>
   <exec_depend>cv_bridge</exec_depend>  <!-- for normalize_image node -->
   <exec_depend>mir_driver</exec_depend>
