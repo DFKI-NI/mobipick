@@ -14,7 +14,7 @@
     <xacro:property name="prefix" value="${tf_prefix_}/" />
   </xacro:unless>
 
-  <xacro:arg name="kinematics_config" default="" />  <!-- path the to the yaml with the arms calibration parameters. E.g. mobipick_bringup/config/ur5_calibration.yaml -->
+  <xacro:arg name="kinematics_config" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>  <!-- path the to the yaml with the arms calibration parameters. -->
 
   <!-- ############# MIR100 BASE ############## -->
   <xacro:include filename="$(find mir_description)/urdf/include/mir_100_v1.urdf.xacro" />
