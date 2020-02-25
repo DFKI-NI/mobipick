@@ -3,13 +3,31 @@
 sensors:
   - sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
     image_topic: gripper_astra/depth_registered/image_raw
-    far_clipping_plane_distance: 0.98   # the Astra S produces depth artifacts at exactly 0.99 m, so this is a cheap way of filtering them out
-    near_clipping_plane_distance: 0.25
-    padding_scale: 1.0
-    padding_offset: 0.1
+    # defaults: see depth_image_octomap_updater.cpp
+    far_clipping_plane_distance: 0.98    # default:  5.0     # the Astra S produces depth artifacts at exactly 0.99 m, so this is a cheap way of filtering them out
+    near_clipping_plane_distance: 0.25   # default:  0.3
+
+    ### Padding (see https://github.com/ros-planning/moveit_ros/issues/342#issuecomment-63454410)
+    # The Kinect has 1/8 pixel disparity resolution, which leads to depth discretization steps that are proportional to z^2.
+    # The filter pads the mesh by shifting each vertex along the vertex normal according to the following formula:
+    #
+    #     p(z) = padding_scale * (1/8 pixel to meters) * z^2 + padding_offset
+    #
+    # So padding_scale = 1.0 means 1/8 pixel disparity resolution,
+    # padding_scale = 3.0 means 3/8 pixel disparity resolution.
+    padding_scale: 1.0                   # default:  0.0
+
+    # Additional constant padding (unit: meters).
+    padding_offset: 0.1                  # default:  0.02
+
+    # Filter out all depth values in the interval [depth of padded mesh, depth of padded mesh + shadow_threshold] (unit: meters)
+    shadow_threshold: 0.5                # default:  0.04
+
+    # Amount of depth image border pixels to ignore
+    skip_vertical_pixels:   1            # default:  4
+    skip_horizontal_pixels: 1            # default:  6
+
     queue_size: 5
-    skip_vertical_pixels: 1
-    skip_horizontal_pixels: 1
-    shadow_threshold: 0.2
+
 #   filtered_cloud_topic: filtered_cloud
 # this last topic is just to debug, having it adds processing time
