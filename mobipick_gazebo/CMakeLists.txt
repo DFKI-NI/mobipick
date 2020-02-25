@@ -40,4 +40,3 @@ install(DIRECTORY
 #roslaunch_add_file_check(launch/mobipick)   # disabled because of false positives: https://git.hb.dfki.de/mobipick/mobipick/merge_requests/5
 roslaunch_add_file_check(launch/objects)
 roslaunch_add_file_check(launch/robotiq_2f_140)
-roslaunch_add_file_check(launch/ur5)
