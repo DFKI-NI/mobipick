@@ -13,7 +13,11 @@
   <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
 
   <!-- Load URDF -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix)" />
+  <!-- URDF -->
+  <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
+    <arg name="tf_prefix" value="$(arg tf_prefix)" />
+  </include>
+
 
   <!-- Load gazebo controller configurations -->
   <!-- Note: You MUST load these PID parameters for all joints that are using

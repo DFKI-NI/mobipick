@@ -14,6 +14,7 @@
     <xacro:property name="prefix" value="${tf_prefix_}/" />
   </xacro:unless>
 
+  <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
   <xacro:arg name="kinematics_config" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>  <!-- path the to the yaml with the arms calibration parameters. -->
 
   <!-- ############# MIR100 BASE ############## -->
@@ -46,7 +47,9 @@
     <origin xyz="0.0 0.0 0.0025" rpy="0.0 0.0 0.0" />
   </joint>
 
-  <xacro:ur5_robot prefix="${prefix}ur5_" joint_limited="true" kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
+  <xacro:ur5_robot prefix="${prefix}ur5_" joint_limited="true"
+    transmission_hw_interface="$(arg transmission_hw_interface)"
+    kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
 
   <!-- ############## FT SENSOR ############### -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_ft_300/robotiq_ft_300.urdf.xacro" />

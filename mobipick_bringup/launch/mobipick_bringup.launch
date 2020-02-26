@@ -22,7 +22,12 @@
     -->
 
     <!-- URDF -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro tf_prefix:=$(arg tf_prefix) robot:=mobipick-$(arg robot_version) kinematics_config:=$(arg ur5_kinematics_file)" />
+    <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
+      <arg name="robot" value="mobipick-$(arg robot_version)" />
+      <arg name="tf_prefix" value="$(arg tf_prefix)" />
+      <arg name="ur5_kinematics_file" value="$(arg ur5_kinematics_file)" />
+      <arg name="transmission_hw_interface" value="hardware_interface/PositionJointInterface" />
+    </include>
 
     <!-- ur5 controller configs -->
     <!-- <rosparam command="load" file="$(find mobipick_bringup)/config/ur5_controllers.yaml" subst_value="True" /> -->

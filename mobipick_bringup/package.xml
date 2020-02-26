@@ -20,6 +20,7 @@
   <exec_depend>cv_bridge</exec_depend>  <!-- for normalize_image node -->
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>mir_driver</exec_depend>
+  <exec_depend>mobipick_description</exec_depend>
   <exec_depend>mobipick_moveit_config</exec_depend>
   <exec_depend>mobipick_pick_n_place</exec_depend>
   <exec_depend>nodelet</exec_depend>

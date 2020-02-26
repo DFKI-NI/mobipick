@@ -3,7 +3,11 @@
 <launch>
   <arg name="rviz" default="true" />
   <arg name="robot" default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro robot:=$(arg robot)" />
+  
+  <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
+    <arg name="robot" value="$(arg robot)" />
+  </include>
+
   <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
     <rosparam>
       zeros:
@@ -16,6 +20,8 @@
       source_list: ['/mobipick/joint_states']
     </rosparam>
   </node>
+
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  
   <node if="$(arg rviz)" name="rviz" pkg="rviz" type="rviz" args="-d $(find mobipick_description)/rviz/visualize_mobipick.rviz" required="true" />
 </launch>

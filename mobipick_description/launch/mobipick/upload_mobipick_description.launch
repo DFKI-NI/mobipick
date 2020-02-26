@@ -1,4 +1,14 @@
 <?xml version="1.0" ?>
 <launch>
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro" />
+
+  <arg name="robot" default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="tf_prefix" default="" doc="TF prefix to use for all of Mobipick's TF frames"/>
+  <arg name="ur5_kinematics_file" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>
+  <arg name="transmission_hw_interface" default="hardware_interface/VelocityJointInterface" />
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro 
+    robot:=$(arg robot) 
+    tf_prefix:=$(arg tf_prefix)
+    kinematics_config:=$(arg ur5_kinematics_file)
+    transmission_hw_interface:=$(arg transmission_hw_interface)" />
 </launch>

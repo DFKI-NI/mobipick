@@ -12,7 +12,9 @@
   <arg name="prefix" default="$(arg tf_prefix)/" unless="$(eval tf_prefix=='')" />
 
   <!-- Load universal robot description format (URDF) -->
-  <param if="$(arg load_robot_description)" name="$(arg robot_description)" command="xacro --inorder '$(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro' tf_prefix:=$(arg tf_prefix)"/>
+  <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
+    <arg name="tf_prefix" value="$(arg tf_prefix)" />
+  </include>
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic" 
