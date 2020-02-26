@@ -140,7 +140,7 @@
     <xacro:if value="${variant == 'v2'}">
       <!-- cover_front -->
       <joint name="${prefix}cover_front_joint" type="fixed">
-        <origin xyz="${structure_length / 2 + cover_thickness / 2} 0 ${structure_height - cover_height / 2}" rpy="0 0 0" />
+        <origin xyz="${structure_length / 2 + cover_thickness / 2} 0 ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 0" />
         <parent link="${prefix}part_down" />
         <child link="${prefix}cover_front_link" />
       </joint>
@@ -164,7 +164,7 @@
 
       <!-- cover_back -->
       <joint name="${prefix}cover_back_joint" type="fixed">
-        <origin xyz="${-(structure_length / 2 + cover_thickness / 2)} 0 ${structure_height - cover_height / 2}" rpy="0 0 ${pi}" />
+        <origin xyz="${-(structure_length / 2 + cover_thickness / 2)} 0 ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${pi}" />
         <parent link="${prefix}part_down" />
         <child link="${prefix}cover_back_link" />
       </joint>
@@ -188,7 +188,7 @@
 
       <!-- cover_left -->
       <joint name="${prefix}cover_left_joint" type="fixed">
-        <origin xyz="0 ${structure_width / 2 + cover_thickness / 2} ${structure_height - cover_height / 2}" rpy="0 0 ${pi / 2}" />
+        <origin xyz="0 ${structure_width / 2 + cover_thickness / 2} ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${pi / 2}" />
         <parent link="${prefix}part_down" />
         <child link="${prefix}cover_left_link" />
       </joint>
@@ -212,7 +212,7 @@
 
       <!-- cover_right -->
       <joint name="${prefix}cover_right_joint" type="fixed">
-        <origin xyz="0 ${-(structure_width / 2 + cover_thickness / 2)} ${structure_height - cover_height / 2}" rpy="0 0 ${-pi / 2}" />
+        <origin xyz="0 ${-(structure_width / 2 + cover_thickness / 2)} ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${-pi / 2}" />
         <parent link="${prefix}part_down" />
         <child link="${prefix}cover_right_link" />
       </joint>
