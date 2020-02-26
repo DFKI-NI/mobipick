@@ -47,7 +47,11 @@
     <origin xyz="0.0 0.0 0.0025" rpy="0.0 0.0 0.0" />
   </joint>
 
+  <!-- Reachable joint angles are limited by the robot structure to these
+       values for the shoulder_lift_joint. It's important to restrict the joint
+       angles, otherwise the planning space is discontinuous. -->
   <xacro:ur5_robot prefix="${prefix}ur5_" joint_limited="true"
+    shoulder_lift_lower_limit="${-pi - 0.82}" shoulder_lift_upper_limit="${0.82}"
     transmission_hw_interface="$(arg transmission_hw_interface)"
     kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
 
