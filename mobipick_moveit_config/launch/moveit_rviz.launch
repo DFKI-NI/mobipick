@@ -11,7 +11,6 @@
   <node name="$(anon rviz)" launch-prefix="$(arg launch_prefix)" pkg="rviz" type="rviz" respawn="false"
 	args="$(arg command_args)" output="screen">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml"/>
-    <param name="arm_prefix" value="ur5_" />   <!-- needed until https://github.com/ros-industrial/universal_robot/pull/334 is merged -->
   </node>
 
 </launch>
