@@ -1,19 +1,8 @@
 image: ubuntu:xenial
 
 before_script:
-  # Install ssh-agent if not already installed
-  - 'which ssh-agent || ( apt-get update -qq && apt-get install openssh-client -y )'
-
-  # Run ssh-agent (inside the build environment)
-  - eval $(ssh-agent -s)
-
-  # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
-  - ssh-add <(echo "$SSH_PRIVATE_KEY")
-
-  # Add gitlab ssh key to known hosts
-  - mkdir -p -m 0700 ~/.ssh
-  - ssh-keyscan -H 'git.ni.dfki.de' >> ~/.ssh/known_hosts
-
+  # Enable system-wide authentication for git cloning via https
+  - [ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc
 
 build:
   stage: build
@@ -49,7 +38,7 @@ build:
     - git clone -b calibration_devel https://github.com/fmauch/universal_robot.git fmauch_universal_robot
     - git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git Universal_Robots_ROS_Driver
     - git clone -b kinetic-devel https://github.com/ros-industrial/robotiq.git
-    - git clone -b master git@git.ni.dfki.de:perception/astra_depth_filters.git
+    - git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git
 
     # use rosdep to install all dependencies (including ROS itself)
     - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=pico_flexx_driver
