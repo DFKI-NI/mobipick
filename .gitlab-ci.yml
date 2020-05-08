@@ -16,9 +16,13 @@ build:
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
 
+    # generate locale
+    - apt-get update -qq
+    - apt install locales
+    - locale-gen $LANG
+
     # install tzdata non-interactively (tzdata is a requirement of the ROS packages below)
     - export DEBIAN_FRONTEND=noninteractive
-    - apt-get update -qq
     - apt-get install -y tzdata
     - ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
     - dpkg-reconfigure --frontend noninteractive tzdata
