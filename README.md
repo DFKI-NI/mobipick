@@ -38,6 +38,7 @@ git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git Uni
 git clone -b kinetic-devel https://github.com/ros-industrial/robotiq.git
 git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git
 git clone -b 0.2.2 https://github.com/orbbec/ros_astra_launch.git astra_launch
+git clone -b master https://github.com/orbbec/ros_astra_camera.git astra_camera
 
 # use rosdep to install all dependencies (including ROS itself)
 apt-get update -qq
