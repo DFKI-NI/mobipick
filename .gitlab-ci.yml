@@ -1,4 +1,4 @@
-image: ubuntu:xenial
+image: ubuntu:bionic
 
 before_script:
   # Enable system-wide authentication for git cloning via https
@@ -11,7 +11,7 @@ build:
   script:
     - export LANG="en_US.UTF-8"
     - export LC_ALL=$LANG
-    - export CI_ROS_DISTRO="kinetic"
+    - export CI_ROS_DISTRO="melodic"
     - export CATKIN_WS=~/catkin_ws
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
@@ -30,7 +30,7 @@ build:
     # set up ROS repo
     # Install wget if not already installed
     - apt-get install -qq -y wget gnupg2
-    - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
+    - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'
     - wget http://packages.ros.org/ros.key -O - | apt-key add -
     - apt-get update -qq
     - apt-get install -qq -y python-rosdep git build-essential cmake
@@ -41,11 +41,11 @@ build:
     # create a catkin workspace and clone all required ROS packages
     - mkdir -p $CATKIN_WS_SRC
     - cd $CATKIN_WS_SRC/
-    - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b kinetic git@git.ni.dfki.de:mobipick/mobipick.git
+    - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b melodic git@git.ni.dfki.de:mobipick/mobipick.git
     - git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
     - git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
     - git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
-    - git clone -b kinetic https://github.com/uos/uos_tools.git
+    - git clone -b master https://github.com/uos/uos_tools.git
     - git clone -b calibration_devel https://github.com/fmauch/universal_robot.git fmauch_universal_robot
     - git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git Universal_Robots_ROS_Driver
     - git clone -b kinetic-devel https://github.com/ros-industrial/robotiq.git
