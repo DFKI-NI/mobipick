@@ -16,9 +16,15 @@ build:
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
 
+    # install tzdata non-interactively (tzdata is a requirement of the ROS packages below)
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt-get update -qq
+    - apt-get install -y tzdata
+    - ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+    - dpkg-reconfigure --frontend noninteractive tzdata
+
     # set up ROS repo
     # Install wget if not already installed
-    - apt-get update -qq
     - apt-get install -qq -y wget gnupg2
     - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
     - wget http://packages.ros.org/ros.key -O - | apt-key add -
