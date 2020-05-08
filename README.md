@@ -32,7 +32,12 @@ git clone -b kinetic git@git.ni.dfki.de:mobipick/mobipick.git
 git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
 git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
 git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
-git clone -b kinetic https://github.com/uos/uos_tools.git
+git clone -b master https://github.com/uos/uos_tools.git
+git clone -b calibration_devel https://github.com/fmauch/universal_robot.git fmauch_universal_robot
+git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git Universal_Robots_ROS_Driver
+git clone -b kinetic-devel https://github.com/ros-industrial/robotiq.git
+git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git
+git clone -b 0.2.2 https://github.com/orbbec/ros_astra_launch.git astra_launch
 
 # use rosdep to install all dependencies (including ROS itself)
 apt-get update -qq
