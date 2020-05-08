@@ -32,7 +32,6 @@ git clone -b kinetic git@git.ni.dfki.de:mobipick/mobipick.git
 git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
 git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
 git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
-git clone -b kinetic https://github.com/uos/uos_tools.git
 
 # use rosdep to install all dependencies (including ROS itself)
 apt-get update -qq
