@@ -31,6 +31,8 @@
   <exec_depend>rqt_joint_trajectory_controller</exec_depend>
   <exec_depend>rqt_robot_steering</exec_depend>
   <exec_depend>topic_tools</exec_depend>
+  <exec_depend>uos_gazebo_worlds</exec_depend>
+  <exec_depend>uos_maps</exec_depend>
 
   <export>
     <gazebo_ros gazebo_media_path="${prefix}"/>

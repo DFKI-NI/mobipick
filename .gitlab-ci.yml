@@ -2,7 +2,7 @@ image: ubuntu:xenial
 
 before_script:
   # Enable system-wide authentication for git cloning via https
-  - [ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc
+  - '[ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc'
 
 build:
   stage: build
@@ -16,9 +16,20 @@ build:
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
 
+    # generate locale
+    - apt-get update -qq
+    - apt install locales
+    - locale-gen $LANG
+
+    # install tzdata non-interactively (tzdata is a requirement of the ROS packages below)
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt-get install -y tzdata
+    - ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+    - dpkg-reconfigure --frontend noninteractive tzdata
+
     # set up ROS repo
     # Install wget if not already installed
-    - 'which wget || ( apt-get update -qq && apt-get install wget -y )'
+    - apt-get install -qq -y wget gnupg2
     - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
     - wget http://packages.ros.org/ros.key -O - | apt-key add -
     - apt-get update -qq
@@ -34,7 +45,6 @@ build:
     - git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
     - git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
     - git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
-    - git clone -b kinetic https://github.com/uos/uos_tools.git
     - git clone -b calibration_devel https://github.com/fmauch/universal_robot.git fmauch_universal_robot
     - git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git Universal_Robots_ROS_Driver
     - git clone -b kinetic-devel https://github.com/ros-industrial/robotiq.git
