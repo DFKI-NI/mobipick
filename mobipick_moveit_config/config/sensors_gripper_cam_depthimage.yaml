@@ -18,7 +18,7 @@ sensors:
     padding_scale: 1.0                   # default:  0.0
 
     # Additional constant padding (unit: meters).
-    padding_offset: 0.1                  # default:  0.02
+    padding_offset: 0.05                  # default:  0.02
 
     # Filter out all depth values in the interval [depth of padded mesh, depth of padded mesh + shadow_threshold] (unit: meters)
     shadow_threshold: 0.5                # default:  0.04
