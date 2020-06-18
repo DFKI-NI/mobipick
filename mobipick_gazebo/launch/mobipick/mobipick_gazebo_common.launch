@@ -12,6 +12,8 @@
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
   <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
 
+  <arg name="ir_processing" default="true" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
+
   <!-- Load URDF -->
   <!-- URDF -->
   <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
@@ -55,8 +57,8 @@
   </group>
 
   <!-- Start the controllers -->
-  <node name="controller_spawner" pkg="controller_manager" type="controller_manager" output="screen"
-        args="spawn joint_state_controller mobile_base_controller gripper_controller"/>
+ <node name="controller_spawner" pkg="controller_manager" type="controller_manager" output="screen" 
+        args="spawn joint_state_controller mobile_base_controller gripper_controller" /> 
 
   <group unless="$(arg arm_velocity_controller)">
     <node name="arm_controller_spawner"          pkg="controller_manager" type="controller_manager" output="screen" args="spawn arm_controller"/>
@@ -80,7 +82,7 @@
 
   <!-- Load teleop -->
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-    <param name="default_topic" value="cmd_vel"/>
+    <param name="default_topic" value="/mobipick/cmd_vel"/>
     <param name="default_vx_max" value="1.0" />
     <param name="default_vx_min" value="-1.0" />
     <param name="default_vw_max" value="1.5" />
@@ -102,4 +104,11 @@
     <remap from="scan" to="f_scan" />
     <remap from="scan_filtered" to="f_scan_rep117" />
   </node>
+
+  <!-- Astra gripper camera -->
+    <include file="$(find mobipick_bringup)/launch/includes/gripper_astra.launch.xml">
+      <arg name="tf_prefix"     value="$(arg tf_prefix)" />
+      <arg name="ir_processing" value="$(arg ir_processing)" />
+      <arg name="load_driver" value="false" />
+    </include>
 </launch>

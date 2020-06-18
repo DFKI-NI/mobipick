@@ -7,6 +7,8 @@
   <arg name="astra_serial" default="16112110432" if="$(eval robot_version=='hb')" />
 
   <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
+  
+  <arg name="load_driver" default="true" />
 
   <!-- Astra gripper camera -->
   <include file="$(find mobipick_bringup)/launch/includes/astra.launch.xml">
@@ -19,6 +21,7 @@
     <arg name="rgb_camera_info_url"   value="package://mobipick_bringup/camera_info/rgb_$(arg astra_serial).yaml" />
     <arg name="depth_camera_info_url" value="package://mobipick_bringup/camera_info/depth_$(arg astra_serial).yaml" />
     <arg name="ir_processing"         value="$(arg ir_processing)" />
+    <arg name="load_driver"           value="$(arg load_driver)" />
   </include>
   <param name="gripper_astra/driver/data_skip" value="9" />
 

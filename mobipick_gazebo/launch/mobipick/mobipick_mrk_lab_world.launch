@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="gui" default="true" />
   <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
 
@@ -11,7 +12,7 @@
     <arg name="robot_y"   value="11.32" />
     <arg name="robot_yaw" value="1.57" />
   </include>
-
+  
   <!-- spawn power drill -->
   <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
     <arg name="x"     default="10.05" />
@@ -22,9 +23,12 @@
     <arg name="yaw"   default="$(eval pi)" />
   </include>
 
+
   <!-- spawn table -->
+
   <param name="table_description"
     command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
   <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 10.05 -y 11.35"
     respawn="false" output="screen" />
+
 </launch>
