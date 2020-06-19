@@ -12,6 +12,7 @@
     <arg name="info" value="true" />
     <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
     <arg name="simulation" value="$(arg simulation)"/>
+    <arg name="prefix" value="mobipick" />
   </include>
   # The visualization component of MoveIt!
   <!--include file="$(find mobipick_moveit_config)/launch/moveit_rviz.launch">
