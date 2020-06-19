@@ -1,15 +1,16 @@
 <launch>
   <arg name="object_source" default="gazebo" doc="Where to get objects from. Possible values: 'gazebo' (for gazebo) or 'static' (for moveit demo mode)." />
-  <arg name="prefix" default="" />
+  <arg name="prefix" default="mobipick" />
+  <arg name="simulation" default="false" />
 
   <group ns="mobipick">
   <node name="mobipick_pick_n_place" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place" output="screen">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
   </node>
-
+  <group if="$(arg simulation)">
   <node name="$(arg object_source)_object_publisher" pkg="mobipick_pick_n_place" type="$(arg object_source)_object_publisher" output="screen" />
 
   <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
   </group>
-  
+</group>
 </launch>

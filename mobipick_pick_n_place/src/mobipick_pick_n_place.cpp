@@ -56,7 +56,7 @@
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
   posture.joint_names.resize(1);
-  posture.joint_names[0] = "gripper_finger_joint";
+  posture.joint_names[0] = "mobipick/gripper_finger_joint";
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
@@ -68,7 +68,7 @@ void openGripper(trajectory_msgs::JointTrajectory &posture)
 void closedGripper(trajectory_msgs::JointTrajectory &posture)
 {
   posture.joint_names.resize(1);
-  posture.joint_names[0] = "gripper_finger_joint";
+  posture.joint_names[0] = "mobipick/gripper_finger_joint";
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
@@ -119,14 +119,20 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     Eigen::Affine3d bbox_center_rotated; // = Eigen::Affine3d::Identity();
 
     geometry_msgs::Pose power_drill;
+//    power_drill.orientation.x = 0.0;
+//    power_drill.orientation.y = -0.707106781;
+//    power_drill.orientation.z = -0.707106781;
+//    power_drill.orientation.w = 0.0;
+
+    power_drill.position.x = 1.00;
+    power_drill.position.y = 1.00;
+    power_drill.position.z = 0.00;
+
     power_drill.orientation.x = 0.0;
-    power_drill.orientation.y = -0.707106781;
-    power_drill.orientation.z = -0.707106781;
+    power_drill.orientation.y = 0.0;
+    power_drill.orientation.z = 0.0;
     power_drill.orientation.w = 0.0;
 
-    power_drill.position.x = 0.00;
-    power_drill.position.y = 0.00;
-    power_drill.position.z = 0.00;
 
     tf::poseMsgToEigen(power_drill, bbox_center_rotated);
     //bbox_center_rotated.rotate(Eigen::Quaterniond(0.0d, 0.0d, -0.707106781d, -0.707106781d));
@@ -149,11 +155,11 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     ROS_INFO_STREAM("Grasp pose:\n" << p.pose);
 
     g.pre_grasp_approach.direction.vector.x = 1.0;
-    g.pre_grasp_approach.direction.header.frame_id = "gripper_tcp";
+    g.pre_grasp_approach.direction.header.frame_id = "mobipick/gripper_tcp";
     g.pre_grasp_approach.min_distance = 0.08;
     g.pre_grasp_approach.desired_distance = 0.25;
 
-    g.post_grasp_retreat.direction.header.frame_id = "base_link";
+    g.post_grasp_retreat.direction.header.frame_id = "mobipick/base_link";
     g.post_grasp_retreat.direction.vector.z = 1.0;
     g.post_grasp_retreat.min_distance = 0.1;
     g.post_grasp_retreat.desired_distance = 0.15;
@@ -186,7 +192,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   // --- calculate desired pose of gripper_tcp when placing
   // desired pose of power drill
   geometry_msgs::PoseStamped p;
-  p.header.frame_id = "base_footprint";
+  p.header.frame_id = "mobipick/base_footprint";
   p.pose.position.x = -0.142;
   p.pose.position.y = -0.969;
   p.pose.position.z = table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
@@ -198,11 +204,11 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
 
-  g.pre_place_approach.direction.header.frame_id = "base_footprint";
+  g.pre_place_approach.direction.header.frame_id = "mobipick/base_footprint";
   g.pre_place_approach.desired_distance = 0.2;
   g.pre_place_approach.direction.vector.z = -1.0;
   g.pre_place_approach.min_distance = 0.1;
-  g.post_place_retreat.direction.header.frame_id = "gripper_tcp";
+  g.post_place_retreat.direction.header.frame_id = "mobipick/gripper_tcp";
   g.post_place_retreat.direction.vector.x = -1.0;
   g.post_place_retreat.desired_distance = 0.25;
   g.post_place_retreat.min_distance = 0.1;
@@ -303,7 +309,7 @@ int main(int argc, char **argv)
       return 0;
 
       vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
-              "detected_objects", nh, ros::Duration(10.0));
+              "/mobipick/dope/detected_objects", nh, ros::Duration(30.0));
       if (!detections)
       {
         ROS_ERROR("Timed out while waiting for a message on topic detected_objects!");
@@ -312,7 +318,7 @@ int main(int argc, char **argv)
 
 
 
-    // add objects to planning scene
+    // add objects to planning scener
     bool found_table = false;
     std::vector<moveit_msgs::CollisionObject> collision_objects;
     for (auto &&det3d : detections->detections)
@@ -329,7 +335,7 @@ int main(int argc, char **argv)
         found_power_drill = true;
 
       moveit_msgs::CollisionObject co;
-      co.header = det3d.header;
+      co.header = detections->header;
       co.id = id_to_string(det3d.results[0].id);
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
