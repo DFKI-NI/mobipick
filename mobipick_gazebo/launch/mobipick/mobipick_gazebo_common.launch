@@ -6,13 +6,13 @@
   <arg name="robot_y"   default="0.0" />
   <arg name="robot_yaw" default="0.0" />
 
-  <arg name="tf_prefix" default="" doc="tf_prefix to be used by gazebo plugins and in the robots urdf etc." />
+  <arg name="tf_prefix" default="mobipick" doc="tf_prefix to be used by gazebo plugins and in the robots urdf etc." />
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
   <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
 
-  <arg name="ir_processing" default="true" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
+  <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 
   <!-- Load URDF -->
   <!-- URDF -->

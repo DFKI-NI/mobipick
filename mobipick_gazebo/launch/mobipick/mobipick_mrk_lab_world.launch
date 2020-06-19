@@ -15,8 +15,8 @@
   
   <!-- spawn power drill -->
   <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
-    <arg name="x"     default="10.05" />
-    <arg name="y"     default="11.18" />
+    <arg name="x"     default="9.85" />
+    <arg name="y"     default="11.48" />
     <arg name="z"     default="1.02" />
     <arg name="roll"  default="$(eval pi / 2)" />
     <arg name="pitch" default="0.0" />
