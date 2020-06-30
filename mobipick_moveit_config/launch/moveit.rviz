@@ -6,8 +6,10 @@ Panels:
       Expanded:
         - /Global Options1
         - /MotionPlanning1
+        - /TF1
+        - /TF1/Frames1
       Splitter Ratio: 0.742560029
-    Tree Height: 95
+    Tree Height: 136
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -1120,7 +1122,12 @@ Visualization Manager:
       Marker Topic: /mobipick/dope/markers
       Name: MarkerArray
       Namespaces:
-        {}
+        bboxes: true
+        meshes: true
+        texts: true
+        unfiltered_bboxes: true
+        unfiltered_meshes: true
+        unfiltered_texts: true
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -1137,6 +1144,252 @@ Visualization Manager:
       Shape: Arrow
       Topic: /mobipick/dope/pose_power_drill_with_grip
       Unreliable: false
+      Value: true
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        mobipick/back_laser_link:
+          Value: false
+        mobipick/base_footprint:
+          Value: false
+        mobipick/base_link:
+          Value: false
+        mobipick/bl_caster_rotation_link:
+          Value: false
+        mobipick/bl_caster_wheel_link:
+          Value: false
+        mobipick/br_caster_rotation_link:
+          Value: false
+        mobipick/br_caster_wheel_link:
+          Value: false
+        mobipick/fl_caster_rotation_link:
+          Value: false
+        mobipick/fl_caster_wheel_link:
+          Value: false
+        mobipick/fr_caster_rotation_link:
+          Value: false
+        mobipick/fr_caster_wheel_link:
+          Value: false
+        mobipick/front_laser_link:
+          Value: false
+        mobipick/fts_robotside:
+          Value: false
+        mobipick/fts_toolside:
+          Value: false
+        mobipick/gripper_astra_depth_frame:
+          Value: false
+        mobipick/gripper_astra_depth_optical_frame:
+          Value: false
+        mobipick/gripper_astra_link:
+          Value: false
+        mobipick/gripper_astra_rgb_frame:
+          Value: false
+        mobipick/gripper_astra_rgb_optical_frame:
+          Value: false
+        mobipick/gripper_coupling_link:
+          Value: false
+        mobipick/gripper_left_inner_finger:
+          Value: false
+        mobipick/gripper_left_inner_knuckle:
+          Value: false
+        mobipick/gripper_left_outer_finger:
+          Value: false
+        mobipick/gripper_left_outer_knuckle:
+          Value: false
+        mobipick/gripper_left_robotiq_fingertip_65mm:
+          Value: false
+        mobipick/gripper_pico_flexx_frame:
+          Value: false
+        mobipick/gripper_pico_flexx_link:
+          Value: false
+        mobipick/gripper_pico_flexx_optical_frame:
+          Value: false
+        mobipick/gripper_right_inner_finger:
+          Value: false
+        mobipick/gripper_right_inner_knuckle:
+          Value: false
+        mobipick/gripper_right_outer_finger:
+          Value: false
+        mobipick/gripper_right_outer_knuckle:
+          Value: false
+        mobipick/gripper_right_robotiq_fingertip_65mm:
+          Value: false
+        mobipick/gripper_robotiq_arg2f_base_link:
+          Value: false
+        mobipick/gripper_tcp:
+          Value: true
+        mobipick/imu_frame:
+          Value: false
+        mobipick/imu_link:
+          Value: false
+        mobipick/left_wheel_link:
+          Value: false
+        mobipick/odom_comb:
+          Value: false
+        mobipick/power_drill:
+          Value: true
+        mobipick/right_wheel_link:
+          Value: false
+        mobipick/robotiq_force_torque_frame_id:
+          Value: false
+        mobipick/sensor_mount_bracket_link:
+          Value: false
+        mobipick/sensor_mount_link:
+          Value: false
+        mobipick/sensor_mount_pico_holder_link:
+          Value: false
+        mobipick/structure_cover_back_link:
+          Value: false
+        mobipick/structure_cover_front_link:
+          Value: false
+        mobipick/structure_cover_left_link:
+          Value: false
+        mobipick/structure_cover_right_link:
+          Value: false
+        mobipick/structure_cover_top_back_link:
+          Value: false
+        mobipick/structure_cover_top_front_link:
+          Value: false
+        mobipick/structure_part_down:
+          Value: false
+        mobipick/structure_part_up:
+          Value: false
+        mobipick/structure_pedestal:
+          Value: false
+        mobipick/structure_pedestal_surface:
+          Value: false
+        mobipick/surface:
+          Value: false
+        mobipick/ur5_base:
+          Value: false
+        mobipick/ur5_base_link:
+          Value: false
+        mobipick/ur5_ee_link:
+          Value: false
+        mobipick/ur5_forearm_link:
+          Value: false
+        mobipick/ur5_shoulder_link:
+          Value: false
+        mobipick/ur5_tool0:
+          Value: false
+        mobipick/ur5_upper_arm_link:
+          Value: false
+        mobipick/ur5_wrist_1_link:
+          Value: false
+        mobipick/ur5_wrist_2_link:
+          Value: false
+        mobipick/ur5_wrist_3_link:
+          Value: false
+        mobipick/us_1_frame:
+          Value: false
+        mobipick/us_2_frame:
+          Value: false
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        mobipick/odom_comb:
+          mobipick/base_footprint:
+            mobipick/base_link:
+              mobipick/back_laser_link:
+                {}
+              mobipick/bl_caster_rotation_link:
+                mobipick/bl_caster_wheel_link:
+                  {}
+              mobipick/br_caster_rotation_link:
+                mobipick/br_caster_wheel_link:
+                  {}
+              mobipick/fl_caster_rotation_link:
+                mobipick/fl_caster_wheel_link:
+                  {}
+              mobipick/fr_caster_rotation_link:
+                mobipick/fr_caster_wheel_link:
+                  {}
+              mobipick/front_laser_link:
+                {}
+              mobipick/imu_link:
+                mobipick/imu_frame:
+                  {}
+              mobipick/left_wheel_link:
+                {}
+              mobipick/right_wheel_link:
+                {}
+              mobipick/surface:
+                mobipick/structure_part_down:
+                  mobipick/structure_cover_back_link:
+                    {}
+                  mobipick/structure_cover_front_link:
+                    {}
+                  mobipick/structure_cover_left_link:
+                    {}
+                  mobipick/structure_cover_right_link:
+                    {}
+                  mobipick/structure_cover_top_back_link:
+                    {}
+                  mobipick/structure_cover_top_front_link:
+                    {}
+                  mobipick/structure_part_up:
+                    mobipick/structure_pedestal:
+                      mobipick/structure_pedestal_surface:
+                        mobipick/ur5_base_link:
+                          mobipick/ur5_base:
+                            {}
+                          mobipick/ur5_shoulder_link:
+                            mobipick/ur5_upper_arm_link:
+                              mobipick/ur5_forearm_link:
+                                mobipick/ur5_wrist_1_link:
+                                  mobipick/ur5_wrist_2_link:
+                                    mobipick/ur5_wrist_3_link:
+                                      mobipick/ur5_ee_link:
+                                        {}
+                                      mobipick/ur5_tool0:
+                                        mobipick/fts_robotside:
+                                          mobipick/fts_toolside:
+                                            mobipick/gripper_coupling_link:
+                                              mobipick/gripper_robotiq_arg2f_base_link:
+                                                mobipick/gripper_left_inner_knuckle:
+                                                  {}
+                                                mobipick/gripper_left_outer_knuckle:
+                                                  mobipick/gripper_left_outer_finger:
+                                                    mobipick/gripper_left_inner_finger:
+                                                      mobipick/gripper_left_robotiq_fingertip_65mm:
+                                                        {}
+                                                mobipick/gripper_right_inner_knuckle:
+                                                  {}
+                                                mobipick/gripper_right_outer_knuckle:
+                                                  mobipick/gripper_right_outer_finger:
+                                                    mobipick/gripper_right_inner_finger:
+                                                      mobipick/gripper_right_robotiq_fingertip_65mm:
+                                                        {}
+                                                mobipick/gripper_tcp:
+                                                  {}
+                                            mobipick/sensor_mount_link:
+                                              mobipick/gripper_astra_link:
+                                                mobipick/gripper_astra_depth_frame:
+                                                  {}
+                                                mobipick/gripper_astra_rgb_frame:
+                                                  mobipick/gripper_astra_rgb_optical_frame:
+                                                    mobipick/gripper_astra_depth_optical_frame:
+                                                      mobipick/power_drill:
+                                                        {}
+                                              mobipick/sensor_mount_bracket_link:
+                                                {}
+                                              mobipick/sensor_mount_pico_holder_link:
+                                                mobipick/gripper_pico_flexx_link:
+                                                  mobipick/gripper_pico_flexx_frame:
+                                                    mobipick/gripper_pico_flexx_optical_frame:
+                                                      {}
+                                          mobipick/robotiq_force_torque_frame_id:
+                                            {}
+              mobipick/us_1_frame:
+                {}
+              mobipick/us_2_frame:
+                {}
+      Update Interval: 0
       Value: true
   Enabled: true
   Global Options:
@@ -1169,15 +1422,15 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.07479656
+      Pitch: 0.189796612
       Target Frame: base_footprint
       Value: XYOrbit (rviz)
-      Yaw: 0.778583288
+      Yaw: 0.228583515
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 997
+  Height: 996
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -1188,9 +1441,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000003f800000391fc0200000009fb000000100044006900730070006c006100790073010000003a000000ed000000c600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b00000009e00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000001600000016fb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067010000012d000001760000016b00fffffffb0000000a0049006d006100670065010000025e0000009c0000000000000000fb0000000a0049006d00610067006501000002a9000001220000001600ffffff000003820000039100000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000003f800000390fc0200000009fb000000100044006900730070006c006100790073010000003a00000116000000c600fffffffb0000000800480065006c00700000000342000000bb0000006e00fffffffb0000000a0056006900650077007300000003b0000000b00000009e00fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000003e00fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000156000001b70000016b00fffffffb0000000a0049006d0061006700650100000313000000b70000001600fffffffb0000000a0049006d00610067006501000002a9000001220000000000000000000003800000039000000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1920
+  Width: 1918
   X: 0
   Y: 387
