@@ -1,0 +1,3 @@
+string frame_id
+---
+bool attached

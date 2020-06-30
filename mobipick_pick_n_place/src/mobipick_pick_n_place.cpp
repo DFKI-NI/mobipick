@@ -48,6 +48,7 @@
 #include <vision_msgs/Detection3DArray.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
+#include <mobipick_pick_n_place/AnchoringSrv.h>
 
 #include <eigen_conversions/eigen_msg.h>
 
@@ -60,9 +61,11 @@ void openGripper(trajectory_msgs::JointTrajectory &posture)
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
-  posture.points[0].positions[0] = 0.0;
+  posture.points[0].positions[0] = 0.1;
 
   posture.points[0].time_from_start.fromSec(5.0);
+
+  
 }
 
 void closedGripper(trajectory_msgs::JointTrajectory &posture)
@@ -114,41 +117,20 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   for (auto&& grasp_pose : grasp_poses)
   {
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
-    // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0)
     // Eigen quaternion = wxyz, not xyzw
-    Eigen::Affine3d bbox_center_rotated; // = Eigen::Affine3d::Identity();
-
-    geometry_msgs::Pose power_drill;
-//    power_drill.orientation.x = 0.0;
-//    power_drill.orientation.y = -0.707106781;
-//    power_drill.orientation.z = -0.707106781;
-//    power_drill.orientation.w = 0.0;
-
-    power_drill.position.x = 1.00;
-    power_drill.position.y = 1.00;
-    power_drill.position.z = 0.00;
-
-    power_drill.orientation.x = 0.0;
-    power_drill.orientation.y = 0.0;
-    power_drill.orientation.z = 0.0;
-    power_drill.orientation.w = 0.0;
-
-
-    tf::poseMsgToEigen(power_drill, bbox_center_rotated);
-    //bbox_center_rotated.rotate(Eigen::Quaterniond(0.0d, 0.0d, -0.707106781d, -0.707106781d));
-
+    Eigen::Affine3d bbox_center_rotated= Eigen::Affine3d::Identity();
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0d, 0.0d, 1.0d)));
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    
+    
     // --- calculate desired pose of gripper_tcp when grasping
     // pose of power drill
     geometry_msgs::PoseStamped p;
-    p.header.frame_id = "power_drill";
+    p.header.frame_id = "mobipick/power_drill";
     tf::poseEigenToMsg(bbox_center_rotated * grasp_pose, p.pose);
     ROS_DEBUG_STREAM("Grasp pose:\n" << p.pose);
 
     moveit_msgs::Grasp g;
-    // p.pose.orientation.x = 0.0;
-    // p.pose.orientation.y = -0.707106781;
-    // p.pose.orientation.z = -0.707106781;
-    // p.pose.orientation.w = 0.0;
 
     g.grasp_pose = p;
     g.grasp_quality = 1.0;
@@ -195,10 +177,10 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   p.header.frame_id = "mobipick/base_footprint";
   p.pose.position.x = -0.142;
   p.pose.position.y = -0.969;
-  p.pose.position.z = table_height + 0.10;   // power drill center (with large battery pack) is about 0.10 m above table
+  p.pose.position.z = table_height + 0.12;   // power drill center (with large battery pack) is about 0.10 m above table
 
-  p.pose.orientation.x = 0.5;
-  p.pose.orientation.y = 0.5;
+  p.pose.orientation.x = -0.5;
+  p.pose.orientation.y = -0.5;
   p.pose.orientation.z = 0.5;
   p.pose.orientation.w = 0.5;
   moveit_msgs::PlaceLocation g;
@@ -263,8 +245,10 @@ int main(int argc, char **argv)
 
   std_msgs::String msgGripper;
   std::stringstream ssGripper;
-
-
+  
+  ros::ServiceClient attachSrv = nh.serviceClient<mobipick_pick_n_place::AnchoringSrv>("anchoring/attach_power_drill");
+  
+  
   /* ********************* PLAN AND EXECUTE MOVES ********************* */
 
   // plan to observe the table
@@ -404,46 +388,28 @@ int main(int argc, char **argv)
   {
     group.detachObject(object.first);
   }
-  // geometry_msgs::PoseStamped p;
-  // p.header.frame_id = "base_footprint";
-  // p.pose.position.x = -0.142;
-  // p.pose.position.y = -0.969;
-  // p.pose.position.z =  1.137;
-  //
-  // // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0) />
-  // p.pose.orientation.x = 0.078;
-  // p.pose.orientation.y = -0.038;
-  // p.pose.orientation.z = 0.913;
-  // p.pose.orientation.w = -0.399;
-  //
-  // group.setPoseTarget(p, "gripper_tcp");
-  // error_code = group.plan(plan);
-  // if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  // {
-  //   ROS_INFO("Planning to pick1 pose SUCCESSFUL");
-  // } else
-  // {
-  //   ROS_ERROR("Planning to pick1 pose FAILED");
-  //   return 1;
-  // }
-  // // move to observation pose
-  // error_code = group.move();
-  // if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  // {
-  //   ROS_INFO("Moving to pick1 pose SUCCESSFUL");
-  // } else
-  // {
-  //   ROS_ERROR("Moving to pick1 pose FAILED");
-  //   return 1;
-  // }
+
   //pick
   uint pickPlanAttempts = 0;
+  mobipick_pick_n_place::AnchoringSrv attach_srv;
+  attach_srv.request.frame_id="/mobipick/odom_comb";
+
+  if(attachSrv.call(attach_srv))
+  {
+    ROS_INFO_STREAM("Attach power drill to frame"<<attach_srv.request.frame_id);
+  }
+
   do {
     error_code = pick(group);
     ++pickPlanAttempts;
     if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO("Picking SUCCESSFUL");
+      attach_srv.request.frame_id="/mobipick/gripper_tcp";
+      if(attachSrv.call(attach_srv))
+        {
+          ROS_INFO_STREAM("Attach power drill to frame"<<attach_srv.request.frame_id);
+        }
     }
     else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) && pickPlanAttempts <3  )
     {
@@ -465,6 +431,11 @@ int main(int argc, char **argv)
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
     ROS_INFO("Placing SUCCESSFUL");
+    attach_srv.request.frame_id="";
+    if(attachSrv.call(attach_srv))
+      {
+        ROS_INFO_STREAM("detached power drill");
+      }
   } else
   {
     ROS_ERROR("Placing FAILED");
