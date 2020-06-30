@@ -12,7 +12,6 @@
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
   <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
 
-  <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 
   <!-- Load URDF -->
   <!-- URDF -->
@@ -108,7 +107,6 @@
   <!-- Astra gripper camera -->
     <include file="$(find mobipick_bringup)/launch/includes/gripper_astra.launch.xml">
       <arg name="tf_prefix"     value="$(arg tf_prefix)" />
-      <arg name="ir_processing" value="$(arg ir_processing)" />
       <arg name="load_driver" value="false" />
     </include>
 </launch>

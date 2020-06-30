@@ -35,7 +35,7 @@
     </collision>
   </link>
   <gazebo reference="table_top_link">
-    <material>Gazebo/Wood</material>
+    <!--<material>Gazebo/Wood</material>-->
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <kp>1000000.0</kp>
