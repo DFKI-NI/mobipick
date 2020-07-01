@@ -7,6 +7,8 @@ find_package(catkin REQUIRED COMPONENTS
   eigen_conversions
   gazebo_msgs
   geometry_msgs
+  message_runtime
+  message_generation
   moveit_msgs
   moveit_ros_planning_interface
   roscpp
