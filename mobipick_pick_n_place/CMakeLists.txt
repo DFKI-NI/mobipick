@@ -24,7 +24,6 @@ add_service_files(
 
 generate_messages(
   DEPENDENCIES
-  std_msgs
 )
 
 ###################################
@@ -34,7 +33,7 @@ catkin_package(
   CATKIN_DEPENDS
     gazebo_msgs
     geometry_msgs
-    message_generation
+    message_runtime
     moveit_msgs
     moveit_ros_planning_interface
     shape_msgs
