@@ -12,6 +12,6 @@
 
   <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
   </group>
-  <node name="mobipick_anchoring"  pkg="mobipick_pick_n_place" type="mobipick_anchoring" output="screen" />
+  <!--<node name="mobipick_anchoring"  pkg="mobipick_pick_n_place" type="mobipick_anchoring" output="screen" />-->
 </group>
 </launch>

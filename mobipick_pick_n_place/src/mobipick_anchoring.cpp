@@ -11,7 +11,7 @@ MobipickAnchoring::MobipickAnchoring(ros::NodeHandle &nh) : node_(&nh)
   power_drill_.found = false;
   power_drill_.is_observable = false;
   power_drill_.is_attached = false;
-  power_drill_.object_name = "/mobipick/power_drill";
+  power_drill_.object_name = "/mobipick/power_drill_tf";
   power_drill_.id = ObjectID::POWER_DRILL;
   power_drill_.frame = power_drill_.object_name;
   detected_objects_.push_back(power_drill_);
