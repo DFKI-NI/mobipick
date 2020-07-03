@@ -9,18 +9,18 @@
     <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
     <arg name="world_name" value="$(find mobipick_gazebo)/worlds/rh5_mrk_lab.sdf"/>
     <arg name="robot_x"   value="9.00" />
-    <arg name="robot_y"   value="11.527" />
+    <arg name="robot_y"   value="11.327" />
     <arg name="robot_yaw" value="1.57" />
   </include>
   
   <!-- spawn power drill -->
   <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
     <arg name="x"     default="9.85" />
-    <arg name="y"     default="11.48" />
+    <arg name="y"     default="11.38" />
     <arg name="z"     default="1.02" />
     <arg name="roll"  default="$(eval pi / 2)" />
     <arg name="pitch" default="0.0" />
-    <arg name="yaw"   default="$(eval pi)" />
+    <arg name="yaw"   default="$(eval pi  *2  / 3)" />
   </include>
 
 
