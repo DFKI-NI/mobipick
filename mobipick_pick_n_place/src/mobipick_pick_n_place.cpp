@@ -48,7 +48,6 @@
 #include <vision_msgs/Detection3DArray.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
-#include <mobipick_pick_n_place/AnchoringSrv.h>
 
 #include <eigen_conversions/eigen_msg.h>
 
@@ -69,8 +68,6 @@ void openGripper(trajectory_msgs::JointTrajectory &posture)
   posture.points[0].positions[0] = 0.1;
 
   posture.points[0].time_from_start.fromSec(5.0);
-
-  
 }
 
 void closedGripper(trajectory_msgs::JointTrajectory &posture, std::float_t gripper_width = 0.63)
@@ -96,8 +93,6 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
   std::vector<GrapsPoseDefine> grasp_poses;
 
-  //std::vector<Eigen::Affine3d> grasp_poses;
-  //std::vector<float64> gripper_width; 
   {
     // GRASP 1: pitch = pi/8  (grasp handle from upper back)
     GrapsPoseDefine grasp_pose_define;
@@ -178,12 +173,12 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
 moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterface &group)
 {
-  tf::TransformListener tf_listener_;
-  tf::StampedTransform transform;
-
   std::vector<moveit_msgs::PlaceLocation> loc;
 
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+
+
 
   // get table height
   std::vector<std::string> object_ids;
@@ -225,105 +220,55 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   // add path constraints - doesn't work for place :(
 
 
-/*
-    moveit_msgs::Constraints constr;
-    
-
-    ros::Duration(1).sleep();
-    try
-    {
-      tf_listener_.lookupTransform("mobipick/gripper_tcp", "mobipick/base_link", ros::Time(0), transform);
-    }
-    catch (tf::TransformException ex)
-    {
-      ROS_ERROR("%s", ex.what());
-      ROS_INFO("Transformation not found!");
-    }
-    moveit_msgs::OrientationConstraint ocm;
-    ocm.link_name = "mobipick/gripper_tcp";
-    ocm.header.frame_id = p.header.frame_id;
-    ocm.orientation.x = transform.getRotation().getX();
-    ocm.orientation.y = transform.getRotation().getY();
-    ocm.orientation.z = transform.getRotation().getZ();
-    ocm.orientation.w = transform.getRotation().getW();
-    ocm.absolute_x_axis_tolerance = 0.5;
-    ocm.absolute_y_axis_tolerance = 0.5;
-    ocm.absolute_z_axis_tolerance = 3.14;
-    ocm.weight = 0.5;
 
 
-    
-    constr.orientation_constraints.push_back(ocm);
 
-    group.setPathConstraints(constr); */
 
   auto error_code = group.place("power_drill", loc);
   group.clearPathConstraints();
   return error_code;
 }
 
-int main(int argc, char **argv)
+
+void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &group)
 {
-  ros::init(argc, argv, "mobipick_pick_n_place");
-  ros::AsyncSpinner spinner(1);
-  spinner.start();
-
-  ros::NodeHandle nh;
-
-  moveit::planning_interface::MoveGroupInterface group("arm");
-  group.setPlanningTime(45.0);
-  group.setPlannerId("RRTConnect");
-  // NOTE: You can replace this by "RRTstar". This will have the following effects:
-  //   - RRT* is an (asymptotically) optimal planner, so the path with minimum path length
-  //     will be returned, which leads to much nicer trajectories without unnecessary reconfigurations.
-  //   - RRT* will always use the full planning time (see setPlanningTime()), even if an initial
-  //     plan is found earlier. If it runs out of time before finding an initial plan, planning will fail.
-  //   - Typical run times: RRT* between 1 and 30 seconds, RRTConnect 0.03 seconds
-  //   - also see: http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ompl_interface/ompl_interface_tutorial.html
-  //   - also see: https://ompl.kavrakilab.org/planners.html
-
-  ros::Publisher pubGripper = nh.advertise<std_msgs::String>("/mobipick/gripper_control", 1);
-
-  std_msgs::String msgGripper;
-  std::stringstream ssGripper;
+  moveit_msgs::Constraints constr;
   
-  //ros::ServiceClient attachSrv = nh.serviceClient<mobipick_pick_n_place::AnchoringSrv>("anchoring/attach_power_drill");
+  tf::TransformListener tf_listener_;
+  tf::StampedTransform transform;
+
+  ros::Duration(1).sleep();
+  try
+  {
+    tf_listener_.lookupTransform("mobipick/gripper_tcp", "mobipick/base_link", ros::Time(0), transform);
+  }
+  catch (tf::TransformException ex)
+  {
+    ROS_ERROR("%s", ex.what());
+    ROS_INFO("Transformation not found!");
+  }
+  moveit_msgs::OrientationConstraint ocm;
+  ocm.link_name = "mobipick/gripper_tcp";
+  ocm.header.frame_id = "mobipick/base_link";
+  ocm.orientation.x = transform.getRotation().getX();
+  ocm.orientation.y = transform.getRotation().getY();
+  ocm.orientation.z = transform.getRotation().getZ();
+  ocm.orientation.w = transform.getRotation().getW();
+  ocm.absolute_x_axis_tolerance = 0.1;
+  ocm.absolute_y_axis_tolerance = 0.1;
+  ocm.absolute_z_axis_tolerance = 2.0 * M_PI;
+  ocm.weight = 0.5;
   
 
-  /* ********************* PLAN AND EXECUTE MOVES ********************* */
+  
+  constr.orientation_constraints.push_back(ocm);
 
-  // plan to observe the table
-  moveit::planning_interface::MoveGroupInterface::Plan plan;
-  group.setNamedTarget("observe100cm_right");
-  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Planning to observation pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Planning to observation pose FAILED");
-    return 1;
-  }
+  group.setPathConstraints(constr); 
+}
 
-  // move to observation pose
-  error_code = group.move();
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Moving to observation pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Moving to observation pose FAILED");
-    return 1;
-  }
-  ros::WallDuration(5.0).sleep();
-  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
-  /* ********************* UPDATE PLANNING SCENE ********************* */
-
-  // clear octomap
-  ros::ServiceClient clear_octomap = nh.serviceClient<std_srvs::Empty>("clear_octomap");
-  std_srvs::Empty srv;
-  clear_octomap.call(srv);
+int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &planning_scene_interface, ros::NodeHandle &nh, moveit::planning_interface::MoveGroupInterface &group)
+{
 
   // get objects from object detection
   bool found_power_drill = false;
@@ -397,28 +342,7 @@ int main(int argc, char **argv)
 
       collision_objects.push_back(co);
     }
-    /* {
-      // Add monitors above table
-      moveit_msgs::CollisionObject co;
-      co.header.stamp = detections->header.stamp;
-      co.header.frame_id = "map";
-      co.id = "monitors";
-      co.operation = moveit_msgs::CollisionObject::ADD;
-      co.primitives.resize(1);
-      co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 1.00;
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 1.80;
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.90;
-      co.primitive_poses.resize(1);
-      co.primitive_poses[0].position.x = 9.9;
-      co.primitive_poses[0].position.y = 12.1;
-      co.primitive_poses[0].position.z = 2.35;
-      co.primitive_poses[0].orientation.w = 1.0;
 
-      collision_objects.push_back(co);
-    }
-    */
     if (!found_power_drill)
       ROS_INFO_THROTTLE(1.0, "Still waiting for power drill...");
 
@@ -431,21 +355,116 @@ int main(int argc, char **argv)
   {
     group.detachObject(object.first);
   }
+  return 1;
+}
 
+moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface &group, double dx= 0.0, double dy=0.2, double dz= 0.2)
+{
+
+  robot_state::RobotState start_state(*group.getCurrentState());
+  group.setStartState(start_state);
+
+  geometry_msgs::PoseStamped actual_pose = group.getCurrentPose();
+  geometry_msgs::Pose target_pose = actual_pose.pose;
+  target_pose.position.x += dx;
+  target_pose.position.y += dy;
+  target_pose.position.z += dz;
+  ROS_INFO_STREAM("Actual Pose frame: " << actual_pose.header.frame_id);
+  group.setPoseTarget(target_pose);
+
+
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+
+  bool success = (group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+
+  ROS_INFO( "Move planning (pose goal) %s", success ? "" : "FAILED");
+
+  auto error_code = group.move();
+  return error_code;
+}
+
+int main(int argc, char **argv)
+{
+  ros::init(argc, argv, "mobipick_pick_n_place");
+  ros::AsyncSpinner spinner(1);
+  spinner.start();
+
+  ros::NodeHandle nh;
+
+  moveit::planning_interface::MoveGroupInterface group("arm");
+  group.setPlanningTime(45.0);
+  group.setPlannerId("RRTConnect");
+  // NOTE: You can replace this by "RRTstar". This will have the following effects:
+  //   - RRT* is an (asymptotically) optimal planner, so the path with minimum path length
+  //     will be returned, which leads to much nicer trajectories without unnecessary reconfigurations.
+  //   - RRT* will always use the full planning time (see setPlanningTime()), even if an initial
+  //     plan is found earlier. If it runs out of time before finding an initial plan, planning will fail.
+  //   - Typical run times: RRT* between 1 and 30 seconds, RRTConnect 0.03 seconds
+  //   - also see: http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ompl_interface/ompl_interface_tutorial.html
+  //   - also see: https://ompl.kavrakilab.org/planners.html
+
+  ros::Publisher pubGripper = nh.advertise<std_msgs::String>("/mobipick/gripper_control", 1);
+
+  std_msgs::String msgGripper;
+  std::stringstream ssGripper;
+  
+  //ros::ServiceClient attachSrv = nh.serviceClient<mobipick_pick_n_place::AnchoringSrv>("anchoring/attach_power_drill");
+  
+
+  /* ********************* PLAN AND EXECUTE MOVES ********************* */
+
+  // plan to observe the table
+  moveit::planning_interface::MoveGroupInterface::Plan plan;
+  group.setNamedTarget("observe100cm_right");
+  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Planning to observation pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Planning to observation pose FAILED");
+    return 1;
+  }
+
+  // move to observation pose
+  error_code = group.move();
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Moving to observation pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Moving to observation pose FAILED");
+    return 1;
+  }
+  ros::WallDuration(5.0).sleep();
+
+  moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
+
+  /* ********************* PICK ********************* */
+
+  // clear octomap
+  ros::ServiceClient clear_octomap = nh.serviceClient<std_srvs::Empty>("clear_octomap");
+  std_srvs::Empty srv;
+  
   //pick
+
+
   uint pickPlanAttempts = 0;
- 
+   do {
 
+    clear_octomap.call(srv);
 
-  do {
+    updatePlanningScene(planning_scene_interface, nh, group);
     error_code = pick(group);
     ++pickPlanAttempts;
+
+
 
     if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO("Picking SUCCESSFUL");
     }
-    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) && pickPlanAttempts <1000  )
+    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) && pickPlanAttempts <10  )
     {
       ROS_INFO("Planning for Picking FAILED");
     }
@@ -456,21 +475,40 @@ int main(int argc, char **argv)
     }
 
 
-  } while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ) && pickPlanAttempts <1000 );
+  } while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ) && pickPlanAttempts <10 );
 
+
+
+  /* ********************* PLACE ********************* */
+
+ 
+  move(group, -0.05, -0.05, 0.2);
   ros::WallDuration(1.0).sleep();
+  group.setPlannerId("PRM");
   ROS_INFO("Start Placing");
   //place
+  uint placePlanAttempts = 0;
+  do{
   error_code = place(group);
+  ++placePlanAttempts;
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
     ROS_INFO("Placing SUCCESSFUL");
-  } else
+  }
+  else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || moveit::planning_interface::MoveItErrorCode::TIMED_OUT) && placePlanAttempts <10 )
+  {
+    ROS_INFO("Planning for Placing FAILED");
+    ros::WallDuration(1.0).sleep();
+    move(group, 0.01, 0.01, -0.01); //TODO: make a random/suitable move
+  }
+  else
   {
     ROS_ERROR("Placing FAILED");
-    return 1;
+    return 0;
   }
-
+  }while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT ) && placePlanAttempts <10 );
+  
+  
   // plan to go home
   group.setNamedTarget("home");
   error_code = group.plan(plan);
