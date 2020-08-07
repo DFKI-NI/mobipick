@@ -54,6 +54,7 @@ class GripperBridgeAction(object):
         success = True
         self.set_jt_goal(-0.76/0.14*goal.command.position+0.76, goal.command.max_effort)
         self._jt_client.send_goal(self._actual_goal)
+
         # start executing the action
         while not self._jt_client.get_state()==actionlib.SimpleGoalState.ACTIVE:
         # check that preempt has not been requested by the client
@@ -68,13 +69,20 @@ class GripperBridgeAction(object):
             self._as.publish_feedback(self._feedback)
             # this step is not necessary, the sequence is computed at 1 Hz for demonstration purposes
             r.sleep()
-        if success:
-            self._result = self._jt_client.get_result()
-            self._result.result.position=(0.14-0.14/0.76*self._joint_state.actual.positions[0])
-            self._result.result.reached_goal=True
-            rospy.loginfo('%s: Succeeded' % self._action_name)
-            self._as.set_succeeded(self._result)
 
+        self._jt_client.wait_for_result()
+        result = self._jt_client.get_result()
+        if not result.error_code == 0:
+            success = False
+        self._result.position=(0.14-0.14/0.76*self._joint_state.actual.positions[0])
+        if success:
+            self._result.reached_goal=True
+            rospy.loginfo('%s: Succeeded' % self._action_name)
+            
+        else:
+            self._result.reached_goal=False
+            rospy.loginfo('%s: Failed with error code %d' % (self._action_name, result.error_code))
+        self._as.set_succeeded(self._result)
         
 if __name__ == '__main__':
     rospy.init_node('gripper_command_bridge')
