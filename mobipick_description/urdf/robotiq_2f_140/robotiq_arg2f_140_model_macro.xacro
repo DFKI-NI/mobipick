@@ -225,5 +225,5 @@
 
   <!-- GRASP HACK -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/gzplugin_grasp_fix.urdf.xacro"/>
-  <gzplugin_grasp_fix prefix="${prefix}"/>
+  <xacro:gzplugin_grasp_fix prefix="${prefix}"/>
 </robot>
