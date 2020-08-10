@@ -10,7 +10,7 @@
   <arg name="yaw" default="$(eval pi)" />
 
   <param name="powerdrill_description"
-    command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/powerdrill.urdf.xacro'" />
+    command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/powerdrill.urdf.xacro'" />
 
   <group if="$(arg wait_for_table)">
     <node name="spawn_powerdrill1" pkg="gazebo_ros" type="spawn_model" args="-urdf
