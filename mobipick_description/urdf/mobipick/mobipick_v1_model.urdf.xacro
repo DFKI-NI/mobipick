@@ -118,7 +118,7 @@
     <child link="${prefix}sensor_mount_link" />
   </joint>
 
-  <gripper_cam prefix="${prefix}" />
+  <xacro:gripper_cam prefix="${prefix}" />
 
   <!-- ############### DUAL XTION MOUNT + XTIONS ################ -->
   <xacro:if value="${robot == 'mobipick-hb'}">
