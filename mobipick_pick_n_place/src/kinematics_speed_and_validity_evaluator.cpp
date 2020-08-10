@@ -118,7 +118,7 @@ int main(int argc, char** argv)
         for (unsigned int i = 0; i < test_count; ++i)
         {
           state.setToRandomPositions(jmg, rng);
-          Eigen::Affine3d pose = state.getGlobalLinkTransform(tip);
+          Eigen::Isometry3d pose = state.getGlobalLinkTransform(tip);
 
           state.setToRandomPositions(jmg, rng);
           std::vector<double> joint_positions_seed;
@@ -132,8 +132,8 @@ int main(int argc, char** argv)
           moveit::tools::Profiler::Begin("IK");
           state.setFromIK(jmg, pose);
           moveit::tools::Profiler::End("IK");
-          const Eigen::Affine3d& pose_upd = state.getGlobalLinkTransform(tip);
-          Eigen::Affine3d diff = pose_upd * pose.inverse();
+          const Eigen::Isometry3d& pose_upd = state.getGlobalLinkTransform(tip);
+          Eigen::Isometry3d diff = pose_upd * pose.inverse();
           double rot_err = (diff.rotation() - Eigen::Matrix3d::Identity()).norm();
           double trans_err = diff.translation().norm();
 

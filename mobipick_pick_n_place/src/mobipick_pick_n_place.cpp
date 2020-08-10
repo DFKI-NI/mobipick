@@ -83,12 +83,12 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
   // --- calculate grasps
   // this is using standard frame orientation: x forward, y left, z up, relative to object bounding box center
-  std::vector<Eigen::Affine3d> grasp_poses;
+  std::vector<Eigen::Isometry3d> grasp_poses;
 
   {
     // GRASP 1: pitch = pi/8  (grasp handle from upper back)
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
-    Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
+    Eigen::Isometry3d grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.0d));
     grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
@@ -96,7 +96,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
   {
     // GRASP 2: pitch = 0 (grasp handle horizontally)
-    Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
+    Eigen::Isometry3d grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose.translate(Eigen::Vector3d(-0.065d, 0.0d, 0.0d));
     grasp_poses.push_back(grasp_pose);
   }
@@ -104,7 +104,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   {
     // GRASP 3: pitch = pi/2 (grasp top part from above)
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
-    Eigen::Affine3d grasp_pose = Eigen::Affine3d::Identity();
+    Eigen::Isometry3d grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.06d));
     grasp_pose.rotate(rotation);
     grasp_poses.push_back(grasp_pose);
@@ -116,7 +116,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
     // inverse quaternion of the power drill: rpy = (pi / 2, 0, pi) = quat (0, 0.707, 0.707, 0)
     // Eigen quaternion = wxyz, not xyzw
-    Eigen::Affine3d bbox_center_rotated; // = Eigen::Affine3d::Identity();
+    Eigen::Isometry3d bbox_center_rotated; // = Eigen::Isometry3d::Identity();
 
     geometry_msgs::Pose power_drill;
     power_drill.orientation.x = 0.0;

@@ -32,9 +32,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       det3d.bbox.size.z = 0.94;
 
       // shift to center of bbox
-      Eigen::Affine3d object_pose;
+      Eigen::Isometry3d object_pose;
       tf::poseMsgToEigen(msg->pose[i], object_pose);
-      Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
+      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
       object_to_bbox.translation() = Eigen::Vector3d(0.0d, 0.0d, det3d.bbox.size.z / 2.0d);
       tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
 
@@ -54,9 +54,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       det3d.bbox.size.z = 0.1239;
 
       // shift to center of bbox
-      Eigen::Affine3d object_pose;
+      Eigen::Isometry3d object_pose;
       tf::poseMsgToEigen(msg->pose[i], object_pose);
-      Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
+      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
       object_to_bbox.translation() = Eigen::Vector3d(0.0d, 0.0d, det3d.bbox.size.z / 2.0d);
       tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
 
@@ -76,9 +76,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
       det3d.bbox.size.z = 0.057294;
 
       // shift to center of bbox
-      Eigen::Affine3d object_pose;
+      Eigen::Isometry3d object_pose;
       tf::poseMsgToEigen(msg->pose[i], object_pose);
-      Eigen::Affine3d object_to_bbox = Eigen::Affine3d::Identity();
+      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
       object_to_bbox.translation() = Eigen::Vector3d(-0.046d, 0.01055d, 0.02545d);
       tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
 
