@@ -40,4 +40,10 @@
     <arg name="robot_yaw" value="$(arg robot_yaw)" />
   </include>
   </group >
+
+
+    <!-- Robotiq command bridge-->
+    <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/robotiq_2f_140_bridge.launch">
+      <arg name="gripper_ns" value="$(arg namespace)" />
+    </include>
 </launch>
