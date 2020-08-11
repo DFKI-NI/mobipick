@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <launch>
-  <arg name="gripper_ns" default="" />
+  <arg name="gripper_ns" default="mobipick" />
 
   <!-- Start gripper command bridge from  gripper command to follow joint trajectory-->
   <node name="gripper_hw" pkg="mobipick_gazebo" type="robotiq_2f_140_command_bridge.py" ns="$(arg gripper_ns)" output="screen">
