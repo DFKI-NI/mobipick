@@ -67,6 +67,8 @@ void openGripper(trajectory_msgs::JointTrajectory &posture)
   posture.points[0].positions.resize(1);
   posture.points[0].positions[0] = 0.1;
 
+  posture.points[0].effort.resize(1);
+  posture.points[0].effort[0]=30;
   posture.points[0].time_from_start.fromSec(5.0);
 }
 
@@ -79,6 +81,8 @@ void closedGripper(trajectory_msgs::JointTrajectory &posture, std::float_t gripp
   posture.points[0].positions.resize(1);
   posture.points[0].positions[0] = gripper_width;   // closed around power drill: 0.65; fully closed: 0.76  TODO: should be 0.42 for top grasp
 
+  posture.points[0].effort.resize(1);
+  posture.points[0].effort[0]=80;
   posture.points[0].time_from_start.fromSec(5.0);
 }
 
@@ -92,7 +96,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   // this is using standard frame orientation: x forward, y left, z up, relative to object bounding box center
 
   std::vector<GrapsPoseDefine> grasp_poses;
-
+/*
   {
     // GRASP 1: pitch = pi/8  (grasp handle from upper back)
     GrapsPoseDefine grasp_pose_define;
@@ -101,7 +105,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     grasp_pose_define.grasp_pose = Eigen::Affine3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
     grasp_pose_define.grasp_pose.rotate(rotation);
-    grasp_pose_define.gripper_width=0.63;
+    grasp_pose_define.gripper_width=0.03;
     grasp_poses.push_back(grasp_pose_define);
     
   }
@@ -111,18 +115,18 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     GrapsPoseDefine grasp_pose_define;
     grasp_pose_define.grasp_pose = Eigen::Affine3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.065d, 0.0d, 0.02d));
-    grasp_pose_define.gripper_width=0.63;
+    grasp_pose_define.gripper_width=0.03;
     grasp_poses.push_back(grasp_pose_define);
   }
-
+*/
   {
     // GRASP 3: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     grasp_pose_define.grasp_pose = Eigen::Affine3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.06d));
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
     grasp_pose_define.grasp_pose.rotate(rotation);
-    grasp_pose_define.gripper_width=0.42;
+    grasp_pose_define.gripper_width=0.045;
     grasp_poses.push_back(grasp_pose_define);
   }
 
@@ -184,22 +188,23 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   std::vector<std::string> object_ids;
   object_ids.push_back("table");
   auto table = planning_scene_interface.getObjects(object_ids).at("table");
-  double table_height =
+  double table_height = 
       table.primitive_poses[0].position.z + table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
   ROS_INFO("Table height: %f", table_height);
 
   // --- calculate desired pose of gripper_tcp when placing
   // desired pose of power drill
   geometry_msgs::PoseStamped p;
+
+
+
+  Eigen::Affine3d place_pose = Eigen::Affine3d::Identity();
+  place_pose.translate(Eigen::Vector3d(-0.0d, -0.7d, table_height + 0.10d));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
   p.header.frame_id = "mobipick/base_link";
-  p.pose.position.x = -0.0;
-  p.pose.position.y = -1.0;
-  p.pose.position.z = table_height + 0.13;   // power drill center (with large battery pack) is about 0.10 m above table
-   
-  p.pose.orientation.x = -0.5;
-  p.pose.orientation.y = -0.5;
-  p.pose.orientation.z = 0.5;
-  p.pose.orientation.w = 0.5;
+  tf::poseEigenToMsg(place_pose, p.pose);
+  
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
 
@@ -223,7 +228,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 
 
 
-
+  ROS_INFO_STREAM("Place at " << g.place_pose);
   auto error_code = group.place("power_drill", loc);
   group.clearPathConstraints();
   return error_code;
@@ -333,7 +338,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.70;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.70;
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.94;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.80;
       co.primitive_poses.resize(1);
       co.primitive_poses[0].position.x = 10.05;
       co.primitive_poses[0].position.y = 11.35;
@@ -482,9 +487,10 @@ int main(int argc, char **argv)
   /* ********************* PLACE ********************* */
 
  
-  move(group, -0.05, -0.05, 0.2);
+  //move(group, -0.05, -0.05, 0.2);
   ros::WallDuration(1.0).sleep();
-  group.setPlannerId("PRM");
+  group.setPlannerId("PRMstar");
+  group.setPlanningTime(30);
   ROS_INFO("Start Placing");
   //place
   uint placePlanAttempts = 0;
@@ -499,7 +505,7 @@ int main(int argc, char **argv)
   {
     ROS_INFO("Planning for Placing FAILED");
     ros::WallDuration(1.0).sleep();
-    move(group, 0.01, 0.01, -0.01); //TODO: make a random/suitable move
+    //move(group, 0.01, 0.01, -0.01); //TODO: make a random/suitable move
   }
   else
   {
