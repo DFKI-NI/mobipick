@@ -20,7 +20,7 @@
     <arg name="z"     default="1.02" />
     <arg name="roll"  default="$(eval pi / 2)" />
     <arg name="pitch" default="0.0" />
-    <arg name="yaw"   default="$(eval pi  *2  / 3)" />
+    <arg name="yaw"   default="$(eval -pi  *2  / 3)" />
   </include>
 
 
