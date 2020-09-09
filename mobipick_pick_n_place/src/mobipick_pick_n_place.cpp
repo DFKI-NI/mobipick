@@ -199,7 +199,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 
 
   Eigen::Affine3d place_pose = Eigen::Affine3d::Identity();
-  place_pose.translate(Eigen::Vector3d(-0.0d, -0.7d, table_height + 0.10d));
+  place_pose.translate(Eigen::Vector3d(-0.0d, -0.7d, table_height + 0.13d));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
   p.header.frame_id = "mobipick/base_link";
@@ -255,14 +255,15 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
   moveit_msgs::OrientationConstraint ocm;
   ocm.link_name = "mobipick/gripper_tcp";
   ocm.header.frame_id = "mobipick/base_link";
-  ocm.orientation.x = transform.getRotation().getX();
-  ocm.orientation.y = transform.getRotation().getY();
-  ocm.orientation.z = transform.getRotation().getZ();
-  ocm.orientation.w = transform.getRotation().getW();
-  ocm.absolute_x_axis_tolerance = 0.1;
-  ocm.absolute_y_axis_tolerance = 0.1;
+
+  ocm.orientation.x = -0.5;
+  ocm.orientation.y = 0.5;
+  ocm.orientation.z = -0.5;
+  ocm.orientation.w = -0.5;
+  ocm.absolute_x_axis_tolerance = M_PI/6;
+  ocm.absolute_y_axis_tolerance = M_PI/6;
   ocm.absolute_z_axis_tolerance = 2.0 * M_PI;
-  ocm.weight = 0.5;
+  ocm.weight = 0.8;
   
 
   
@@ -495,27 +496,31 @@ int main(int argc, char **argv)
   //place
   uint placePlanAttempts = 0;
   do{
-  error_code = place(group);
-  ++placePlanAttempts;
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Placing SUCCESSFUL");
-  }
-  else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || moveit::planning_interface::MoveItErrorCode::TIMED_OUT) && placePlanAttempts <10 )
-  {
-    ROS_INFO("Planning for Placing FAILED");
-    ros::WallDuration(1.0).sleep();
-    //move(group, 0.01, 0.01, -0.01); //TODO: make a random/suitable move
-  }
-  else
-  {
-    ROS_ERROR("Placing FAILED");
-    return 0;
-  }
+    setOrientationContraints(group);
+    error_code = place(group);
+    ++placePlanAttempts;
+    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    {
+      ROS_INFO("Placing SUCCESSFUL");
+    }
+    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || moveit::planning_interface::MoveItErrorCode::TIMED_OUT) && placePlanAttempts <10 )
+    {
+      ROS_INFO("Planning for Placing FAILED");
+      ros::WallDuration(1.0).sleep();
+      //move(group, 0.01, 0.01, -0.01); //TODO: make a random/suitable move
+    }
+    else
+    {
+      ROS_ERROR("Placing FAILED");
+      return 0;
+    }
   }while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT ) && placePlanAttempts <10 );
   
   
   // plan to go home
+
+
+  group.setPlannerId("RRTConnect");
   group.setNamedTarget("home");
   error_code = group.plan(plan);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
