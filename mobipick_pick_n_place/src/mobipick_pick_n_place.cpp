@@ -512,7 +512,7 @@ int main(int argc, char **argv)
     else
     {
       ROS_ERROR("Placing FAILED");
-      return 0;
+      return 1;
     }
   }while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT ) && placePlanAttempts <10 );
   
