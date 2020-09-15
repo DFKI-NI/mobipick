@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
+  <arg name="gui" default="true" />
+  <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
+
+  <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
+    <arg name="world_name" value="$(find mobipick_gazebo)/worlds/smart_factory.sdf"/>
+    <arg name="robot_x"   value="0.00" />
+    <arg name="robot_y"   value="0.0" />
+    <arg name="robot_yaw" value="1.57" />
+  </include>
+  
+  <!-- spawn power drill -->
+  <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
+    <arg name="x"     default="0.750" />
+    <arg name="y"     default="0.0" />
+    <arg name="z"     default="1.02" />
+    <arg name="roll"  default="$(eval pi / 2)" />
+    <arg name="pitch" default="0.0" />
+    <arg name="yaw"   default="$(eval -pi  *2  / 3)" />
+  </include>
+
+
+  <!-- spawn table -->
+
+  <param name="table_description"
+    command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
+  <node name="spawn_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 0.75 -y 0.0"
+    respawn="false" output="screen" />
+
+</launch>
