@@ -207,6 +207,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
+  g.allowed_touch_objects.push_back("table");
 
   g.pre_place_approach.direction.header.frame_id = "mobipick/base_link";
   g.pre_place_approach.desired_distance = 0.2;
@@ -339,7 +340,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.70;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.70;
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.80;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.73;
       co.primitive_poses.resize(1);
       co.primitive_poses[0].position.x = 10.05;
       co.primitive_poses[0].position.y = 11.35;
