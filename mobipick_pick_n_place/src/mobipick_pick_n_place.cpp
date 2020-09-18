@@ -45,6 +45,10 @@
 #include <moveit/planning_scene_monitor/planning_scene_monitor.h>
 #include <geometric_shapes/solid_primitive_dims.h>
 
+//Move base
+#include <move_base_msgs/MoveBaseAction.h>
+#include <actionlib/client/simple_action_client.h>
+
 #include <vision_msgs/Detection3DArray.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
@@ -52,6 +56,10 @@
 #include <eigen_conversions/eigen_msg.h>
 
 #include <sstream>
+
+typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+
+
 struct GrapsPoseDefine {
     Eigen::Affine3d grasp_pose;
     std::float_t gripper_width;
@@ -414,10 +422,42 @@ int main(int argc, char **argv)
   std_msgs::String msgGripper;
   std::stringstream ssGripper;
   
+  actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> move_base_ac("move_base", true);
 
-  
+  //wait for the action server to come up
+  while(!move_base_ac.waitForServer(ros::Duration(5.0))){
+    ROS_INFO("Waiting for the move_base action server to come up");
+  }
+
+  ROS_INFO("Connected to mb action server");
+
+  /* ******************* MOVE TO TABLE ****************************** */
 
 
+  move_base_msgs::MoveBaseGoal mb_goal;
+  mb_goal.target_pose.header.frame_id="/map";
+  mb_goal.target_pose.header.stamp = ros::Time::now();
+
+  mb_goal.target_pose.pose.position.x =-0.2;
+  mb_goal.target_pose.pose.position.y = 0.1;
+  mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
+  mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
+  mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
+  mb_goal.target_pose.pose.orientation.w = 0.999942333612;
+
+  ROS_INFO("Send pick base pose and wait...");
+  move_base_ac.sendGoal(mb_goal);
+
+  move_base_ac.waitForResult();
+
+  if(move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("Moving base to pick pose SUCCESSFUL");
+  else 
+  {
+    ROS_INFO("Moving base to pick pose FAILED");
+    return 1;
+  }
+    
 
   /* ********************* PLAN AND EXECUTE MOVES ********************* */
 
@@ -486,7 +526,57 @@ int main(int argc, char **argv)
   } while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ) && pickPlanAttempts <10 );
 
 
+  /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
+  setOrientationContraints(group);
+  // plan to observe the table
+  group.setNamedTarget("transport");
+error_code = group.plan(plan);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Planning to transport pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Planning to transport pose FAILED");
+    return 1;
+  }
 
+  // move to transport pose
+  error_code = group.move();
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Moving to transport pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Moving to transport pose FAILED");
+    return 1;
+  }
+  ros::WallDuration(5.0).sleep();
+
+
+  /* ********************* MOVE TO PLACE ********************* */
+  mb_goal.target_pose.header.frame_id="/map";
+  mb_goal.target_pose.header.stamp = ros::Time::now();
+
+  mb_goal.target_pose.pose.position.x =7.84681434123;
+  mb_goal.target_pose.pose.position.y = -3.15925832165;
+  mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
+  mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
+  mb_goal.target_pose.pose.orientation.z = -0.015630101472;
+  mb_goal.target_pose.pose.orientation.w = 0.999877777014;
+
+  ROS_INFO("Send place base pose and wait...");
+  move_base_ac.sendGoal(mb_goal);
+
+  move_base_ac.waitForResult();
+
+  if(move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("Moving base to place pose SUCCESSFUL");
+  else 
+  {
+    ROS_INFO("Moving base to place pose FAILED");
+    return 1;
+  }
+    
   /* ********************* PLACE ********************* */
 
  
