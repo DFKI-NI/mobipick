@@ -25,25 +25,27 @@
 
   <!-- Add passive + mimic joints to joint_states topic -->
   <group ns="$(arg namespace)">
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-    <rosparam param="source_list">[/mobipick/joint_states]</rosparam>
-    <param name="rate" value="200.0" />
-  </node>
-</group>
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <rosparam param="source_list">[/mobipick/joint_states]</rosparam>
+      <param name="rate" value="200.0" />
+    </node>
+  </group>
 
+  <!-- This namespace has two effects:
+       1. pushing all topics into the namespace
+       2. adding the namespace prefix to the header.frame_id field of the laser scanner messages. -->
   <group ns="$(arg namespace)">
-  <!-- spawn robot and bring up controllers etc. -->
-  <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_gazebo_common.launch">
-    <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
-    <arg name="robot_x"   value="$(arg robot_x)" />
-    <arg name="robot_y"   value="$(arg robot_y)" />
-    <arg name="robot_yaw" value="$(arg robot_yaw)" />
-  </include>
-  </group >
-
-
-    <!-- Robotiq command bridge-->
-    <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/robotiq_2f_140_bridge.launch">
-      <arg name="gripper_ns" value="$(arg namespace)" />
+    <!-- spawn robot and bring up controllers etc. -->
+    <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_gazebo_common.launch">
+      <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
+      <arg name="robot_x"   value="$(arg robot_x)" />
+      <arg name="robot_y"   value="$(arg robot_y)" />
+      <arg name="robot_yaw" value="$(arg robot_yaw)" />
     </include>
+  </group>
+
+  <!-- Robotiq command bridge-->
+  <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/robotiq_2f_140_bridge.launch">
+    <arg name="gripper_ns" value="$(arg namespace)" />
+  </include>
 </launch>
