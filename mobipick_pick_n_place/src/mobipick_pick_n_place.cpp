@@ -52,7 +52,6 @@
 #include <eigen_conversions/eigen_msg.h>
 
 #include <sstream>
-
 struct GrapsPoseDefine {
     Eigen::Affine3d grasp_pose;
     std::float_t gripper_width;
@@ -126,7 +125,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     grasp_pose_define.grasp_pose = Eigen::Affine3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
     grasp_pose_define.grasp_pose.rotate(rotation);
-    grasp_pose_define.gripper_width=0.045;
+    grasp_pose_define.gripper_width=0.03; // 0.45 for power drill with grip
     grasp_poses.push_back(grasp_pose_define);
   }
 
@@ -415,8 +414,10 @@ int main(int argc, char **argv)
   std_msgs::String msgGripper;
   std::stringstream ssGripper;
   
-  //ros::ServiceClient attachSrv = nh.serviceClient<mobipick_pick_n_place::AnchoringSrv>("anchoring/attach_power_drill");
+
   
+
+
 
   /* ********************* PLAN AND EXECUTE MOVES ********************* */
 
@@ -504,7 +505,7 @@ int main(int argc, char **argv)
     {
       ROS_INFO("Placing SUCCESSFUL");
     }
-    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || moveit::planning_interface::MoveItErrorCode::TIMED_OUT) && placePlanAttempts <10 )
+    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT) && placePlanAttempts <10 )
     {
       ROS_INFO("Planning for Placing FAILED");
       ros::WallDuration(1.0).sleep();

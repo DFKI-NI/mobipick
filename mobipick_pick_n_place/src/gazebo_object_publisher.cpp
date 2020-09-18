@@ -44,7 +44,7 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
           det3d.header = detections.header;
           det3d.bbox.size.x = 0.70;
           det3d.bbox.size.y = 0.70;
-          det3d.bbox.size.z = 0.94;
+          det3d.bbox.size.z = 0.73;
 
           // shift to center of bbox
           Eigen::Isometry3d object_pose;
