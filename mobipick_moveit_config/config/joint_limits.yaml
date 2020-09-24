@@ -8,6 +8,8 @@ joint_limits:
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_shoulder_lift_joint:
+    max_position: 40/180*3.14
+    min_position: -220/180*3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
