@@ -6,7 +6,9 @@
 #include <eigen_conversions/eigen_msg.h>
 
 std::shared_ptr<ros::Publisher> detection_pub;
-std::shared_ptr<ros::Publisher> pose_pub;
+std::shared_ptr<ros::Publisher> pose_power_drill_pub;
+std::shared_ptr<ros::Publisher> pose_table_pub;
+
 
 void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
 {
@@ -58,6 +60,11 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
           tf::poseEigenToMsg((mobipick_pose * object_pose), det3d.results[0].pose.pose);
           det3d.results[0].score = 1.0;
           detections.detections.push_back(det3d);
+          // publish table pose seperately
+          geometry_msgs::PoseStamped pose_msg;
+          pose_msg.header = det3d.header;
+          pose_msg.pose = det3d.bbox.center;
+          pose_table_pub->publish(pose_msg);
         }
         if (msg->name[i] == "cokecan_1::coke_can")
         {
@@ -112,7 +119,7 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr msg)
           geometry_msgs::PoseStamped pose_msg;
           pose_msg.header = det3d.header;
           pose_msg.pose = det3d.bbox.center;
-          pose_pub->publish(pose_msg);
+          pose_power_drill_pub->publish(pose_msg);
         }
       }
     }
@@ -125,7 +132,8 @@ int main(int argc, char **argv)
   ros::init(argc, argv, "gazebo_object_publisher");
   ros::NodeHandle nh;
   detection_pub = std::make_shared<ros::Publisher>(nh.advertise<vision_msgs::Detection3DArray>("dope/detected_objects", 10));
-  pose_pub = std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_power_drill_with_grip", 10));
+  pose_power_drill_pub = std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_power_drill_with_grip", 10));
+  pose_table_pub = std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_table", 10));
   ros::Subscriber sub = nh.subscribe("/gazebo/link_states", 10, gazebo_cb);
 
   ros::spin();
