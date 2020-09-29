@@ -155,7 +155,11 @@ roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true
 ```
+### Rosbridge with websockets
 
+```bash
+roslaunch rosbridge_server rosbridge_websocket.launch port:=9090
+```
 
 ### Using the arm velocity controller
 
