@@ -1,0 +1,29 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="smart_factory">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+  
+  <xacro:property name="mass" value="500" />
+  <link name="smart_factory_link">
+    <inertial>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />      
+      <mass value="10000" />
+      <inertia
+        ixx="${mass * 0.003988511412844956}"
+        ixy="${mass * 0.0004112614213275305}"
+        ixz="${mass * 0.00003166287680811595}"
+        iyy="${mass * 0.0016270423052260282}"
+        iyz="${mass * 0.0000807201704454}"
+        izz="${mass * 0.00534355593909}" />
+    </inertial>
+    <collision name="smart_factory_collision">
+        <geometry>
+      <mesh filename="package://mobipick_gazebo/meshes/smart_factory.stl" />
+        </geometry>
+    </collision>
+    <visual name="smart_factory_visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+      <mesh filename="package://mobipick_gazebo/meshes/smart_factory.stl" />
+        </geometry>
+    </visual>
+  </link>
+</robot>
