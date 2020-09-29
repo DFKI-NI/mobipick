@@ -4,7 +4,7 @@ arm:
   position_only_ik: false                       # default: false
   # kinematics_solver_search_resolution: 0.005  # not applicable to TRAC IK
   # kinematics_solver_attempts: 3               # not applicable to TRAC IK
-  solve_type: Speed   # Can be Speed, Distance, Manipulation1, Manipulation2; default: Speed.
+  solve_type: Distance   # Can be Speed, Distance, Manipulation1, Manipulation2; default: Speed.
                       # See trac_ik_lib documentation for details:
                       # https://bitbucket.org/traclabs/trac_ik/src/36e5da8b1e23e52c62fc428a1b1683a12b367de8/trac_ik_lib/README.md
   arm_prefix: $(arg prefix)ur5_
