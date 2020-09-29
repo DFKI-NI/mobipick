@@ -268,9 +268,9 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
   ocm.orientation.y = 0.5;
   ocm.orientation.z = -0.5;
   ocm.orientation.w = -0.5;
-  ocm.absolute_x_axis_tolerance = M_PI/6;
-  ocm.absolute_y_axis_tolerance = M_PI/6;
-  ocm.absolute_z_axis_tolerance = 2.0 * M_PI;
+  ocm.absolute_x_axis_tolerance = M_PI/2;
+  ocm.absolute_y_axis_tolerance = M_PI/2;
+  ocm.absolute_z_axis_tolerance = 4.0 * M_PI;
   ocm.weight = 0.8;
   
 
@@ -345,12 +345,12 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
       co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.70;
-      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.70;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.80;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.80;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.73;
       co.primitive_poses.resize(1);
-      co.primitive_poses[0].position.x = 10.05;
-      co.primitive_poses[0].position.y = 11.35;
+      co.primitive_poses[0].position.x = 12.3;
+      co.primitive_poses[0].position.y = 3.8;
       co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
       co.primitive_poses[0].orientation.w = 1.0;
 
@@ -431,19 +431,59 @@ int main(int argc, char **argv)
 
   ROS_INFO("Connected to mb action server");
 
+
+  moveit::planning_interface::MoveGroupInterface::Plan plan;
+
+  /* ******************* MOVE ARM TO HOME ****************************** */
+  // plan
+  group.setPlannerId("RRTConnect");
+  group.setNamedTarget("home");
+  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Planning to home pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Planning to home pose FAILED");
+    return 1;
+  }
+ 
+
+ //move
+  error_code = group.move();
+  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+  {
+    ROS_INFO("Moving to home pose SUCCESSFUL");
+  } else
+  {
+    ROS_ERROR("Moving to home pose FAILED");
+    return 1;
+  }
+
+
   /* ******************* MOVE TO TABLE ****************************** */
 
 
   move_base_msgs::MoveBaseGoal mb_goal;
   mb_goal.target_pose.header.frame_id="/map";
   mb_goal.target_pose.header.stamp = ros::Time::now();
-
-  mb_goal.target_pose.pose.position.x =-0.2;
+  /* Smart Factory*/
+  mb_goal.target_pose.pose.position.x = 0.8;
   mb_goal.target_pose.pose.position.y = 0.1;
   mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
   mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
   mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
   mb_goal.target_pose.pose.orientation.w = 0.999942333612;
+
+
+  /* Berghoffstr.
+  mb_goal.target_pose.pose.position.x = 12.331;
+  mb_goal.target_pose.pose.position.y =  2.995;
+  mb_goal.target_pose.pose.orientation.x = 0.000;
+  mb_goal.target_pose.pose.orientation.y =  0.000;
+  mb_goal.target_pose.pose.orientation.z = 1.000;
+  mb_goal.target_pose.pose.orientation.w = 0.000;
+ */
 
   ROS_INFO("Send pick base pose and wait...");
   move_base_ac.sendGoal(mb_goal);
@@ -462,9 +502,8 @@ int main(int argc, char **argv)
   /* ********************* PLAN AND EXECUTE MOVES ********************* */
 
   // plan to observe the table
-  moveit::planning_interface::MoveGroupInterface::Plan plan;
   group.setNamedTarget("observe100cm_right");
-  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+  error_code = group.plan(plan);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
     ROS_INFO("Planning to observation pose SUCCESSFUL");
@@ -556,13 +595,23 @@ error_code = group.plan(plan);
   /* ********************* MOVE TO PLACE ********************* */
   mb_goal.target_pose.header.frame_id="/map";
   mb_goal.target_pose.header.stamp = ros::Time::now();
-
+  /* Smart Factory  */
   mb_goal.target_pose.pose.position.x =7.84681434123;
   mb_goal.target_pose.pose.position.y = -3.15925832165;
   mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
   mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
   mb_goal.target_pose.pose.orientation.z = -0.015630101472;
   mb_goal.target_pose.pose.orientation.w = 0.999877777014;
+  
+
+  /* Berghoffstr 
+  mb_goal.target_pose.pose.position.x =12.291;
+  mb_goal.target_pose.pose.position.y = 4.663;
+  mb_goal.target_pose.pose.orientation.x = 0.0;
+  mb_goal.target_pose.pose.orientation.y =  0.0;
+  mb_goal.target_pose.pose.orientation.z = 0.0;
+  mb_goal.target_pose.pose.orientation.w = 1;
+*/
 
   ROS_INFO("Send place base pose and wait...");
   move_base_ac.sendGoal(mb_goal);
