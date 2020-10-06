@@ -1,3 +1,6 @@
+/* not in use*/
+
+
 #include "mobipick_pick_n_place/mobipick_anchoring.h"
 
 MobipickAnchoring::MobipickAnchoring(ros::NodeHandle &nh) : node_(&nh)

@@ -144,7 +144,19 @@ rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
 
 
-### move_base demo (Smart Factory)
+### Pick + Place with move_base demo (Berghoffstraße)
+
+```bash
+roslaunch mobipick_gazebo mobipick_moelk.launch 
+rosservice call /gazebo/unpause_physics
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint" delta_yaw:=1.57 delta_x:=0.2
+roslaunch mir_navigation start_planner.launch     map_file:=$(rospack find pbr_maps)/maps/moelk/pbr_robot_lab.yaml prefix:="mobipick/" __ns:="mobipick"
+roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
+rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
+roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true
+```
+
+### Pick + Place with demo (Smart Factory)
 
 ```bash
 roslaunch mobipick_gazebo mobipick_smart_factory.launch 
@@ -155,6 +167,7 @@ roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true
 ```
+
 ### Rosbridge with websockets
 
 ```bash

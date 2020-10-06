@@ -467,23 +467,23 @@ int main(int argc, char **argv)
   move_base_msgs::MoveBaseGoal mb_goal;
   mb_goal.target_pose.header.frame_id="/map";
   mb_goal.target_pose.header.stamp = ros::Time::now();
-  /* Smart Factory*/
+  /* Smart Factory
   mb_goal.target_pose.pose.position.x = 0.8;
   mb_goal.target_pose.pose.position.y = 0.1;
   mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
   mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
   mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
-  mb_goal.target_pose.pose.orientation.w = 0.999942333612;
+  mb_goal.target_pose.pose.orientation.w = 0.999942333612;*/
 
 
-  /* Berghoffstr.
+  /* Berghoffstr.*/
   mb_goal.target_pose.pose.position.x = 12.331;
   mb_goal.target_pose.pose.position.y =  2.995;
   mb_goal.target_pose.pose.orientation.x = 0.000;
   mb_goal.target_pose.pose.orientation.y =  0.000;
   mb_goal.target_pose.pose.orientation.z = 1.000;
   mb_goal.target_pose.pose.orientation.w = 0.000;
- */
+
 
   ROS_INFO("Send pick base pose and wait...");
   move_base_ac.sendGoal(mb_goal);
@@ -595,23 +595,23 @@ error_code = group.plan(plan);
   /* ********************* MOVE TO PLACE ********************* */
   mb_goal.target_pose.header.frame_id="/map";
   mb_goal.target_pose.header.stamp = ros::Time::now();
-  /* Smart Factory  */
+  /* Smart Factory  
   mb_goal.target_pose.pose.position.x =7.84681434123;
   mb_goal.target_pose.pose.position.y = -3.15925832165;
   mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
   mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
   mb_goal.target_pose.pose.orientation.z = -0.015630101472;
   mb_goal.target_pose.pose.orientation.w = 0.999877777014;
-  
+  */
 
-  /* Berghoffstr 
+  /* Berghoffstr */
   mb_goal.target_pose.pose.position.x =12.291;
   mb_goal.target_pose.pose.position.y = 4.663;
   mb_goal.target_pose.pose.orientation.x = 0.0;
   mb_goal.target_pose.pose.orientation.y =  0.0;
   mb_goal.target_pose.pose.orientation.z = 0.0;
   mb_goal.target_pose.pose.orientation.w = 1;
-*/
+
 
   ROS_INFO("Send place base pose and wait...");
   move_base_ac.sendGoal(mb_goal);
