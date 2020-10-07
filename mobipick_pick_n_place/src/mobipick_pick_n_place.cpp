@@ -268,8 +268,8 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
   ocm.orientation.y = 0.5;
   ocm.orientation.z = -0.5;
   ocm.orientation.w = -0.5;
-  ocm.absolute_x_axis_tolerance = M_PI/2;
-  ocm.absolute_y_axis_tolerance = M_PI/2;
+  ocm.absolute_x_axis_tolerance = 0.8*M_PI/2;
+  ocm.absolute_y_axis_tolerance = 0.8*M_PI/2;
   ocm.absolute_z_axis_tolerance = 4.0 * M_PI;
   ocm.weight = 0.8;
   
@@ -385,6 +385,33 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
   target_pose.position.z += dz;
   ROS_INFO_STREAM("Actual Pose frame: " << actual_pose.header.frame_id);
   group.setPoseTarget(target_pose);
+
+
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+
+  bool success = (group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+
+  ROS_INFO( "Move planning (pose goal) %s", success ? "" : "FAILED");
+
+  auto error_code = group.move();
+  return error_code;
+}
+
+moveit::planning_interface::MoveItErrorCode moveToTransport(moveit::planning_interface::MoveGroupInterface &group)
+{
+  robot_state::RobotState start_state(*group.getCurrentState());
+  group.setStartState(start_state);
+
+  geometry_msgs::PoseStamped target_pose;
+  target_pose.header.frame_id ="mobipick/ur5_base_link";
+  Eigen::Affine3d transport_pose = Eigen::Affine3d::Identity();
+  transport_pose.translate(Eigen::Vector3d(0.2, -0.4, 0.2));
+  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+  tf::poseEigenToMsg(transport_pose, target_pose.pose);
+
+
+  group.setPoseTarget(target_pose, "mobipick/gripper_tcp");
 
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
@@ -567,28 +594,7 @@ int main(int argc, char **argv)
 
   /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
   setOrientationContraints(group);
-  // plan to observe the table
-  group.setNamedTarget("transport");
-error_code = group.plan(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Planning to transport pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Planning to transport pose FAILED");
-    return 1;
-  }
-
-  // move to transport pose
-  error_code = group.move();
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Moving to transport pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Moving to transport pose FAILED");
-    return 1;
-  }
+  moveToTransport(group);
   ros::WallDuration(5.0).sleep();
 
 

@@ -3,8 +3,8 @@
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
   $(arg prefix)ur5_shoulder_pan_joint:
-    max_position: 6.28
-    min_position: -6.28
+    max_position: 3.14
+    min_position: -3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
@@ -17,15 +17,15 @@ joint_limits:
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_elbow_joint:
-    max_position: 6.28
-    min_position: -6.28
+    max_position: 3.14
+    min_position: -3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_wrist_1_joint:
-    max_position: 6.28
-    min_position: -6.28
+    max_position: 3.14
+    min_position: -3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
@@ -38,8 +38,8 @@ joint_limits:
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_wrist_3_joint:
-    max_position: 6.28
-    min_position: -6.28
+    max_position: 3.14
+    min_position: -3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
