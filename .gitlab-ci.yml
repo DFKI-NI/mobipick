@@ -49,6 +49,7 @@ build:
     - git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git Universal_Robots_ROS_Driver
     - git clone -b kinetic-devel https://github.com/ros-industrial/robotiq.git
     - git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git
+    - git clone -b master https://git.ni.dfki.de/pbr_misc/pbr_tools.git
 
     # use rosdep to install all dependencies (including ROS itself)
     - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=pico_flexx_driver
