@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="gui" default="true" />
+  <arg name="start_paused" default="true" />
   <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
@@ -10,6 +11,7 @@
     <arg name="robot_x"   value="9.08" />
     <arg name="robot_y"   value="11.32" />
     <arg name="robot_yaw" value="1.57" />
+    <arg name="start_paused" value="$(arg start_paused)" />
   </include>
 
   <!-- spawn power drill -->
