@@ -268,8 +268,8 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
   ocm.orientation.y = 0.5;
   ocm.orientation.z = -0.5;
   ocm.orientation.w = -0.5;
-  ocm.absolute_x_axis_tolerance = 0.8*M_PI/2;
-  ocm.absolute_y_axis_tolerance = 0.8*M_PI/2;
+  ocm.absolute_x_axis_tolerance = 0.4*M_PI/2;
+  ocm.absolute_y_axis_tolerance = 0.4*M_PI/2;
   ocm.absolute_z_axis_tolerance = 4.0 * M_PI;
   ocm.weight = 0.8;
   
@@ -638,11 +638,11 @@ int main(int argc, char **argv)
   //move(group, -0.05, -0.05, 0.2);
   ros::WallDuration(1.0).sleep();
   group.setPlannerId("PRMstar");
-  group.setPlanningTime(30);
   ROS_INFO("Start Placing");
   //place
   uint placePlanAttempts = 0;
   do{
+    group.setPlanningTime(30+10*placePlanAttempts);
     setOrientationContraints(group);
     error_code = place(group);
     ++placePlanAttempts;
