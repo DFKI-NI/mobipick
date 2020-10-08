@@ -33,20 +33,27 @@ git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugin
 git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
 git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
 git clone -b master git@git.ni.dfki.de:pbr_misc/pbr_tools.git
-
+git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git 
+git clone -b master https://git.ni.dfki.de/perception/hybrit_objects.git 
+git clone https://github.com/orbbec/ros_astra_camera  
+git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git 
+git clone -b calibration_devel https://github.com/fmauch/universal_robot.git 
+git clone https://github.com/orbbec/ros_astra_launch.git
+git clone -b position_feedback https://github.com/Krause92/robotiq.git
+git clone https://github.com/krause92/mir_robot.git 
 
 # use rosdep to install all dependencies (including ROS itself)
 apt-get update -qq
 apt-get install -qq -y python-rosdep
 sudo rosdep init
 rosdep update
-rosdep install --from-paths ./ -i -y --rosdistro kinetic
+rosdep install --from-paths ./ -i -y --rosdistro melodic
 
 # build all packages in the catkin workspace
-source /opt/ros/kinetic/setup.bash
-catkin_init_workspace
+source /opt/ros/melodic/setup.bash
+catkin init
 cd ~/catkin_ws
-catkin_make -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+catkin build -DCMAKE_BUILD_TYPE=RelWithDebugInfo
 ```
 
 If you have a physical pico flexx camera attached to this PC, also follow the
@@ -70,6 +77,18 @@ Quick start
 -----------
 
 The following examples describe how to use the robot in simulation. For more information on how to use the real mobipick robot have a look at the README.md in `mobipick_bringup`.
+
+### Pick + Place with move_base demo (Berghoffstraße)
+
+```bash
+roslaunch mobipick_gazebo mobipick_moelk.launch
+rosservice call /gazebo/unpause_physics
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint"
+roslaunch mir_navigation start_planner.launch     map_file:=$(rospack find pbr_maps)/maps/moelk/pbr_robot_lab.yaml prefix:="mobipick/" __ns:="mobipick"
+roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
+rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
+roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true
+```
 
 ### Pick + Place demo (Gazebo)
 
@@ -146,17 +165,7 @@ rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
 
 
-### Pick + Place with move_base demo (Berghoffstraße)
 
-```bash
-roslaunch mobipick_gazebo mobipick_moelk.launch
-rosservice call /gazebo/unpause_physics
-roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint"
-roslaunch mir_navigation start_planner.launch     map_file:=$(rospack find pbr_maps)/maps/moelk/pbr_robot_lab.yaml prefix:="mobipick/" __ns:="mobipick"
-roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
-rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
-roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true
-```
 
 ### Pick + Place with demo (Smart Factory)
 
