@@ -30,7 +30,7 @@ build:
     # set up ROS repo
     # Install wget if not already installed
     - apt-get install -qq -y wget gnupg2
-    - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
+    - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'
     - wget http://packages.ros.org/ros.key -O - | apt-key add -
     - apt-get update -qq
     - apt-get install -qq -y python-rosdep git build-essential cmake
