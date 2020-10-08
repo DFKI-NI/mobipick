@@ -50,7 +50,6 @@ build:
     - git clone -b position_feedback https://github.com/Krause92/robotiq.git
     - git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git
     - git clone https://github.com/orbbec/ros_astra_launch.git
-    - 
     - git clone -b master https://git.ni.dfki.de/pbr_misc/pbr_tools.git
 
     # use rosdep to install all dependencies (including ROS itself)
