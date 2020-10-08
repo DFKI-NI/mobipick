@@ -52,6 +52,7 @@
 #include <vision_msgs/Detection3DArray.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
+#include <tf/transform_listener.h>
 
 #include <eigen_conversions/eigen_msg.h>
 
@@ -61,7 +62,7 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 
 
 struct GrapsPoseDefine {
-    Eigen::Affine3d grasp_pose;
+    Eigen::Isometry3d grasp_pose;
     std::float_t gripper_width;
   };
 
@@ -109,7 +110,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     GrapsPoseDefine grasp_pose_define;
     
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
-    grasp_pose_define.grasp_pose = Eigen::Affine3d::Identity();
+    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
     grasp_pose_define.grasp_pose.rotate(rotation);
     grasp_pose_define.gripper_width=0.03;
@@ -120,7 +121,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   {
     // GRASP 2: pitch = 0 (grasp handle horizontally)
     GrapsPoseDefine grasp_pose_define;
-    grasp_pose_define.grasp_pose = Eigen::Affine3d::Identity();
+    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.065d, 0.0d, 0.02d));
     grasp_pose_define.gripper_width=0.03;
     grasp_poses.push_back(grasp_pose_define);
@@ -130,7 +131,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     // GRASP 3: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
-    grasp_pose_define.grasp_pose = Eigen::Affine3d::Identity();
+    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
     grasp_pose_define.grasp_pose.rotate(rotation);
     grasp_pose_define.gripper_width=0.03; // 0.45 for power drill with grip
@@ -142,7 +143,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   {
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
     // Eigen quaternion = wxyz, not xyzw
-    Eigen::Affine3d bbox_center_rotated= Eigen::Affine3d::Identity();
+    Eigen::Isometry3d bbox_center_rotated= Eigen::Isometry3d::Identity();
     bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0d, 0.0d, 1.0d)));
     
     bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
@@ -205,7 +206,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 
 
 
-  Eigen::Affine3d place_pose = Eigen::Affine3d::Identity();
+  Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
   place_pose.translate(Eigen::Vector3d(-0.0d, -0.7d, table_height + 0.13d));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
@@ -404,7 +405,7 @@ moveit::planning_interface::MoveItErrorCode moveToTransport(moveit::planning_int
 
   geometry_msgs::PoseStamped target_pose;
   target_pose.header.frame_id ="mobipick/ur5_base_link";
-  Eigen::Affine3d transport_pose = Eigen::Affine3d::Identity();
+  Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
   transport_pose.translate(Eigen::Vector3d(0.2, -0.4, 0.2));
   transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 1.0, 0.0)));
   transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(1.0, 0.0, 0.0)));
@@ -492,7 +493,7 @@ int main(int argc, char **argv)
 
 
   move_base_msgs::MoveBaseGoal mb_goal;
-  mb_goal.target_pose.header.frame_id="/map";
+  mb_goal.target_pose.header.frame_id="map";
   mb_goal.target_pose.header.stamp = ros::Time::now();
   /* Smart Factory
   mb_goal.target_pose.pose.position.x = 0.8;
@@ -599,7 +600,7 @@ int main(int argc, char **argv)
 
 
   /* ********************* MOVE TO PLACE ********************* */
-  mb_goal.target_pose.header.frame_id="/map";
+  mb_goal.target_pose.header.frame_id="map";
   mb_goal.target_pose.header.stamp = ros::Time::now();
   /* Smart Factory  
   mb_goal.target_pose.pose.position.x =7.84681434123;

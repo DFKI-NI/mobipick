@@ -32,6 +32,8 @@ git clone -b kinetic git@git.ni.dfki.de:mobipick/mobipick.git
 git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
 git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
 git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
+git clone -b master git@git.ni.dfki.de:pbr_misc/pbr_tools.git
+
 
 # use rosdep to install all dependencies (including ROS itself)
 apt-get update -qq
@@ -147,9 +149,9 @@ Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for mov
 ### Pick + Place with move_base demo (Berghoffstraße)
 
 ```bash
-roslaunch mobipick_gazebo mobipick_moelk.launch 
+roslaunch mobipick_gazebo mobipick_moelk.launch
 rosservice call /gazebo/unpause_physics
-roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint" delta_yaw:=1.57 delta_x:=0.2
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint"
 roslaunch mir_navigation start_planner.launch     map_file:=$(rospack find pbr_maps)/maps/moelk/pbr_robot_lab.yaml prefix:="mobipick/" __ns:="mobipick"
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
