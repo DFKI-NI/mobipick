@@ -1,4 +1,4 @@
-image: ubuntu:xenial
+image: ubuntu:bionic
 
 before_script:
   # Enable system-wide authentication for git cloning via https
@@ -11,7 +11,7 @@ build:
   script:
     - export LANG="en_US.UTF-8"
     - export LC_ALL=$LANG
-    - export CI_ROS_DISTRO="kinetic"
+    - export CI_ROS_DISTRO="melodic"
     - export CATKIN_WS=~/catkin_ws
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
