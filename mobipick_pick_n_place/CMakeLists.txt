@@ -19,10 +19,6 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
 )
 
-add_service_files(
-  FILES
-  AnchoringSrv.srv
-)
 
 generate_messages(
   DEPENDENCIES
@@ -52,7 +48,6 @@ catkin_package(
 ## Your package locations should be listed before other locations
 include_directories(
   include
-  srv
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -81,16 +76,11 @@ add_dependencies(${PROJECT_NAME}_camera_marker_publisher ${${PROJECT_NAME}_EXPOR
 target_link_libraries(${PROJECT_NAME}_camera_marker_publisher ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_camera_marker_publisher PROPERTIES OUTPUT_NAME camera_marker_publisher PREFIX "")
 
-add_executable(${PROJECT_NAME}_mobipick_anchoring src/mobipick_anchoring.cpp)
-add_dependencies(${PROJECT_NAME}_mobipick_anchoring ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME}_mobipick_anchoring ${catkin_LIBRARIES})
-set_target_properties(${PROJECT_NAME}_mobipick_anchoring PROPERTIES OUTPUT_NAME mobipick_anchoring PREFIX "")
-
-
 add_executable(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator src/kinematics_speed_and_validity_evaluator.cpp)
 add_dependencies(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator PROPERTIES OUTPUT_NAME moveit_kinematics_speed_and_validity_evaluator PREFIX "")
+
 
 #############
 ## Install ##
