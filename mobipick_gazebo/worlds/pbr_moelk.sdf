@@ -1,0 +1,45 @@
+<?xml version="1.0" ?> 
+<sdf version="1.5">
+  <world name="pbr_moelk">
+    <!-- A global light source -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    <!-- A ground plane -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+
+    <model name="pbr_moelk">
+      <static>true</static>
+      <link name="pbr_moelk_link">
+        <pose>0 0 0 0 0 0</pose>
+        <collision name="pbr_moelk_collision">
+          <geometry>
+            <mesh>
+              <uri>file://Media/models/pbr_robot_lab.stl</uri>
+              <scale>1.0 1.0 1.0</scale>
+            </mesh>
+          </geometry>
+        </collision>
+        <visual name="pbr_moelk_visual">
+          <cast_shadows>false</cast_shadows>
+          <geometry>
+            <mesh>
+              <uri>file://Media/models/pbr_robot_lab.stl</uri>
+              <scale>1.0 1.0 1.0</scale>
+            </mesh>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+
+    <gui fullscreen='0'>
+      <camera name='user_camera'>
+        <pose frame=''>15.96204 4.53222 2.72129 0 0.455643 -2.779</pose>
+        <view_controller>orbit</view_controller>
+        <projection_type>perspective</projection_type>
+      </camera>
+    </gui>
+  </world>
+</sdf>

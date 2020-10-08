@@ -7,7 +7,7 @@
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="gui" value="$(arg gui)" />
     <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
-    <arg name="world_name" value="$(find pbr_gazebo)/worlds/pbr_moelk.sdf"/>
+    <arg name="world_name" value="$(find mobipick_gazebo)/worlds/pbr_moelk.sdf"/>
     <arg name="robot_x"   value="11.00" />
     <arg name="robot_y"   value="3.00" />
     <arg name="robot_yaw" value="0.00" />
