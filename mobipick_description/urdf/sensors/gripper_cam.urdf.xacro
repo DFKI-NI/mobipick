@@ -139,7 +139,7 @@
       <collision>
         <origin xyz="${-0.0325 / 2} ${-astra_cam_py} 0.0" />
         <geometry>
-          <box size="0.0325 0.12 0.0375" />
+          <box size="0.0525 0.14 0.0575" /> <!-- padded 0.01 for moveit collision checking-->
         </geometry>
       </collision>
       <xacro:box_inertial mass="${astra_s_mass}" x="0.0325" y="0.12" z="0.0375">
