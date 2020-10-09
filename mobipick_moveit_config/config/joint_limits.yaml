@@ -2,6 +2,8 @@
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
+  default_velocity_scaling_factor: 0.6  # see https://github.com/ros-planning/moveit/blob/master/MIGRATION.md, ros-planning/moveit#1890
+  default_acceleration_scaling_factor: 0.6
   $(arg prefix)ur5_shoulder_pan_joint:
     max_position: 3.14
     min_position: -3.14
