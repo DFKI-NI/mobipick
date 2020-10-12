@@ -400,7 +400,7 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
 
   ROS_INFO( "Move planning (pose goal) %s", success ? "" : "FAILED");
 
-  auto error_code = group.move();
+  auto error_code = group.execute(my_plan);
   return error_code;
 }
 
@@ -427,7 +427,7 @@ moveit::planning_interface::MoveItErrorCode moveToTransport(moveit::planning_int
 
   ROS_INFO( "Move planning (pose goal) %s", success ? "" : "FAILED");
 
-  auto error_code = group.move();
+  auto error_code = group.execute(my_plan);
   return error_code;
 }
 
@@ -515,7 +515,7 @@ int main(int argc, char **argv)
  
 
  //move
-  error_code = group.move();
+  error_code = group.execute(plan);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
     ROS_INFO("Moving to home pose SUCCESSFUL");
@@ -579,7 +579,7 @@ int main(int argc, char **argv)
   }
 
   // move to observation pose
-  error_code = group.move();
+  error_code = group.execute(plan);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
     ROS_INFO("Moving to observation pose SUCCESSFUL");
@@ -637,8 +637,9 @@ int main(int argc, char **argv)
 
 
   /* ********************* MOVE TO PLACE ********************* */
+/*
   mb_goal.target_pose.header.frame_id="map";
-  mb_goal.target_pose.header.stamp = ros::Time::now();
+  mb_goal.target_pose.header.stamp = ros::Time::now();*/
   /* Smart Factory  
   mb_goal.target_pose.pose.position.x =7.84681434123;
   mb_goal.target_pose.pose.position.y = -3.15925832165;
@@ -649,7 +650,7 @@ int main(int argc, char **argv)
   */
 
   /* Berghoffstr */
-  mb_goal.target_pose.pose.position.x =12.291;
+/*  mb_goal.target_pose.pose.position.x =12.291;
   mb_goal.target_pose.pose.position.y = 4.663;
   mb_goal.target_pose.pose.orientation.x = 0.0;
   mb_goal.target_pose.pose.orientation.y =  0.0;
@@ -670,7 +671,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-
+*/
   /* ********************* WAIT FOR USER ********************* */
   mobipick_pick_n_place::FtObserverGoal ft_goal;
 
@@ -758,7 +759,7 @@ int main(int argc, char **argv)
   }
 
   // move to home
-  error_code = group.move();
+  error_code = group.execute(plan);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
   {
     ROS_INFO("Moving to home pose SUCCESSFUL");
