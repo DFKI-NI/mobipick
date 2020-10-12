@@ -52,6 +52,7 @@
        angles, otherwise the planning space is discontinuous. -->
   <xacro:ur5_robot prefix="${prefix}ur5_" joint_limited="true"
     shoulder_lift_lower_limit="${-pi - 0.82}" shoulder_lift_upper_limit="${0.82}"
+    wrist_3_lower_limit="0.0001" wrist_3_upper_limit="${2 * pi}"
     transmission_hw_interface="$(arg transmission_hw_interface)"
     kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
 

@@ -40,8 +40,8 @@ joint_limits:
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_wrist_3_joint:
-    max_position: 3.14
-    min_position: -3.14
+    max_position: 6.283185307179586
+    min_position: 0.0001
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
