@@ -273,11 +273,11 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
 
   ocm.orientation.x = -0.5;
   ocm.orientation.y = 0.5;
-  ocm.orientation.z = -0.5;
-  ocm.orientation.w = -0.5;
-  ocm.absolute_x_axis_tolerance = 0.4*M_PI/2;
-  ocm.absolute_y_axis_tolerance = 0.4*M_PI/2;
-  ocm.absolute_z_axis_tolerance = 4.0 * M_PI;
+  ocm.orientation.z = 0.5;
+  ocm.orientation.w = 0.5;
+  ocm.absolute_x_axis_tolerance = 0.2 * M_PI;
+  ocm.absolute_y_axis_tolerance = 0.2 * M_PI;
+  ocm.absolute_z_axis_tolerance = 2.0 * M_PI;
   ocm.weight = 0.8;
   
 
