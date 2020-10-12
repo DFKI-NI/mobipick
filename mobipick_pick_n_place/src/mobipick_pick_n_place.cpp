@@ -747,6 +747,7 @@ int main(int argc, char **argv)
 
 
   group.setPlannerId("RRTConnect");
+  group.setStartStateToCurrentState();   // not sure why this is necessary after placing
   group.setNamedTarget("home");
   error_code = group.plan(plan);
   if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
