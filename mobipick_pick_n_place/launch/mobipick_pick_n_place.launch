@@ -2,6 +2,7 @@
   <arg name="object_source" default="gazebo" doc="Where to get objects from. Possible values: 'gazebo' (for gazebo) or 'static' (for moveit demo mode)." />
   <arg name="prefix" default="mobipick" />
   <arg name="simulation" default="false" />
+  <arg name="ft_observer" default="true" />
 
   <group ns="mobipick">
   <node name="mobipick_pick_n_place" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place" output="screen">
@@ -12,6 +13,9 @@
 
   <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
   </group>
-  <!--<node name="mobipick_anchoring"  pkg="mobipick_pick_n_place" type="mobipick_anchoring" output="screen" />-->
+  
+  <group if="$(arg ft_observer)">
+  <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer.py" output="screen" />
+  </group>
 </group>
 </launch>
