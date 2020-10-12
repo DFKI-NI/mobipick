@@ -694,7 +694,7 @@ int main(int argc, char **argv)
   control_msgs::GripperCommandGoal gripper_goal;
 
   gripper_goal.command.position= 0.1;
-  gripper_goal.command.effort= 30.0;
+  gripper_goal.command.max_effort= 30.0;
   gripper_ac.sendGoal(gripper_goal);
 
   gripper_ac.waitForResult();
