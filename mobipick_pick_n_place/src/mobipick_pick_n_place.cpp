@@ -52,6 +52,9 @@
 //ft observer
 #include <mobipick_pick_n_place/FtObserverAction.h>
 
+//gripper
+#include <control_msgs/GripperCommandAction.h>
+
 #include <vision_msgs/Detection3DArray.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
@@ -448,15 +451,22 @@ int main(int argc, char **argv)
   //   - also see: http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ompl_interface/ompl_interface_tutorial.html
   //   - also see: https://ompl.kavrakilab.org/planners.html
 
+  
+  /* old:
   ros::Publisher pubGripper = nh.advertise<std_msgs::String>("/mobipick/gripper_control", 1);
 
   std_msgs::String msgGripper;
   std::stringstream ssGripper;
+  */
+ 
+  group.setPlanningTime(45.0);
+  group.setPlannerId("RRTConnect");
   
+
+
+  // MOVE BASE
   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> move_base_ac("move_base", true);
   
-
-
   //wait for the move base action server to come up
   while(!move_base_ac.waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the move_base action server to come up");
@@ -464,7 +474,10 @@ int main(int argc, char **argv)
 
   ROS_INFO("Connected to mb action server");
 
+  
+  // FT Observer
   actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction> ft_observer_ac("ft_observer", true);
+  
   //wait for the ft observer action server to come up
   while(!ft_observer_ac.waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the ft_observer action server to come up");
@@ -472,8 +485,18 @@ int main(int argc, char **argv)
 
   ROS_INFO("Connected to ft observer action server");
   
+  // GRIPPER
+  actionlib::SimpleActionClient<control_msgs::GripperCommandAction> gripper_ac("gripper_hw", true);
   
+  //wait for the gripper action server to come up
+  while(!gripper_ac.waitForServer(ros::Duration(5.0))){
+    ROS_INFO("Waiting for the gripper action server to come up");
+  }
+
+  ROS_INFO("Connected to gripper action server");
   
+
+  // MOVE IT
   moveit::planning_interface::MoveGroupInterface::Plan plan;
 
   /* ******************* MOVE ARM TO HOME ****************************** */
@@ -666,6 +689,23 @@ int main(int argc, char **argv)
     return 1;
   }
 
+
+
+  control_msgs::GripperCommandGoal gripper_goal;
+
+  gripper_goal.command.position= 0.1;
+  gripper_goal.command.effort= 30.0;
+  gripper_ac.sendGoal(gripper_goal);
+
+  gripper_ac.waitForResult();
+
+  if(gripper_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("Gripper move SUCCESSFUL");
+  else 
+  {
+    ROS_INFO("Gripper move FAILED");
+    return 1;
+  }
 
 
 
