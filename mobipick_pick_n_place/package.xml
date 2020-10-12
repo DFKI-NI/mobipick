@@ -17,6 +17,7 @@
   <buildtool_depend>catkin</buildtool_depend>
 
   <build_depend>message_generation</build_depend>
+  <build_depend>actionlib_msgs</build_depend>
   <build_depend>roslaunch</build_depend>
   
 
@@ -34,4 +35,5 @@
 
 
   <exec_depend>message_generation</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
 </package>

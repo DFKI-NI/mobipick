@@ -1,0 +1,9 @@
+#goal
+float32 threshold
+geometry_msgs/Quaternion direction
+---
+#result
+bool catched
+---
+#feedback
+float32 actualForce

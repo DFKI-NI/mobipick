@@ -49,6 +49,9 @@
 #include <move_base_msgs/MoveBaseAction.h>
 #include <actionlib/client/simple_action_client.h>
 
+//ft observer
+#include <mobipick_pick_n_place/FtObserverAction.h>
+
 #include <vision_msgs/Detection3DArray.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
@@ -451,15 +454,26 @@ int main(int argc, char **argv)
   std::stringstream ssGripper;
   
   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> move_base_ac("move_base", true);
+  
 
-  //wait for the action server to come up
+
+  //wait for the move base action server to come up
   while(!move_base_ac.waitForServer(ros::Duration(5.0))){
     ROS_INFO("Waiting for the move_base action server to come up");
   }
 
   ROS_INFO("Connected to mb action server");
 
+  actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction> ft_observer_ac("ft_observer", true);
+  //wait for the ft observer action server to come up
+  while(!ft_observer_ac.waitForServer(ros::Duration(5.0))){
+    ROS_INFO("Waiting for the ft_observer action server to come up");
+  }
 
+  ROS_INFO("Connected to ft observer action server");
+  
+  
+  
   moveit::planning_interface::MoveGroupInterface::Plan plan;
 
   /* ******************* MOVE ARM TO HOME ****************************** */
@@ -632,7 +646,30 @@ int main(int argc, char **argv)
     ROS_INFO("Moving base to place pose FAILED");
     return 1;
   }
-    
+
+
+  /* ********************* WAIT FOR USER ********************* */
+  mobipick_pick_n_place::FtObserverGoal ft_goal;
+
+  ft_goal.threshold = 5.0;
+ 
+
+  ft_observer_ac.sendGoal(ft_goal);
+
+  ft_observer_ac.waitForResult();
+
+  if(ft_observer_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    ROS_INFO("Detection user interaction SUCCESSFUL");
+  else 
+  {
+    ROS_INFO("Detection user interaction FAILED");
+    return 1;
+  }
+
+
+
+
+
   /* ********************* PLACE ********************* */
 
  

@@ -4,6 +4,8 @@ project(mobipick_pick_n_place)
 add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
+  actionlib_msgs
+  genmsg
   eigen_conversions
   gazebo_msgs
   geometry_msgs
@@ -19,9 +21,10 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
 )
 
+add_action_files(DIRECTORY action FILES FtObserver.action)
 
 generate_messages(
-  DEPENDENCIES
+  DEPENDENCIES actionlib_msgs geometry_msgs
 )
 
 ###################################
@@ -80,6 +83,7 @@ add_executable(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator sr
 add_dependencies(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator  ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator PROPERTIES OUTPUT_NAME moveit_kinematics_speed_and_validity_evaluator PREFIX "")
+
 
 
 #############
