@@ -37,6 +37,7 @@ class ForceTorqueObserver(object):
             if respond.success:
                 rospy.loginfo("ft sensor set to zero")
                 wait_for_detection = True
+                rospy.sleep(5)
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
         
@@ -58,7 +59,7 @@ class ForceTorqueObserver(object):
 
             
             # publish the feedback
-            self._as.publish_feedback(self._feedback)
+            #self._as.publish_feedback(self._feedback)
             # this step is not necessary, the sequence is computed at 1 Hz for demonstration purposes
             r.sleep()
           
