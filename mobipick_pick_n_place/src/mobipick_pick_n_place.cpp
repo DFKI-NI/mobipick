@@ -213,7 +213,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 
 
   Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
-  place_pose.translate(Eigen::Vector3d(-0.0d, -0.7d, table_height + 0.13d));
+  place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.13d));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
   p.header.frame_id = "mobipick/base_link";
@@ -275,8 +275,8 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
   ocm.orientation.y = 0.5;
   ocm.orientation.z = 0.5;
   ocm.orientation.w = 0.5;
-  ocm.absolute_x_axis_tolerance = 0.2 * M_PI;
-  ocm.absolute_y_axis_tolerance = 0.2 * M_PI;
+  ocm.absolute_x_axis_tolerance = 0.3 * M_PI;
+  ocm.absolute_y_axis_tolerance = 0.3 * M_PI;
   ocm.absolute_z_axis_tolerance = 2.0 * M_PI;
   ocm.weight = 0.8;
   
@@ -346,7 +346,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       // Add table from MRK Lab
       moveit_msgs::CollisionObject co;
       co.header.stamp = detections->header.stamp;
-      co.header.frame_id = "/mobipick/odom_comb";
+      co.header.frame_id = "/map";
       co.id = id_to_string(ObjectID::TABLE);
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
@@ -670,42 +670,41 @@ int main(int argc, char **argv)
 
 
   /* ********************* WAIT FOR USER ********************* */
-/*  mobipick_pick_n_place::FtObserverGoal ft_goal;
+  mobipick_pick_n_place::FtObserverGoal ft_goal;
 
   ft_goal.threshold = 5.0;
- 
+  ft_goal.timeout = 30.0;
 
   ft_observer_ac.sendGoal(ft_goal);
 
   ft_observer_ac.waitForResult();
 
   if(ft_observer_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+  {
     ROS_INFO("Detection user interaction SUCCESSFUL");
+    control_msgs::GripperCommandGoal gripper_goal;
+
+    gripper_goal.command.position= 0.1;
+    gripper_goal.command.max_effort= 30.0;
+    gripper_ac.sendGoal(gripper_goal);
+
+    gripper_ac.waitForResult();
+
+    if(gripper_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    {
+      ROS_INFO("Gripper move SUCCESSFUL");
+      return 1;
+    }
+    else 
+    {
+      ROS_INFO("Gripper move FAILED");
+      return 1;
+    }
+  }
   else 
   {
-    ROS_INFO("Detection user interaction FAILED");
-    return 1;
+    ROS_INFO("Detection user interaction FAILED, start placing Object");
   }
-
-
-
-  control_msgs::GripperCommandGoal gripper_goal;
-
-  gripper_goal.command.position= 0.1;
-  gripper_goal.command.max_effort= 30.0;
-  gripper_ac.sendGoal(gripper_goal);
-
-  gripper_ac.waitForResult();
-
-  if(gripper_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Gripper move SUCCESSFUL");
-  else 
-  {
-    ROS_INFO("Gripper move FAILED");
-    return 1;
-  }
-
-*/
 
 
   /* ********************* PLACE ********************* */

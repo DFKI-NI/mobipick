@@ -1,5 +1,6 @@
 #goal
 float32 threshold
+float32 timeout
 geometry_msgs/Quaternion direction
 ---
 #result

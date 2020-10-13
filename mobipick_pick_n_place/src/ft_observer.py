@@ -14,6 +14,7 @@ class ForceTorqueObserver(object):
     _result = FtObserverActionResult
     _wrench = WrenchStamped
     _actual_force = 0.0
+    _timer_is_running=False
 
     def __init__(self, name):
         rospy.wait_for_service('/mobipick/ft_sensor/sensor_acc')
@@ -23,8 +24,6 @@ class ForceTorqueObserver(object):
         self._action_name = name
         self._as = actionlib.SimpleActionServer(self._action_name, FtObserverAction, execute_cb=self.execute_cb, auto_start = False)
         self._as.start()
-        
-        
       
     def execute_cb(self, goal):
         success = False
@@ -43,9 +42,10 @@ class ForceTorqueObserver(object):
         
         # helper variables
         r = rospy.Rate(1)
-        
+        rospy.Timer(goal.timeout, timer_cb, True)
+        self._timer_is_running = True
         # start executing the action
-        while wait_for_detection:
+        while wait_for_detection and self._timer_is_running:
             if self._actual_force > goal.threshold:
                 success=True
                 wait_for_detection = False
@@ -72,6 +72,9 @@ class ForceTorqueObserver(object):
     def wrench_cb(self, data):
         self._wrench = data.wrench
         self._actual_force = data.wrench.force.y
+
+    def timer_cb(self, time):
+        self._timer_is_running=False
 
 
 if __name__ == '__main__':
