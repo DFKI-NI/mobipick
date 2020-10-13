@@ -540,15 +540,13 @@ int main(int argc, char **argv)
   mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
   mb_goal.target_pose.pose.orientation.w = 0.999942333612;*/
 
-
-  /* Berghoffstr.*/
+  /* Berghoffstr pick pose*/
   mb_goal.target_pose.pose.position.x = 12.331;
   mb_goal.target_pose.pose.position.y =  2.995;
   mb_goal.target_pose.pose.orientation.x = 0.000;
   mb_goal.target_pose.pose.orientation.y =  0.000;
   mb_goal.target_pose.pose.orientation.z = 1.000;
   mb_goal.target_pose.pose.orientation.w = 0.000;
-
 
   ROS_INFO("Send pick base pose and wait...");
   move_base_ac.sendGoal(mb_goal);
@@ -637,9 +635,9 @@ int main(int argc, char **argv)
 
 
   /* ********************* MOVE TO PLACE ********************* */
-/*
+
   mb_goal.target_pose.header.frame_id="map";
-  mb_goal.target_pose.header.stamp = ros::Time::now();*/
+  mb_goal.target_pose.header.stamp = ros::Time::now();
   /* Smart Factory  
   mb_goal.target_pose.pose.position.x =7.84681434123;
   mb_goal.target_pose.pose.position.y = -3.15925832165;
@@ -649,14 +647,13 @@ int main(int argc, char **argv)
   mb_goal.target_pose.pose.orientation.w = 0.999877777014;
   */
 
-  /* Berghoffstr */
-/*  mb_goal.target_pose.pose.position.x =12.291;
-  mb_goal.target_pose.pose.position.y = 4.663;
+  /* Berghoffstr. place pose*/
+  mb_goal.target_pose.pose.position.x =12.291;
+  mb_goal.target_pose.pose.position.y = 4.75;
   mb_goal.target_pose.pose.orientation.x = 0.0;
   mb_goal.target_pose.pose.orientation.y =  0.0;
   mb_goal.target_pose.pose.orientation.z = 0.0;
   mb_goal.target_pose.pose.orientation.w = 1;
-
 
   ROS_INFO("Send place base pose and wait...");
   move_base_ac.sendGoal(mb_goal);
@@ -671,9 +668,9 @@ int main(int argc, char **argv)
     return 1;
   }
 
-*/
+
   /* ********************* WAIT FOR USER ********************* */
-  mobipick_pick_n_place::FtObserverGoal ft_goal;
+/*  mobipick_pick_n_place::FtObserverGoal ft_goal;
 
   ft_goal.threshold = 5.0;
  
@@ -708,7 +705,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-
+*/
 
 
   /* ********************* PLACE ********************* */
