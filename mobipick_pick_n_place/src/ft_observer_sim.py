@@ -25,7 +25,7 @@ class ForceTorqueObserver(object):
     def execute_cb(self, goal):
         r = rospy.Rate(1)
         success = False
-        rospy.Timer(goal.timeout, self.timer_cb, True)
+        rospy.Timer(rospy.Duration(goal.timeout), self.timer_cb, True)
         self._timer_is_running = True
         # start executing the action
         while self._timer_is_running:    
@@ -39,12 +39,13 @@ class ForceTorqueObserver(object):
             #self._as.publish_feedback(self._feedback)
             # this step is not necessary, the sequence is computed at 1 Hz for demonstration purposes
             r.sleep()
-          
+        success=False 
         if success:
             self._result.catched = True
             rospy.loginfo('%s: Succeeded' % self._action_name)
-
             self._as.set_succeeded(self._result)
+        else:
+            self._as.set_aborted()
 
     def timer_cb(self, time):
         self._timer_is_running=False
