@@ -2,20 +2,18 @@
   <arg name="object_source" default="gazebo" doc="Where to get objects from. Possible values: 'gazebo' (for gazebo) or 'static' (for moveit demo mode)." />
   <arg name="prefix" default="mobipick" />
   <arg name="simulation" default="false" />
-  <arg name="ft_observer" default="true" />
 
   <group ns="mobipick">
   <node name="mobipick_pick_n_place" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place" output="screen">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
   </node>
   <group if="$(arg simulation)">
-  <node name="$(arg object_source)_object_publisher" pkg="mobipick_pick_n_place" type="$(arg object_source)_object_publisher" output="screen" />
+    <node name="$(arg object_source)_object_publisher" pkg="mobipick_pick_n_place" type="$(arg object_source)_object_publisher" output="screen" />
 
-  <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
+    <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
+    <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer_sim.py" output="screen" />
   </group>
   
-  <group if="$(arg ft_observer)">
-  <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer.py" output="screen" />
+  <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer.py" output="screen" unless="$(arg simulation)" />
   </group>
-</group>
 </launch>
