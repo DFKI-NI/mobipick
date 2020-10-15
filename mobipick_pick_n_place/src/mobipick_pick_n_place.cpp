@@ -127,17 +127,6 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   {
     // GRASP 2: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
-    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-    grasp_pose_define.gripper_width=0.03; // 
-    grasp_poses.push_back(grasp_pose_define);
-  }
-
-  {
-    // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
-    GrapsPoseDefine grasp_pose_define;
     Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
@@ -145,6 +134,18 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
    grasp_pose_define.gripper_width=0.03; // 
     grasp_poses.push_back(grasp_pose_define);
   }
+/*
+  {
+    // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
+    GrapsPoseDefine grasp_pose_define;
+    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    grasp_pose_define.gripper_width=0.03; // 
+    grasp_poses.push_back(grasp_pose_define);
+  }
+*/
 
 
   for (auto&& grasp_pose : grasp_poses)
@@ -292,7 +293,7 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
 
 int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &planning_scene_interface, ros::NodeHandle &nh, moveit::planning_interface::MoveGroupInterface &group)
 {
-
+  
   // get objects from object detection
   bool found_power_drill = false;
   uint visionCounter = 0;
@@ -406,21 +407,17 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
   return error_code;
 }
 
-moveit::planning_interface::MoveItErrorCode moveToTransport(moveit::planning_interface::MoveGroupInterface &group)
+moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface &group, Eigen::Isometry3d cartesian_pose, std::string base_frame = "mobipick/ur5_base_link", std::string target_frame = "mobipick/gripper_tcp")
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
 
   geometry_msgs::PoseStamped target_pose;
-  target_pose.header.frame_id ="mobipick/ur5_base_link";
-  Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
-  transport_pose.translate(Eigen::Vector3d(0.2, -0.4, 0.2));
-  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 1.0, 0.0)));
-  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(1.0, 0.0, 0.0)));
-  tf::poseEigenToMsg(transport_pose, target_pose.pose);
+  target_pose.header.frame_id =base_frame;
+  tf::poseEigenToMsg(cartesian_pose, target_pose.pose);
 
 
-  group.setPoseTarget(target_pose, "mobipick/gripper_tcp");
+  group.setPoseTarget(target_pose, target_frame);
 
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
@@ -432,6 +429,7 @@ moveit::planning_interface::MoveItErrorCode moveToTransport(moveit::planning_int
   auto error_code = group.execute(my_plan);
   return error_code;
 }
+
 
 int main(int argc, char **argv)
 {
@@ -632,7 +630,14 @@ int main(int argc, char **argv)
 
   /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
   setOrientationContraints(group);
-  moveToTransport(group);
+  
+  Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
+  transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
+  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+
+  moveToCartPose(group, transport_pose);
+
   ros::WallDuration(5.0).sleep();
 
 
@@ -670,6 +675,16 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  /* ********************* PLAN AND EXECUTE TO HAND OVER POSE ********************* */
+
+  Eigen::Isometry3d hand_over_pose = Eigen::Isometry3d::Identity();
+  hand_over_pose.translate(Eigen::Vector3d(0.8, -0.4, 0.2));
+  hand_over_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+  hand_over_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+  hand_over_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 0.0, 1.0)));
+
+  moveToCartPose(group, hand_over_pose);
+
 
   /* ********************* WAIT FOR USER ********************* */
   mobipick_pick_n_place::FtObserverGoal ft_goal;
@@ -694,8 +709,30 @@ int main(int argc, char **argv)
 
     if(gripper_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
     {
-      ROS_INFO("Gripper move SUCCESSFUL");
-      return 1;
+      ROS_INFO("Gripper move SUCCESSFUL, detach all Objects");
+      
+      // detach all objects
+      auto attached_objects = planning_scene_interface.getAttachedObjects();
+      std::vector<std::string> objects_to_remove;
+      for (auto &&object : attached_objects)
+      {
+        ROS_INFO_STREAM("Detach object "<< object.first);
+        group.detachObject(object.first);
+        objects_to_remove.push_back(object.first);
+      }
+      planning_scene_interface.removeCollisionObjects(objects_to_remove);
+
+      // move to home
+      error_code = group.execute(plan);
+      if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+      {
+        ROS_INFO("Moving to home pose SUCCESSFUL");
+      } else
+      {
+        ROS_ERROR("Moving to home pose FAILED");
+        return 1;
+      }
+      return 0;
     }
     else 
     {
@@ -707,7 +744,6 @@ int main(int argc, char **argv)
   {
     ROS_INFO("Detection user interaction FAILED, start placing Object");
   }
-
 
   /* ********************* PLACE ********************* */
 
