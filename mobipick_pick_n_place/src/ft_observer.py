@@ -42,7 +42,7 @@ class ForceTorqueObserver(object):
         
         # helper variables
         r = rospy.Rate(1)
-        rospy.Timer(goal.timeout, self.timer_cb, True)
+        rospy.Timer(rospy.Duration(goal.timeout), self.timer_cb, True)
         self._timer_is_running = True
         # start executing the action
         while wait_for_detection and self._timer_is_running:
@@ -68,6 +68,8 @@ class ForceTorqueObserver(object):
             rospy.loginfo('%s: Succeeded' % self._action_name)
 
             self._as.set_succeeded(self._result)
+        else:
+            self._as.set_aborted()
 
     def wrench_cb(self, data):
         self._wrench = data.wrench
