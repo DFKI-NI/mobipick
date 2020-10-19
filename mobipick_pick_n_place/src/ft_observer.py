@@ -36,12 +36,12 @@ class ForceTorqueObserver(object):
             if respond.success:
                 rospy.loginfo("ft sensor set to zero")
                 wait_for_detection = True
-                rospy.sleep(5)
+                rospy.sleep(1)
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
         
         # helper variables
-        r = rospy.Rate(1)
+        r = rospy.Rate(10)
         rospy.Timer(rospy.Duration(goal.timeout), self.timer_cb, True)
         self._timer_is_running = True
         # start executing the action
