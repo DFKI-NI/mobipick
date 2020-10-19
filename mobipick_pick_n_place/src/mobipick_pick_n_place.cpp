@@ -40,25 +40,25 @@
 #include <ros/ros.h>
 
 // MoveIt!
+#include <geometric_shapes/solid_primitive_dims.h>
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/planning_scene_interface/planning_scene_interface.h>
 #include <moveit/planning_scene_monitor/planning_scene_monitor.h>
-#include <geometric_shapes/solid_primitive_dims.h>
 
-//Move base
-#include <move_base_msgs/MoveBaseAction.h>
+// Move base
 #include <actionlib/client/simple_action_client.h>
+#include <move_base_msgs/MoveBaseAction.h>
 
-//ft observer
+// ft observer
 #include <mobipick_pick_n_place/FtObserverAction.h>
 
-//gripper
+// gripper
 #include <control_msgs/GripperCommandAction.h>
 
-#include <vision_msgs/Detection3DArray.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
 #include <tf/transform_listener.h>
+#include <vision_msgs/Detection3DArray.h>
 
 #include <eigen_conversions/eigen_msg.h>
 
@@ -66,11 +66,28 @@
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
 
+enum state
+{
+  ST_INIT,
+  ST_ARM_TO_HOME_START,
+  ST_BASE_TO_PICK,
+  ST_CAPTURE_OBJ,
+  ST_PICK_OBJ,
+  ST_ARM_TO_TRANSPORT,
+  ST_BASE_TO_HANDOVER,
+  ST_ARM_TO_HANDOVER,
+  ST_USER_HANDOVER,
+  ST_BASE_TO_PLACE,
+  ST_PLACE_OBJ,
+  ST_ARM_TO_HOME_END,
+  ST_DONE
+};
 
-struct GrapsPoseDefine {
-    Eigen::Isometry3d grasp_pose;
-    std::float_t gripper_width;
-  };
+struct GrapsPoseDefine
+{
+  Eigen::Isometry3d grasp_pose;
+  std::float_t gripper_width;
+};
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
@@ -82,7 +99,7 @@ void openGripper(trajectory_msgs::JointTrajectory &posture)
   posture.points[0].positions[0] = 0.1;
 
   posture.points[0].effort.resize(1);
-  posture.points[0].effort[0]=30;
+  posture.points[0].effort[0] = 30;
   posture.points[0].time_from_start.fromSec(5.0);
 }
 
@@ -93,71 +110,68 @@ void closedGripper(trajectory_msgs::JointTrajectory &posture, std::float_t gripp
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
-  posture.points[0].positions[0] = gripper_width;   // closed around power drill: 0.65; fully closed: 0.76  TODO: should be 0.42 for top grasp
+  posture.points[0].positions[0] =
+      gripper_width;  // closed around power drill: 0.65; fully closed: 0.76  TODO: should be 0.42 for top grasp
 
   posture.points[0].effort.resize(1);
-  posture.points[0].effort[0]=80;
+  posture.points[0].effort[0] = 80;
   posture.points[0].time_from_start.fromSec(5.0);
 }
 
 moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterface &group)
 {
-
-  
   std::vector<moveit_msgs::Grasp> grasps;
-  
+
   // --- calculate grasps
   // this is using standard frame orientation: x forward, y left, z up, relative to object bounding box center
 
   std::vector<GrapsPoseDefine> grasp_poses;
-/*
-  {
-    // GRASP 1: pitch = pi/8  (grasp handle from upper back)
-    GrapsPoseDefine grasp_pose_define;
-    
-    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
-    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
-    grasp_pose_define.grasp_pose.rotate(rotation);
-    grasp_pose_define.gripper_width=0.03;
-    grasp_poses.push_back(grasp_pose_define);
-    
-  }
-*/
+  /*
+    {
+      // GRASP 1: pitch = pi/8  (grasp handle from upper back)
+      GrapsPoseDefine grasp_pose_define;
+
+      Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+      grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
+      grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
+      grasp_pose_define.grasp_pose.rotate(rotation);
+      grasp_pose_define.gripper_width=0.03;
+      grasp_poses.push_back(grasp_pose_define);
+
+    }
+  */
   {
     // GRASP 2: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
-    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
     grasp_pose_define.grasp_pose.rotate(rotation);
-   grasp_pose_define.gripper_width=0.03; // 
+    grasp_pose_define.gripper_width = 0.03;  //
     grasp_poses.push_back(grasp_pose_define);
   }
-/*
-  {
-    // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
-    GrapsPoseDefine grasp_pose_define;
-    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-    grasp_pose_define.gripper_width=0.03; // 
-    grasp_poses.push_back(grasp_pose_define);
-  }
-*/
+  /*
+    {
+      // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
+      GrapsPoseDefine grasp_pose_define;
+      grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
+      grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
+      grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+      grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+      grasp_pose_define.gripper_width=0.03; //
+      grasp_poses.push_back(grasp_pose_define);
+    }
+  */
 
-
-  for (auto&& grasp_pose : grasp_poses)
+  for (auto &&grasp_pose : grasp_poses)
   {
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
     // Eigen quaternion = wxyz, not xyzw
-    Eigen::Isometry3d bbox_center_rotated= Eigen::Isometry3d::Identity();
+    Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
     bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0d, 0.0d, 1.0d)));
-    
-    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-    
-    
+
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+
     // --- calculate desired pose of gripper_tcp when grasping
     // pose of power drill
     geometry_msgs::PoseStamped p;
@@ -198,14 +212,11 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
-
-
-
   // get table height
   std::vector<std::string> object_ids;
   object_ids.push_back("table");
   auto table = planning_scene_interface.getObjects(object_ids).at("table");
-  double table_height = 
+  double table_height =
       table.primitive_poses[0].position.z + table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
   ROS_INFO("Table height: %f", table_height);
 
@@ -213,15 +224,13 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   // desired pose of power drill
   geometry_msgs::PoseStamped p;
 
-
-
   Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
   place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.13d));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
   p.header.frame_id = "mobipick/base_link";
   tf::poseEigenToMsg(place_pose, p.pose);
-  
+
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
   g.allowed_touch_objects.push_back("table");
@@ -242,21 +251,16 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 
   // add path constraints - doesn't work for place :(
 
-
-
-
-
   ROS_INFO_STREAM("Place at " << g.place_pose);
   auto error_code = group.place("power_drill", loc);
   group.clearPathConstraints();
   return error_code;
 }
 
-
 void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &group)
 {
   moveit_msgs::Constraints constr;
-  
+
   tf::TransformListener tf_listener_;
   tf::StampedTransform transform;
 
@@ -282,18 +286,15 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
   ocm.absolute_y_axis_tolerance = 0.3 * M_PI;
   ocm.absolute_z_axis_tolerance = 2.0 * M_PI;
   ocm.weight = 0.8;
-  
 
-  
   constr.orientation_constraints.push_back(ocm);
 
-  group.setPathConstraints(constr); 
+  group.setPathConstraints(constr);
 }
 
-
-int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &planning_scene_interface, ros::NodeHandle &nh, moveit::planning_interface::MoveGroupInterface &group)
+int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &planning_scene_interface,
+                        ros::NodeHandle &nh, moveit::planning_interface::MoveGroupInterface &group)
 {
-  
   // get objects from object detection
   bool found_power_drill = false;
   uint visionCounter = 0;
@@ -302,15 +303,13 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
     if (!ros::ok())
       return 0;
 
-      vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
-              "/mobipick/dope/detected_objects", nh, ros::Duration(30.0));
-      if (!detections)
-      {
-        ROS_ERROR("Timed out while waiting for a message on topic detected_objects!");
-        return 1;
-      }
-
-
+    vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
+        "/mobipick/dope/detected_objects", nh, ros::Duration(30.0));
+    if (!detections)
+    {
+      ROS_ERROR("Timed out while waiting for a message on topic detected_objects!");
+      return 1;
+    }
 
     // add objects to planning scener
     bool found_table = false;
@@ -334,7 +333,8 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(
+          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x + 0.04;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y + 0.04;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z + 0.04;
@@ -343,7 +343,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
 
       collision_objects.push_back(co);
     }
-   
+
     if (!found_table)
     {
       // Add table from MRK Lab
@@ -354,7 +354,8 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(
+          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.80;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.80;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.73;
@@ -382,9 +383,9 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
   return 1;
 }
 
-moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface &group, double dx= 0.0, double dy=0.2, double dz= 0.2)
+moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface &group, double dx = 0.0,
+                                                 double dy = 0.2, double dz = 0.2)
 {
-
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
 
@@ -396,40 +397,39 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
   ROS_INFO_STREAM("Actual Pose frame: " << actual_pose.header.frame_id);
   group.setPoseTarget(target_pose);
 
-
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   bool success = (group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
-  ROS_INFO( "Move planning (pose goal) %s", success ? "" : "FAILED");
+  ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
 
   auto error_code = group.execute(my_plan);
   return error_code;
 }
 
-moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface &group, Eigen::Isometry3d cartesian_pose, std::string base_frame = "mobipick/ur5_base_link", std::string target_frame = "mobipick/gripper_tcp")
+moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface &group,
+                                                           Eigen::Isometry3d cartesian_pose,
+                                                           std::string base_frame = "mobipick/ur5_base_link",
+                                                           std::string target_frame = "mobipick/gripper_tcp")
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
 
   geometry_msgs::PoseStamped target_pose;
-  target_pose.header.frame_id =base_frame;
+  target_pose.header.frame_id = base_frame;
   tf::poseEigenToMsg(cartesian_pose, target_pose.pose);
 
-
   group.setPoseTarget(target_pose, target_frame);
-
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   bool success = (group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
-  ROS_INFO( "Move planning (pose goal) %s", success ? "" : "FAILED");
+  ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
 
   auto error_code = group.execute(my_plan);
   return error_code;
 }
-
 
 int main(int argc, char **argv)
 {
@@ -438,6 +438,7 @@ int main(int argc, char **argv)
   spinner.start();
 
   ros::NodeHandle nh;
+  state task_state = ST_INIT;
 
   moveit::planning_interface::MoveGroupInterface group("arm");
   group.setPlanningTime(45.0);
@@ -448,360 +449,480 @@ int main(int argc, char **argv)
   //   - RRT* will always use the full planning time (see setPlanningTime()), even if an initial
   //     plan is found earlier. If it runs out of time before finding an initial plan, planning will fail.
   //   - Typical run times: RRT* between 1 and 30 seconds, RRTConnect 0.03 seconds
-  //   - also see: http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ompl_interface/ompl_interface_tutorial.html
+  //   - also see:
+  //   http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ompl_interface/ompl_interface_tutorial.html
   //   - also see: https://ompl.kavrakilab.org/planners.html
 
-  
   /* old:
   ros::Publisher pubGripper = nh.advertise<std_msgs::String>("/mobipick/gripper_control", 1);
 
   std_msgs::String msgGripper;
   std::stringstream ssGripper;
   */
- 
+
   group.setPlanningTime(45.0);
   group.setPlannerId("RRTConnect");
-  
-
 
   // MOVE BASE
   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> move_base_ac("move_base", true);
-  
-  //wait for the move base action server to come up
-  while(!move_base_ac.waitForServer(ros::Duration(5.0))){
+
+  // wait for the move base action server to come up
+  while (!move_base_ac.waitForServer(ros::Duration(5.0)))
+  {
     ROS_INFO("Waiting for the move_base action server to come up");
   }
 
   ROS_INFO("Connected to mb action server");
 
-  
   // FT Observer
   actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction> ft_observer_ac("ft_observer", true);
-  
-  //wait for the ft observer action server to come up
-  while(!ft_observer_ac.waitForServer(ros::Duration(5.0))){
+
+  // wait for the ft observer action server to come up
+  while (!ft_observer_ac.waitForServer(ros::Duration(5.0)))
+  {
     ROS_INFO("Waiting for the ft_observer action server to come up");
   }
 
   ROS_INFO("Connected to ft observer action server");
-  
+
   // GRIPPER
   actionlib::SimpleActionClient<control_msgs::GripperCommandAction> gripper_ac("gripper_hw", true);
-  
-  //wait for the gripper action server to come up
-  while(!gripper_ac.waitForServer(ros::Duration(5.0))){
+
+  // wait for the gripper action server to come up
+  while (!gripper_ac.waitForServer(ros::Duration(5.0)))
+  {
     ROS_INFO("Waiting for the gripper action server to come up");
   }
 
   ROS_INFO("Connected to gripper action server");
-  
 
   // MOVE IT
   moveit::planning_interface::MoveGroupInterface::Plan plan;
 
-  /* ******************* MOVE ARM TO HOME ****************************** */
-  // plan
-  group.setPlannerId("RRTConnect");
-  group.setNamedTarget("home");
-  moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Planning to home pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Planning to home pose FAILED");
-    return 1;
-  }
- 
-
- //move
-  error_code = group.execute(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Moving to home pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Moving to home pose FAILED");
-    return 1;
-  }
-
-
-  /* ******************* MOVE TO TABLE ****************************** */
-
-
-  move_base_msgs::MoveBaseGoal mb_goal;
-  mb_goal.target_pose.header.frame_id="map";
-  mb_goal.target_pose.header.stamp = ros::Time::now();
-  /* Smart Factory
-  mb_goal.target_pose.pose.position.x = 0.8;
-  mb_goal.target_pose.pose.position.y = 0.1;
-  mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
-  mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
-  mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
-  mb_goal.target_pose.pose.orientation.w = 0.999942333612;*/
-
-  /* Berghoffstr pick pose*/
-  mb_goal.target_pose.pose.position.x = 12.331;
-  mb_goal.target_pose.pose.position.y =  2.995;
-  mb_goal.target_pose.pose.orientation.x = 0.000;
-  mb_goal.target_pose.pose.orientation.y =  0.000;
-  mb_goal.target_pose.pose.orientation.z = 1.000;
-  mb_goal.target_pose.pose.orientation.w = 0.000;
-
-  ROS_INFO("Send pick base pose and wait...");
-  move_base_ac.sendGoal(mb_goal);
-
-  move_base_ac.waitForResult();
-
-  if(move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Moving base to pick pose SUCCESSFUL");
-  else 
-  {
-    ROS_INFO("Moving base to pick pose FAILED");
-    return 1;
-  }
-    
-
-  /* ********************* PLAN AND EXECUTE MOVES ********************* */
-
-  // plan to observe the table
-  group.setNamedTarget("observe100cm_right");
-  error_code = group.plan(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Planning to observation pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Planning to observation pose FAILED");
-    return 1;
-  }
-
-  // move to observation pose
-  error_code = group.execute(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Moving to observation pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Moving to observation pose FAILED");
-    return 1;
-  }
-  ros::WallDuration(5.0).sleep();
-
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
 
-  /* ********************* PICK ********************* */
-
-  // clear octomap
-  ros::ServiceClient clear_octomap = nh.serviceClient<std_srvs::Empty>("clear_octomap");
-  std_srvs::Empty srv;
-  
-  //pick
-
-
-  uint pickPlanAttempts = 0;
-   do {
-
-    clear_octomap.call(srv);
-
-    updatePlanningScene(planning_scene_interface, nh, group);
-    error_code = pick(group);
-    ++pickPlanAttempts;
-
-
-
-    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-    {
-      ROS_INFO("Picking SUCCESSFUL");
-    }
-    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) && pickPlanAttempts <10  )
-    {
-      ROS_INFO("Planning for Picking FAILED");
-    }
-    else
-    {
-      ROS_ERROR("Picking FAILED");
-      return 1;
-    }
-
-
-  } while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ) && pickPlanAttempts <10 );
-
-
-  /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
-  setOrientationContraints(group);
-  
-  Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
-  transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
-  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 1.0, 0.0)));
-  transport_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(1.0, 0.0, 0.0)));
-
-  moveToCartPose(group, transport_pose);
-
-  ros::WallDuration(5.0).sleep();
-
-
-  /* ********************* MOVE TO PLACE ********************* */
-
-  mb_goal.target_pose.header.frame_id="map";
-  mb_goal.target_pose.header.stamp = ros::Time::now();
-  /* Smart Factory  
-  mb_goal.target_pose.pose.position.x =7.84681434123;
-  mb_goal.target_pose.pose.position.y = -3.15925832165;
-  mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
-  mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
-  mb_goal.target_pose.pose.orientation.z = -0.015630101472;
-  mb_goal.target_pose.pose.orientation.w = 0.999877777014;
-  */
-
-  /* Berghoffstr. place pose*/
-  mb_goal.target_pose.pose.position.x =12.291;
-  mb_goal.target_pose.pose.position.y = 4.75;
-  mb_goal.target_pose.pose.orientation.x = 0.0;
-  mb_goal.target_pose.pose.orientation.y =  0.0;
-  mb_goal.target_pose.pose.orientation.z = 0.0;
-  mb_goal.target_pose.pose.orientation.w = 1;
-
-  ROS_INFO("Send place base pose and wait...");
-  move_base_ac.sendGoal(mb_goal);
-
-  move_base_ac.waitForResult();
-
-  if(move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    ROS_INFO("Moving base to place pose SUCCESSFUL");
-  else 
+  while (ros::ok())
   {
-    ROS_INFO("Moving base to place pose FAILED");
-    return 1;
-  }
-
-  /* ********************* PLAN AND EXECUTE TO HAND OVER POSE ********************* */
-
-  Eigen::Isometry3d hand_over_pose = Eigen::Isometry3d::Identity();
-  hand_over_pose.translate(Eigen::Vector3d(0.8, -0.4, 0.2));
-  hand_over_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 1.0, 0.0)));
-  hand_over_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(1.0, 0.0, 0.0)));
-  hand_over_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0, 0.0, 1.0)));
-
-  moveToCartPose(group, hand_over_pose);
-
-
-  /* ********************* WAIT FOR USER ********************* */
-  mobipick_pick_n_place::FtObserverGoal ft_goal;
-
-  ft_goal.threshold = 5.0;
-  ft_goal.timeout = 30.0;
-
-  ft_observer_ac.sendGoal(ft_goal);
-
-  ft_observer_ac.waitForResult();
-
-  if(ft_observer_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-  {
-    ROS_INFO("Detection user interaction SUCCESSFUL");
-    control_msgs::GripperCommandGoal gripper_goal;
-
-    gripper_goal.command.position= 0.1;
-    gripper_goal.command.max_effort= 30.0;
-    gripper_ac.sendGoal(gripper_goal);
-
-    gripper_ac.waitForResult();
-
-    if(gripper_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    switch (task_state)
     {
-      ROS_INFO("Gripper move SUCCESSFUL, detach all Objects");
-      
-      // detach all objects
-      auto attached_objects = planning_scene_interface.getAttachedObjects();
-      std::vector<std::string> objects_to_remove;
-      for (auto &&object : attached_objects)
+      case ST_INIT:
       {
-        ROS_INFO_STREAM("Detach object "<< object.first);
-        group.detachObject(object.first);
-        objects_to_remove.push_back(object.first);
+        ROS_INFO_STREAM("ST_INIT");
+        task_state = ST_ARM_TO_HOME_START;
+        break;
       }
-      planning_scene_interface.removeCollisionObjects(objects_to_remove);
+      case ST_ARM_TO_HOME_START:
+      {
+        ROS_INFO_STREAM("ST_ARM_TO_HOME_START");
 
-      // move to home
-      error_code = group.execute(plan);
-      if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        /* ******************* MOVE ARM TO HOME ****************************** */
+        // plan
+        group.setPlannerId("RRTConnect");
+        group.setNamedTarget("home");
+        moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          ROS_INFO("Planning to home pose SUCCESSFUL");
+        }
+        else
+        {
+          ROS_ERROR("Planning to home pose FAILED");
+          return 1;
+        }
+
+        // move
+        error_code = group.execute(plan);
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          ROS_INFO("Moving to home pose SUCCESSFUL");
+          task_state = ST_BASE_TO_PICK;
+        }
+        else
+        {
+          ROS_ERROR("Moving to home pose FAILED");
+          return 1;
+        }
+
+        break;
+      }
+      case ST_BASE_TO_PICK:
       {
-        ROS_INFO("Moving to home pose SUCCESSFUL");
-      } else
+        ROS_INFO_STREAM("ST_BASE_TO_PICK");
+        /* ******************* MOVE TO TABLE ****************************** */
+
+        move_base_msgs::MoveBaseGoal mb_goal;
+        mb_goal.target_pose.header.frame_id = "map";
+        mb_goal.target_pose.header.stamp = ros::Time::now();
+        /* Smart Factory
+        mb_goal.target_pose.pose.position.x = 0.8;
+        mb_goal.target_pose.pose.position.y = 0.1;
+        mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
+        mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
+        mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
+        mb_goal.target_pose.pose.orientation.w = 0.999942333612;*/
+
+        /* Berghoffstr pick pose*/
+        mb_goal.target_pose.pose.position.x = 12.331;
+        mb_goal.target_pose.pose.position.y = 2.995;
+        mb_goal.target_pose.pose.orientation.x = 0.000;
+        mb_goal.target_pose.pose.orientation.y = 0.000;
+        mb_goal.target_pose.pose.orientation.z = 1.000;
+        mb_goal.target_pose.pose.orientation.w = 0.000;
+
+        ROS_INFO("Send pick base pose and wait...");
+        move_base_ac.sendGoal(mb_goal);
+
+        move_base_ac.waitForResult();
+
+        if (move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        {
+          ROS_INFO("Moving base to pick pose SUCCESSFUL");
+          task_state = ST_CAPTURE_OBJ;
+        }
+        else
+        {
+          ROS_INFO("Moving base to pick pose FAILED");
+          return 1;
+        }
+        break;
+      }
+      case ST_CAPTURE_OBJ:
       {
-        ROS_ERROR("Moving to home pose FAILED");
+        ROS_INFO_STREAM("ST_CAPTURE_OBJ");
+
+        /* ********************* PLAN AND EXECUTE MOVES ********************* */
+
+        // plan to observe the table
+        group.setNamedTarget("observe100cm_right");
+        moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          ROS_INFO("Planning to observation pose SUCCESSFUL");
+        }
+        else
+        {
+          ROS_ERROR("Planning to observation pose FAILED");
+          return 1;
+        }
+
+        // move to observation pose
+        error_code = group.execute(plan);
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          ROS_INFO("Moving to observation pose SUCCESSFUL");
+          task_state = ST_PICK_OBJ;
+        }
+        else
+        {
+          ROS_ERROR("Moving to observation pose FAILED");
+          return 1;
+        }
+        ros::WallDuration(5.0).sleep();
+        break;
+      }
+      case ST_PICK_OBJ:
+      {
+        ROS_INFO_STREAM("ST_PICK_OBJ");
+
+        /* ********************* PICK ********************* */
+
+        // clear octomap
+        ros::ServiceClient clear_octomap = nh.serviceClient<std_srvs::Empty>("clear_octomap");
+        std_srvs::Empty srv;
+
+        // pick
+        moveit::planning_interface::MoveItErrorCode error_code;
+        uint pickPlanAttempts = 0;
+        do
+        {
+          clear_octomap.call(srv);
+
+          updatePlanningScene(planning_scene_interface, nh, group);
+          error_code = pick(group);
+          ++pickPlanAttempts;
+
+          if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+          {
+            ROS_INFO("Picking SUCCESSFUL");
+            task_state = ST_ARM_TO_TRANSPORT;
+          }
+          else if ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
+                    error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) &&
+                   pickPlanAttempts < 10)
+          {
+            ROS_INFO("Planning for Picking FAILED");
+          }
+          else
+          {
+            ROS_ERROR("Picking FAILED");
+            return 1;
+          }
+
+        } while ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
+                  error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) &&
+                 pickPlanAttempts < 10);
+        break;
+      }
+      case ST_ARM_TO_TRANSPORT:
+      {
+        ROS_INFO_STREAM("ST_ARM_TO_TRANSPORT");
+
+        /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
+        setOrientationContraints(group);
+
+        Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
+        transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
+        transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+        transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+
+        if (moveToCartPose(group, transport_pose))
+        {
+          ros::WallDuration(5.0).sleep();
+          task_state = ST_BASE_TO_HANDOVER;
+        }
+        break;
+      }
+      case ST_BASE_TO_HANDOVER:
+      {
+        ROS_INFO_STREAM("ST_BASE_TO_HANDOVER");
+        /* ********************* MOVE TO PLACE ********************* */
+
+        move_base_msgs::MoveBaseGoal mb_goal;
+        mb_goal.target_pose.header.frame_id = "map";
+        mb_goal.target_pose.header.stamp = ros::Time::now();
+        /* Smart Factory
+        mb_goal.target_pose.pose.position.x =7.84681434123;
+        mb_goal.target_pose.pose.position.y = -3.15925832165;
+        mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
+        mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
+        mb_goal.target_pose.pose.orientation.z = -0.015630101472;
+        mb_goal.target_pose.pose.orientation.w = 0.999877777014;
+        */
+
+        /* Berghoffstr. place pose*/
+        mb_goal.target_pose.pose.position.x = 12.291;
+        mb_goal.target_pose.pose.position.y = 4.75;
+        mb_goal.target_pose.pose.orientation.x = 0.0;
+        mb_goal.target_pose.pose.orientation.y = 0.0;
+        mb_goal.target_pose.pose.orientation.z = 0.0;
+        mb_goal.target_pose.pose.orientation.w = 1;
+
+        ROS_INFO("Send place base pose and wait...");
+        move_base_ac.sendGoal(mb_goal);
+
+        move_base_ac.waitForResult();
+
+        if (move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        {
+          ROS_INFO("Moving base to place pose SUCCESSFUL");
+          task_state = ST_ARM_TO_HANDOVER;
+        }
+        else
+        {
+          ROS_INFO("Moving base to place pose FAILED");
+          return 1;
+        }
+        break;
+      }
+      case ST_ARM_TO_HANDOVER:
+      {
+        ROS_INFO_STREAM("ST_ARM_TO_HANDOVER");
+        /* ********************* PLAN AND EXECUTE TO HAND OVER POSE ********************* */
+
+        Eigen::Isometry3d hand_over_pose = Eigen::Isometry3d::Identity();
+        hand_over_pose.translate(Eigen::Vector3d(0.8, -0.4, 0.2));
+        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 0.0, 1.0)));
+
+        if (moveToCartPose(group, hand_over_pose))
+        {
+          task_state = ST_USER_HANDOVER;
+        }
+        break;
+      }
+      case ST_USER_HANDOVER:
+      {
+        ROS_INFO_STREAM("ST_USER_HANDOVER");
+        /* ********************* WAIT FOR USER ********************* */
+        mobipick_pick_n_place::FtObserverGoal ft_goal;
+
+        ft_goal.threshold = 5.0;
+        ft_goal.timeout = 30.0;
+
+        ft_observer_ac.sendGoal(ft_goal);
+
+        ft_observer_ac.waitForResult();
+
+        if (ft_observer_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        {
+          ROS_INFO("Detection user interaction SUCCESSFUL");
+          control_msgs::GripperCommandGoal gripper_goal;
+
+          gripper_goal.command.position = 0.1;
+          gripper_goal.command.max_effort = 30.0;
+          gripper_ac.sendGoal(gripper_goal);
+
+          gripper_ac.waitForResult();
+
+          if (gripper_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+          {
+            ROS_INFO("Gripper move SUCCESSFUL, detach all Objects");
+
+            // detach all objects
+            auto attached_objects = planning_scene_interface.getAttachedObjects();
+            std::vector<std::string> objects_to_remove;
+            for (auto &&object : attached_objects)
+            {
+              ROS_INFO_STREAM("Detach object " << object.first);
+              group.detachObject(object.first);
+              objects_to_remove.push_back(object.first);
+            }
+            planning_scene_interface.removeCollisionObjects(objects_to_remove);
+            task_state = ST_ARM_TO_HOME_END;
+          }
+          else
+          {
+            ROS_INFO("Gripper move FAILED");
+            return 1;
+          }
+        }
+        else
+        {
+          ROS_INFO("Detection user interaction FAILED, start placing Object");
+          task_state = ST_BASE_TO_PLACE;
+        }
+        break;
+      }
+      case ST_BASE_TO_PLACE:
+      {
+        ROS_INFO_STREAM("ST_BASE_TO_PLACE");
+        /* ********************* MOVE TO PLACE ********************* */
+        move_base_msgs::MoveBaseGoal mb_goal;
+        mb_goal.target_pose.header.frame_id = "map";
+        mb_goal.target_pose.header.stamp = ros::Time::now();
+        /* Smart Factory
+        mb_goal.target_pose.pose.position.x =7.84681434123;
+        mb_goal.target_pose.pose.position.y = -3.15925832165;
+        mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
+        mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
+        mb_goal.target_pose.pose.orientation.z = -0.015630101472;
+        mb_goal.target_pose.pose.orientation.w = 0.999877777014;
+        */
+
+        /* Berghoffstr. place pose*/
+        mb_goal.target_pose.pose.position.x = 12.291;
+        mb_goal.target_pose.pose.position.y = 4.75;
+        mb_goal.target_pose.pose.orientation.x = 0.0;
+        mb_goal.target_pose.pose.orientation.y = 0.0;
+        mb_goal.target_pose.pose.orientation.z = 0.0;
+        mb_goal.target_pose.pose.orientation.w = 1;
+
+        ROS_INFO("Send place base pose and wait...");
+        move_base_ac.sendGoal(mb_goal);
+
+        move_base_ac.waitForResult();
+
+        if (move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        {
+          ROS_INFO("Moving base to place pose SUCCESSFUL");
+          task_state = ST_PLACE_OBJ;
+        }
+        else
+        {
+          ROS_INFO("Moving base to place pose FAILED");
+          return 1;
+        }
+        break;
+      }
+      case ST_PLACE_OBJ:
+      {
+        ROS_INFO_STREAM("ST_PLACE_OBJ");
+
+        /* ********************* PLACE ********************* */
+
+        // move(group, -0.05, -0.05, 0.2);
+        ros::WallDuration(1.0).sleep();
+        group.setPlannerId("PRMstar");
+        ROS_INFO("Start Placing");
+        // place
+        uint placePlanAttempts = 0;
+        moveit::planning_interface::MoveItErrorCode error_code;
+        do
+        {
+          group.setPlanningTime(30 + 10 * placePlanAttempts);
+          setOrientationContraints(group);
+          error_code = place(group);
+          ++placePlanAttempts;
+          if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+          {
+            ROS_INFO("Placing SUCCESSFUL");
+            task_state = ST_ARM_TO_HOME_END;
+          }
+          else if ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
+                    error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ||
+                    error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT) &&
+                   placePlanAttempts < 10)
+          {
+            ROS_INFO("Planning for Placing FAILED");
+            ros::WallDuration(1.0).sleep();
+            // move(group, 0.01, 0.01, -0.01); //TODO: make a random/suitable move
+          }
+          else
+          {
+            ROS_ERROR("Placing FAILED");
+            return 1;
+          }
+        } while ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
+                  error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ||
+                  error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT) &&
+                 placePlanAttempts < 10);
+        break;
+      }
+      case ST_ARM_TO_HOME_END:
+      {
+        ROS_INFO_STREAM("ST_ARM_TO_HOME_END");
+        // plan to go home
+
+        group.setPlannerId("RRTConnect");
+        group.setStartStateToCurrentState();  // not sure why this is necessary after placing
+        group.setNamedTarget("home");
+        moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          ROS_INFO("Planning to home pose SUCCESSFUL");
+        }
+        else
+        {
+          ROS_ERROR("Planning to home pose FAILED");
+          return 1;
+        }
+
+        // move to home
+        error_code = group.execute(plan);
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          ROS_INFO("Moving to home pose SUCCESSFUL");
+          task_state = ST_DONE;
+        }
+        else
+        {
+          ROS_ERROR("Moving to home pose FAILED");
+          return 1;
+        }
+        break;
+      }
+      case ST_DONE:
+      {
+        ROS_INFO_STREAM("ST_DONE");
+        return 0;
+      }
+      default:
+      {
+        ROS_INFO_STREAM("Unknown state");
         return 1;
       }
-      return 0;
-    }
-    else 
-    {
-      ROS_INFO("Gripper move FAILED");
-      return 1;
     }
   }
-  else 
-  {
-    ROS_INFO("Detection user interaction FAILED, start placing Object");
-  }
-
-  /* ********************* PLACE ********************* */
-
- 
-  //move(group, -0.05, -0.05, 0.2);
-  ros::WallDuration(1.0).sleep();
-  group.setPlannerId("PRMstar");
-  ROS_INFO("Start Placing");
-  //place
-  uint placePlanAttempts = 0;
-  do{
-    group.setPlanningTime(30+10*placePlanAttempts);
-    setOrientationContraints(group);
-    error_code = place(group);
-    ++placePlanAttempts;
-    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-    {
-      ROS_INFO("Placing SUCCESSFUL");
-    }
-    else if((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT) && placePlanAttempts <10 )
-    {
-      ROS_INFO("Planning for Placing FAILED");
-      ros::WallDuration(1.0).sleep();
-      //move(group, 0.01, 0.01, -0.01); //TODO: make a random/suitable move
-    }
-    else
-    {
-      ROS_ERROR("Placing FAILED");
-      return 1;
-    }
-  }while((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN || error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT ) && placePlanAttempts <10 );
-  
-  
-  // plan to go home
-
-
-  group.setPlannerId("RRTConnect");
-  group.setStartStateToCurrentState();   // not sure why this is necessary after placing
-  group.setNamedTarget("home");
-  error_code = group.plan(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Planning to home pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Planning to home pose FAILED");
-    return 1;
-  }
-
-  // move to home
-  error_code = group.execute(plan);
-  if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-  {
-    ROS_INFO("Moving to home pose SUCCESSFUL");
-  } else
-  {
-    ROS_ERROR("Moving to home pose FAILED");
-    return 1;
-  }
-  return 0;
+  return 1;
 }
