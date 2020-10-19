@@ -80,6 +80,7 @@ enum state
   ST_BASE_TO_PLACE,
   ST_PLACE_OBJ,
   ST_ARM_TO_HOME_END,
+  ST_BASE_TO_HOME_END,
   ST_DONE
 };
 
@@ -225,7 +226,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   geometry_msgs::PoseStamped p;
 
   Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
-  place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.13d));
+  place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.11d));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
   p.header.frame_id = "mobipick/base_link";
@@ -257,7 +258,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   return error_code;
 }
 
-void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &group)
+void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &group, double factor_pi = 0.3)
 {
   moveit_msgs::Constraints constr;
 
@@ -280,10 +281,10 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
 
   ocm.orientation.x = -0.5;
   ocm.orientation.y = 0.5;
-  ocm.orientation.z = 0.5;
-  ocm.orientation.w = 0.5;
-  ocm.absolute_x_axis_tolerance = 0.3 * M_PI;
-  ocm.absolute_y_axis_tolerance = 0.3 * M_PI;
+  ocm.orientation.z = -0.5;
+  ocm.orientation.w = -0.5;
+  ocm.absolute_x_axis_tolerance = factor_pi * M_PI;
+  ocm.absolute_y_axis_tolerance = factor_pi * M_PI;
   ocm.absolute_z_axis_tolerance = 2.0 * M_PI;
   ocm.weight = 0.8;
 
@@ -441,66 +442,17 @@ int main(int argc, char **argv)
   state task_state = ST_INIT;
 
   moveit::planning_interface::MoveGroupInterface group("arm");
-  group.setPlanningTime(45.0);
-  group.setPlannerId("RRTConnect");
-  // NOTE: You can replace this by "RRTstar". This will have the following effects:
-  //   - RRT* is an (asymptotically) optimal planner, so the path with minimum path length
-  //     will be returned, which leads to much nicer trajectories without unnecessary reconfigurations.
-  //   - RRT* will always use the full planning time (see setPlanningTime()), even if an initial
-  //     plan is found earlier. If it runs out of time before finding an initial plan, planning will fail.
-  //   - Typical run times: RRT* between 1 and 30 seconds, RRTConnect 0.03 seconds
-  //   - also see:
-  //   http://docs.ros.org/kinetic/api/moveit_tutorials/html/doc/ompl_interface/ompl_interface_tutorial.html
-  //   - also see: https://ompl.kavrakilab.org/planners.html
-
-  /* old:
-  ros::Publisher pubGripper = nh.advertise<std_msgs::String>("/mobipick/gripper_control", 1);
-
-  std_msgs::String msgGripper;
-  std::stringstream ssGripper;
-  */
-
-  group.setPlanningTime(45.0);
-  group.setPlannerId("RRTConnect");
-
   // MOVE BASE
   actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> move_base_ac("move_base", true);
-
-  // wait for the move base action server to come up
-  while (!move_base_ac.waitForServer(ros::Duration(5.0)))
-  {
-    ROS_INFO("Waiting for the move_base action server to come up");
-  }
-
-  ROS_INFO("Connected to mb action server");
-
   // FT Observer
   actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction> ft_observer_ac("ft_observer", true);
-
-  // wait for the ft observer action server to come up
-  while (!ft_observer_ac.waitForServer(ros::Duration(5.0)))
-  {
-    ROS_INFO("Waiting for the ft_observer action server to come up");
-  }
-
-  ROS_INFO("Connected to ft observer action server");
-
   // GRIPPER
   actionlib::SimpleActionClient<control_msgs::GripperCommandAction> gripper_ac("gripper_hw", true);
-
-  // wait for the gripper action server to come up
-  while (!gripper_ac.waitForServer(ros::Duration(5.0)))
-  {
-    ROS_INFO("Waiting for the gripper action server to come up");
-  }
-
-  ROS_INFO("Connected to gripper action server");
-
   // MOVE IT
   moveit::planning_interface::MoveGroupInterface::Plan plan;
-
+  // PLANNING INTERFACE
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-
+  bool handover_planned ;
   while (ros::ok())
   {
     switch (task_state)
@@ -508,6 +460,29 @@ int main(int argc, char **argv)
       case ST_INIT:
       {
         ROS_INFO_STREAM("ST_INIT");
+        group.setPlanningTime(45.0);
+        group.setPlannerId("RRTConnect");
+        // wait for the move base action server to come up
+        while (!move_base_ac.waitForServer(ros::Duration(5.0)))
+        {
+          ROS_INFO("Waiting for the move_base action server to come up");
+        }
+        ROS_INFO("Connected to mb action server");
+
+        // wait for the ft observer action server to come up
+        while (!ft_observer_ac.waitForServer(ros::Duration(5.0)))
+        {
+          ROS_INFO("Waiting for the ft_observer action server to come up");
+        }
+        ROS_INFO("Connected to ft observer action server");
+
+        // wait for the gripper action server to come up
+        while (!gripper_ac.waitForServer(ros::Duration(5.0)))
+        {
+          ROS_INFO("Waiting for the gripper action server to come up");
+        }
+        ROS_INFO("Connected to gripper action server");
+        handover_planned = true;
         task_state = ST_ARM_TO_HOME_START;
         break;
       }
@@ -668,17 +643,22 @@ int main(int argc, char **argv)
         ROS_INFO_STREAM("ST_ARM_TO_TRANSPORT");
 
         /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
-        setOrientationContraints(group);
+        setOrientationContraints(group, 0.2);
 
         Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
         transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
         transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
         transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
 
-        if (moveToCartPose(group, transport_pose))
+        if (moveToCartPose(group, transport_pose) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
-          ros::WallDuration(5.0).sleep();
-          task_state = ST_BASE_TO_HANDOVER;
+          ros::WallDuration(1.0).sleep();
+          if(handover_planned)
+          {
+           task_state = ST_BASE_TO_HANDOVER;
+          }
+          else
+            task_state = ST_BASE_TO_PLACE;
         }
         break;
       }
@@ -700,26 +680,26 @@ int main(int argc, char **argv)
         */
 
         /* Berghoffstr. place pose*/
-        mb_goal.target_pose.pose.position.x = 12.291;
-        mb_goal.target_pose.pose.position.y = 4.75;
+        mb_goal.target_pose.pose.position.x = 11.05;
+        mb_goal.target_pose.pose.position.y = 3.37;
         mb_goal.target_pose.pose.orientation.x = 0.0;
         mb_goal.target_pose.pose.orientation.y = 0.0;
-        mb_goal.target_pose.pose.orientation.z = 0.0;
-        mb_goal.target_pose.pose.orientation.w = 1;
+        mb_goal.target_pose.pose.orientation.z = 0.914895905969;
+        mb_goal.target_pose.pose.orientation.w = 0.403689832967;
 
-        ROS_INFO("Send place base pose and wait...");
+        ROS_INFO("Send base handover pose and wait...");
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
 
         if (move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
         {
-          ROS_INFO("Moving base to place pose SUCCESSFUL");
+          ROS_INFO("Moving base to handover pose SUCCESSFUL");
           task_state = ST_ARM_TO_HANDOVER;
         }
         else
         {
-          ROS_INFO("Moving base to place pose FAILED");
+          ROS_INFO("Moving base to handover pose FAILED");
           return 1;
         }
         break;
@@ -728,14 +708,14 @@ int main(int argc, char **argv)
       {
         ROS_INFO_STREAM("ST_ARM_TO_HANDOVER");
         /* ********************* PLAN AND EXECUTE TO HAND OVER POSE ********************* */
-
+        setOrientationContraints(group, 0.3);
         Eigen::Isometry3d hand_over_pose = Eigen::Isometry3d::Identity();
         hand_over_pose.translate(Eigen::Vector3d(0.8, -0.4, 0.2));
         hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
         hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
         hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 0.0, 1.0)));
 
-        if (moveToCartPose(group, hand_over_pose))
+        if (moveToCartPose(group, hand_over_pose) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
           task_state = ST_USER_HANDOVER;
         }
@@ -779,6 +759,7 @@ int main(int argc, char **argv)
               objects_to_remove.push_back(object.first);
             }
             planning_scene_interface.removeCollisionObjects(objects_to_remove);
+            group.clearPathConstraints();
             task_state = ST_ARM_TO_HOME_END;
           }
           else
@@ -790,7 +771,8 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Detection user interaction FAILED, start placing Object");
-          task_state = ST_BASE_TO_PLACE;
+          handover_planned = false;
+          task_state = ST_ARM_TO_TRANSPORT;
         }
         break;
       }
@@ -851,7 +833,7 @@ int main(int argc, char **argv)
         do
         {
           group.setPlanningTime(30 + 10 * placePlanAttempts);
-          setOrientationContraints(group);
+          setOrientationContraints(group, 0.2);
           error_code = place(group);
           ++placePlanAttempts;
           if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
@@ -903,11 +885,44 @@ int main(int argc, char **argv)
         if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
           ROS_INFO("Moving to home pose SUCCESSFUL");
-          task_state = ST_DONE;
+          task_state = ST_BASE_TO_HOME_END;
         }
         else
         {
           ROS_ERROR("Moving to home pose FAILED");
+          return 1;
+        }
+        break;
+      }
+      case ST_BASE_TO_HOME_END:
+      {
+       ROS_INFO_STREAM("ST_BASE_TO_HOME_END");
+        /* ********************* MOVE TO PLACE ********************* */
+        move_base_msgs::MoveBaseGoal mb_goal;
+        mb_goal.target_pose.header.frame_id = "map";
+        mb_goal.target_pose.header.stamp = ros::Time::now();
+       
+        /* Berghoffstr. home pose*/
+        mb_goal.target_pose.pose.position.x = 17.6;
+        mb_goal.target_pose.pose.position.y = 5.55;
+        mb_goal.target_pose.pose.orientation.x = 0.0;
+        mb_goal.target_pose.pose.orientation.y = 0.0;
+        mb_goal.target_pose.pose.orientation.z = 0.68642644945;
+        mb_goal.target_pose.pose.orientation.w = 0.727199236452;
+
+        ROS_INFO("Send base home pose and wait...");
+        move_base_ac.sendGoal(mb_goal);
+
+        move_base_ac.waitForResult();
+
+        if (move_base_ac.getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+        {
+          ROS_INFO("Moving base to home SUCCESSFUL");
+          task_state = ST_DONE;
+        }
+        else
+        {
+          ROS_INFO("Moving base to home pose FAILED");
           return 1;
         }
         break;
