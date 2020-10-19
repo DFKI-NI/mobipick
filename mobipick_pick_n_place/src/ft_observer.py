@@ -73,7 +73,7 @@ class ForceTorqueObserver(object):
 
     def wrench_cb(self, data):
         self._wrench = data.wrench
-        self._actual_force = data.wrench.force.y
+        self._actual_force = - data.wrench.force.z
 
     def timer_cb(self, time):
         self._timer_is_running=False
