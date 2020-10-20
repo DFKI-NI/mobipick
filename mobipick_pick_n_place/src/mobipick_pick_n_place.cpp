@@ -69,6 +69,7 @@ typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseCl
 enum state
 {
   ST_INIT,
+  ST_PAUSED,
   ST_ARM_TO_HOME_START,
   ST_BASE_TO_PICK,
   ST_CAPTURE_OBJ,
@@ -89,6 +90,8 @@ struct GrapsPoseDefine
   Eigen::Isometry3d grasp_pose;
   std::float_t gripper_width;
 };
+
+bool paused = true;
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
@@ -432,6 +435,26 @@ moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_inte
   return error_code;
 }
 
+bool pause_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  if (!paused)
+  {
+    ROS_INFO_STREAM("Pause statemachine after actual state is completed");
+    paused = true;
+  }
+  return true;
+}
+
+bool continue_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+{
+  if (paused)
+  {
+    paused = false;
+    ROS_INFO_STREAM("Continue statemachine");
+  }
+  return true;
+}
+
 int main(int argc, char **argv)
 {
   ros::init(argc, argv, "mobipick_pick_n_place");
@@ -440,6 +463,13 @@ int main(int argc, char **argv)
 
   ros::NodeHandle nh;
   state task_state = ST_INIT;
+  state paused_state = ST_INIT;
+
+  // pause service
+  ros::ServiceServer pause_state = nh.advertiseService("pause_statemachine", pause_service);
+
+  // pause service
+  ros::ServiceServer continue_state = nh.advertiseService("continue_statemachine", continue_service);
 
   moveit::planning_interface::MoveGroupInterface group("arm");
   // MOVE BASE
@@ -452,9 +482,15 @@ int main(int argc, char **argv)
   moveit::planning_interface::MoveGroupInterface::Plan plan;
   // PLANNING INTERFACE
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-  bool handover_planned ;
+  bool handover_planned;
   while (ros::ok())
   {
+    if (paused && !(task_state == ST_PAUSED))
+    {
+      ROS_INFO_STREAM("PAUSED in state "<<task_state);
+      paused_state = task_state;
+      task_state = ST_PAUSED;
+    }
     switch (task_state)
     {
       case ST_INIT:
@@ -484,6 +520,15 @@ int main(int argc, char **argv)
         ROS_INFO("Connected to gripper action server");
         handover_planned = true;
         task_state = ST_ARM_TO_HOME_START;
+        break;
+      }
+      case ST_PAUSED:
+      {
+        if (!paused)
+        {
+          task_state = paused_state;
+          ROS_INFO_STREAM("Next state: "<< task_state);
+        }
         break;
       }
       case ST_ARM_TO_HOME_START:
@@ -643,7 +688,7 @@ int main(int argc, char **argv)
         ROS_INFO_STREAM("ST_ARM_TO_TRANSPORT");
 
         /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
-        setOrientationContraints(group, 0.2);
+        setOrientationContraints(group, 0.3);
 
         Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
         transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
@@ -653,9 +698,9 @@ int main(int argc, char **argv)
         if (moveToCartPose(group, transport_pose) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
           ros::WallDuration(1.0).sleep();
-          if(handover_planned)
+          if (handover_planned)
           {
-           task_state = ST_BASE_TO_HANDOVER;
+            task_state = ST_BASE_TO_HANDOVER;
           }
           else
             task_state = ST_BASE_TO_PLACE;
@@ -896,12 +941,12 @@ int main(int argc, char **argv)
       }
       case ST_BASE_TO_HOME_END:
       {
-       ROS_INFO_STREAM("ST_BASE_TO_HOME_END");
+        ROS_INFO_STREAM("ST_BASE_TO_HOME_END");
         /* ********************* MOVE TO PLACE ********************* */
         move_base_msgs::MoveBaseGoal mb_goal;
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
-       
+
         /* Berghoffstr. home pose*/
         mb_goal.target_pose.pose.position.x = 17.6;
         mb_goal.target_pose.pose.position.y = 5.55;
