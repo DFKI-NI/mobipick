@@ -878,7 +878,7 @@ int main(int argc, char **argv)
         do
         {
           group.setPlanningTime(30 + 10 * placePlanAttempts);
-          setOrientationContraints(group, 0.2);
+          setOrientationContraints(group, 0.3);
           error_code = place(group);
           ++placePlanAttempts;
           if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
