@@ -317,6 +317,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
 
     // add objects to planning scener
     bool found_table = false;
+    bool found_roof = false;
     std::vector<moveit_msgs::CollisionObject> collision_objects;
     for (auto &&det3d : detections->detections)
     {
@@ -330,6 +331,8 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
         found_table = true;
       else if (det3d.results[0].id == ObjectID::POWER_DRILL)
         found_power_drill = true;
+      else if (det3d.results[0].id == ObjectID::ROOF)
+        found_roof = true;
 
       moveit_msgs::CollisionObject co;
       co.header = detections->header;
@@ -367,6 +370,30 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.primitive_poses[0].position.x = 12.3;
       co.primitive_poses[0].position.y = 3.8;
       co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
+      co.primitive_poses[0].orientation.w = 1.0;
+
+      collision_objects.push_back(co);
+    }
+
+    if (!found_roof)
+    {
+      // Add roof from Lab
+      moveit_msgs::CollisionObject co;
+      co.header.stamp = detections->header.stamp;
+      co.header.frame_id = "/map";
+      co.id = id_to_string(ObjectID::ROOF);
+      co.operation = moveit_msgs::CollisionObject::ADD;
+      co.primitives.resize(1);
+      co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
+      co.primitives[0].dimensions.resize(
+          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 5.0;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 5.0;
+      co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.2;
+      co.primitive_poses.resize(1);
+      co.primitive_poses[0].position.x = 12.3;
+      co.primitive_poses[0].position.y = 3.8;
+      co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0 + 2.0;
       co.primitive_poses[0].orientation.w = 1.0;
 
       collision_objects.push_back(co);
