@@ -75,6 +75,7 @@ enum state
   ST_CAPTURE_OBJ,
   ST_PICK_OBJ,
   ST_ARM_TO_TRANSPORT,
+  ST_RECONFIGURE,
   ST_BASE_TO_HANDOVER,
   ST_ARM_TO_HANDOVER,
   ST_USER_HANDOVER,
@@ -93,7 +94,6 @@ struct GrapsPoseDefine
 
 bool paused = true;
 bool failed = false;
-
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
@@ -417,29 +417,33 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
 }
 
 moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface &group, double dx = 0.0,
-                                                 double dy = 0.2, double dz = 0.2)
+                                                 double dy = 0.0, double dz = 0.0, double droll = 0.0,
+                                                 double dpitch = 0.0, double dyaw = 0.0)
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
 
+  Eigen::Isometry3d pose;
   geometry_msgs::PoseStamped actual_pose = group.getCurrentPose();
-  geometry_msgs::Pose target_pose = actual_pose.pose;
-  target_pose.position.x += dx;
-  target_pose.position.y += dy;
-  target_pose.position.z += dz;
-  ROS_INFO_STREAM("Actual Pose frame: " << actual_pose.header.frame_id);
+  geometry_msgs::PoseStamped target_pose = actual_pose;
+  tf::poseMsgToEigen(actual_pose.pose, pose);
+  pose.translate(Eigen::Vector3d(dx, dy, dz));
+  pose.rotate(Eigen::AngleAxisd(dyaw, Eigen::Vector3d(0.0, 0.0, 1.0)));
+  pose.rotate(Eigen::AngleAxisd(dpitch, Eigen::Vector3d(0.0, 1.0, 0.0)));
+  pose.rotate(Eigen::AngleAxisd(droll, Eigen::Vector3d(1.0, 0.0, 0.0)));
+  tf::poseEigenToMsg(pose, target_pose.pose);
+  ROS_INFO_STREAM("Target pose frame: " << target_pose.header.frame_id);
   group.setPoseTarget(target_pose);
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   auto error_code = group.plan(my_plan);
   bool success = (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS);
- 
 
   ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
   if (success)
   {
-  error_code = group.execute(my_plan);
+    error_code = group.execute(my_plan);
   }
   return error_code;
 }
@@ -466,7 +470,7 @@ moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_inte
   ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
   if (success)
   {
-  error_code = group.execute(my_plan);
+    error_code = group.execute(my_plan);
   }
   return error_code;
 }
@@ -522,9 +526,9 @@ int main(int argc, char **argv)
   bool handover_planned;
   while (ros::ok())
   {
-    if ((paused || failed ) && !(task_state == ST_PAUSED))
+    if ((paused || failed) && !(task_state == ST_PAUSED))
     {
-      ROS_INFO_STREAM("PAUSED in state "<<task_state);
+      ROS_INFO_STREAM("PAUSED in state " << task_state);
       ROS_INFO_STREAM("Call service continue_statemachine to resume");
       paused_state = task_state;
       task_state = ST_PAUSED;
@@ -565,7 +569,7 @@ int main(int argc, char **argv)
         if (!paused && !failed)
         {
           task_state = paused_state;
-          ROS_INFO_STREAM("Next state: "<< task_state);
+          ROS_INFO_STREAM("Next state: " << task_state);
         }
         break;
       }
@@ -585,7 +589,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Planning to home pose FAILED");
-          failed=true;
+          failed = true;
         }
 
         // move
@@ -598,7 +602,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Moving to home pose FAILED");
-          failed=true;
+          failed = true;
         }
         break;
       }
@@ -639,8 +643,8 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Moving base to pick pose FAILED");
-          failed=true;   
-          }
+          failed = true;
+        }
         break;
       }
       case ST_CAPTURE_OBJ:
@@ -659,7 +663,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Planning to observation pose FAILED");
-          failed=true;            
+          failed = true;
         }
 
         // move to observation pose
@@ -672,7 +676,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Moving to observation pose FAILED");
-          failed=true;            
+          failed = true;
         }
         ros::WallDuration(5.0).sleep();
         break;
@@ -712,7 +716,7 @@ int main(int argc, char **argv)
           else
           {
             ROS_ERROR("Picking FAILED");
-            failed = true;           
+            failed = true;
           }
 
         } while ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
@@ -746,11 +750,25 @@ int main(int argc, char **argv)
         {
           ROS_INFO_STREAM("Move to TRANSPORT failed");
           failed = true;
-          group.setPlannerId("PRMstar");
-          group.setPlanningTime(90.0);
+          task_state = ST_RECONFIGURE;
         }
         break;
       }
+      case ST_RECONFIGURE:
+      {
+        ROS_INFO_STREAM("ST_RECONFIGURE");
+        if (move(group, 0.0, 0.0, 0.0, 0.0, 0.0, M_PI) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          task_state = ST_ARM_TO_TRANSPORT;
+        }
+        else
+        {
+          ROS_INFO_STREAM("RECONFIGURE failed");
+          failed = true;
+        }
+        break;
+      }
+
       case ST_BASE_TO_HANDOVER:
       {
         ROS_INFO_STREAM("ST_BASE_TO_HANDOVER");
@@ -907,7 +925,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Moving base to place pose FAILED");
-          failed=true;
+          failed = true;
         }
         break;
       }
