@@ -757,7 +757,7 @@ int main(int argc, char **argv)
       case ST_RECONFIGURE:
       {
         ROS_INFO_STREAM("ST_RECONFIGURE");
-        if (move(group, 0.0, 0.0, 0.0, 0.0, 0.0, M_PI) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        if (move(group, 0.0, 0.0, 0.0, M_PI, 0.0, 0) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
           task_state = ST_ARM_TO_TRANSPORT;
         }
@@ -815,7 +815,7 @@ int main(int argc, char **argv)
       {
         ROS_INFO_STREAM("ST_ARM_TO_HANDOVER");
         /* ********************* PLAN AND EXECUTE TO HAND OVER POSE ********************* */
-        setOrientationContraints(group, 0.3);
+        setOrientationContraints(group, 0.666666);
         Eigen::Isometry3d hand_over_pose = Eigen::Isometry3d::Identity();
         hand_over_pose.translate(Eigen::Vector3d(0.8, -0.4, 0.2));
         hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
@@ -937,14 +937,14 @@ int main(int argc, char **argv)
 
         // move(group, -0.05, -0.05, 0.2);
         ros::WallDuration(1.0).sleep();
-        group.setPlannerId("PRMstar");
+        group.setPlannerId("RRTConnect");
         ROS_INFO("Start Placing");
         // place
         uint placePlanAttempts = 0;
         moveit::planning_interface::MoveItErrorCode error_code;
         do
         {
-          group.setPlanningTime(30 + 10 * placePlanAttempts);
+          group.setPlanningTime(40 + 10 * placePlanAttempts);
           setOrientationContraints(group, 0.3);
           error_code = place(group);
           ++placePlanAttempts;
