@@ -92,6 +92,8 @@ struct GrapsPoseDefine
 };
 
 bool paused = true;
+bool failed = false;
+
 
 void openGripper(trajectory_msgs::JointTrajectory &posture)
 {
@@ -393,7 +395,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.primitive_poses.resize(1);
       co.primitive_poses[0].position.x = 12.3;
       co.primitive_poses[0].position.y = 3.8;
-      co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0 + 2.1;
+      co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0 + 2.2;
       co.primitive_poses[0].orientation.w = 1.0;
 
       collision_objects.push_back(co);
@@ -430,11 +432,15 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
-  bool success = (group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  auto error_code = group.plan(my_plan);
+  bool success = (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+ 
 
   ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
-
-  auto error_code = group.execute(my_plan);
+  if (success)
+  {
+  error_code = group.execute(my_plan);
+  }
   return error_code;
 }
 
@@ -454,11 +460,14 @@ moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_inte
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
-  bool success = (group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  auto error_code = group.plan(my_plan);
+  bool success = (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS);
 
   ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
-
-  auto error_code = group.execute(my_plan);
+  if (success)
+  {
+  error_code = group.execute(my_plan);
+  }
   return error_code;
 }
 
@@ -474,9 +483,10 @@ bool pause_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res
 
 bool continue_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
 {
-  if (paused)
+  if (paused || failed)
   {
     paused = false;
+    failed = false;
     ROS_INFO_STREAM("Continue statemachine");
   }
   return true;
@@ -512,10 +522,10 @@ int main(int argc, char **argv)
   bool handover_planned;
   while (ros::ok())
   {
-    if (paused && !(task_state == ST_PAUSED))
+    if ((paused || failed ) && !(task_state == ST_PAUSED))
     {
       ROS_INFO_STREAM("PAUSED in state "<<task_state);
-      ROS_INFO_STREAM("Cass service continue_statemachine to resume");
+      ROS_INFO_STREAM("Call service continue_statemachine to resume");
       paused_state = task_state;
       task_state = ST_PAUSED;
     }
@@ -552,7 +562,7 @@ int main(int argc, char **argv)
       }
       case ST_PAUSED:
       {
-        if (!paused)
+        if (!paused && !failed)
         {
           task_state = paused_state;
           ROS_INFO_STREAM("Next state: "<< task_state);
@@ -575,7 +585,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Planning to home pose FAILED");
-          return 1;
+          failed=true;
         }
 
         // move
@@ -588,9 +598,8 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Moving to home pose FAILED");
-          return 1;
+          failed=true;
         }
-
         break;
       }
       case ST_BASE_TO_PICK:
@@ -630,8 +639,8 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Moving base to pick pose FAILED");
-          return 1;
-        }
+          failed=true;   
+          }
         break;
       }
       case ST_CAPTURE_OBJ:
@@ -650,7 +659,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Planning to observation pose FAILED");
-          return 1;
+          failed=true;            
         }
 
         // move to observation pose
@@ -663,7 +672,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Moving to observation pose FAILED");
-          return 1;
+          failed=true;            
         }
         ros::WallDuration(5.0).sleep();
         break;
@@ -703,7 +712,7 @@ int main(int argc, char **argv)
           else
           {
             ROS_ERROR("Picking FAILED");
-            return 1;
+            failed = true;           
           }
 
         } while ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
@@ -733,6 +742,13 @@ int main(int argc, char **argv)
           else
             task_state = ST_BASE_TO_PLACE;
         }
+        else
+        {
+          ROS_INFO_STREAM("Move to TRANSPORT failed");
+          failed = true;
+          group.setPlannerId("PRMstar");
+          group.setPlanningTime(90.0);
+        }
         break;
       }
       case ST_BASE_TO_HANDOVER:
@@ -754,7 +770,7 @@ int main(int argc, char **argv)
 
         /* Berghoffstr. place pose*/
         mb_goal.target_pose.pose.position.x = 11.05;
-        mb_goal.target_pose.pose.position.y = 3.37;
+        mb_goal.target_pose.pose.position.y = 3.3;
         mb_goal.target_pose.pose.orientation.x = 0.0;
         mb_goal.target_pose.pose.orientation.y = 0.0;
         mb_goal.target_pose.pose.orientation.z = 0.914895905969;
@@ -791,6 +807,11 @@ int main(int argc, char **argv)
         if (moveToCartPose(group, hand_over_pose) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
           task_state = ST_USER_HANDOVER;
+        }
+        else
+        {
+          ROS_INFO("Move arm to HANDOVER failed");
+          failed = true;
         }
         break;
       }
@@ -838,7 +859,7 @@ int main(int argc, char **argv)
           else
           {
             ROS_INFO("Gripper move FAILED");
-            return 1;
+            failed = true;
           }
         }
         else
@@ -886,7 +907,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Moving base to place pose FAILED");
-          return 1;
+          failed=true;
         }
         break;
       }
@@ -926,7 +947,7 @@ int main(int argc, char **argv)
           else
           {
             ROS_ERROR("Placing FAILED");
-            return 1;
+            failed = true;
           }
         } while ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
                   error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ||
@@ -950,7 +971,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Planning to home pose FAILED");
-          return 1;
+          failed = true;
         }
 
         // move to home
@@ -963,7 +984,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_ERROR("Moving to home pose FAILED");
-          return 1;
+          failed = true;
         }
         break;
       }
@@ -996,7 +1017,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Moving base to home pose FAILED");
-          return 1;
+          failed = true;
         }
         break;
       }
