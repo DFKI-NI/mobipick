@@ -393,7 +393,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.primitive_poses.resize(1);
       co.primitive_poses[0].position.x = 12.3;
       co.primitive_poses[0].position.y = 3.8;
-      co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0 + 2.0;
+      co.primitive_poses[0].position.z = co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0 + 2.1;
       co.primitive_poses[0].orientation.w = 1.0;
 
       collision_objects.push_back(co);
@@ -515,6 +515,7 @@ int main(int argc, char **argv)
     if (paused && !(task_state == ST_PAUSED))
     {
       ROS_INFO_STREAM("PAUSED in state "<<task_state);
+      ROS_INFO_STREAM("Cass service continue_statemachine to resume");
       paused_state = task_state;
       task_state = ST_PAUSED;
     }
