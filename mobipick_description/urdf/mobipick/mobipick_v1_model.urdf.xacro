@@ -49,8 +49,13 @@
 
   <!-- Reachable joint angles are limited by the robot structure to these
        values for the shoulder_lift_joint. It's important to restrict the joint
-       angles, otherwise the planning space is discontinuous. -->
+       angles, otherwise the planning space is discontinuous. 
+
+       The shoulder_pan joint is limited to avoid unneccessary full arm
+       reconfigurations when picking from the right. For picking from the left,
+       one should exclude the opposite quadrant. -->
   <xacro:ur5_robot prefix="${prefix}ur5_" joint_limited="true"
+    shoulder_pan_lower_limit="${-1.25 * pi}" shoulder_pan_upper_limit="${0.25 * pi}"
     shoulder_lift_lower_limit="${-pi - 0.82}" shoulder_lift_upper_limit="${0.82}"
     wrist_3_lower_limit="${-0.25 * pi}" wrist_3_upper_limit="${1.75 * pi}"
     transmission_hw_interface="$(arg transmission_hw_interface)"
