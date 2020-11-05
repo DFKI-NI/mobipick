@@ -61,6 +61,9 @@
     transmission_hw_interface="$(arg transmission_hw_interface)"
     kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
 
+  <!-- ############### CABLE GUIDE ################ -->
+  <xacro:include filename="$(find mobipick_description)/urdf/cable_guide/cable_guide.urdf.xacro" />
+
   <!-- ############## FT SENSOR ############### -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_ft_300/robotiq_ft_300.urdf.xacro" />
 
