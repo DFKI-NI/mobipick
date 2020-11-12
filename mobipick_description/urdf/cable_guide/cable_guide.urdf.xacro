@@ -101,7 +101,7 @@
   <!-- wrist_3 -->
 
   <joint name="cable_guide_wrist_clamp_joint" type="fixed">
-    <origin xyz="0 0 -0.03" rpy="0 0 0" />
+    <origin xyz="0 0 -0.025" rpy="0 0 0" />
     <parent link="ur5_wrist_3_link" />
     <child link="cable_guide_wrist_clamp_link" />
   </joint>
@@ -115,7 +115,7 @@
   </link>
 
   <joint name="cable_guide_terminal_element_joint" type="fixed">
-    <origin xyz="-0.027 0.128 0.0095" rpy="0 0 0" />
+    <origin xyz="-0.029 0.142 0.007" rpy="0 0 0" />
     <parent link="cable_guide_wrist_clamp_link" />
     <child link="cable_guide_terminal_element_link" />
   </joint>
