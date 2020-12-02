@@ -88,6 +88,7 @@ roslaunch mir_navigation start_planner.launch     map_file:=$(rospack find pbr_m
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true
+rosservice call /mobipick/continue_statemachine
 ```
 
 ### Pick + Place demo (Gazebo)
