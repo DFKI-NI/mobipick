@@ -5,16 +5,17 @@ add_compile_options(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs
-  genmsg
   eigen_conversions
   gazebo_msgs
+  genmsg
   geometry_msgs
-  message_runtime
   message_generation
+  message_runtime
   moveit_msgs
   moveit_ros_planning_interface
   roscpp
   roslaunch
+	rosparam_shortcuts
   shape_msgs
   tf
   vision_msgs
@@ -38,6 +39,7 @@ catkin_package(
     message_runtime
     moveit_msgs
     moveit_ros_planning_interface
+    roscpp
     shape_msgs
     tf
     vision_msgs
@@ -60,17 +62,17 @@ add_dependencies(${PROJECT_NAME}_test_trajectory ${${PROJECT_NAME}_EXPORTED_TARG
 target_link_libraries(${PROJECT_NAME}_test_trajectory ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_test_trajectory PROPERTIES OUTPUT_NAME test_trajectory PREFIX "")
 
-add_executable(${PROJECT_NAME}_mobipick_pick_n_place src/mobipick_pick_n_place.cpp include/${PROJECT_NAME}/fake_object_recognition.h)
-add_dependencies(${PROJECT_NAME}_mobipick_pick_n_place ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME}_mobipick_pick_n_place ${catkin_LIBRARIES})
-set_target_properties(${PROJECT_NAME}_mobipick_pick_n_place PROPERTIES OUTPUT_NAME mobipick_pick_n_place PREFIX "")
+add_executable(${PROJECT_NAME} include/${PROJECT_NAME}/fake_object_recognition.h src/mobipick_pick_n_place.cpp)
+add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME} PREFIX "")
 
-add_executable(${PROJECT_NAME}_static_object_publisher src/static_object_publisher.cpp include/${PROJECT_NAME}/fake_object_recognition.h)
+add_executable(${PROJECT_NAME}_static_object_publisher include/${PROJECT_NAME}/fake_object_recognition.h src/static_object_publisher.cpp)
 add_dependencies(${PROJECT_NAME}_static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_static_object_publisher ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_static_object_publisher PROPERTIES OUTPUT_NAME static_object_publisher PREFIX "")
 
-add_executable(${PROJECT_NAME}_gazebo_object_publisher src/gazebo_object_publisher.cpp include/${PROJECT_NAME}/fake_object_recognition.h)
+add_executable(${PROJECT_NAME}_gazebo_object_publisher include/${PROJECT_NAME}/fake_object_recognition.h src/gazebo_object_publisher.cpp)
 add_dependencies(${PROJECT_NAME}_gazebo_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_gazebo_object_publisher ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_gazebo_object_publisher PROPERTIES OUTPUT_NAME gazebo_object_publisher PREFIX "")
@@ -99,14 +101,16 @@ set_target_properties(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evalu
 install(PROGRAMS
   nodes/gripper_plotter.py
   nodes/joint_trajectory_forwarder.py
+  src/ft_observer.py
+  src/ft_observer_sim.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 # Mark executables and/or libraries for installation
 install(TARGETS
+    ${PROJECT_NAME}
     ${PROJECT_NAME}_camera_marker_publisher
     ${PROJECT_NAME}_gazebo_object_publisher
-    ${PROJECT_NAME}_mobipick_pick_n_place
     ${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator
     ${PROJECT_NAME}_static_object_publisher
     ${PROJECT_NAME}_test_trajectory

@@ -28,6 +28,7 @@
   <depend>moveit_msgs</depend>
   <depend>moveit_ros_planning_interface</depend>
   <depend>roscpp</depend>
+  <depend>rosparam_shortcuts</depend>
   <depend>shape_msgs</depend>
   <depend>tf</depend>
   <depend>vision_msgs</depend>
@@ -35,4 +36,5 @@
 
 
   <exec_depend>message_generation</exec_depend>
+  <exec_depend>mobipick_moveit_config</exec_depend>
 </package>
