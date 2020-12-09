@@ -6,7 +6,7 @@
   <arg name="z" default="0.35" />
 
   <param name="coke_can_description"
-    command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/coke_can.urdf.xacro'" />
+    command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/coke_can.urdf.xacro'" />
 
   <group if="$(arg wait_for_table)">
     <node name="spawn_cokecan1" pkg="gazebo_ros" type="spawn_model" args="-urdf

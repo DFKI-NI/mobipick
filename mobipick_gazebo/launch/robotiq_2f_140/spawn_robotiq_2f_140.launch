@@ -6,7 +6,7 @@
   <include file="$(find gazebo_ros)/launch/empty_world.launch" />
 
   <!-- Convert an xacro and put on parameter server -->
-  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_sim.urdf.xacro" />
+  <param name="robot_description" command="$(find xacro)/xacro $(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_sim.urdf.xacro" />
 
   <!-- Spawn a robot into Gazebo -->
   <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model robotiq_2f_140 -gazebo_namespace /$(arg namespace)/gazebo" />
