@@ -60,7 +60,7 @@
   </group>
   <group if="$(arg arm_velocity_controller)">
     <node name="arm_controller_spawner"          pkg="controller_manager" type="controller_manager" output="screen" args="load arm_controller"/>
-    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="controller_manager" output="screen" args="arm_velocity_controller"/>
+    <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="controller_manager" output="screen" args="spawn arm_velocity_controller"/>
   </group>
 
   <!-- Fake calibration -->
