@@ -12,7 +12,7 @@
     <arg name="robot_y"   value="0.00" />
     <arg name="robot_yaw" value="0.00" />
   </include>
-  
+  <param name="world" type="str" value="smart_factory" />
   <!-- spawn power drill -->
   <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
     <arg name="x"     default="0.750" />

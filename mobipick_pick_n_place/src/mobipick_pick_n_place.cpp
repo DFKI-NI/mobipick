@@ -75,7 +75,6 @@ enum state
   ST_CAPTURE_OBJ,
   ST_PICK_OBJ,
   ST_ARM_TO_TRANSPORT,
-  ST_RECONFIGURE,
   ST_BASE_TO_HANDOVER,
   ST_ARM_TO_HANDOVER,
   ST_USER_HANDOVER,
@@ -505,7 +504,9 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
   state task_state = ST_INIT;
   state paused_state = ST_INIT;
-
+  std::string world_name;
+  nh.param<std::string>("/world", world_name, "unknown");
+  ROS_INFO_STREAM("Actual world name" << world_name);
   // pause service
   ros::ServiceServer pause_state = nh.advertiseService("pause_statemachine", pause_service);
 
@@ -614,23 +615,32 @@ int main(int argc, char **argv)
         move_base_msgs::MoveBaseGoal mb_goal;
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
-        /* Smart Factory
-        mb_goal.target_pose.pose.position.x = 0.8;
-        mb_goal.target_pose.pose.position.y = 0.1;
-        mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
-        mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
-        mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
-        mb_goal.target_pose.pose.orientation.w = 0.999942333612;*/
 
-        /* Berghoffstr pick pose*/
-        mb_goal.target_pose.pose.position.x = 12.331;
-        mb_goal.target_pose.pose.position.y = 2.995;
-        mb_goal.target_pose.pose.orientation.x = 0.000;
-        mb_goal.target_pose.pose.orientation.y = 0.000;
-        mb_goal.target_pose.pose.orientation.z = 1.000;
-        mb_goal.target_pose.pose.orientation.w = 0.000;
-
-        ROS_INFO("Send pick base pose and wait...");
+        
+        
+        if (world_name.compare("smart_factory") == 0)
+        {
+          /* Smart Factory pick pose*/
+          mb_goal.target_pose.pose.position.x = 0.8;
+          mb_goal.target_pose.pose.position.y = 0.1;
+          mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
+          mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
+          mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
+          mb_goal.target_pose.pose.orientation.w = 0.999942333612;
+          ROS_INFO("Send base to Smart Factory's Pick pose and wait...");
+        }
+        else
+        {
+          /* Berghoffstr pick pose*/
+          mb_goal.target_pose.pose.position.x = 12.331;
+          mb_goal.target_pose.pose.position.y = 2.995;
+          mb_goal.target_pose.pose.orientation.x = 0.000;
+          mb_goal.target_pose.pose.orientation.y = 0.000;
+          mb_goal.target_pose.pose.orientation.z = 1.000;
+          mb_goal.target_pose.pose.orientation.w = 0.000;
+          ROS_INFO("Send base to Moelk's Pick pose and wait...");
+        }
+        
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
@@ -730,63 +740,46 @@ int main(int argc, char **argv)
 
         /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
         setOrientationContraints(group, 0.3);
-// TODO: Use joint state -0.8971422354327601, -1.88397723833193, 2.141711711883545, -1.827597443257467, -1.5847457090960901, 3.8100781440734863
-/*        Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
-        transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
-        transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
-        transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
-*/
-         group.setNamedTarget("transport");       
-         moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
+        // TODO: Use joint state -0.8971422354327601, -1.88397723833193, 2.141711711883545, -1.827597443257467,
+        // -1.5847457090960901, 3.8100781440734863
+        /*        Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
+                transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
+                transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+                transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+        */
+        group.setNamedTarget("transport");
+        moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
 
-         if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-         {
-             ROS_INFO("Planning to transport pose SUCCESSFUL");
-         }
-         else
-         {
-             ROS_ERROR("Planning to transport pose FAILED");
-             failed = true;
-         }
-      
-         // move to transport pose
-
-         
-         error_code = group.execute(plan);
-         if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-         {
-              ROS_INFO("Moving to observation pose SUCCESSFUL");
-              if (handover_planned)
-                 {
-                     task_state = ST_BASE_TO_HANDOVER;
-                 }
-              else
-                 task_state = ST_BASE_TO_PLACE;
-          }
-          else
-          {
-              ROS_INFO_STREAM("Move to TRANSPORT failed");
-              failed = true;
-              task_state = ST_RECONFIGURE;
-          }
-          break;       
-         }
-
-      case ST_RECONFIGURE:
-      {
-        ROS_INFO_STREAM("ST_RECONFIGURE");
-        if (move(group, 0.0, 0.0, 0.0, M_PI, 0.0, 0) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
-          task_state = ST_ARM_TO_TRANSPORT;
+          ROS_INFO("Planning to transport pose SUCCESSFUL");
         }
         else
         {
-          ROS_INFO_STREAM("RECONFIGURE failed");
+          ROS_ERROR("Planning to transport pose FAILED");
+          failed = true;
+        }
+
+        // move to transport pose
+
+        error_code = group.execute(plan);
+        if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        {
+          ROS_INFO("Moving to observation pose SUCCESSFUL");
+          if (handover_planned)
+          {
+            task_state = ST_BASE_TO_HANDOVER;
+          }
+          else
+            task_state = ST_BASE_TO_PLACE;
+        }
+        else
+        {
+          ROS_INFO_STREAM("Move to TRANSPORT failed");
           failed = true;
         }
         break;
       }
-
       case ST_BASE_TO_HANDOVER:
       {
         ROS_INFO_STREAM("ST_BASE_TO_HANDOVER");
@@ -795,24 +788,29 @@ int main(int argc, char **argv)
         move_base_msgs::MoveBaseGoal mb_goal;
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
-        /* Smart Factory
-        mb_goal.target_pose.pose.position.x =7.84681434123;
-        mb_goal.target_pose.pose.position.y = -3.15925832165;
-        mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
-        mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
-        mb_goal.target_pose.pose.orientation.z = -0.015630101472;
-        mb_goal.target_pose.pose.orientation.w = 0.999877777014;
-        */
-
-        /* Berghoffstr. place pose*/
-        mb_goal.target_pose.pose.position.x = 11.05;
-        mb_goal.target_pose.pose.position.y = 3.3;
-        mb_goal.target_pose.pose.orientation.x = 0.0;
-        mb_goal.target_pose.pose.orientation.y = 0.0;
-        mb_goal.target_pose.pose.orientation.z = 0.914895905969;
-        mb_goal.target_pose.pose.orientation.w = 0.403689832967;
-
-        ROS_INFO("Send base handover pose and wait...");
+        /* Smart Factory*/
+        if (world_name.compare("smart_factory") != 0)
+        {
+          mb_goal.target_pose.pose.position.x = 7.84681434123;
+          mb_goal.target_pose.pose.position.y = -3.15925832165;
+          mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
+          mb_goal.target_pose.pose.orientation.y = 3.46092411389e-05;
+          mb_goal.target_pose.pose.orientation.z = -0.015630101472;
+          mb_goal.target_pose.pose.orientation.w = 0.999877777014;
+          ROS_INFO("Send base to Smart Factory's Hand Over pose and wait...");
+        }
+        else
+        {
+          /* Berghoffstr. place pose*/
+          mb_goal.target_pose.pose.position.x = 11.05;
+          mb_goal.target_pose.pose.position.y = 3.3;
+          mb_goal.target_pose.pose.orientation.x = 0.0;
+          mb_goal.target_pose.pose.orientation.y = 0.0;
+          mb_goal.target_pose.pose.orientation.z = 0.914895905969;
+          mb_goal.target_pose.pose.orientation.w = 0.403689832967;
+          ROS_INFO("Send base to Moekls Hand Over pose and wait...");
+        }
+        
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
@@ -825,7 +823,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Moving base to handover pose FAILED");
-          failed=true;
+          failed = true;
         }
         break;
       }
@@ -913,24 +911,29 @@ int main(int argc, char **argv)
         move_base_msgs::MoveBaseGoal mb_goal;
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
-        /* Smart Factory
-        mb_goal.target_pose.pose.position.x =7.84681434123;
-        mb_goal.target_pose.pose.position.y = -3.15925832165;
-        mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
-        mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
-        mb_goal.target_pose.pose.orientation.z = -0.015630101472;
-        mb_goal.target_pose.pose.orientation.w = 0.999877777014;
-        */
-
-        /* Berghoffstr. place pose*/
-        mb_goal.target_pose.pose.position.x = 12.291;
-        mb_goal.target_pose.pose.position.y = 4.75;
-        mb_goal.target_pose.pose.orientation.x = 0.0;
-        mb_goal.target_pose.pose.orientation.y = 0.0;
-        mb_goal.target_pose.pose.orientation.z = 0.0;
-        mb_goal.target_pose.pose.orientation.w = 1;
-
-        ROS_INFO("Send place base pose and wait...");
+        if (world_name.compare("smart_factory") != 0)
+        {
+          /* Smart Factory*/
+          mb_goal.target_pose.pose.position.x =7.84681434123;
+          mb_goal.target_pose.pose.position.y = -3.15925832165;
+          mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
+          mb_goal.target_pose.pose.orientation.y =  3.46092411389e-05;
+          mb_goal.target_pose.pose.orientation.z = -0.015630101472;
+          mb_goal.target_pose.pose.orientation.w = 0.999877777014;
+          ROS_INFO("Send base to Smart Factory place pose and wait...");
+        }
+        else
+        {
+          /* Berghoffstr. place pose*/
+          mb_goal.target_pose.pose.position.x = 12.291;
+          mb_goal.target_pose.pose.position.y = 4.75;
+          mb_goal.target_pose.pose.orientation.x = 0.0;
+          mb_goal.target_pose.pose.orientation.y = 0.0;
+          mb_goal.target_pose.pose.orientation.z = 0.0;
+          mb_goal.target_pose.pose.orientation.w = 1;
+          ROS_INFO("Send base to Moelks place pose and wait...");
+        }
+        
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
