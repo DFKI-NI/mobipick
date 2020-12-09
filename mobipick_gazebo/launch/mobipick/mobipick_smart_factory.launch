@@ -17,7 +17,7 @@
   <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
     <arg name="x"     default="0.750" />
     <arg name="y"     default="1.0" />
-    <arg name="z"     default="0.80" />
+    <arg name="z"     default="0.90" />
     <arg name="roll"  default="$(eval pi / 2)" />
     <arg name="pitch" default="0.0" />
     <arg name="yaw"   default="$(eval -pi  *2  / 3)" />
@@ -30,7 +30,7 @@
     command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
   <node name="spawn_pick_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 0.75 -y 1.0"
     respawn="false" output="screen" />
-<node name="spawn_place_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_2 -x 4.0 -y 8.0"
+<node name="spawn_place_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_2 -x 2.8 -y -4.85"
     respawn="false" output="screen" />
 
 </launch>

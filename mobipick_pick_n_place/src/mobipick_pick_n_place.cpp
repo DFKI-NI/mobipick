@@ -62,6 +62,7 @@
 
 #include <eigen_conversions/eigen_msg.h>
 
+#include <rosparam_shortcuts/rosparam_shortcuts.h>
 #include <sstream>
 
 typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
@@ -504,9 +505,49 @@ int main(int argc, char **argv)
   ros::NodeHandle nh;
   state task_state = ST_INIT;
   state paused_state = ST_INIT;
+
+
+  geometry_msgs::Pose base_pick_pose;
+  geometry_msgs::Pose base_handover_pose;
+  geometry_msgs::Pose base_place_pose;
+  geometry_msgs::Pose base_home_pose;
   std::string world_name;
-  nh.param<std::string>("/world", world_name, "unknown");
-  ROS_INFO_STREAM("Actual world name" << world_name);
+  bool handover_planned;
+  
+  // Load rosparams
+  ros::NodeHandle rpnh(nh, "poses");
+  std::size_t error = 0;
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_pick_pose", base_pick_pose);              // geometry_msgs::Pose base_pick_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_handover_pose", base_handover_pose);              // geometry_msgs::Pose base_handover_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_place_pose", base_place_pose);              // geometry_msgs::Pose base_place_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_home_pose", base_home_pose);              // geometry_msgs::Pose base_home_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "handover_planned", handover_planned);              // bool
+  error += !rosparam_shortcuts::get("poses", rpnh, "world_name", world_name);              // string
+  // add more parameters here to load if desired
+  rosparam_shortcuts::shutdownIfError("poses", error);
+
+
+
+  ROS_INFO_STREAM("Actual world name: " << world_name);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // pause service
   ros::ServiceServer pause_state = nh.advertiseService("pause_statemachine", pause_service);
 
@@ -524,7 +565,7 @@ int main(int argc, char **argv)
   moveit::planning_interface::MoveGroupInterface::Plan plan;
   // PLANNING INTERFACE
   moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-  bool handover_planned;
+
   while (ros::ok())
   {
     if ((paused || failed) && !(task_state == ST_PAUSED))
@@ -561,7 +602,7 @@ int main(int argc, char **argv)
           ROS_INFO("Waiting for the gripper action server to come up");
         }
         ROS_INFO("Connected to gripper action server");
-        handover_planned = true;
+        
         task_state = ST_ARM_TO_HOME_START;
         break;
       }
@@ -617,30 +658,32 @@ int main(int argc, char **argv)
         mb_goal.target_pose.header.stamp = ros::Time::now();
 
         
-        
+        /*
         if (world_name.compare("smart_factory") == 0)
         {
-          /* Smart Factory pick pose*/
+          // Smart Factory pick pose
           mb_goal.target_pose.pose.position.x = 0.8;
           mb_goal.target_pose.pose.position.y = 0.1;
           mb_goal.target_pose.pose.orientation.x = -0.00512939136499;
           mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
           mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
           mb_goal.target_pose.pose.orientation.w = 0.999942333612;
+         
           ROS_INFO("Send base to Smart Factory's Pick pose and wait...");
         }
         else
         {
-          /* Berghoffstr pick pose*/
+          // Berghoffstr pick pose
           mb_goal.target_pose.pose.position.x = 12.331;
           mb_goal.target_pose.pose.position.y = 2.995;
           mb_goal.target_pose.pose.orientation.x = 0.000;
           mb_goal.target_pose.pose.orientation.y = 0.000;
           mb_goal.target_pose.pose.orientation.z = 1.000;
           mb_goal.target_pose.pose.orientation.w = 0.000;
-          ROS_INFO("Send base to Moelk's Pick pose and wait...");
-        }
         
+        }*/
+         mb_goal.target_pose.pose = base_pick_pose;
+          ROS_INFO("Send base to Pick pose and wait...");
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
@@ -700,7 +743,7 @@ int main(int argc, char **argv)
         // clear octomap
         ros::ServiceClient clear_octomap = nh.serviceClient<std_srvs::Empty>("clear_octomap");
         std_srvs::Empty srv;
-
+        group.clearPathConstraints();
         // pick
         moveit::planning_interface::MoveItErrorCode error_code;
         uint pickPlanAttempts = 0;
@@ -739,7 +782,7 @@ int main(int argc, char **argv)
         ROS_INFO_STREAM("ST_ARM_TO_TRANSPORT");
 
         /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
-        setOrientationContraints(group, 0.3);
+        setOrientationContraints(group, 0.4);
         // TODO: Use joint state -0.8971422354327601, -1.88397723833193, 2.141711711883545, -1.827597443257467,
         // -1.5847457090960901, 3.8100781440734863
         /*        Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
@@ -788,7 +831,7 @@ int main(int argc, char **argv)
         move_base_msgs::MoveBaseGoal mb_goal;
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
-        /* Smart Factory*/
+        /* Smart Factory
         if (world_name.compare("smart_factory") != 0)
         {
           mb_goal.target_pose.pose.position.x = 7.84681434123;
@@ -801,16 +844,17 @@ int main(int argc, char **argv)
         }
         else
         {
-          /* Berghoffstr. place pose*/
+          // Berghoffstr. place pose
           mb_goal.target_pose.pose.position.x = 11.05;
           mb_goal.target_pose.pose.position.y = 3.3;
           mb_goal.target_pose.pose.orientation.x = 0.0;
           mb_goal.target_pose.pose.orientation.y = 0.0;
           mb_goal.target_pose.pose.orientation.z = 0.914895905969;
           mb_goal.target_pose.pose.orientation.w = 0.403689832967;
-          ROS_INFO("Send base to Moekls Hand Over pose and wait...");
-        }
-        
+          
+        }*/
+         mb_goal.target_pose.pose = base_handover_pose;
+         ROS_INFO("Send base to Hand Over pose and wait...");
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
@@ -911,9 +955,9 @@ int main(int argc, char **argv)
         move_base_msgs::MoveBaseGoal mb_goal;
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
-        if (world_name.compare("smart_factory") != 0)
+        /*        if (world_name.compare("smart_factory") != 0)
         {
-          /* Smart Factory*/
+          // Smart Factory
           mb_goal.target_pose.pose.position.x =7.84681434123;
           mb_goal.target_pose.pose.position.y = -3.15925832165;
           mb_goal.target_pose.pose.orientation.x = 0.000360226159889;
@@ -924,16 +968,19 @@ int main(int argc, char **argv)
         }
         else
         {
-          /* Berghoffstr. place pose*/
+          // Berghoffstr. place pose
           mb_goal.target_pose.pose.position.x = 12.291;
           mb_goal.target_pose.pose.position.y = 4.75;
           mb_goal.target_pose.pose.orientation.x = 0.0;
           mb_goal.target_pose.pose.orientation.y = 0.0;
           mb_goal.target_pose.pose.orientation.z = 0.0;
-          mb_goal.target_pose.pose.orientation.w = 1;
+          mb_goal.target_pose.pose.orientation.w = 1; 
+          
           ROS_INFO("Send base to Moelks place pose and wait...");
         }
-        
+        */
+        mb_goal.target_pose.pose = base_place_pose;
+        ROS_INFO("Send base to place pose and wait...");
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
@@ -1034,7 +1081,7 @@ int main(int argc, char **argv)
         move_base_msgs::MoveBaseGoal mb_goal;
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
-
+        mb_goal.target_pose.pose = base_home_pose;
         /* Berghoffstr. home pose*/
         mb_goal.target_pose.pose.position.x = 17.6;
         mb_goal.target_pose.pose.position.y = 5.55;
