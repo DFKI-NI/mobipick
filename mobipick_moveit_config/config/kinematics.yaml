@@ -1,6 +1,6 @@
 arm:
   kinematics_solver: trac_ik_kinematics_plugin/TRAC_IKKinematicsPlugin
-  kinematics_solver_timeout: 0.005              # default: 0.005
+  kinematics_solver_timeout: 0.1                # default: 0.005
   position_only_ik: false                       # default: false
   # kinematics_solver_search_resolution: 0.005  # not applicable to TRAC IK
   # kinematics_solver_attempts: 3               # not applicable to TRAC IK

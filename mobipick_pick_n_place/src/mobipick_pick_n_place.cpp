@@ -730,34 +730,52 @@ int main(int argc, char **argv)
 
         /* ********************* PLAN AND EXECUTE TO TRANSPORT POSE ********************* */
         setOrientationContraints(group, 0.3);
-
-        Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
+// TODO: Use joint state -0.8971422354327601, -1.88397723833193, 2.141711711883545, -1.827597443257467, -1.5847457090960901, 3.8100781440734863
+/*        Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
         transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
         transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
         transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+*/
+         group.setNamedTarget("transport");       
+         moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
 
-        if (moveToCartPose(group, transport_pose) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
-        {
-          ros::WallDuration(1.0).sleep();
-          if (handover_planned)
-          {
-            task_state = ST_BASE_TO_HANDOVER;
+         if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+         {
+             ROS_INFO("Planning to transport pose SUCCESSFUL");
+         }
+         else
+         {
+             ROS_ERROR("Planning to transport pose FAILED");
+             failed = true;
+         }
+      
+         // move to transport pose
+
+         
+         error_code = group.execute(plan);
+         if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+         {
+              ROS_INFO("Moving to observation pose SUCCESSFUL");
+              if (handover_planned)
+                 {
+                     task_state = ST_BASE_TO_HANDOVER;
+                 }
+              else
+                 task_state = ST_BASE_TO_PLACE;
           }
           else
-            task_state = ST_BASE_TO_PLACE;
-        }
-        else
-        {
-          ROS_INFO_STREAM("Move to TRANSPORT failed");
-          failed = true;
-          task_state = ST_RECONFIGURE;
-        }
-        break;
-      }
+          {
+              ROS_INFO_STREAM("Move to TRANSPORT failed");
+              failed = true;
+              task_state = ST_RECONFIGURE;
+          }
+          break;       
+         }
+
       case ST_RECONFIGURE:
       {
         ROS_INFO_STREAM("ST_RECONFIGURE");
-        if (move(group, 0.0, 0.0, 0.0, 0.0, 0.0, M_PI) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+        if (move(group, 0.0, 0.0, 0.0, M_PI, 0.0, 0) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
           task_state = ST_ARM_TO_TRANSPORT;
         }
@@ -807,7 +825,7 @@ int main(int argc, char **argv)
         else
         {
           ROS_INFO("Moving base to handover pose FAILED");
-          return 1;
+          failed=true;
         }
         break;
       }
@@ -815,7 +833,7 @@ int main(int argc, char **argv)
       {
         ROS_INFO_STREAM("ST_ARM_TO_HANDOVER");
         /* ********************* PLAN AND EXECUTE TO HAND OVER POSE ********************* */
-        setOrientationContraints(group, 0.3);
+        setOrientationContraints(group, 0.666666);
         Eigen::Isometry3d hand_over_pose = Eigen::Isometry3d::Identity();
         hand_over_pose.translate(Eigen::Vector3d(0.8, -0.4, 0.2));
         hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
@@ -937,14 +955,14 @@ int main(int argc, char **argv)
 
         // move(group, -0.05, -0.05, 0.2);
         ros::WallDuration(1.0).sleep();
-        group.setPlannerId("PRMstar");
+        group.setPlannerId("RRTConnect");
         ROS_INFO("Start Placing");
         // place
         uint placePlanAttempts = 0;
         moveit::planning_interface::MoveItErrorCode error_code;
         do
         {
-          group.setPlanningTime(30 + 10 * placePlanAttempts);
+          group.setPlanningTime(40 + 10 * placePlanAttempts);
           setOrientationContraints(group, 0.3);
           error_code = place(group);
           ++placePlanAttempts;

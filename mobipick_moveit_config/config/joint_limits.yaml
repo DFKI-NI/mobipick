@@ -5,8 +5,8 @@ joint_limits:
   default_velocity_scaling_factor: 0.6  # see https://github.com/ros-planning/moveit/blob/master/MIGRATION.md, ros-planning/moveit#1890
   default_acceleration_scaling_factor: 0.6
   $(arg prefix)ur5_shoulder_pan_joint:
-    max_position: 3.14
-    min_position: -3.14
+    max_position: 0.7853981633974483
+    min_position: -3.9269908169872414
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
