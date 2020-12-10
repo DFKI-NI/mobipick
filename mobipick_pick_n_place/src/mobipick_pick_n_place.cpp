@@ -1082,13 +1082,6 @@ int main(int argc, char **argv)
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
         mb_goal.target_pose.pose = base_home_pose;
-        /* Berghoffstr. home pose*/
-        mb_goal.target_pose.pose.position.x = 17.6;
-        mb_goal.target_pose.pose.position.y = 5.55;
-        mb_goal.target_pose.pose.orientation.x = 0.0;
-        mb_goal.target_pose.pose.orientation.y = 0.0;
-        mb_goal.target_pose.pose.orientation.z = 0.68642644945;
-        mb_goal.target_pose.pose.orientation.w = 0.727199236452;
 
         ROS_INFO("Send base home pose and wait...");
         move_base_ac.sendGoal(mb_goal);
