@@ -1,0 +1,11 @@
+home: {elbow_joint: 2.4269862174987793, shoulder_lift_joint: -2.6058371702777308,
+  shoulder_pan_joint: 0.0011141584254801273, wrist_1_joint: -2.0528696219073694, wrist_2_joint: -1.5755208174334925,
+  wrist_3_joint: 3.1365742683410645}
+home_up: {elbow_joint: 2.14, shoulder_lift_joint: -2.6, shoulder_pan_joint: 0, wrist_1_joint: -2.39,
+  wrist_2_joint: -1.57, wrist_3_joint: 3.14}
+observe: {elbow_joint: 1.8664660453796387, shoulder_lift_joint: -1.0228155295001429,
+  shoulder_pan_joint: -0.04586774507631475, wrist_1_joint: -2.0844295660602015, wrist_2_joint: -1.610323731099264,
+  wrist_3_joint: 4.597344875335693}
+observe_sfm: {elbow_joint: 2.43933367729187, shoulder_lift_joint: -2.605777088795797,
+  shoulder_pan_joint: 0.0011980480048805475, wrist_1_joint: -2.052917782460348, wrist_2_joint: -1.5754368940936487,
+  wrist_3_joint: 3.1364545822143555}
