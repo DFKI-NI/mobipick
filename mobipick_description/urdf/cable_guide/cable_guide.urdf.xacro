@@ -6,140 +6,142 @@
   <xacro:property name="shoulder_offset" value="0.136" />
   <xacro:property name="elbow_offset" value="0.0165" />
 
-  <!-- upper_arm -->
+  <xacro:macro name="cable_guide" params="prefix">
+    <!-- upper_arm -->
 
-  <joint name="cable_guide_clamp1_joint" type="fixed">
-    <origin xyz="-0.11 0.091 ${shoulder_offset}" rpy="0 0 0" />
-    <parent link="ur5_upper_arm_link" />
-    <child link="cable_guide_clamp1_link" />
-  </joint>
+    <joint name="${prefix}cable_guide_clamp1_joint" type="fixed">
+      <origin xyz="-0.11 0.091 ${shoulder_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_upper_arm_link" />
+      <child link="${prefix}cable_guide_clamp1_link" />
+    </joint>
 
-  <link name="cable_guide_clamp1_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_big_TR_911_965_086_Z0.dae" />
-      </geometry>
-    </visual>
-  </link>
+    <link name="${prefix}cable_guide_clamp1_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_big_TR_911_965_086_Z0.dae" />
+        </geometry>
+      </visual>
+    </link>
 
-  <joint name="cable_guide_clamp2_joint" type="fixed">
-    <origin xyz="-0.31 0.091 ${shoulder_offset}" rpy="0 0 0" />
-    <parent link="ur5_upper_arm_link" />
-    <child link="cable_guide_clamp2_link" />
-  </joint>
+    <joint name="${prefix}cable_guide_clamp2_joint" type="fixed">
+      <origin xyz="-0.31 0.091 ${shoulder_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_upper_arm_link" />
+      <child link="${prefix}cable_guide_clamp2_link" />
+    </joint>
 
-  <link name="cable_guide_clamp2_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_big_TR_911_965_086_Z0.dae" />
-      </geometry>
-    </visual>
-  </link>
+    <link name="${prefix}cable_guide_clamp2_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_big_TR_911_965_086_Z0.dae" />
+        </geometry>
+      </visual>
+    </link>
 
-  <joint name="cable_guide_upper_arm_tube_joint" type="fixed">
-    <origin xyz="-0.10 0 0" rpy="0 ${pi/2} 0" />
-    <parent link="cable_guide_clamp1_link" />
-    <child link="cable_guide_upper_arm_tube_link" />
-  </joint>
+    <joint name="${prefix}cable_guide_upper_arm_tube_joint" type="fixed">
+      <origin xyz="-0.10 0 0" rpy="0 ${pi/2} 0" />
+      <parent link="${prefix}cable_guide_clamp1_link" />
+      <child link="${prefix}cable_guide_upper_arm_tube_link" />
+    </joint>
 
-  <link name="cable_guide_upper_arm_tube_link">
-    <visual>
-      <geometry>
-        <cylinder radius="0.01725" length="0.3"/>
-      </geometry>
-      <xacro:insert_block name="material_black" />
-    </visual>
-  </link>
-
-
-  <!-- forearm -->
-
-  <joint name="cable_guide_clamp3_joint" type="fixed">
-    <origin xyz="-0.11 0.0775 ${elbow_offset}" rpy="0 0 0" />
-    <parent link="ur5_forearm_link" />
-    <child link="cable_guide_clamp3_link" />
-  </joint>
-
-  <link name="cable_guide_clamp3_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_small_TR_911_965_075_Z0.dae" />
-      </geometry>
-    </visual>
-  </link>
-
-  <joint name="cable_guide_clamp4_joint" type="fixed">
-    <origin xyz="-0.31 0.0775 ${elbow_offset}" rpy="0 0 0" />
-    <parent link="ur5_forearm_link" />
-    <child link="cable_guide_clamp4_link" />
-  </joint>
-
-  <link name="cable_guide_clamp4_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_small_TR_911_965_075_Z0.dae" />
-      </geometry>
-    </visual>
-  </link>
-
-  <joint name="cable_guide_forearm_tube_joint" type="fixed">
-    <origin xyz="-0.10 0 0" rpy="0 ${pi/2} 0" />
-    <parent link="cable_guide_clamp3_link" />
-    <child link="cable_guide_forearm_tube_link" />
-  </joint>
-
-  <link name="cable_guide_forearm_tube_link">
-    <visual>
-      <geometry>
-        <cylinder radius="0.01725" length="0.3"/>
-      </geometry>
-      <xacro:insert_block name="material_black" />
-    </visual>
-  </link>
+    <link name="${prefix}cable_guide_upper_arm_tube_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.01725" length="0.3"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+    </link>
 
 
-  <!-- wrist_3 -->
+    <!-- forearm -->
 
-  <joint name="cable_guide_wrist_clamp_joint" type="fixed">
-    <origin xyz="0 0 -0.025" rpy="0 0 0" />
-    <parent link="ur5_wrist_3_link" />
-    <child link="cable_guide_wrist_clamp_link" />
-  </joint>
+    <joint name="${prefix}cable_guide_clamp3_joint" type="fixed">
+      <origin xyz="-0.11 0.0775 ${elbow_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_forearm_link" />
+      <child link="${prefix}cable_guide_clamp3_link" />
+    </joint>
 
-  <link name="cable_guide_wrist_clamp_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://mobipick_description/meshes/cable_guide/visual/wrist_clamp_TR_918_012.dae" />
-      </geometry>
-    </visual>
-  </link>
+    <link name="${prefix}cable_guide_clamp3_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_small_TR_911_965_075_Z0.dae" />
+        </geometry>
+      </visual>
+    </link>
 
-  <joint name="cable_guide_terminal_element_joint" type="fixed">
-    <origin xyz="-0.029 0.142 0.007" rpy="0 0 0" />
-    <parent link="cable_guide_wrist_clamp_link" />
-    <child link="cable_guide_terminal_element_link" />
-  </joint>
+    <joint name="${prefix}cable_guide_clamp4_joint" type="fixed">
+      <origin xyz="-0.31 0.0775 ${elbow_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_forearm_link" />
+      <child link="${prefix}cable_guide_clamp4_link" />
+    </joint>
 
-  <link name="cable_guide_terminal_element_link">
-    <visual>
-      <geometry>
-        <mesh filename="package://mobipick_description/meshes/cable_guide/visual/terminal_element_TL_30_01_Z1.dae" />
-      </geometry>
-    </visual>
-  </link>
+    <link name="${prefix}cable_guide_clamp4_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_small_TR_911_965_075_Z0.dae" />
+        </geometry>
+      </visual>
+    </link>
 
-  <joint name="cable_guide_wrist_3_tube_joint" type="fixed">
-    <origin xyz="0 0 ${-(0.05 / 2)}" rpy="0 0 0" />
-    <parent link="cable_guide_terminal_element_link" />
-    <child link="cable_guide_wrist_3_tube_link" />
-  </joint>
+    <joint name="${prefix}cable_guide_forearm_tube_joint" type="fixed">
+      <origin xyz="-0.10 0 0" rpy="0 ${pi/2} 0" />
+      <parent link="${prefix}cable_guide_clamp3_link" />
+      <child link="${prefix}cable_guide_forearm_tube_link" />
+    </joint>
 
-  <link name="cable_guide_wrist_3_tube_link">
-    <visual>
-      <geometry>
-        <cylinder radius="0.01725" length="0.05"/>
-      </geometry>
-      <xacro:insert_block name="material_black" />
-    </visual>
-  </link>
+    <link name="${prefix}cable_guide_forearm_tube_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.01725" length="0.3"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+    </link>
+
+
+    <!-- wrist_3 -->
+
+    <joint name="${prefix}cable_guide_wrist_clamp_joint" type="fixed">
+      <origin xyz="0 0 -0.025" rpy="0 0 0" />
+      <parent link="${prefix}ur5_wrist_3_link" />
+      <child link="${prefix}cable_guide_wrist_clamp_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_wrist_clamp_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/wrist_clamp_TR_918_012.dae" />
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}cable_guide_terminal_element_joint" type="fixed">
+      <origin xyz="-0.029 0.142 0.007" rpy="0 0 0" />
+      <parent link="${prefix}cable_guide_wrist_clamp_link" />
+      <child link="${prefix}cable_guide_terminal_element_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_terminal_element_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/terminal_element_TL_30_01_Z1.dae" />
+        </geometry>
+      </visual>
+    </link>
+
+    <joint name="${prefix}cable_guide_wrist_3_tube_joint" type="fixed">
+      <origin xyz="0 0 ${-(0.05 / 2)}" rpy="0 0 0" />
+      <parent link="${prefix}cable_guide_terminal_element_link" />
+      <child link="${prefix}cable_guide_wrist_3_tube_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_wrist_3_tube_link">
+      <visual>
+        <geometry>
+          <cylinder radius="0.01725" length="0.05"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+    </link>
+  </xacro:macro>
 </robot>

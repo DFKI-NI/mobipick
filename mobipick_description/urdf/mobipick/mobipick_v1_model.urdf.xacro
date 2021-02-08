@@ -63,6 +63,7 @@
 
   <!-- ############### CABLE GUIDE ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/cable_guide/cable_guide.urdf.xacro" />
+  <xacro:cable_guide prefix="${prefix}" />
 
   <!-- ############## FT SENSOR ############### -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_ft_300/robotiq_ft_300.urdf.xacro" />
