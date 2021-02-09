@@ -28,31 +28,27 @@ Installation
 # create a catkin workspace and clone all required ROS packages
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
-git clone -b kinetic git@git.ni.dfki.de:mobipick/mobipick.git
-git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
-git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
-git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
-git clone -b master git@git.ni.dfki.de:pbr_misc/pbr_tools.git
-git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git 
-git clone -b master https://git.ni.dfki.de/perception/hybrit_objects.git 
-git clone https://github.com/orbbec/ros_astra_camera  
-git clone https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git 
-git clone -b calibration_devel https://github.com/fmauch/universal_robot.git 
-git clone https://github.com/orbbec/ros_astra_launch.git
-git clone -b position_feedback https://github.com/Krause92/robotiq.git
-git clone https://github.com/krause92/mir_robot.git 
+git clone -b melodic git@git.ni.dfki.de:mobipick/mobipick.git
+
+# clone dependencies
+sudo apt-get update -qq
+sudo apt-get install -qq -y python-wstool
+wstool init
+wstool merge mobipick/dependencies-melodic.rosinstall
+wstool update
 
 # use rosdep to install all dependencies (including ROS itself)
-apt-get update -qq
-apt-get install -qq -y python-rosdep
+sudo apt-get install -qq -y python-rosdep
 sudo rosdep init
 rosdep update
-rosdep install --from-paths ./ -i -y --rosdistro melodic
+rosdep install --from-paths ./ -i -y --skip-keys=pico_flexx_driver --rosdistro melodic
 
 # build all packages in the catkin workspace
+sudo apt-get install -qq -y python-catkin-tools build-essential
 source /opt/ros/melodic/setup.bash
-catkin init
 cd ~/catkin_ws
+catkin init
+catkin config --blacklist pico_flexx_driver
 catkin build -DCMAKE_BUILD_TYPE=RelWithDebugInfo
 ```
 
