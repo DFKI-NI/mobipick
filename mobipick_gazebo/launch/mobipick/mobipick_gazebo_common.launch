@@ -27,9 +27,7 @@
        to lose contact with the ground, so the robot won't be able to properly
        navigate. See
        https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
-  <!-- Note: Must be put into the root namespace, see: https://github.com/ros-simulation/gazebo_ros_pkgs/pull/637 -->
-  <rosparam ns="/" file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" subst_value="true" />
-  <!-- Note: mimic joints use a different plugin and expect the parameters in the robot namespace -->
+  <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" subst_value="true" />
   <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_mimic_joint.yaml" command="load" subst_value="true" />
 
   <!-- Spawn the robot into Gazebo -->
