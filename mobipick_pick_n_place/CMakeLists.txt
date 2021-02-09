@@ -99,10 +99,10 @@ set_target_properties(${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evalu
 # Mark executable scripts (Python etc.) for installation
 # in contrast to setup.py, you can choose the destination
 install(PROGRAMS
+  nodes/ft_observer.py
+  nodes/ft_observer_sim.py
   nodes/gripper_plotter.py
   nodes/joint_trajectory_forwarder.py
-  src/ft_observer.py
-  src/ft_observer_sim.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

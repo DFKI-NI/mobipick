@@ -22,10 +22,11 @@
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>mir_description</exec_depend>
   <exec_depend>mir_driver</exec_depend>
   <exec_depend>mir_gazebo</exec_depend>
-  <exec_depend>mobipick_description</exec_depend>
   <exec_depend>mobipick_bringup</exec_depend>
+  <exec_depend>mobipick_description</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>roboticsgroup_gazebo_plugins</exec_depend>  <!-- from https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins -->
   <exec_depend>rostopic</exec_depend>
@@ -34,6 +35,7 @@
   <exec_depend>topic_tools</exec_depend>
   <exec_depend>uos_gazebo_worlds</exec_depend>
   <exec_depend>uos_maps</exec_depend>
+  <exec_depend>xacro</exec_depend>
 
   <export>
     <gazebo_ros gazebo_media_path="${prefix}"/>
