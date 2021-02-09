@@ -1,0 +1,88 @@
+- git:
+    local-name: Universal_Robots_ROS_Driver
+    uri: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git
+    version: master
+- git:
+    local-name: astra_depth_filters
+    uri: https://git.ni.dfki.de/perception/astra_depth_filters.git
+    version: master
+- git:
+    local-name: fcl
+    uri: https://github.com/flexible-collision-library/fcl.git
+    version: master
+- git:
+    local-name: fmauch_universal_robot
+    uri: https://github.com/fmauch/universal_robot.git
+    version: calibration_devel
+- git:
+    local-name: gazebo-pkgs
+    uri: https://github.com/JenniferBuehler/gazebo-pkgs.git
+    version: master
+- git:
+    local-name: general_message_pkgs
+    uri: https://github.com/JenniferBuehler/general-message-pkgs
+    version: master
+- git:
+    local-name: geometric_shapes
+    uri: https://github.com/ros-planning/geometric_shapes.git
+    version: noetic-devel
+- git:
+    local-name: hybrit_objects
+    uri: https://git.ni.dfki.de/perception/hybrit_objects.git
+    version: master
+- git:
+    local-name: mir_robot
+    uri: https://github.com/dfki-ric/mir_robot.git
+    version: kinetic
+- git:
+    local-name: moveit
+    uri: https://github.com/ros-planning/moveit.git
+    version: master
+- git:
+    local-name: moveit_msgs
+    uri: https://github.com/ros-planning/moveit_msgs.git
+    version: master
+- git:
+    local-name: moveit_resources
+    uri: https://github.com/ros-planning/moveit_resources.git
+    version: master
+- git:
+    local-name: moveit_tutorials
+    uri: https://github.com/ros-planning/moveit_tutorials.git
+    version: master
+- git:
+    local-name: moveit_visual_tools
+    uri: https://github.com/ros-planning/moveit_visual_tools.git
+    version: master
+- git:
+    local-name: panda_moveit_config
+    uri: https://github.com/ros-planning/panda_moveit_config.git
+    version: melodic-devel
+- git:
+    local-name: pbr_mobipick_demo
+    uri: https://git.ni.dfki.de/mobipick/pbr_mobipick_demo.git
+    version: master
+- git:
+    local-name: pbr_tools
+    uri: https://git.ni.dfki.de/pbr_misc/pbr_tools.git
+    version: master
+- git:
+    local-name: pico_flexx_driver
+    uri: https://github.com/code-iai/pico_flexx_driver.git
+    version: master
+- git:
+    local-name: roboticsgroup_gazebo_plugins
+    uri: https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
+    version: master
+- git:
+    local-name: robotiq
+    uri: https://github.com/Krause92/robotiq.git
+    version: position_feedback
+- git:
+    local-name: rosparam_shortcuts
+    uri: https://github.com/davetcoleman/rosparam_shortcuts.git
+    version: melodic-devel
+- git:
+    local-name: trac_ik
+    uri: https://bitbucket.org/traclabs/trac_ik.git
+    version: master
