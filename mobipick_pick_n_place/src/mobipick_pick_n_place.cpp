@@ -424,9 +424,9 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
   group.setStartState(start_state);
 
   Eigen::Isometry3d pose;
-  geometry_msgs::PoseStamped actual_pose = group.getCurrentPose();
-  geometry_msgs::PoseStamped target_pose = actual_pose;
-  tf::poseMsgToEigen(actual_pose.pose, pose);
+  geometry_msgs::PoseStamped current_pose = group.getCurrentPose();
+  geometry_msgs::PoseStamped target_pose = current_pose;
+  tf::poseMsgToEigen(current_pose.pose, pose);
   pose.translate(Eigen::Vector3d(dx, dy, dz));
   pose.rotate(Eigen::AngleAxisd(dyaw, Eigen::Vector3d(0.0, 0.0, 1.0)));
   pose.rotate(Eigen::AngleAxisd(dpitch, Eigen::Vector3d(0.0, 1.0, 0.0)));
@@ -479,7 +479,7 @@ bool pause_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res
 {
   if (!paused)
   {
-    ROS_INFO_STREAM("Pause statemachine after actual state is completed");
+    ROS_INFO_STREAM("Pause statemachine after current state is completed");
     paused = true;
   }
   return true;
@@ -526,27 +526,7 @@ int main(int argc, char **argv)
   // add more parameters here to load if desired
   rosparam_shortcuts::shutdownIfError("poses", error);
 
-
-
-  ROS_INFO_STREAM("Actual world name: " << world_name);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  ROS_INFO_STREAM("Current world name: " << world_name);
 
   // pause service
   ros::ServiceServer pause_state = nh.advertiseService("pause_statemachine", pause_service);
