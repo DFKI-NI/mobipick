@@ -1,6 +1,6 @@
 poses:
   base_pick_pose: [12.331, 2.995, 0.0, 0.0, 0.0, 0.0, 1.0] # geometry_msgs::Pose - x, y, z, qw, qx, qy, qz
-  base_handover_pose: [11.05, 3.3, 0.0, 0.403689832967, 0,0, 0.0, 0.914895905969] # geometry_msgs::Pose - x, y, z, qw, qx, qy, qz
+  base_handover_pose: [11.05, 3.3, 0.0, 0.403689832967, 0.0, 0.0, 0.914895905969] # geometry_msgs::Pose - x, y, z, qw, qx, qy, qz
   base_place_pose: [12.291, 4.75, 0.0, 1.0,  0.0, 0.0, 0.0] # geometry_msgs::Pose - x, y, z, qw, qx, qy, qz
   base_home_pose: [17.6, 5.55, 0.0, 0.727199236452, 0.0, 0, 0.68642644945] # geometry_msgs::Pose - x, y, z, qw, qx, qy, qz
   handover_planned: true # bool
