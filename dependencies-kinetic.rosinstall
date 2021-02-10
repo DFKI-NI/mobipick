@@ -76,8 +76,8 @@
     version: master
 - git:
     local-name: robotiq
-    uri: https://github.com/Krause92/robotiq.git
-    version: position_feedback
+    uri: https://git.ni.dfki.de/mobipick/robotiq.git
+    version: melodic-position-feedback
 - git:
     local-name: rosparam_shortcuts
     uri: https://github.com/davetcoleman/rosparam_shortcuts.git
