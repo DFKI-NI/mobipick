@@ -148,22 +148,6 @@ rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
 
 
-### move_base demo (AVZ world)
-
-```bash
-roslaunch mobipick_gazebo mobipick_avz_world.launch
-rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
-roslaunch mir_gazebo fake_localization.launch delta_x:=-14.70 delta_y:=-15.0 delta_yaw:=-1.57
-rosrun mobipick_gazebo move_arm_to_home
-roslaunch mir_navigation start_planner.launch map_file:=$(rospack find uos_maps)/maps/avz5floor_gazebo.yaml local_planner:=eband
-rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
-```
-
-Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
-
-
-
-
 ### Pick + Place with demo (Smart Factory)
 
 ```bash
