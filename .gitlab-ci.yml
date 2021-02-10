@@ -1,4 +1,4 @@
-image: ubuntu:bionic
+image: ubuntu:focal
 
 before_script:
   # Enable system-wide authentication for git cloning via https
@@ -11,7 +11,7 @@ build:
   script:
     - export LANG="en_US.UTF-8"
     - export LC_ALL=$LANG
-    - export CI_ROS_DISTRO="melodic"
+    - export CI_ROS_DISTRO="noetic"
     - export CATKIN_WS=~/catkin_ws
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
@@ -30,32 +30,36 @@ build:
     # set up ROS repo
     # Install wget if not already installed
     - apt-get install -qq -y wget gnupg2
-    - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu bionic main" > /etc/apt/sources.list.d/ros-latest.list'
+    - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list'
     - wget http://packages.ros.org/ros.key -O - | apt-key add -
     - apt-get update -qq
-    - apt-get install -qq -y python-rosdep git build-essential cmake
+    - apt-get install -qq -y python3-rosdep git build-essential cmake python3-wstool
     - apt-get install -qq -y ros-$CI_ROS_DISTRO-rosbash   # otherwise "source /opt/ros..." fails
-    - apt-get install -qq -y python-catkin-tools
+    - apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon   # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
+    - apt-get install -qq -y libuvc-dev         # for astra_camera
+    - apt-get install -qq -y libnlopt-cxx-dev   # for trac_ik_lib
     - rosdep init
     - rosdep update
 
     # create a catkin workspace and clone all required ROS packages
     - mkdir -p $CATKIN_WS_SRC
     - cd $CATKIN_WS_SRC/
-    - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b melodic git@git.ni.dfki.de:mobipick/mobipick.git
+    - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
     - git clone -b master https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
     - git clone -b master https://github.com/JenniferBuehler/general-message-pkgs.git
     - git clone -b master https://github.com/JenniferBuehler/gazebo-pkgs.git
     - git clone -b calibration_devel https://github.com/fmauch/universal_robot.git fmauch_universal_robot
-    - git clone -b master https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git Universal_Robots_ROS_Driver
-    - git clone -b melodic-position-feedback https://git.ni.dfki.de/mobipick/robotiq.git robotiq
+    - git clone -b master https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git
+    - git clone -b noetic-position-feedback https://git.ni.dfki.de/mobipick/robotiq.git
     - git clone -b master https://github.com/orbbec/ros_astra_camera.git astra_camera
     - git clone -b master https://git.ni.dfki.de/perception/astra_depth_filters.git
     - git clone -b 0.2.2 https://github.com/orbbec/ros_astra_launch.git astra_launch
     - git clone -b master https://git.ni.dfki.de/pbr_misc/pbr_tools.git
+    - git clone -b master https://bitbucket.org/traclabs/trac_ik.git
+    - git clone -b master https://github.com/orocos/orocos_kinematics_dynamics.git --recurse-submodules
 
     # use rosdep to install all dependencies (including ROS itself)
-    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=pico_flexx_driver
+    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=pico_flexx_driver --skip-keys=libuvc
 
     # build all packages in the catkin workspace
     - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
@@ -66,7 +70,7 @@ build:
 
     # catkin_lint
     - source install/setup.bash
-    - apt-get install -y python-catkin-lint
+    - apt-get install -y python3-catkin-lint
     - cd $CATKIN_PROJECT_DIR
     - catkin_lint . --skip-pkg mobipick_moveit_config   # have to skip this package because of the missing warehouse_ros_mongo dependency
 

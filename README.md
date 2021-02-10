@@ -28,28 +28,31 @@ Installation
 # create a catkin workspace and clone all required ROS packages
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
-git clone -b melodic git@git.ni.dfki.de:mobipick/mobipick.git
+git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
 # clone dependencies
 sudo apt-get update -qq
-sudo apt-get install -qq -y python-wstool
+sudo apt-get install -qq -y python3-wstool
 wstool init
-wstool merge mobipick/dependencies-melodic.rosinstall
+wstool merge mobipick/dependencies-noetic.rosinstall
 wstool update
 
 # use rosdep to install all dependencies (including ROS itself)
-sudo apt-get install -qq -y python-rosdep
+sudo apt-get install -qq -y python3-rosdep
 sudo rosdep init
 rosdep update
-rosdep install --from-paths ./ -i -y --skip-keys=pico_flexx_driver --rosdistro melodic
+rosdep install --from-paths ./ -i -y --skip-keys=pico_flexx_driver --skip-keys=libuvc --skip-keys=trac_ik_lib --skip-keys=trac_ik_kinematics_plugin --skip-keys=python-pymodbus --rosdistro noetic
 
 # build all packages in the catkin workspace
-sudo apt-get install -qq -y python-catkin-tools build-essential
-source /opt/ros/melodic/setup.bash
+sudo apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon build-essential  # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
+sudo apt-get install -qq -y libuvc-dev         # for astra_camera
+sudo apt-get install -qq -y libnlopt-cxx-dev   # for trac_ik_lib
+
+source /opt/ros/noetic/setup.bash
 cd ~/catkin_ws
 catkin init
-catkin config --blacklist pico_flexx_driver
-catkin build -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+catkin config --blacklist pico_flexx_driver --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+catkin build
 ```
 
 If you have a physical pico flexx camera attached to this PC, also follow the
