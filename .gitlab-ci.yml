@@ -18,7 +18,7 @@ build:
 
     # generate locale
     - apt-get update -qq
-    - apt install locales
+    - apt-get install locales
     - locale-gen $LANG
 
     # install tzdata non-interactively (tzdata is a requirement of the ROS packages below)
