@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright (c) 2013-2015, Rethink Robotics
 # All rights reserved.
@@ -84,8 +84,8 @@ class Trajectory(object):
 
     def start(self):
         self._goal.trajectory.header.stamp = rospy.Time.now()
-        print '\n--- goal --------------------------------------'
-        print self._goal
+        print('\n--- goal --------------------------------------')
+        print(self._goal)
         self._client.send_goal(self._goal)
 
     def stop(self):
@@ -119,10 +119,10 @@ def print_result(res):
     error_codes = ['SUCCESSFUL', 'INVALID_GOAL', 'INVALID_JOINTS', 'OLD_HEADER_TIMESTAMP', 'PATH_TOLERANCE_VIOLATED',
                    'GOAL_TOLERANCE_VIOLATED']
 
-    print '\n--- result --------------------------------------'
-    print "error_code: %s (%d)" % (error_codes[-res.error_code], res.error_code)
-    print "error_string: '%s'" % res.error_string
-    print '-------------------------------------------------\n'
+    print('\n--- result --------------------------------------')
+    print("error_code: %s (%d)" % (error_codes[-res.error_code], res.error_code))
+    print("error_string: '%s'" % res.error_string)
+    print('-------------------------------------------------\n')
 
 
 def main():

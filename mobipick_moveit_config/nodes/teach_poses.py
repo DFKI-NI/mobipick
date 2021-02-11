@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import rospkg
@@ -75,8 +75,8 @@ class PoseTeacher(object):
                 with open(self.filename) as poseFile:
                     poses = yaml.load(poseFile)
             except IOError as err:
-                print "Could not open %s to read poses" % self.filename
-                print err
+                print("Could not open %s to read poses" % self.filename)
+                print(err)
                 raise
 
             if not request.name in poses:
@@ -105,8 +105,8 @@ class PoseTeacher(object):
                 with open(self.filename) as poseFile:
                     poses = yaml.load(poseFile)
             except IOError as err:
-                print "Could not open %s to read poses" % self.filename
-                print err
+                print("Could not open %s to read poses" % self.filename)
+                print(err)
                 poses = {}
             
             joints = {}

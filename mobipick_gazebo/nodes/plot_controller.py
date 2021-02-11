@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import actionlib
 from control_msgs.msg import (
     FollowJointTrajectoryAction,

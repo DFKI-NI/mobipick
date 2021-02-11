@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 This node provides a joint trajectory action server that forwards the trajectory to Rock for execution.

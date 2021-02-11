@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 This node plots the gripper joint angle vs. the opening gap.
@@ -58,4 +58,4 @@ if __name__ == '__main__':
     rospy.Subscriber('joint_states', JointState, cb, queue_size=10)
     rospy.spin()
     for bucket in sorted(buckets.values()):
-        print bucket[0], bucket[1], bucket[2]
+        print(bucket[0], bucket[1], bucket[2])
