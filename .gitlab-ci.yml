@@ -35,6 +35,7 @@ build:
     - apt-get update -qq
     - apt-get install -qq -y python-rosdep git build-essential cmake
     - apt-get install -qq -y ros-$CI_ROS_DISTRO-rosbash   # otherwise "source /opt/ros..." fails
+    - apt-get install -qq -y python-catkin-tools
     - rosdep init
     - rosdep update
 
@@ -58,20 +59,24 @@ build:
 
     # build all packages in the catkin workspace
     - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
-    - catkin_init_workspace
     - cd $CATKIN_WS
-    - catkin_make -DCMAKE_BUILD_TYPE=Release install
-    - source install/setup.bash   # not strictly necessary, but checks if everything was properly installed
+    - catkin init
+    - catkin config --install --blacklist pico_flexx_driver --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+    - catkin build --limit-status-rate 0.1 --no-notify
+
+    # catkin_lint
+    - source install/setup.bash
+    - apt-get install -y python-catkin-lint
+    - cd $CATKIN_PROJECT_DIR
+    - catkin_lint . --skip-pkg mobipick_moveit_config   # have to skip this package because of the missing warehouse_ros_mongo dependency
 
     # NOTE on testing: `catkin_make run_tests` will show the output of the tests
     # (gtest, nosetest, etc..) but always returns 0 (success) even if a test
     # fails. Running `catkin_test_results` aggregates all the results and returns
     # non-zero when a test fails (which notifies Gitlab CI that the build failed).
-    - touch src/Universal_Robots_ROS_Driver/CATKIN_IGNORE   # these tests now require a physical UR connected to the CI server: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/pull/209
-    - catkin_make -DCMAKE_BUILD_TYPE=Release run_tests
+    - cd $CATKIN_WS
+    - touch src/Universal_Robots_ROS_Driver/ur_robot_driver/CATKIN_IGNORE   # these tests now require a docker simulation of an UR running on the CI server: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/pull/209
+    - catkin build --limit-status-rate 0.1 --no-notify --make-args tests
+    - source devel/setup.bash
+    - catkin run_tests --limit-status-rate 0.1 --no-notify
     - catkin_test_results
-
-    # catkin_lint
-    - apt-get install -y python-catkin-lint
-    - cd $CATKIN_PROJECT_DIR
-    - catkin_lint .
