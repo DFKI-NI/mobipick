@@ -51,7 +51,7 @@ sudo apt-get install -qq -y libnlopt-cxx-dev   # for trac_ik_lib
 source /opt/ros/noetic/setup.bash
 cd ~/catkin_ws
 catkin init
-catkin config --blacklist pico_flexx_driver --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+catkin config --install --blacklist pico_flexx_driver --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
 catkin build
 ```
 
@@ -69,8 +69,17 @@ You should add the following line to the end of your `~/.bashrc`, and then
 close and reopen all terminals:
 
 ```bash
-source ~/catkin_ws/devel/setup.bash
+source ~/catkin_ws/install/setup.bash
 ```
+
+**Note:** It's important to source the `install` space (not the `devel` space)
+when running on the real robot because of the following: There's a ROS node in
+`Universal_Robots_ROS_Driver/ur_robot_driver/scripts/tool_communication` that
+has a `#!/usr/bin/env python` shebang line. During installation, the
+`catkin_install_python` macro changes this line to `#!/usr/bin/env python3`. If
+you source the devel space, the version from `src` with the unchanged shebang
+will be called so it will be run in python2, which will fail on Noetic.
+
 
 Quick start
 -----------
