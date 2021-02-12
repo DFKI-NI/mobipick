@@ -770,6 +770,7 @@ int main(int argc, char **argv)
                 transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
                 transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
         */
+        group.setStartStateToCurrentState();
         group.setNamedTarget("transport");
         moveit::planning_interface::MoveItErrorCode error_code = group.plan(plan);
 
