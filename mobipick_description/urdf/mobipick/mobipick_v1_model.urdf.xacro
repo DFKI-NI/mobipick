@@ -136,7 +136,7 @@
       <child link="${prefix}dual_xtion_mount_link" />
     </joint>
 
-    <dual_xtions prefix="${prefix}" />
+    <xacro:dual_xtions prefix="${prefix}" />
   </xacro:if>
 
   <!-- ################ GAZEBO ################ -->

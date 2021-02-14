@@ -15,14 +15,14 @@
       <child link="${prefix}dual_xtion_left_mount_link" />
       <origin xyz="0 0.06 0" rpy="0.0 1.571 0.0" />
     </joint>
-    <dual_xtion_mount side="left" prefix="${prefix}" />
+    <xacro:dual_xtion_mount side="left" prefix="${prefix}" />
 
     <joint name="${prefix}dual_xtion_right_mount" type="fixed">
       <parent link="${prefix}dual_xtion_mount_link" />
       <child link="${prefix}dual_xtion_right_mount_link" />
       <origin xyz="0 -0.06 0" rpy="0.0 -1.571 3.142" />
     </joint>
-    <dual_xtion_mount side="right" prefix="${prefix}" />
+    <xacro:dual_xtion_mount side="right" prefix="${prefix}" />
 
     <joint name="${prefix}dual_xtion_bottom_joint" type="fixed">
       <parent link="${prefix}dual_xtion_mount_link" />
@@ -30,7 +30,7 @@
       <origin xyz="0.045 ${xtion_cam_py} -0.032" rpy="0 0.262 0" />
     </joint>
 
-    <sensor_xtion camera_name="dual_xtion_bottom" prefix="${prefix}" />
+    <xacro:sensor_xtion camera_name="dual_xtion_bottom" prefix="${prefix}" />
 
     <joint name="${prefix}dual_xtion_top_joint" type="fixed">
       <parent link="${prefix}dual_xtion_mount_link" />
@@ -38,7 +38,7 @@
       <origin xyz="0.045 ${xtion_cam_py} 0.032" rpy="0 -0.262 0" />
     </joint>
 
-    <sensor_xtion camera_name="dual_xtion_top" prefix="${prefix}" />
+    <xacro:sensor_xtion camera_name="dual_xtion_top" prefix="${prefix}" />
 
   </xacro:macro>
 
