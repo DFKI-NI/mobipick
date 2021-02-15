@@ -8,6 +8,13 @@
   <!-- By default, we are not in debug mode -->
   <arg name="debug" default="false" />
 
+  <!-- A prefix for all joints and links of the robot -->
+  <arg name="prefix" default="mobipick" />
+
+  <!-- Prefix with / or empty -->
+  <arg name="prefix_" default=""               if="$(eval prefix == '')" />
+  <arg name="prefix_" default="$(arg prefix)/" unless="$(eval prefix == '')" />
+
   <!--
   By default, hide joint_state_publisher's GUI
 
@@ -24,12 +31,13 @@
   <!-- Load the URDF, SRDF and other .yaml configuration files on the param server -->
   <include file="$(find mobipick_moveit_config)/launch/planning_context.launch">
     <arg name="load_robot_description" value="true"/>
+    <arg name="tf_prefix" value="$(arg prefix)" />
   </include>
 
   <!-- If needed, broadcast static tf for robot root -->
-    <node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 odom_comb base_footprint 100" />
+    <node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 $(arg prefix_)odom_comb $(arg prefix_)base_footprint 100" />
 
-
+  <group ns="$(arg prefix)">
   <!-- We do not have a robot connected, so publish fake joint states -->
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
     <param name="use_gui" value="$(arg use_gui)"/>
@@ -46,8 +54,9 @@
     <arg name="info" value="true"/>
     <arg name="debug" value="$(arg debug)"/>
     <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
+    <arg name="prefix" value="$(arg prefix)" />
   </include>
-
+  </group>
   <!-- Run Rviz and load the default config to see the state of the move_group node -->
   <include file="$(find mobipick_moveit_config)/launch/moveit_rviz.launch">
     <arg name="config" value="true"/>
