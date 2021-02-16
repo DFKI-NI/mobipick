@@ -1,7 +1,7 @@
 mobipick
 ========
 
-[![pipeline status](https://git.ni.dfki.de/mobipick/mobipick/badges/melodic/pipeline.svg)](https://git.ni.dfki.de/mobipick/mobipick/commits/melodic)
+[![pipeline status](https://git.ni.dfki.de/mobipick/mobipick/badges/noetic/pipeline.svg)](https://git.ni.dfki.de/mobipick/mobipick/commits/noetic)
 
 This repo contains ROS configuration files (URDF description, Gazebo launch
 files, MoveIt config, bringup launch files) for the Mobipick
