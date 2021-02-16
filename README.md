@@ -41,7 +41,7 @@ wstool update
 sudo apt-get install -qq -y python3-rosdep
 sudo rosdep init
 rosdep update
-rosdep install --from-paths ./ -i -y --skip-keys=pico_flexx_driver --skip-keys=libuvc --skip-keys=trac_ik_lib --skip-keys=trac_ik_kinematics_plugin --skip-keys=python-pymodbus --rosdistro noetic
+rosdep install --from-paths ./ -i -y --skip-keys=pico_flexx_driver --skip-keys=libuvc --rosdistro noetic
 
 # build all packages in the catkin workspace
 sudo apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon build-essential  # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
