@@ -342,8 +342,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(
-          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(geometric_shapes::solidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>());
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x + 0.04;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y + 0.04;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z + 0.04;
@@ -363,8 +362,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(
-          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(geometric_shapes::solidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>());
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.80;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.80;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.73;
@@ -387,8 +385,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(
-          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(geometric_shapes::solidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>());
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 5.0;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 5.0;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.2;
