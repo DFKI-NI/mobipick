@@ -35,6 +35,7 @@ sudo apt-get update -qq
 sudo apt-get install -qq -y python3-wstool
 wstool init
 wstool merge mobipick/dependencies-noetic.rosinstall
+wstool merge mobipick/dependencies-noetic-optional.rosinstall
 wstool update
 
 # use rosdep to install all dependencies (including ROS itself)

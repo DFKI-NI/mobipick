@@ -15,15 +15,11 @@
     uri: https://github.com/orbbec/ros_astra_launch.git
     version: 0.2.2
 - git:
-    local-name: fcl
-    uri: https://github.com/flexible-collision-library/fcl.git
-    version: master
-- git:
     local-name: fmauch_universal_robot
     uri: https://github.com/fmauch/universal_robot.git
     version: calibration_devel
 - git:
-    local-name: gazebo-pkgs
+    local-name: gazebo_pkgs
     uri: https://github.com/JenniferBuehler/gazebo-pkgs.git
     version: master
 - git:
@@ -35,48 +31,8 @@
     uri: https://github.com/ros-planning/geometric_shapes.git
     version: noetic-devel
 - git:
-    local-name: hybrit_objects
-    uri: https://git.ni.dfki.de/perception/hybrit_objects.git
-    version: master
-- git:
-    local-name: mir_robot
-    uri: https://github.com/dfki-ric/mir_robot.git
-    version: noetic
-- git:
-    local-name: moveit
-    uri: https://github.com/ros-planning/moveit.git
-    version: master
-- git:
-    local-name: moveit_msgs
-    uri: https://github.com/ros-planning/moveit_msgs.git
-    version: master
-- git:
-    local-name: moveit_resources
-    uri: https://github.com/ros-planning/moveit_resources.git
-    version: master
-- git:
-    local-name: moveit_tutorials
-    uri: https://github.com/ros-planning/moveit_tutorials.git
-    version: master
-- git:
-    local-name: moveit_visual_tools
-    uri: https://github.com/ros-planning/moveit_visual_tools.git
-    version: master
-- git:
-    local-name: panda_moveit_config
-    uri: https://github.com/ros-planning/panda_moveit_config.git
-    version: melodic-devel
-- git:
-    local-name: pbr_mobipick_demo
-    uri: https://git.ni.dfki.de/mobipick/pbr_mobipick_demo.git
-    version: master
-- git:
     local-name: pbr_tools
     uri: https://git.ni.dfki.de/pbr_misc/pbr_tools.git
-    version: master
-- git:
-    local-name: pico_flexx_driver
-    uri: https://github.com/code-iai/pico_flexx_driver.git
     version: master
 - git:
     local-name: roboticsgroup_gazebo_plugins
@@ -86,10 +42,6 @@
     local-name: robotiq
     uri: https://git.ni.dfki.de/mobipick/robotiq.git
     version: noetic-position-feedback
-- git:
-    local-name: rviz_visual_tools
-    uri: https://github.com/PickNikRobotics/rviz_visual_tools.git
-    version: master
 - git:
     local-name: trac_ik
     uri: https://bitbucket.org/traclabs/trac_ik.git

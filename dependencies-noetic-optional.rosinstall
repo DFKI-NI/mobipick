@@ -1,0 +1,48 @@
+- git:
+    local-name: fcl
+    uri: https://github.com/flexible-collision-library/fcl.git
+    version: master
+- git:
+    local-name: hybrit_objects
+    uri: https://git.ni.dfki.de/perception/hybrit_objects.git
+    version: master
+- git:
+    local-name: mir_robot
+    uri: https://github.com/dfki-ric/mir_robot.git
+    version: noetic
+- git:
+    local-name: moveit
+    uri: https://github.com/ros-planning/moveit.git
+    version: master
+- git:
+    local-name: moveit_msgs
+    uri: https://github.com/ros-planning/moveit_msgs.git
+    version: master
+- git:
+    local-name: moveit_resources
+    uri: https://github.com/ros-planning/moveit_resources.git
+    version: master
+- git:
+    local-name: moveit_tutorials
+    uri: https://github.com/ros-planning/moveit_tutorials.git
+    version: master
+- git:
+    local-name: moveit_visual_tools
+    uri: https://github.com/ros-planning/moveit_visual_tools.git
+    version: master
+- git:
+    local-name: panda_moveit_config
+    uri: https://github.com/ros-planning/panda_moveit_config.git
+    version: melodic-devel
+- git:
+    local-name: pbr_mobipick_demo
+    uri: https://git.ni.dfki.de/mobipick/pbr_mobipick_demo.git
+    version: master
+- git:
+    local-name: pico_flexx_driver
+    uri: https://github.com/code-iai/pico_flexx_driver.git
+    version: master
+- git:
+    local-name: rviz_visual_tools
+    uri: https://github.com/PickNikRobotics/rviz_visual_tools.git
+    version: master
