@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5.1)
 project(mobipick_pick_n_place)
 
 add_compile_options(-std=c++14)
