@@ -9,7 +9,6 @@ build:
   tags:
     - docker
   script:
-    - export CI_ROS_DISTRO="noetic"
     - export CATKIN_WS=~/catkin_ws
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
@@ -19,29 +18,10 @@ build:
     - cd $CATKIN_WS_SRC/
     - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
-    # clone dependencies
-    - apt-get update -qq
-    - apt-get install -qq -y python3-wstool
-    - wstool init
-    - wstool merge mobipick/dependencies-${CI_ROS_DISTRO}.rosinstall
-    - wstool update
-
-    # use rosdep to install all dependencies (including ROS itself)
-    # - rosdep init
-    # - rosdep update
-    - apt-get install -qq -y libuvc-dev                          # for astra_camera
-    - apt-get install -qq -y libnlopt-cxx-dev liborocos-kdl-dev  # for trac_ik_lib, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
-    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=libuvc --skip-keys=orocos_kdl  # orocos_kdl must be skipped, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
-
-    # build all packages in the catkin workspace
-    - apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon   # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
-    - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
-    - cd $CATKIN_WS
-    - catkin init
-    - catkin config --install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
-    - catkin build --limit-status-rate 0.1 --no-notify
+    - $CATKIN_PROJECT_DIR/install.sh
 
     # catkin_lint
+    - cd $CATKIN_WS
     - source install/setup.bash
     - apt-get install -y python3-catkin-lint
     - cd $CATKIN_PROJECT_DIR

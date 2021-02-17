@@ -24,36 +24,15 @@ Package overview
 Installation
 ------------
 
+First, [install ROS](http://wiki.ros.org/ROS/Installation). Then:
+
 ```bash
 # create a catkin workspace and clone all required ROS packages
 mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
 git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
-# clone dependencies
-sudo apt-get update -qq
-sudo apt-get install -qq -y python3-wstool
-wstool init
-wstool merge mobipick/dependencies-noetic.rosinstall
-wstool merge mobipick/dependencies-noetic-optional.rosinstall
-wstool update
-
-# use rosdep to install all dependencies (including ROS itself)
-sudo apt-get install -qq -y libuvc-dev                          # for astra_camera
-sudo apt-get install -qq -y libnlopt-cxx-dev liborocos-kdl-dev  # for trac_ik_lib, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
-sudo apt-get install -qq -y python3-rosdep
-sudo rosdep init
-rosdep update
-rosdep install --from-paths ./ -i -y --rosdistro noetic --skip-keys=libuvc --skip-keys=orocos_kdl  # orocos_kdl must be skipped, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
-
-# build all packages in the catkin workspace
-sudo apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon build-essential  # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
-
-source /opt/ros/noetic/setup.bash
-cd ~/catkin_ws
-catkin init
-catkin config --install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
-catkin build
+mobipick/install.sh
 ```
 
 If you have a physical pico flexx camera attached to this PC, also follow the
@@ -62,9 +41,9 @@ installation instructions of the
 cannot be integrated into the instructions above because they require a manual
 download step.
 
-In case you encounter problems, please compare the commands above to the build
-step in [`.gitlab-ci.yml`](.gitlab-ci.yml); that should always have the most
-recent list of commands.
+You can also optionally install the dependencies in
+dependencies-noetic-optional.rosinstall; simply uncomment the relevant line in
+`install.sh` before running it.
 
 You should add the following line to the end of your `~/.bashrc`, and then
 close and reopen all terminals:
