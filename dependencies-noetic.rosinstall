@@ -63,10 +63,6 @@
     uri: https://github.com/ros-planning/moveit_visual_tools.git
     version: master
 - git:
-    local-name: orocos_kinematics_dynamics
-    uri: https://github.com/orocos/orocos_kinematics_dynamics.git
-    version: master
-- git:
     local-name: panda_moveit_config
     uri: https://github.com/ros-planning/panda_moveit_config.git
     version: melodic-devel

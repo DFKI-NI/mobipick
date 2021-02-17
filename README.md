@@ -41,12 +41,12 @@ wstool update
 sudo apt-get install -qq -y python3-rosdep
 sudo rosdep init
 rosdep update
-rosdep install --from-paths ./ -i -y --skip-keys=pico_flexx_driver --skip-keys=libuvc --rosdistro noetic
+rosdep install --from-paths ./ -i -y --rosdistro noetic --skip-keys=pico_flexx_driver --skip-keys=libuvc --skip-keys=orocos_kdl  # orocos_kdl must be skipped, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
 
 # build all packages in the catkin workspace
 sudo apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon build-essential  # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
 sudo apt-get install -qq -y libuvc-dev         # for astra_camera
-sudo apt-get install -qq -y libnlopt-cxx-dev   # for trac_ik_lib
+sudo apt-get install -qq -y libnlopt-cxx-dev liborocos-kdl-dev  # for trac_ik_lib, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
 
 source /opt/ros/noetic/setup.bash
 cd ~/catkin_ws
