@@ -18,7 +18,7 @@ wstool update
 sudo apt-get install -qq -y libuvc-dev                          # for astra_camera
 sudo apt-get install -qq -y libnlopt-cxx-dev liborocos-kdl-dev  # for trac_ik_lib, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
 sudo apt-get install -qq -y python3-rosdep
-sudo rosdep init
+#sudo rosdep init
 rosdep update
 rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO} --skip-keys=libuvc --skip-keys=orocos_kdl  # orocos_kdl must be skipped, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
 
