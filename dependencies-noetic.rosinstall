@@ -28,7 +28,7 @@
     version: master
 - git:
     local-name: general_message_pkgs
-    uri: https://github.com/JenniferBuehler/general-message-pkgs
+    uri: https://github.com/JenniferBuehler/general-message-pkgs.git
     version: master
 - git:
     local-name: geometric_shapes
@@ -88,7 +88,7 @@
     version: noetic-position-feedback
 - git:
     local-name: rviz_visual_tools
-    uri: https://github.com/PickNikRobotics/rviz_visual_tools
+    uri: https://github.com/PickNikRobotics/rviz_visual_tools.git
     version: master
 - git:
     local-name: trac_ik
