@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 # This script must be run in the in catkin_ws/src/ directory, i.e., the parent
 # directory of this repo.
@@ -7,7 +8,7 @@ export ROS_DISTRO="noetic"
 
 # clone dependencies
 sudo apt-get update -qq
-sudo apt-get install -qq -y python3-wstool
+sudo apt-get install -qq -y python3-wstool git
 wstool init
 wstool merge mobipick/dependencies-${ROS_DISTRO}.rosinstall
 #wstool merge mobipick/dependencies-${ROS_DISTRO}-optional.rosinstall
