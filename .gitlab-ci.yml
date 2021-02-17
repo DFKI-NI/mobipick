@@ -1,4 +1,4 @@
-image: ubuntu:focal
+image: ros:noetic-ros-base
 
 before_script:
   # Enable system-wide authentication for git cloning via https
@@ -9,37 +9,10 @@ build:
   tags:
     - docker
   script:
-    - export LANG="en_US.UTF-8"
-    - export LC_ALL=$LANG
     - export CI_ROS_DISTRO="noetic"
     - export CATKIN_WS=~/catkin_ws
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
     - export CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
-
-    # generate locale
-    - apt-get update -qq
-    - apt-get install locales
-    - locale-gen $LANG
-
-    # install tzdata non-interactively (tzdata is a requirement of the ROS packages below)
-    - export DEBIAN_FRONTEND=noninteractive
-    - apt-get install -y tzdata
-    - ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-    - dpkg-reconfigure --frontend noninteractive tzdata
-
-    # set up ROS repo
-    # Install wget if not already installed
-    - apt-get install -qq -y wget gnupg2
-    - sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list'
-    - wget http://packages.ros.org/ros.key -O - | apt-key add -
-    - apt-get update -qq
-    - apt-get install -qq -y python3-rosdep git build-essential cmake python3-wstool
-    - apt-get install -qq -y ros-$CI_ROS_DISTRO-rosbash   # otherwise "source /opt/ros..." fails
-    - apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon   # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
-    - apt-get install -qq -y libuvc-dev         # for astra_camera
-    - apt-get install -qq -y libnlopt-cxx-dev liborocos-kdl-dev  # for trac_ik_lib, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
-    - rosdep init
-    - rosdep update
 
     # create a catkin workspace and clone all required ROS packages
     - mkdir -p $CATKIN_WS_SRC
@@ -58,13 +31,19 @@ build:
     - git clone -b master https://bitbucket.org/traclabs/trac_ik.git
 
     # use rosdep to install all dependencies (including ROS itself)
-    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=pico_flexx_driver --skip-keys=libuvc --skip-keys=orocos_kdl  # orocos_kdl must be skipped, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
+    # - rosdep init
+    # - rosdep update
+    - apt-get update -qq
+    - apt-get install -qq -y libuvc-dev                          # for astra_camera
+    - apt-get install -qq -y libnlopt-cxx-dev liborocos-kdl-dev  # for trac_ik_lib, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
+    - rosdep install --from-paths ./ -i -y --rosdistro $CI_ROS_DISTRO --skip-keys=libuvc --skip-keys=orocos_kdl  # orocos_kdl must be skipped, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
 
     # build all packages in the catkin workspace
+    - apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon   # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
     - source /opt/ros/${CI_ROS_DISTRO}/setup.bash
     - cd $CATKIN_WS
     - catkin init
-    - catkin config --install --blacklist pico_flexx_driver --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+    - catkin config --install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
     - catkin build --limit-status-rate 0.1 --no-notify
 
     # catkin_lint
