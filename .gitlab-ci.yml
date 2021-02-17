@@ -1,6 +1,16 @@
 image: ros:noetic-ros-base
 
+cache:
+  paths:
+    - .apt-archives
+    - .apt-lists
+
 before_script:
+  # Enable APT cache (see https://gitlab.com/gitlab-org/gitlab-runner/-/issues/991#note_126864314)
+  - rm -f /etc/apt/apt.conf.d/docker-clean
+  - mkdir .apt-archives && mkdir -p /var/cache/apt/archives && mount --bind .apt-archives /var/cache/apt/archives/
+  - mkdir .apt-lists && mkdir -p /var/lib/apt/lists && mount --bind .apt-lists /var/lib/apt/lists/
+
   # Enable system-wide authentication for git cloning via https
   - '[ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc'
 
