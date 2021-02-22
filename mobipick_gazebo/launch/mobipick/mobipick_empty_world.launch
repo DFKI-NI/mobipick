@@ -28,7 +28,7 @@
   <group ns="$(arg namespace)">
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
       <rosparam param="source_list">[/mobipick/gazebo_joint_states]</rosparam>
-      <param name="rate" value="200.0" />
+      <param name="rate" value="60.0" />
     </node>
   </group>
 
