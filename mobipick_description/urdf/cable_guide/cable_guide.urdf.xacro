@@ -6,11 +6,13 @@
   <xacro:property name="shoulder_offset" value="0.136" />
   <xacro:property name="elbow_offset" value="0.0165" />
 
+  <xacro:property name="wrist_clamp_yaw" value="0.5" />
+
   <xacro:macro name="cable_guide" params="prefix">
     <!-- upper_arm -->
 
     <joint name="${prefix}cable_guide_clamp1_joint" type="fixed">
-      <origin xyz="-0.11 0.091 ${shoulder_offset}" rpy="0 0 0" />
+      <origin xyz="-0.105 0.091 ${shoulder_offset}" rpy="0 0 0" />
       <parent link="${prefix}ur5_upper_arm_link" />
       <child link="${prefix}cable_guide_clamp1_link" />
     </joint>
@@ -24,7 +26,7 @@
     </link>
 
     <joint name="${prefix}cable_guide_clamp2_joint" type="fixed">
-      <origin xyz="-0.31 0.091 ${shoulder_offset}" rpy="0 0 0" />
+      <origin xyz="-0.32 0.091 ${shoulder_offset}" rpy="0 0 0" />
       <parent link="${prefix}ur5_upper_arm_link" />
       <child link="${prefix}cable_guide_clamp2_link" />
     </joint>
@@ -56,7 +58,7 @@
     <!-- forearm -->
 
     <joint name="${prefix}cable_guide_clamp3_joint" type="fixed">
-      <origin xyz="-0.11 0.0775 ${elbow_offset}" rpy="0 0 0" />
+      <origin xyz="-0.105 0.0775 ${elbow_offset}" rpy="0 0 0" />
       <parent link="${prefix}ur5_forearm_link" />
       <child link="${prefix}cable_guide_clamp3_link" />
     </joint>
@@ -70,7 +72,7 @@
     </link>
 
     <joint name="${prefix}cable_guide_clamp4_joint" type="fixed">
-      <origin xyz="-0.31 0.0775 ${elbow_offset}" rpy="0 0 0" />
+      <origin xyz="-0.29 0.0775 ${elbow_offset}" rpy="0 0 0" />
       <parent link="${prefix}ur5_forearm_link" />
       <child link="${prefix}cable_guide_clamp4_link" />
     </joint>
@@ -102,7 +104,7 @@
     <!-- wrist_3 -->
 
     <joint name="${prefix}cable_guide_wrist_clamp_joint" type="fixed">
-      <origin xyz="0 0 -0.025" rpy="0 0 0" />
+      <origin xyz="0 0 -0.025" rpy="0 0 ${wrist_clamp_yaw}" />
       <parent link="${prefix}ur5_wrist_3_link" />
       <child link="${prefix}cable_guide_wrist_clamp_link" />
     </joint>
