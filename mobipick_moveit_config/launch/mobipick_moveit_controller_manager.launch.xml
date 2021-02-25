@@ -1,23 +1,12 @@
 <launch>
 
-  <!-- Set the param that trajectory_execution_manager needs to find the controller plugin -->
+  <!-- loads moveit_controller_manager on the parameter server which is taken as argument 
+    if no argument is passed, moveit_simple_controller_manager will be set -->
   <arg name="moveit_controller_manager" default="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
   <param name="moveit_controller_manager" value="$(arg moveit_controller_manager)"/>
 
-  <!-- The rest of the params are specific to this plugin -->
-
-  <!-- If a controller manager is running (the generic one, not the MoveIt! one), we can talk to it via its action interfaces.
-       But we need to know its name. -->
-  <arg name="controller_manager_name" default="moveit_simple_controller_manager" />
-  <param name="controller_manager_name" value="$(arg controller_manager_name)" />
-
-  <!-- Flag indicating whether the controller manager should be used or not -->
-  <arg name="use_controller_manager" default="false" />
-  <param name="use_controller_manager" value="$(arg use_controller_manager)" />
-
   <!-- prefix for the joints specified in the controllers.yaml -->
   <arg name="prefix" default="" />
-  <!-- load controller_list and controller_manager_ns -->
+  <!-- loads ros_controllers to the param server -->
   <rosparam file="$(find mobipick_moveit_config)/config/controllers.yaml" subst_value="true" />
-
 </launch>
