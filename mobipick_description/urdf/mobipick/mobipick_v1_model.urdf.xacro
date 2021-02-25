@@ -51,12 +51,26 @@
        values for the shoulder_lift_joint. It's important to restrict the joint
        angles, otherwise the planning space is discontinuous. 
 
-       The shoulder_pan joint is limited to avoid unneccessary full arm
-       reconfigurations when picking from the right. For picking from the left,
-       one should exclude the opposite quadrant. -->
+       Reasons for the further limits:
+       * shoulder_lift_lower_limit=-pi and elbow_joint_lower_limit=0: 
+         The combination of these two limits ensures that there are no IK solutions
+         which require full arm reconfigurations during picking from table height.
+         These IK solutions would lead to undesirable "overhead" trajectories and also
+         mess up the path simplification (planner produces a feasible plan, but path
+         "simplification" introduces jumps from one configuration to the opposite one).
+       * shoulder_lift_upper_limit=0.72: all values > 0.72 are in self collision
+         (this limit is just an optimization)
+       * elbow_joint_upper_limit=2.93: all values > 2.93 are in self collision
+       * wrist_3 limits: It's nice to center the range around (pi - 0.25),
+         because that is where our "home" position is and where the cables are
+         least stretched. From there, wrist_3 can move pi in either direction.
+       -->
   <xacro:ur5_robot prefix="${prefix}ur5_" joint_limited="true"
-    shoulder_pan_lower_limit="${-1.25 * pi}" shoulder_pan_upper_limit="${0.25 * pi}"
-    shoulder_lift_lower_limit="${-pi - 0.82}" shoulder_lift_upper_limit="${0.82}"
+    shoulder_pan_lower_limit="${-pi}"   shoulder_pan_upper_limit="${pi}"
+    shoulder_lift_lower_limit="${-pi}"  shoulder_lift_upper_limit="0.72"
+    elbow_joint_lower_limit="0.0"       elbow_joint_upper_limit="2.93"
+    wrist_1_lower_limit="${-pi}"        wrist_1_upper_limit="${pi}"
+    wrist_2_lower_limit="${-pi}"        wrist_2_upper_limit="${pi}"
     wrist_3_lower_limit="${-0.25 * pi}" wrist_3_upper_limit="${1.75 * pi}"
     transmission_hw_interface="$(arg transmission_hw_interface)"
     kinematics_file="${load_yaml('$(arg kinematics_config)')}" />
