@@ -5,43 +5,31 @@ joint_limits:
   default_velocity_scaling_factor: 0.6  # see https://github.com/ros-planning/moveit/blob/master/MIGRATION.md, ros-planning/moveit#1890
   default_acceleration_scaling_factor: 0.6
   $(arg prefix)ur5_shoulder_pan_joint:
-    max_position: 0.7853981633974483
-    min_position: -3.9269908169872414
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_shoulder_lift_joint:
-    max_position: 0.82
-    min_position: -3.961592653589793
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_elbow_joint:
-    max_position: 3.14
-    min_position: -3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_wrist_1_joint:
-    max_position: 3.14
-    min_position: -3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_wrist_2_joint:
-    max_position: 3.14
-    min_position: -3.14
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true
     max_acceleration: 1.0
   $(arg prefix)ur5_wrist_3_joint:
-    max_position: 5.497787143782138    # 1.75 * pi (315 deg)
-    min_position: -0.7853981633974483   # 0.25 * pi (45 deg)
     has_velocity_limits: true
     max_velocity: 0.45
     has_acceleration_limits: true

@@ -1,0 +1,265 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <!-- constants coped from ur_description: -->
+  <xacro:property name="shoulder_offset" value="0.136" />
+  <xacro:property name="elbow_offset" value="0.0165" />
+
+  <xacro:property name="tube_radius" value="0.01725" />
+  <xacro:property name="tube_length" value="0.3" />
+  <xacro:property name="tube_mass" value="0.100" />
+
+  <xacro:property name="clamp_radius" value="0.0225" />
+  <xacro:property name="clamp_length" value="0.013" />
+  <xacro:property name="clamp_mass" value="0.50" />
+
+  <xacro:property name="wrist_clamp_mass" value="0.200" />
+  <xacro:property name="wrist_clamp_yaw" value="0.5" />
+
+  <xacro:property name="terminal_element_x_length" value="0.044" />
+  <xacro:property name="terminal_element_y_length" value="0.045" />
+  <xacro:property name="terminal_element_z_length" value="0.0255" />
+  <xacro:property name="terminal_element_mass" value="0.50" />
+
+  <xacro:macro name="cable_guide" params="prefix">
+    <!-- upper_arm -->
+
+    <joint name="${prefix}cable_guide_clamp1_joint" type="fixed">
+      <origin xyz="-0.105 0.091 ${shoulder_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_upper_arm_link" />
+      <child link="${prefix}cable_guide_clamp1_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_clamp1_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_big_TR_911_965_086_Z0.dae" />
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+        <geometry>
+          <cylinder radius="${clamp_radius}" length="${clamp_length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${clamp_radius}" length="${clamp_length}" mass="${clamp_mass}">
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+      </xacro:cylinder_inertial>
+    </link>
+
+    <joint name="${prefix}cable_guide_clamp2_joint" type="fixed">
+      <origin xyz="-0.32 0.091 ${shoulder_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_upper_arm_link" />
+      <child link="${prefix}cable_guide_clamp2_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_clamp2_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_big_TR_911_965_086_Z0.dae" />
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+        <geometry>
+          <cylinder radius="${clamp_radius}" length="${clamp_length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${clamp_radius}" length="${clamp_length}" mass="${clamp_mass}">
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+      </xacro:cylinder_inertial>
+    </link>
+
+    <joint name="${prefix}cable_guide_upper_arm_tube_joint" type="fixed">
+      <origin xyz="-0.10 0 0" rpy="0 ${pi/2} 0" />
+      <parent link="${prefix}cable_guide_clamp1_link" />
+      <child link="${prefix}cable_guide_upper_arm_tube_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_upper_arm_tube_link">
+      <visual>
+        <geometry>
+          <cylinder radius="${tube_radius}" length="${tube_length}"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${tube_radius}" length="${tube_length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${tube_radius}" length="${tube_length}" mass="${tube_mass}">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <gazebo reference="${prefix}cable_guide_upper_arm_tube_link">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+
+    <!-- forearm -->
+
+    <joint name="${prefix}cable_guide_clamp3_joint" type="fixed">
+      <origin xyz="-0.105 0.0775 ${elbow_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_forearm_link" />
+      <child link="${prefix}cable_guide_clamp3_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_clamp3_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_small_TR_911_965_075_Z0.dae" />
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+        <geometry>
+          <cylinder radius="${clamp_radius}" length="${clamp_length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${clamp_radius}" length="${clamp_length}" mass="${clamp_mass}">
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+      </xacro:cylinder_inertial>
+    </link>
+
+    <joint name="${prefix}cable_guide_clamp4_joint" type="fixed">
+      <origin xyz="-0.29 0.0775 ${elbow_offset}" rpy="0 0 0" />
+      <parent link="${prefix}ur5_forearm_link" />
+      <child link="${prefix}cable_guide_clamp4_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_clamp4_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/mounting_clamp_small_TR_911_965_075_Z0.dae" />
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+        <geometry>
+          <cylinder radius="${clamp_radius}" length="${clamp_length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${clamp_radius}" length="${clamp_length}" mass="${clamp_mass}">
+        <origin xyz="0 0 0" rpy="0 ${pi/2} 0" />
+      </xacro:cylinder_inertial>
+    </link>
+
+    <joint name="${prefix}cable_guide_forearm_tube_joint" type="fixed">
+      <origin xyz="-0.10 0 0" rpy="0 ${pi/2} 0" />
+      <parent link="${prefix}cable_guide_clamp3_link" />
+      <child link="${prefix}cable_guide_forearm_tube_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_forearm_tube_link">
+      <visual>
+        <geometry>
+          <cylinder radius="${tube_radius}" length="${tube_length}"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${tube_radius}" length="${tube_length}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${tube_radius}" length="${tube_length}" mass="${tube_mass}">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <gazebo reference="${prefix}cable_guide_forearm_tube_link">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+
+
+    <!-- wrist_3 -->
+
+    <joint name="${prefix}cable_guide_wrist_clamp_joint" type="fixed">
+      <origin xyz="0 0 -0.025" rpy="0 0 ${wrist_clamp_yaw}" />
+      <parent link="${prefix}ur5_wrist_3_link" />
+      <child link="${prefix}cable_guide_wrist_clamp_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_wrist_clamp_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/wrist_clamp_TR_918_012.dae" />
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/collision/wrist_clamp_TR_918_012.stl" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="${wrist_clamp_mass}" />
+        <origin xyz="0.0 0.05549427 -0.0" rpy="0 0 0" />
+        <inertia ixx="${wrist_clamp_mass *  0.0042434960684663275}"
+                 ixy="${wrist_clamp_mass * -2.2400373470288125e-06}"
+                 ixz="${wrist_clamp_mass *  4.4523467998712435e-08}"
+                 iyy="${wrist_clamp_mass *  0.0005344100748342659}"
+                 iyz="${wrist_clamp_mass * -5.1403149429916256e-08}"
+                 izz="${wrist_clamp_mass *  0.004767239872136627}" />
+      </inertial>
+    </link>
+
+    <joint name="${prefix}cable_guide_terminal_element_joint" type="fixed">
+      <origin xyz="-0.029 0.142 0.007" rpy="0 0 0" />
+      <parent link="${prefix}cable_guide_wrist_clamp_link" />
+      <child link="${prefix}cable_guide_terminal_element_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_terminal_element_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/cable_guide/visual/terminal_element_TL_30_01_Z1.dae" />
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${terminal_element_x_length} ${terminal_element_y_length} ${terminal_element_z_length} " />
+        </geometry>
+      </collision>
+      <xacro:box_inertial x="${terminal_element_x_length}" y="${terminal_element_y_length}" z="${terminal_element_z_length}" mass="${terminal_element_mass}">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      </xacro:box_inertial>
+    </link>
+
+    <joint name="${prefix}cable_guide_wrist_3_tube_joint" type="fixed">
+      <origin xyz="0 0 ${-(0.05 / 2)}" rpy="0 0 0" />
+      <parent link="${prefix}cable_guide_terminal_element_link" />
+      <child link="${prefix}cable_guide_wrist_3_tube_link" />
+    </joint>
+
+    <link name="${prefix}cable_guide_wrist_3_tube_link">
+      <visual>
+        <geometry>
+          <cylinder radius="${tube_radius}" length="0.05"/>
+        </geometry>
+        <xacro:insert_block name="material_black" />
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <cylinder radius="${tube_radius}" length="0.05"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertial radius="${tube_radius}" length="0.05" mass="${tube_mass}">
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+      </xacro:cylinder_inertial>
+    </link>
+    <gazebo reference="${prefix}cable_guide_wrist_3_tube_link">
+      <material>Gazebo/FlatBlack</material>
+    </gazebo>
+  </xacro:macro>
+</robot>
