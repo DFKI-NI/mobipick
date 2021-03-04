@@ -199,6 +199,22 @@ If you prefer a graphical interface, try this:
 rosrun rqt_controller_manager rqt_controller_manager
 ```
 
+Updating the SRDF
+-----------------
+
+Whenever the URDF of the robot changes, the SRDF has to be updated as well.
+Since we changed the URDF to xacro, the following process is necessary:
+
+```bash
+roscd mobipick_moveit_config/config/
+xacro mobipick.srdf.xacro tf_prefix:=mobipick > mobipick.srdf
+roslaunch mobipick_moveit_config setup_assistant.launch
+
+sed -i 's/mobipick\//${tf_prefix}/g' mobipick.srdf
+meld mobipick.srdf mobipick.srdf.xacro   # compare and apply all relevant changes
+rm mobipick.srdf
+```
+
 
 Troubleshooting
 ------------
