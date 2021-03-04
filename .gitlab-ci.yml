@@ -4,6 +4,9 @@ before_script:
   # Enable system-wide authentication for git cloning via https
   - '[ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc'
 
+  # Enable caching of APT packages (only works for packages.ubuntu.com and packages.ros.org)
+  - echo "Acquire::http::Proxy \"http://apt-cache.ni.dfki:8000\";" | sudo tee /etc/apt/apt.conf.d/00proxy
+
 build:
   stage: build
   tags:
