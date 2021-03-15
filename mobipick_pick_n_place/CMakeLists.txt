@@ -114,6 +114,7 @@ install(PROGRAMS
 # Mark executables and/or libraries for installation
 install(TARGETS
     ${PROJECT_NAME}
+    ${PROJECT_NAME}_bt
     ${PROJECT_NAME}_camera_marker_publisher
     ${PROJECT_NAME}_gazebo_object_publisher
     ${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator
