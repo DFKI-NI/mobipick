@@ -67,6 +67,11 @@ add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EX
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME} PREFIX "")
 
+add_executable(${PROJECT_NAME}_bt include/${PROJECT_NAME}/fake_object_recognition.h src/mobipick_pick_n_place_bt.cpp)
+add_dependencies(${PROJECT_NAME}_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_bt ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_bt PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_bt PREFIX "")
+
 add_executable(${PROJECT_NAME}_static_object_publisher include/${PROJECT_NAME}/fake_object_recognition.h src/static_object_publisher.cpp)
 add_dependencies(${PROJECT_NAME}_static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_static_object_publisher ${catkin_LIBRARIES})
