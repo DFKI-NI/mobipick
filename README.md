@@ -33,6 +33,7 @@ cd ~/catkin_ws/src/
 git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
 mobipick/install.sh
+mobipick/build.sh
 ```
 
 If you have a physical pico flexx camera attached to this PC, also follow the

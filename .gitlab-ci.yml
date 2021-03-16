@@ -22,6 +22,7 @@ build:
     - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
     - $CATKIN_PROJECT_DIR/install.sh
+    - $CATKIN_PROJECT_DIR/build.sh
 
     # catkin_lint
     - cd $CATKIN_WS
