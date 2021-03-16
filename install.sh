@@ -22,3 +22,4 @@ sudo apt-get install -qq -y python3-rosdep
 rosdep update
 rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO} --skip-keys=libuvc --skip-keys=orocos_kdl  # orocos_kdl must be skipped, see https://bitbucket.org/traclabs/trac_ik/pull-requests/29#comment-206183885
 sudo apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon build-essential  # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
+sudo apt-get install -qq -y ccache
