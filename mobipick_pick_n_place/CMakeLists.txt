@@ -15,7 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   moveit_ros_planning_interface
   roscpp
   roslaunch
-	rosparam_shortcuts
+  rosparam_shortcuts
   shape_msgs
   tf
   vision_msgs
@@ -62,15 +62,15 @@ add_dependencies(${PROJECT_NAME}_test_trajectory ${${PROJECT_NAME}_EXPORTED_TARG
 target_link_libraries(${PROJECT_NAME}_test_trajectory ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_test_trajectory PROPERTIES OUTPUT_NAME test_trajectory PREFIX "")
 
-add_executable(${PROJECT_NAME} include/${PROJECT_NAME}/fake_object_recognition.h src/mobipick_pick_n_place.cpp)
-add_dependencies(${PROJECT_NAME} ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES})
-set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME ${PROJECT_NAME} PREFIX "")
+add_executable(${PROJECT_NAME}_mobipick_pick_n_place include/${PROJECT_NAME}/fake_object_recognition.h src/mobipick_pick_n_place.cpp)
+add_dependencies(${PROJECT_NAME}_mobipick_pick_n_place ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_mobipick_pick_n_place ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_mobipick_pick_n_place PROPERTIES OUTPUT_NAME mobipick_pick_n_place PREFIX "")
 
-add_executable(${PROJECT_NAME}_bt include/${PROJECT_NAME}/fake_object_recognition.h src/mobipick_pick_n_place_bt.cpp)
-add_dependencies(${PROJECT_NAME}_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-target_link_libraries(${PROJECT_NAME}_bt ${catkin_LIBRARIES})
-set_target_properties(${PROJECT_NAME}_bt PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_bt PREFIX "")
+add_executable(${PROJECT_NAME}_mobipick_pick_n_place_bt include/${PROJECT_NAME}/fake_object_recognition.h src/mobipick_pick_n_place_bt.cpp)
+add_dependencies(${PROJECT_NAME}_mobipick_pick_n_place_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_mobipick_pick_n_place_bt ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_mobipick_pick_n_place_bt PROPERTIES OUTPUT_NAME mobipick_pick_n_place_bt PREFIX "")
 
 add_executable(${PROJECT_NAME}_static_object_publisher include/${PROJECT_NAME}/fake_object_recognition.h src/static_object_publisher.cpp)
 add_dependencies(${PROJECT_NAME}_static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -113,10 +113,10 @@ install(PROGRAMS
 
 # Mark executables and/or libraries for installation
 install(TARGETS
-    ${PROJECT_NAME}
-    ${PROJECT_NAME}_bt
     ${PROJECT_NAME}_camera_marker_publisher
     ${PROJECT_NAME}_gazebo_object_publisher
+    ${PROJECT_NAME}_mobipick_pick_n_place
+    ${PROJECT_NAME}_mobipick_pick_n_place_bt
     ${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator
     ${PROJECT_NAME}_static_object_publisher
     ${PROJECT_NAME}_test_trajectory
