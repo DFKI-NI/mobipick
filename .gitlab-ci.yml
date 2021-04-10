@@ -25,8 +25,19 @@ build:
     - cd $CATKIN_WS_SRC/
     - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
+    # install dependencies
     - $CATKIN_PROJECT_DIR/install.sh
+
+    # build
+    - export PATH="/usr/lib/ccache:$PATH"
+    - export CCACHE_DIR=${CI_PROJECT_DIR}/.ccache
+    - echo "================= ccache stats (before build) ================="
+    - ccache -s
+    - echo "==============================================================="
     - $CATKIN_PROJECT_DIR/build.sh
+    - echo "================= ccache stats (after build) =================="
+    - ccache -s
+    - echo "==============================================================="
 
     # catkin_lint
     - cd $CATKIN_WS
