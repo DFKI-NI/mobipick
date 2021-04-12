@@ -1,20 +1,47 @@
-image: ros:noetic-ros-base
-
 cache:
   paths:
     - .ccache/
 
-before_script:
-  # Enable system-wide authentication for git cloning via https
-  - '[ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc'
+stages:
+  - build_docker
+  - build
 
-  # Enable caching of APT packages (only works for packages.ubuntu.com and packages.ros.org)
-  - echo "Acquire::http::Proxy \"http://apt-cache.ni.dfki:8000\";" | sudo tee /etc/apt/apt.conf.d/00proxy
+build_docker:
+  image: docker:stable-git
+  stage: build_docker
+  tags:
+    - docker
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:noetic
+    DOCKER_DRIVER: overlay2
+  only:   # see https://docs.gitlab.com/ee/ci/yaml/#onlychangesexceptchanges
+    refs:
+      - noetic
+    changes:
+      - Dockerfile
+      - "*/package.xml"
+      - dependencies-noetic.rosinstall
+      - install.sh
+      - build.sh
+
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build --pull --build-arg CI_JOB_TOKEN=$CI_JOB_TOKEN -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
 
 build:
   stage: build
   tags:
     - docker
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:noetic
+  image: $IMAGE_TAG
+  before_script:
+    # Enable system-wide authentication for git cloning via https
+    - '[ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc'
+
+    # Enable caching of APT packages (only works for packages.ubuntu.com and packages.ros.org)
+    - echo "Acquire::http::Proxy \"http://apt-cache.ni.dfki:8000\";" | sudo tee /etc/apt/apt.conf.d/00proxy
   script:
     - export CATKIN_WS=~/catkin_ws
     - export CATKIN_WS_SRC=${CATKIN_WS}/src
@@ -23,6 +50,7 @@ build:
     # create a catkin workspace and clone all required ROS packages
     - mkdir -p $CATKIN_WS_SRC
     - cd $CATKIN_WS_SRC/
+    - rm -rf $CATKIN_PROJECT_DIR
     - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
     # install dependencies
