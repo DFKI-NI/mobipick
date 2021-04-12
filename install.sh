@@ -9,9 +9,11 @@ export ROS_DISTRO="noetic"
 # clone dependencies
 sudo apt-get update -qq
 sudo apt-get install -qq -y python3-wstool git
-wstool init
-wstool merge mobipick/dependencies-${ROS_DISTRO}.rosinstall
-#wstool merge mobipick/dependencies-${ROS_DISTRO}-optional.rosinstall
+if [ ! -f .rosinstall ]; then 
+  wstool init
+  wstool merge mobipick/dependencies-${ROS_DISTRO}.rosinstall
+  #wstool merge mobipick/dependencies-${ROS_DISTRO}-optional.rosinstall
+fi
 wstool update
 
 # use rosdep to install all dependencies (including ROS itself)
