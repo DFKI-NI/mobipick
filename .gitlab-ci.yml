@@ -20,7 +20,7 @@ build_docker:
     changes:
       - Dockerfile
       - "*/package.xml"
-      - dependencies-noetic.rosinstall
+      - dependencies.rosinstall
       - install.sh
       - build.sh
 

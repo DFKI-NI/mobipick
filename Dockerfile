@@ -22,7 +22,7 @@ COPY mobipick_description/package.xml   $CATKIN_PROJECT_DIR/mobipick_description
 COPY mobipick_gazebo/package.xml        $CATKIN_PROJECT_DIR/mobipick_gazebo/package.xml
 COPY mobipick_moveit_config/package.xml $CATKIN_PROJECT_DIR/mobipick_moveit_config/package.xml
 COPY mobipick_pick_n_place/package.xml  $CATKIN_PROJECT_DIR/mobipick_pick_n_place/package.xml
-COPY dependencies-noetic.rosinstall     $CATKIN_PROJECT_DIR/
+COPY dependencies.rosinstall            $CATKIN_PROJECT_DIR/
 COPY install.sh                         $CATKIN_PROJECT_DIR/
 
 WORKDIR $CATKIN_WS_SRC

@@ -12,8 +12,8 @@ sudo apt-get install -qq -y python3-wstool git
 if [ ! -f .rosinstall ]; then 
   wstool init
 fi
-wstool merge --merge-keep -y mobipick/dependencies-${ROS_DISTRO}.rosinstall
-#wstool merge --merge-keep -y mobipick/dependencies-${ROS_DISTRO}-optional.rosinstall
+wstool merge --merge-keep -y mobipick/dependencies.rosinstall
+#wstool merge --merge-keep -y mobipick/dependencies-optional.rosinstall
 wstool update
 
 # use rosdep to install all dependencies (including ROS itself)
