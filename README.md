@@ -32,7 +32,7 @@ mkdir -p ~/catkin_ws/src
 cd ~/catkin_ws/src/
 git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
-mobipick/install.sh
+mobipick/install-deps.sh
 mobipick/build.sh
 ```
 
@@ -44,7 +44,7 @@ download step.
 
 You can also optionally install the dependencies in
 dependencies-optional.rosinstall; simply uncomment the relevant line in
-`install.sh` before running it.
+`install-deps.sh` before running it.
 
 You should add the following line to the end of your `~/.bashrc`, and then
 close and reopen all terminals:

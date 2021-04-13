@@ -21,7 +21,7 @@ build_docker:
       - Dockerfile
       - "*/package.xml"
       - dependencies.rosinstall
-      - install.sh
+      - install-deps.sh
       - build.sh
 
   script:
@@ -54,7 +54,7 @@ build:
     - ln -s $CI_PROJECT_DIR $CATKIN_PROJECT_DIR   # outside CI, run this instead: git clone -b noetic git@git.ni.dfki.de:mobipick/mobipick.git
 
     # install dependencies
-    - $CATKIN_PROJECT_DIR/install.sh
+    - $CATKIN_PROJECT_DIR/install-deps.sh
 
     # build
     - export PATH="/usr/lib/ccache:$PATH"

@@ -23,10 +23,10 @@ COPY mobipick_gazebo/package.xml        $CATKIN_PROJECT_DIR/mobipick_gazebo/pack
 COPY mobipick_moveit_config/package.xml $CATKIN_PROJECT_DIR/mobipick_moveit_config/package.xml
 COPY mobipick_pick_n_place/package.xml  $CATKIN_PROJECT_DIR/mobipick_pick_n_place/package.xml
 COPY dependencies.rosinstall            $CATKIN_PROJECT_DIR/
-COPY install.sh                         $CATKIN_PROJECT_DIR/
+COPY install-deps.sh                    $CATKIN_PROJECT_DIR/
 
 WORKDIR $CATKIN_WS_SRC
-RUN /bin/bash $CATKIN_PROJECT_DIR/install.sh \
+RUN /bin/bash $CATKIN_PROJECT_DIR/install-deps.sh \
     && rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
 # build workspace
