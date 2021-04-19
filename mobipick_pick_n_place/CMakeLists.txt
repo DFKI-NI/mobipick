@@ -22,7 +22,7 @@ find_package(catkin REQUIRED COMPONENTS
   visualization_msgs
 )
 
-add_action_files(DIRECTORY action FILES FtObserver.action)
+add_action_files(DIRECTORY action FILES FtObserver.action MoveItMacro.action)
 
 generate_messages(
   DEPENDENCIES actionlib_msgs geometry_msgs
@@ -67,10 +67,15 @@ add_dependencies(${PROJECT_NAME}_mobipick_pick_n_place ${${PROJECT_NAME}_EXPORTE
 target_link_libraries(${PROJECT_NAME}_mobipick_pick_n_place ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_mobipick_pick_n_place PROPERTIES OUTPUT_NAME mobipick_pick_n_place PREFIX "")
 
-add_executable(${PROJECT_NAME}_mobipick_pick_n_place_bt include/${PROJECT_NAME}/fake_object_recognition.h src/mobipick_pick_n_place_bt.cpp)
+add_executable(${PROJECT_NAME}_mobipick_pick_n_place_bt include/${PROJECT_NAME}/fake_object_recognition.h include/${PROJECT_NAME}/pausable_behavior_tree.h src/mobipick_pick_n_place_bt.cpp)
 add_dependencies(${PROJECT_NAME}_mobipick_pick_n_place_bt ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 target_link_libraries(${PROJECT_NAME}_mobipick_pick_n_place_bt ${catkin_LIBRARIES})
 set_target_properties(${PROJECT_NAME}_mobipick_pick_n_place_bt PROPERTIES OUTPUT_NAME mobipick_pick_n_place_bt PREFIX "")
+
+add_executable(${PROJECT_NAME}_moveit_macros include/${PROJECT_NAME}/fake_object_recognition.h src/moveit_macros.cpp)
+add_dependencies(${PROJECT_NAME}_moveit_macros ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(${PROJECT_NAME}_moveit_macros ${catkin_LIBRARIES})
+set_target_properties(${PROJECT_NAME}_moveit_macros PROPERTIES OUTPUT_NAME moveit_macros PREFIX "")
 
 add_executable(${PROJECT_NAME}_static_object_publisher include/${PROJECT_NAME}/fake_object_recognition.h src/static_object_publisher.cpp)
 add_dependencies(${PROJECT_NAME}_static_object_publisher ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
@@ -117,6 +122,7 @@ install(TARGETS
     ${PROJECT_NAME}_gazebo_object_publisher
     ${PROJECT_NAME}_mobipick_pick_n_place
     ${PROJECT_NAME}_mobipick_pick_n_place_bt
+    ${PROJECT_NAME}_moveit_macros
     ${PROJECT_NAME}_moveit_kinematics_speed_and_validity_evaluator
     ${PROJECT_NAME}_static_object_publisher
     ${PROJECT_NAME}_test_trajectory
