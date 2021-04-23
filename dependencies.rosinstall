@@ -8,7 +8,7 @@
     version: master
 - git:
     local-name: astra_depth_filters
-    uri: https://git.ni.dfki.de/perception/astra_depth_filters.git
+    uri: https://github.com/DFKI-NI/astra_depth_filters.git
     version: master
 - git:
     local-name: astra_launch
@@ -40,7 +40,7 @@
     version: master
 - git:
     local-name: robotiq
-    uri: https://git.ni.dfki.de/mobipick/robotiq.git
+    uri: https://github.com/Krause92/robotiq.git
     version: noetic-position-feedback
 - git:
     local-name: trac_ik
