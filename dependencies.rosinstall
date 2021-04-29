@@ -32,7 +32,7 @@
     version: noetic-devel
 - git:
     local-name: pbr_tools
-    uri: https://git.ni.dfki.de/pbr_misc/pbr_tools.git
+    uri: https://github.com/DFKI-NI/pbr_tools.git
     version: master
 - git:
     local-name: roboticsgroup_gazebo_plugins
