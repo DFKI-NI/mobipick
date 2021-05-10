@@ -94,7 +94,7 @@ roslaunch mobipick_pick_n_place mobipick_pick_n_place_bt.launch simulation:=true
 rosservice call /mobipick/continue_behavior_tree
 ```
 
-Optionally execute `rosservice call /mobipick/user_interaction` during the user interaction step to fake taking the power drill.
+Optionally execute `rosservice call /mobipick/simulate_user_interaction` during the user interaction step to fake taking the power drill.
 
 ### Pick + Place demo (Gazebo)
 

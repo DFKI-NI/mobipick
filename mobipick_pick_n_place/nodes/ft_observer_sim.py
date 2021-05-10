@@ -22,13 +22,13 @@ class ForceTorqueObserver(object):
         self._action_name = name
         self._as = actionlib.SimpleActionServer(self._action_name, FtObserverAction, execute_cb=self.execute_cb, auto_start = False)
         self._as.start()
-        self._srv = rospy.Service("user_interaction", Empty, self.interact_cb)
+        self._srv = rospy.Service("simulate_user_interaction", Empty, self.interact_cb)
         rospy.loginfo("ft observer action server in simulation mode started")
 
     def execute_cb(self, goal):
         r = rospy.Rate(1)
         self._user_interaction_simulated = False
-        rospy.loginfo("Optionally call service user_interaction to simulate user interaction")
+        rospy.loginfo("Optionally call service simulate_user_interaction if you want to")
         rospy.Timer(rospy.Duration(goal.timeout), self.timer_cb, True)
         self._timer_is_running = True
         # start executing the action
