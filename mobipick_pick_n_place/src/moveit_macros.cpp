@@ -720,6 +720,7 @@ public:
     moveit_functions["CaptureObject"] = &MoveItMacroAction::captureObject;
     moveit_functions["PickUpObject"] = &MoveItMacroAction::pickUpObject;
     moveit_functions["MoveArmToHandover"] = &MoveItMacroAction::moveArmToHandover;
+    moveit_functions["ReleaseGripper"] = &MoveItMacroAction::releaseGripper;
     moveit_functions["PlaceObject"] = &MoveItMacroAction::placeObject;
   }
 

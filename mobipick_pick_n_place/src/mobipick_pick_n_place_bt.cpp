@@ -267,7 +267,7 @@ namespace mobipick
         ROS_INFO("Detection user interaction SUCCESSFUL");
         mobipick_pick_n_place::MoveItMacroGoal goal;
         goal.type = "function";
-        goal.name = "releaseGripper";
+        goal.name = "ReleaseGripper";
         moveit_macros_ac_ptr->sendGoal(goal);
         moveit_macros_ac_ptr->waitForResult();
         failed = !moveit_macros_ac_ptr->getResult()->result;
