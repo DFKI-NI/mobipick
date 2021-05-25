@@ -6,8 +6,6 @@ ENV CATKIN_WS=/root/catkin_ws
 ENV CATKIN_WS_SRC=${CATKIN_WS}/src
 ENV CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
 
-RUN ls
-
 # Enable system-wide authentication for git cloning via https
 # This will leak the CI_JOB_TOKEN into the history and the intermediate
 # containers, but that should be fine because it's only valid as long as the job is running.
