@@ -46,7 +46,3 @@
     uri: https://github.com/ros-industrial/ur_msgs.git
     local-name: ur_msgs
     version: melodic-devel
-- git:
-    local-name: trac_ik
-    uri: https://bitbucket.org/traclabs/trac_ik.git
-    version: master
