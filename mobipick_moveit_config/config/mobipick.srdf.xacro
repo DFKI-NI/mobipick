@@ -183,7 +183,6 @@
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -238,7 +237,6 @@
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -292,7 +290,6 @@
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -345,7 +342,6 @@
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -397,7 +393,6 @@
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -448,7 +443,6 @@
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -477,7 +471,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp1_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp1_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp1_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp1_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp1_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp1_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp1_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Adjacent" />
@@ -522,7 +515,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Adjacent" />
@@ -555,7 +547,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}structure_part_up" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}ur5_forearm_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -591,7 +582,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp4_link" link2="${tf_prefix}structure_part_up" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp4_link" link2="${tf_prefix}structure_pedestal" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp4_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp4_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp4_link" link2="${tf_prefix}ur5_forearm_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp4_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_clamp4_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -608,7 +598,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}structure_part_up" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -643,7 +632,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
@@ -663,7 +651,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -698,7 +685,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never" />
@@ -728,7 +714,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Adjacent" />
@@ -765,7 +750,6 @@
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_rotation_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -805,7 +789,6 @@
     <disable_collisions link1="${tf_prefix}fl_caster_wheel_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_wheel_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_wheel_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}fl_caster_wheel_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_wheel_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_wheel_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fl_caster_wheel_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -844,7 +827,6 @@
     <disable_collisions link1="${tf_prefix}fr_caster_rotation_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_rotation_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_rotation_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}fr_caster_rotation_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_rotation_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_rotation_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_rotation_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -882,7 +864,6 @@
     <disable_collisions link1="${tf_prefix}fr_caster_wheel_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_wheel_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_wheel_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}fr_caster_wheel_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_wheel_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_wheel_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fr_caster_wheel_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -919,7 +900,6 @@
     <disable_collisions link1="${tf_prefix}front_laser_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}front_laser_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}front_laser_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}front_laser_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}front_laser_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}front_laser_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}front_laser_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -947,7 +927,6 @@
     <disable_collisions link1="${tf_prefix}fts_robotside" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fts_robotside" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}fts_robotside" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}fts_robotside" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fts_robotside" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fts_robotside" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}fts_robotside" link2="${tf_prefix}ur5_wrist_3_link" reason="Adjacent" />
@@ -971,7 +950,6 @@
     <disable_collisions link1="${tf_prefix}gripper_astra_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_astra_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_astra_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_astra_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_astra_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_astra_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Default" />
     <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}gripper_left_inner_finger" reason="Never" />
@@ -993,7 +971,6 @@
     <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_coupling_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1015,7 +992,6 @@
     <disable_collisions link1="${tf_prefix}gripper_left_inner_finger" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_finger" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_finger" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_left_inner_finger" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_finger" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_finger" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_finger" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1036,7 +1012,6 @@
     <disable_collisions link1="${tf_prefix}gripper_left_inner_knuckle" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_knuckle" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_knuckle" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_left_inner_knuckle" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_knuckle" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_knuckle" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_inner_knuckle" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1056,7 +1031,6 @@
     <disable_collisions link1="${tf_prefix}gripper_left_outer_finger" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_finger" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_finger" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_left_outer_finger" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_finger" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_finger" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_finger" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1075,7 +1049,6 @@
     <disable_collisions link1="${tf_prefix}gripper_left_outer_knuckle" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_knuckle" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_knuckle" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_left_outer_knuckle" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_knuckle" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_knuckle" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_outer_knuckle" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1093,7 +1066,6 @@
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1110,7 +1082,6 @@
     <disable_collisions link1="${tf_prefix}gripper_pico_flexx_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}gripper_pico_flexx_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_pico_flexx_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_pico_flexx_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_pico_flexx_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_pico_flexx_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_pico_flexx_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1126,7 +1097,6 @@
     <disable_collisions link1="${tf_prefix}gripper_right_inner_finger" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_finger" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_finger" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_right_inner_finger" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_finger" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_finger" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_finger" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1141,7 +1111,6 @@
     <disable_collisions link1="${tf_prefix}gripper_right_inner_knuckle" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_knuckle" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_knuckle" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_right_inner_knuckle" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_knuckle" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_knuckle" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_inner_knuckle" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1155,7 +1124,6 @@
     <disable_collisions link1="${tf_prefix}gripper_right_outer_finger" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_finger" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_finger" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_right_outer_finger" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_finger" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_finger" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_finger" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1168,7 +1136,6 @@
     <disable_collisions link1="${tf_prefix}gripper_right_outer_knuckle" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_knuckle" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_knuckle" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_right_outer_knuckle" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_knuckle" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_knuckle" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_outer_knuckle" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1180,7 +1147,6 @@
     <disable_collisions link1="${tf_prefix}gripper_right_robotiq_fingertip_65mm" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_robotiq_fingertip_65mm" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_right_robotiq_fingertip_65mm" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_right_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_right_robotiq_fingertip_65mm" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1191,7 +1157,6 @@
     <disable_collisions link1="${tf_prefix}gripper_robotiq_arg2f_base_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_robotiq_arg2f_base_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}gripper_robotiq_arg2f_base_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}gripper_robotiq_arg2f_base_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_robotiq_arg2f_base_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_robotiq_arg2f_base_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}gripper_robotiq_arg2f_base_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1209,7 +1174,6 @@
     <disable_collisions link1="${tf_prefix}left_wheel_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}left_wheel_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}left_wheel_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}left_wheel_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}left_wheel_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}left_wheel_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}left_wheel_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -1229,7 +1193,6 @@
     <disable_collisions link1="${tf_prefix}right_wheel_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}right_wheel_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}right_wheel_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}right_wheel_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}right_wheel_link" link2="${tf_prefix}ur5_forearm_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}right_wheel_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}right_wheel_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -1240,20 +1203,17 @@
     <disable_collisions link1="${tf_prefix}sensor_mount_bracket_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_bracket_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}sensor_mount_bracket_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}sensor_mount_bracket_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_bracket_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_bracket_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_bracket_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}sensor_mount_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}sensor_mount_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}sensor_mount_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_pico_holder_link" link2="${tf_prefix}structure_part_down" reason="User" />
     <disable_collisions link1="${tf_prefix}sensor_mount_pico_holder_link" link2="${tf_prefix}structure_part_up" reason="User" />
-    <disable_collisions link1="${tf_prefix}sensor_mount_pico_holder_link" link2="${tf_prefix}ur5_ee_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_pico_holder_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_pico_holder_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}sensor_mount_pico_holder_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never" />
@@ -1266,7 +1226,6 @@
     <disable_collisions link1="${tf_prefix}structure_cover_back_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_back_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_back_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_cover_back_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_cover_back_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_front_link" link2="${tf_prefix}structure_cover_left_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_front_link" link2="${tf_prefix}structure_cover_right_link" reason="Never" />
@@ -1276,7 +1235,6 @@
     <disable_collisions link1="${tf_prefix}structure_cover_front_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_front_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_front_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_cover_front_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_cover_front_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_left_link" link2="${tf_prefix}structure_cover_right_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_left_link" link2="${tf_prefix}structure_cover_top_back_link" reason="Never" />
@@ -1285,7 +1243,6 @@
     <disable_collisions link1="${tf_prefix}structure_cover_left_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_left_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_left_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_cover_left_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_cover_left_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_right_link" link2="${tf_prefix}structure_cover_top_back_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_right_link" link2="${tf_prefix}structure_cover_top_front_link" reason="Never" />
@@ -1293,27 +1250,23 @@
     <disable_collisions link1="${tf_prefix}structure_cover_right_link" link2="${tf_prefix}structure_part_up" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_right_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_right_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_cover_right_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_cover_right_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}structure_cover_top_front_link" reason="Default" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}structure_part_down" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}structure_part_up" reason="Default" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_back_link" link2="${tf_prefix}ur5_upper_arm_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_front_link" link2="${tf_prefix}structure_part_down" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_front_link" link2="${tf_prefix}structure_part_up" reason="Default" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_front_link" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_front_link" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_cover_top_front_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_front_link" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_cover_top_front_link" link2="${tf_prefix}ur5_upper_arm_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}structure_part_up" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}structure_pedestal" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}ur5_forearm_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
@@ -1322,7 +1275,6 @@
     <disable_collisions link1="${tf_prefix}structure_part_down" link2="${tf_prefix}ur5_wrist_3_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}structure_pedestal" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}ur5_base_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}ur5_forearm_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}ur5_upper_arm_link" reason="User" />
@@ -1330,16 +1282,9 @@
     <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}ur5_wrist_2_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_part_up" link2="${tf_prefix}ur5_wrist_3_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_pedestal" link2="${tf_prefix}ur5_base_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}structure_pedestal" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}structure_pedestal" link2="${tf_prefix}ur5_shoulder_link" reason="Never" />
     <disable_collisions link1="${tf_prefix}structure_pedestal" link2="${tf_prefix}ur5_upper_arm_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}ur5_base_link" link2="${tf_prefix}ur5_ee_link" reason="User" />
     <disable_collisions link1="${tf_prefix}ur5_base_link" link2="${tf_prefix}ur5_shoulder_link" reason="Adjacent" />
-    <disable_collisions link1="${tf_prefix}ur5_ee_link" link2="${tf_prefix}ur5_shoulder_link" reason="User" />
-    <disable_collisions link1="${tf_prefix}ur5_ee_link" link2="${tf_prefix}ur5_upper_arm_link" reason="User" />
-    <disable_collisions link1="${tf_prefix}ur5_ee_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}ur5_ee_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never" />
-    <disable_collisions link1="${tf_prefix}ur5_ee_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}ur5_forearm_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}ur5_forearm_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Adjacent" />
     <disable_collisions link1="${tf_prefix}ur5_shoulder_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Adjacent" />
