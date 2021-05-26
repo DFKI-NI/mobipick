@@ -29,7 +29,7 @@
   <!-- spawn table -->
 
   <param name="table_description"
-    command="$(find xacro)/xacro --inorder '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
+    command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
   <node name="spawn_pick_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 12.3 -y 3.8"
     respawn="false" output="screen" />
 
