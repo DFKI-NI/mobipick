@@ -5,6 +5,7 @@ ARG CI_JOB_TOKEN
 ENV CATKIN_WS=/root/catkin_ws
 ENV CATKIN_WS_SRC=${CATKIN_WS}/src
 ENV CATKIN_PROJECT_DIR=$CATKIN_WS_SRC/mobipick
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Enable system-wide authentication for git cloning via https
 # This will leak the CI_JOB_TOKEN into the history and the intermediate
