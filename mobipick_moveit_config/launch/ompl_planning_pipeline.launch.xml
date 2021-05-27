@@ -20,6 +20,8 @@
   <param name="request_adapters" value="$(arg planning_adapters)" />
   <param name="start_state_max_bounds_error" value="$(arg start_state_max_bounds_error)" />
 
+  <!-- Add MoveGroup capabilities specific to this pipeline -->
+  <!-- <param name="capabilities" value="" /> -->
 
   <!-- A prefix for joint and link names in the robot -->
   <arg name="prefix" default="" />

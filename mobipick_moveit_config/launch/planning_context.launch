@@ -12,7 +12,7 @@
   <arg name="prefix" default="$(arg tf_prefix)/" unless="$(eval tf_prefix=='')" />
 
   <!-- Load universal robot description format (URDF) -->
-  <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
+  <include if="$(arg load_robot_description)" file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
     <arg name="tf_prefix" value="$(arg tf_prefix)" />
   </include>
 
@@ -23,6 +23,7 @@
   <!-- Load updated joint limits (override information from URDF) -->
   <group ns="$(arg robot_description)_planning">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/joint_limits.yaml" subst_value="true" />
+    <rosparam command="load" file="$(find mobipick_moveit_config)/config/cartesian_limits.yaml"/>
   </group>
 
   <!-- Load padding; this is using the private node handle of move_group! :( -->
