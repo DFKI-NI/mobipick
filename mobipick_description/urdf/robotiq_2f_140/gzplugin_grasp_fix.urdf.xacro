@@ -21,11 +21,11 @@
           <gripper_link>${prefix}gripper_right_inner_finger          </gripper_link>
           <!-- <gripper_link>gripper_right_robotiq_fingertip_65mm</gripper_link> -->
         </arm>
-        <forces_angle_tolerance>100</forces_angle_tolerance>
-        <update_rate>4</update_rate>
+        <forces_angle_tolerance>120</forces_angle_tolerance>
+        <update_rate>8</update_rate>
         <grip_count_threshold>4</grip_count_threshold>
-        <max_grip_count>8</max_grip_count>
-        <release_tolerance>0.005</release_tolerance>
+        <max_grip_count>16</max_grip_count>
+        <release_tolerance>0.01</release_tolerance>
         <disable_collisions_on_attach>false</disable_collisions_on_attach>
         <contact_topic>__default_topic__</contact_topic>
       </plugin>
