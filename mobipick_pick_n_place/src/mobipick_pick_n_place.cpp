@@ -590,6 +590,7 @@ int main(int argc, char **argv)
           task_state = paused_state;
           ROS_INFO_STREAM("Next state: " << task_state);
         }
+        ros::Duration(0.1).sleep();
         break;
       }
       case ST_ARM_TO_HOME_START:
