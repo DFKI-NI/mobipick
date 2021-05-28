@@ -28,19 +28,14 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import sys
-from copy import copy
-
 from math import pi
 
 import actionlib
 import rospy
 from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal, FollowJointTrajectoryResult, \
     JointTolerance
-from trajectory_msgs.msg import JointTrajectoryPoint
 from sensor_msgs.msg import JointState
-
-JOINT_NAMES = ['ur5_shoulder_pan_joint', 'ur5_shoulder_lift_joint', 'ur5_elbow_joint', 'ur5_wrist_1_joint',
-               'ur5_wrist_2_joint', 'ur5_wrist_3_joint']
+from trajectory_msgs.msg import JointTrajectoryPoint
 
 
 def normalize_angle(angle):
@@ -58,7 +53,8 @@ def normalize_angle(angle):
 
 
 class Trajectory(object):
-    def __init__(self):
+    def __init__(self, joint_names):
+        self.joint_names = joint_names
         ns = 'arm_controller/'
         self._client = actionlib.SimpleActionClient(
             ns + "follow_joint_trajectory",
@@ -78,7 +74,7 @@ class Trajectory(object):
     def add_point(self, positions, time):
         point = JointTrajectoryPoint()
         point.positions = [normalize_angle(p) for p in positions]
-        #point.positions[1] += 2* pi  # TODO WTF!?
+        # point.positions[1] += 2* pi  # TODO WTF!?
         point.time_from_start = rospy.Duration(time)
         self._goal.trajectory.points.append(point)
 
@@ -102,8 +98,8 @@ class Trajectory(object):
     def clear(self):
         self._goal = FollowJointTrajectoryGoal()
         self._goal.goal_time_tolerance = self._goal_time_tolerance
-        self._goal.trajectory.joint_names = JOINT_NAMES
-        for j in JOINT_NAMES:
+        self._goal.trajectory.joint_names = self.joint_names
+        for j in self.joint_names:
             tol = JointTolerance()
             tol.name = j
             tol.position = 0.2
@@ -140,11 +136,17 @@ def main():
     joint_state = rospy.wait_for_message('joint_states', JointState, timeout=paramTimeout)
     print("Running. Ctrl-c to quit")
 
-    traj = Trajectory()
+    prefix = rospy.get_param("~prefix", "mobipick")
+    prefix = prefix.rstrip('/') + '/'
+    joint_names = [prefix + j for j in
+                   ['ur5_shoulder_pan_joint', 'ur5_shoulder_lift_joint', 'ur5_elbow_joint', 'ur5_wrist_1_joint',
+                    'ur5_wrist_2_joint', 'ur5_wrist_3_joint']]
+
+    traj = Trajectory(joint_names)
     rospy.on_shutdown(traj.stop)
 
     # Command Current Joint Positions first
-    current_angles = [joint_state.position[joint_state.name.index(j)] for j in JOINT_NAMES]
+    current_angles = [joint_state.position[joint_state.name.index(j)] for j in joint_names]
     traj.add_point(current_angles, 1.0)
 
     goal_angles = [0.00, -2.60, 2.43, -2.05, -1.57, 1.57]
