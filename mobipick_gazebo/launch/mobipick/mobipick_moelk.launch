@@ -16,10 +16,10 @@
   </include>
   
   <!-- spawn power drill -->
-  <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
+  <include file="$(find mobipick_gazebo)/launch/objects/powerdrill_with_grip.launch">
     <arg name="x"     default="12.3" />
     <arg name="y"     default="3.8" />
-    <arg name="z"     default="0.84" />
+    <arg name="z"     default="0.87" />
     <arg name="roll"  default="$(eval pi / 2)" />
     <arg name="pitch" default="0.0" />
     <arg name="yaw"   default="$(eval -pi  *2  / 3)" />
