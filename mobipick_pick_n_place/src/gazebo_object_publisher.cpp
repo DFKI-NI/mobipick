@@ -1,6 +1,8 @@
 #include <ros/ros.h>
 #include <gazebo_msgs/LinkStates.h>
 #include <vision_msgs/Detection3DArray.h>
+#include <visualization_msgs/MarkerArray.h>
+#include <std_msgs/ColorRGBA.h>
 #include <geometry_msgs/PoseStamped.h>
 #include "mobipick_pick_n_place/fake_object_recognition.h"
 #include <eigen_conversions/eigen_msg.h>
@@ -8,6 +10,7 @@
 std::shared_ptr<ros::Publisher> detection_pub;
 std::shared_ptr<ros::Publisher> pose_power_drill_pub;
 std::shared_ptr<ros::Publisher> pose_table_pub;
+std::shared_ptr<ros::Publisher> marker_pub;
 
 void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
 {
@@ -152,6 +155,111 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
     }
   }
   detection_pub->publish(detections);
+
+  // ------------ PUBLISH MARKERS
+  // Object markers
+  visualization_msgs::MarkerArray markers;
+
+  int32_t id = 0;
+  for (auto det: detections.detections)
+  {
+    std::string name = id_to_string(det.results.at(0).id);
+
+    std_msgs::ColorRGBA color_rgba;
+    // TODO:
+    // draw_color = self.draw_colors[name]
+    // color_rgba.r = draw_color[0] / 255.0
+    // color_rgba.g = draw_color[1] / 255.0
+    // color_rgba.b = draw_color[2] / 255.0
+    color_rgba.r = 152.0 / 255.0;
+    color_rgba.g = 78.0 / 255.0;
+    color_rgba.b = 163.0 / 255.0;
+    color_rgba.a = 1.0;
+
+    // cube marker
+    {
+      visualization_msgs::Marker marker;
+      marker.header = detections.header;
+      marker.action = visualization_msgs::Marker::ADD;
+      marker.pose = det.bbox.center;
+      marker.color = color_rgba;
+      marker.color.a = 0.4;
+      marker.ns = "bboxes";
+      marker.id = id;
+      marker.type = visualization_msgs::Marker::CUBE;
+      marker.scale = det.bbox.size;
+      markers.markers.push_back(marker);
+    }
+
+    // text marker
+    {
+      visualization_msgs::Marker marker;
+      marker.header = detections.header;
+      marker.action = visualization_msgs::Marker::ADD;
+      marker.pose = det.bbox.center;
+      marker.color = color_rgba;
+      marker.color.a = 1.0;
+      marker.ns = "texts";
+      marker.id = id;
+      marker.type = visualization_msgs::Marker::TEXT_VIEW_FACING;
+      marker.scale.x = 0.05;
+      marker.scale.y = 0.05;
+      marker.scale.z = 0.05;
+      marker.text = name + " (1.0)";
+      markers.markers.push_back(marker);
+    }
+
+    // TODO: mesh marker
+    // try:
+    //     marker = Marker()
+    //     marker.header = detection_array.header
+    //     marker.action = Marker.ADD
+    //     marker.pose = det.bbox.center
+    //     marker.color = color_rgba
+    //     marker.color.a = 0.7
+    //     marker.ns = namespace_prefix + "meshes"
+    //     marker.id = i
+    //     marker.type = Marker.MESH_RESOURCE
+    //     marker.scale.x = self.mesh_scales[name]
+    //     marker.scale.y = self.mesh_scales[name]
+    //     marker.scale.z = self.mesh_scales[name]
+    //     marker.mesh_resource = self.mesh_urls[name]
+    //     markers.markers.append(marker)
+    // except KeyError:
+    //     # user didn't specify self.meshes[name], so don't publish marker
+    //     pass
+
+    id++;
+  }
+
+  static size_t prev_num_detections = 0;
+  for (size_t i = detections.detections.size(); i < prev_num_detections; i++)
+  {
+    {
+      visualization_msgs::Marker marker;
+      marker.action = visualization_msgs::Marker::DELETE;
+      marker.ns = "bboxes";
+      marker.id = i;
+      markers.markers.push_back(marker);
+    }
+    {
+      visualization_msgs::Marker marker;
+      marker.action = visualization_msgs::Marker::DELETE;
+      marker.ns = "texts";
+      marker.id = i;
+      markers.markers.push_back(marker);
+    }
+    {
+      visualization_msgs::Marker marker;
+      marker.action = visualization_msgs::Marker::DELETE;
+      marker.ns = "meshes";
+      marker.id = i;
+      markers.markers.push_back(marker);
+    }
+  }
+  prev_num_detections = detections.detections.size();
+
+  marker_pub->publish(markers);
 }
 
 int main(int argc, char **argv)
@@ -164,6 +272,8 @@ int main(int argc, char **argv)
       "/mobipick/dope/pose_power_drill_with_grip", 10));
   pose_table_pub =
       std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_table", 10));
+  marker_pub =
+      std::make_shared<ros::Publisher>(nh.advertise<visualization_msgs::MarkerArray>("/mobipick/dope/markers", 10));
   ros::Subscriber sub = nh.subscribe("/gazebo/link_states", 10, gazebo_cb);
 
   ros::spin();
