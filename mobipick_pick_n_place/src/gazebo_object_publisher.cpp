@@ -90,9 +90,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
           // add powerdrill
           vision_msgs::Detection3D det3d;
           det3d.header = detections.header;
-          det3d.bbox.size.x = 0.184208;
-          det3d.bbox.size.y = 0.187514;
-          det3d.bbox.size.z = 0.057294;
+          det3d.bbox.size.x = 0.18436100006103516;
+          det3d.bbox.size.y = 0.18683599472045898;
+          det3d.bbox.size.z = 0.057192001342773438;
 
           // shift to center of bbox and rotate coordinate frames to match dope detection
           Eigen::Isometry3d object_pose;
@@ -121,9 +121,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
           // add powerdrill
           vision_msgs::Detection3D det3d;
           det3d.header = detections.header;
-          det3d.bbox.size.x = 0.184208;
-          det3d.bbox.size.y = 0.187514;
-          det3d.bbox.size.z = 0.057294;
+          det3d.bbox.size.x = 0.18002399444580078;
+          det3d.bbox.size.y = 0.22317399978637695;
+          det3d.bbox.size.z = 0.082321996688842773;
 
           // shift to center of bbox and rotate coordinate frames to match dope detection
           Eigen::Isometry3d object_pose;
