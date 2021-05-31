@@ -1,4 +1,25 @@
+# padding parameters for robot-object collision checks (not used for self collision checks, see https://github.com/ros-planning/moveit/issues/683)
 default_robot_padding: 0.04
 default_robot_scale: 1.0
 default_object_padding: 0.0
 default_attached_padding: 0.0
+
+## The following currently doesn't work, because the prefix results in a
+## sub-dictionary ({'mobipick': {'ur5_forearm_link': 0.0, ...}}), but
+## planning_scene_monitor expects ({'mobipick/ur5_forearm_link': 0.0, ...}).
+#default_robot_link_padding:
+#  $(arg prefix)ur5_forearm_link: 0.0
+#  $(arg prefix)ur5_shoulder_link: 0.0
+#  $(arg prefix)ur5_upper_arm_link: 0.0
+#  $(arg prefix)ur5_wrist_1_link: 0.0
+#  $(arg prefix)ur5_wrist_2_link: 0.0
+#  $(arg prefix)ur5_wrist_3_link: 0.0
+#  # ...
+#default_robot_link_scale:
+#  $(arg prefix)ur5_forearm_link: 1.0
+#  $(arg prefix)ur5_shoulder_link: 1.0
+#  $(arg prefix)ur5_upper_arm_link: 1.0
+#  $(arg prefix)ur5_wrist_1_link: 1.0
+#  $(arg prefix)ur5_wrist_2_link: 1.0
+#  $(arg prefix)ur5_wrist_3_link: 1.0
+#  # ...

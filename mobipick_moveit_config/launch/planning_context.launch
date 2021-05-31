@@ -27,7 +27,7 @@
   </group>
 
   <!-- Load padding; this is using the private node handle of move_group! :( -->
-  <group ns="move_group/$(arg robot_description)_planning">
+  <group ns="move_group/$(arg prefix)$(arg robot_description)_planning">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/paddings.yaml" subst_value="true" />
   </group>
 
