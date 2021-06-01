@@ -4,7 +4,7 @@
   <arg name="wait_for_table_name" default="table_1" />
   <arg name="x" default="0.90" />
   <arg name="y" default="-0.20" />
-  <arg name="z" default="1.10" />
+  <arg name="z" default="0.81" />
   <arg name="roll" default="0.0" />
   <arg name="pitch" default="0.0" />
   <arg name="yaw" default="$(eval pi)" />
