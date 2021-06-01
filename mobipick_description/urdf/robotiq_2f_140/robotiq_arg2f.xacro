@@ -32,6 +32,7 @@
     <xacro:outer_finger_joint prefix="${prefix}" fingerprefix="${fingerprefix}"/>
     <xacro:inner_knuckle_joint prefix="${prefix}" fingerprefix="${fingerprefix}" reflect="${reflect}"/>
     <xacro:inner_finger_joint prefix="${prefix}" fingerprefix="${fingerprefix}"/>
+    <xacro:inner_knuckle_to_finger_joint prefix="${prefix}" fingerprefix="${fingerprefix}"/>
   </xacro:macro>
 
   <xacro:macro name="finger_links" params="prefix fingerprefix stroke">

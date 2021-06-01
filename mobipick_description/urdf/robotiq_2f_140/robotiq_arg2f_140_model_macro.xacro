@@ -170,6 +170,23 @@
 
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f.xacro" />
 
+  <!-- === 2x inner knuckle to inner finger joint ===================================================== -->
+
+  <xacro:macro name="inner_knuckle_to_finger_joint" params="prefix fingerprefix">
+    <!-- This joint closes the kinematic loop. Since loops are not allowed in URDF, but they are allowed in SDF, this is an SDF fragment. -->
+    <gazebo>
+      <joint name="${prefix}${fingerprefix}_inner_knuckle_to_finger_joint" type="revolute">
+        <pose relative_to="${prefix}${fingerprefix}_inner_knuckle">0 0.1 -0.0022 0 0 0</pose>
+        <axis>
+          <xyz>1 0 0</xyz>
+        </axis>
+        <parent>${prefix}${fingerprefix}_inner_knuckle</parent>
+        <child>${prefix}${fingerprefix}_inner_finger</child>
+      </joint>
+    </gazebo>
+  </xacro:macro>
+
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f.xacro" />
   <!-- === outer knuckle joint (first movable joint in series) ===================================================== -->
 
   <xacro:macro name="finger_joint" params="prefix">   <!-- = "left_outer_knuckle_joint" -->

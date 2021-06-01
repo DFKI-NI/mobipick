@@ -23,9 +23,5 @@
   <!-- plugin from https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins used to simulate the mimic joints -->
   <xacro:macro name="mimic_joint_plugins_gazebo" params="prefix robot_namespace">
     <xacro:mimic_joint_plugin_gazebo name_prefix="${prefix}right_outer_knuckle" parent_joint="${prefix}finger_joint" mimic_joint="${prefix}right_outer_knuckle_joint" has_pid="true" multiplier="-1.0" max_effort="10.0" robot_namespace="${robot_namespace}"/>
-    <xacro:mimic_joint_plugin_gazebo name_prefix="${prefix}left_inner_knuckle"  parent_joint="${prefix}finger_joint" mimic_joint="${prefix}left_inner_knuckle_joint"  has_pid="true" multiplier="-1.0" max_effort="10.0" robot_namespace="${robot_namespace}"/>
-    <xacro:mimic_joint_plugin_gazebo name_prefix="${prefix}right_inner_knuckle" parent_joint="${prefix}finger_joint" mimic_joint="${prefix}right_inner_knuckle_joint" has_pid="true" multiplier="-1.0" max_effort="10.0" robot_namespace="${robot_namespace}"/>
-    <xacro:mimic_joint_plugin_gazebo name_prefix="${prefix}left_inner_finger"   parent_joint="${prefix}finger_joint" mimic_joint="${prefix}left_inner_finger_joint"   has_pid="true" multiplier="1"    max_effort="10.0" robot_namespace="${robot_namespace}"/>
-    <xacro:mimic_joint_plugin_gazebo name_prefix="${prefix}right_inner_finger"  parent_joint="${prefix}finger_joint" mimic_joint="${prefix}right_inner_finger_joint"  has_pid="true" multiplier="1"    max_effort="10.0" robot_namespace="${robot_namespace}"/>
   </xacro:macro>
 </robot>
