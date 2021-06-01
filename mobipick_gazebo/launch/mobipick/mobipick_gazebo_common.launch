@@ -96,10 +96,4 @@
     <remap from="scan" to="f_scan" />
     <remap from="scan_filtered" to="f_scan_rep117" />
   </node>
-
-  <!-- Astra gripper camera -->
-    <include file="$(find mobipick_bringup)/launch/includes/gripper_astra.launch.xml">
-      <arg name="tf_prefix"     value="$(arg tf_prefix)" />
-      <arg name="load_driver" value="false" />
-    </include>
 </launch>
