@@ -168,8 +168,6 @@
     </joint>
   </xacro:macro>
 
-  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f.xacro" />
-
   <!-- === 2x inner knuckle to inner finger joint ===================================================== -->
 
   <xacro:macro name="inner_knuckle_to_finger_joint" params="prefix fingerprefix">
@@ -187,6 +185,7 @@
   </xacro:macro>
 
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f.xacro" />
+
   <!-- === outer knuckle joint (first movable joint in series) ===================================================== -->
 
   <xacro:macro name="finger_joint" params="prefix">   <!-- = "left_outer_knuckle_joint" -->
