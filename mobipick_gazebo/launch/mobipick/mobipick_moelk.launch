@@ -14,7 +14,7 @@
     <arg name="robot_y"   value="3.00" />
     <arg name="robot_yaw" value="0.00" />
   </include>
-  
+
   <!-- spawn power drill -->
   <include file="$(find mobipick_gazebo)/launch/objects/powerdrill_with_grip.launch">
     <arg name="x"     default="12.3" />
@@ -25,12 +25,19 @@
     <arg name="yaw"   default="$(eval -pi  *2  / 3)" />
   </include>
 
+  <!-- spawn KLT -->
+  <include file="$(find mobipick_gazebo)/launch/objects/klt.launch">
+    <arg name="x"     default="12.55" />
+    <arg name="y"     default="3.86" />
+    <arg name="z"     default="0.80" />
+    <arg name="roll"  default="0.0" />
+    <arg name="pitch" default="0.0" />
+    <arg name="yaw"   default="1.96" />
+  </include>
 
   <!-- spawn table -->
-
   <param name="table_description"
     command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
   <node name="spawn_pick_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 12.3 -y 3.8"
     respawn="false" output="screen" />
-
 </launch>

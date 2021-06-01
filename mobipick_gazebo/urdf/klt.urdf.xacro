@@ -1,0 +1,31 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="klt_model">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="mass" value="0.575" />
+
+  <link name="klt">
+    <inertial>
+      <origin xyz="0.00012358 -0.00007882 -0.00089578" rpy="0 0 0" />
+      <mass value="${mass}" />
+      <inertia
+        ixx="${mass *  0.007472041582202446}"
+        ixy="${mass * -1.0940575783940914e-05}"
+        ixz="${mass *  4.89988236783716e-07}"
+        iyy="${mass *  0.014559482643509519}"
+        iyz="${mass * -3.143030520392239e-07}"
+        izz="${mass *  0.017079079407189855}" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mobipick_gazebo/meshes/klt3147.dae" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://mobipick_gazebo/meshes/klt3147.dae" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
