@@ -22,15 +22,11 @@
   <param name="$(arg robot_description)_semantic"
          command="xacro $(find mobipick_moveit_config)/config/mobipick.srdf.xacro tf_prefix:=$(arg tf_prefix)" />
 
-  <!-- Load updated joint limits (override information from URDF) -->
+  <!-- Load updated joint limits (override information from URDF), padding etc. -->
   <group ns="$(arg robot_description)_planning">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/joint_limits.yaml" subst_value="true" />
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/cartesian_limits.yaml"/>
     <param name="shape_transform_cache_lookup_wait_time" value="$(arg shape_transform_cache_lookup_wait_time)" />
-  </group>
-
-  <!-- Load padding; this is using the private node handle of move_group! :( -->
-  <group ns="move_group/$(arg prefix)$(arg robot_description)_planning">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/paddings.yaml" subst_value="true" />
   </group>
 
