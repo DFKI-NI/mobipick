@@ -11,9 +11,11 @@ from control_msgs.msg import (
     FollowJointTrajectoryAction,
     FollowJointTrajectoryGoal,
     FollowJointTrajectoryResult,
-    FollowJointTrajectoryFeedback)
+    FollowJointTrajectoryFeedback,
+)
 from trajectory_msgs.msg import JointTrajectory
 from std_msgs.msg import Int32
+
 
 class JointTrajectoryForwarder(object):
     # create messages that are used to publish feedback/result
@@ -23,16 +25,23 @@ class JointTrajectoryForwarder(object):
     def __init__(self, name):
         self._pub = rospy.Publisher('~trajectory', JointTrajectory, queue_size=1)
         action_name = name + '/follow_joint_trajectory'
-        self._as = actionlib.SimpleActionServer(action_name, FollowJointTrajectoryAction,
-                                                execute_cb=self.execute_cb, auto_start=False)
+        self._as = actionlib.SimpleActionServer(
+            action_name, FollowJointTrajectoryAction, execute_cb=self.execute_cb, auto_start=False
+        )
 
         if name == 'arm_controller':
             topic_name = 'arm'
         elif name == 'gripper_controller':
             topic_name = 'gripper'
-        self._sub_errorcode = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/error_code', Int32, self.callback_errorcode)
-        self._sub_status = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/status', Int32, self.callback_status)
-        self._sub_preempt_ext = rospy.Subscriber('/mobipick/'+ topic_name + '_joint_trajectory_interface/cancel_goal', Int32, self.callback_preempt_external)
+        self._sub_errorcode = rospy.Subscriber(
+            '/mobipick/' + topic_name + '_joint_trajectory_interface/error_code', Int32, self.callback_errorcode
+        )
+        self._sub_status = rospy.Subscriber(
+            '/mobipick/' + topic_name + '_joint_trajectory_interface/status', Int32, self.callback_status
+        )
+        self._sub_preempt_ext = rospy.Subscriber(
+            '/mobipick/' + topic_name + '_joint_trajectory_interface/cancel_goal', Int32, self.callback_preempt_external
+        )
 
         self.error_code = 1
         self.status = 0
@@ -59,7 +68,7 @@ class JointTrajectoryForwarder(object):
         rospy.loginfo('%s: Received explicit request for preempting the goal- %d', rospy.get_name(), data.data)
         if data.data == 1:
             rospy.loginfo('%s: Received explicit request for preempting the goal- %d', rospy.get_name(), data.data)
-            self._as.preempt_request = True   # TODO: `self._as.set_preempted()` would probably be better
+            self._as.preempt_request = True  # TODO: `self._as.set_preempted()` would probably be better
 
     def callback_errorcode(self, data):
         rospy.loginfo('%s: Received new error code- %d', rospy.get_name(), data.data)
@@ -98,16 +107,19 @@ class JointTrajectoryForwarder(object):
             # check that preempt has not been requested by the client
             if self._as.is_preempt_requested():
                 rospy.loginfo('%s: Preempted' % rospy.get_name())
-                self._pub_cancel.publish(1);
+                self._pub_cancel.publish(1)
                 self._as.set_preempted()
-                self._as.preempt_request = False   # TODO: not necessary with `self._as.set_preempted()` above
+                self._as.preempt_request = False  # TODO: not necessary with `self._as.set_preempted()` above
                 return  # return instead of break so that we don't call set_succeeded/set_aborted
 
             # check if the trajectory is finished
             if self.error_code <= 0:
-                rospy.loginfo('%s: Trajectory completed (planned duration: %f s, actual duration: %f s)',
-                              rospy.get_name(), goal.trajectory.points[-1].time_from_start.to_sec(),
-                              (rospy.Time.now() - traj_start_time).to_sec())
+                rospy.loginfo(
+                    '%s: Trajectory completed (planned duration: %f s, actual duration: %f s)',
+                    rospy.get_name(),
+                    goal.trajectory.points[-1].time_from_start.to_sec(),
+                    (rospy.Time.now() - traj_start_time).to_sec(),
+                )
                 break
 
             # publish the feedback
@@ -132,7 +144,7 @@ class JointTrajectoryForwarder(object):
 def main():
     rospy.init_node('joint_trajectory_forwarder')
     try:
-        controller_name = rospy.get_param('~controller_name')   # for example 'arm_controller' or 'gripper_controller'
+        controller_name = rospy.get_param('~controller_name')  # for example 'arm_controller' or 'gripper_controller'
     except KeyError:
         rospy.logfatal('Parameter ~controller_name was not set!')
         sys.exit(1)

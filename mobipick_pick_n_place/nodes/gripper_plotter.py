@@ -37,9 +37,12 @@ def cb(msg):
     @type msg: JointState
     """
     try:
-        trans = tf_buffer.lookup_transform('gripper_right_robotiq_fingertip_65mm',
-                                           'gripper_left_robotiq_fingertip_65mm', msg.header.stamp,
-                                           rospy.Duration(1))
+        trans = tf_buffer.lookup_transform(
+            'gripper_right_robotiq_fingertip_65mm',
+            'gripper_left_robotiq_fingertip_65mm',
+            msg.header.stamp,
+            rospy.Duration(1),
+        )
     except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
         raise
 

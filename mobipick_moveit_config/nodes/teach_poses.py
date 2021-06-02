@@ -13,6 +13,7 @@ from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from std_srvs.srv import Empty, EmptyResponse
 
+
 class PoseTeacher(object):
     def __init__(self):
         rospy.loginfo("initializing...")
@@ -35,7 +36,14 @@ class PoseTeacher(object):
         self.latestJointState = None
         self.jointStateLock = threading.Lock()
 
-        self.relevantJoints = ['shoulder_pan_joint', 'shoulder_lift_joint', 'elbow_joint', 'wrist_1_joint', 'wrist_2_joint', 'wrist_3_joint']
+        self.relevantJoints = [
+            'shoulder_pan_joint',
+            'shoulder_lift_joint',
+            'elbow_joint',
+            'wrist_1_joint',
+            'wrist_2_joint',
+            'wrist_3_joint',
+        ]
         self.jointPrefix = "mobipick/ur5_"
 
         self.jointListener = rospy.Subscriber("joint_states", JointState, self.setLatestJointState, queue_size=5)
@@ -52,14 +60,14 @@ class PoseTeacher(object):
 
     def openGripper(self, request):
         goal = control_msgs.msg.GripperCommandGoal()
-        goal.command.max_effort = 100.
+        goal.command.max_effort = 100.0
         goal.command.position = 0.1
         self.gripperClient.send_goal_and_wait(goal)
         return EmptyResponse()
 
     def closeGripper(self, request):
         goal = control_msgs.msg.GripperCommandGoal()
-        goal.command.max_effort = 50.
+        goal.command.max_effort = 50.0
         goal.command.position = 0.0
         self.gripperClient.send_goal_and_wait(goal)
         return EmptyResponse()
@@ -93,7 +101,6 @@ class PoseTeacher(object):
             # publish to drive the arm
             self.pubJointTrajectory.publish(msg)
             return "ok"
-
 
     def saveArmPose(self, request):
         with self.jointStateLock:

@@ -5,16 +5,22 @@ import rospy
 import actionlib
 
 import geometry_msgs.msg._WrenchStamped
-from mobipick_pick_n_place.msg import FtObserverAction, FtObserverActionFeedback, FtObserverActionGoal, FtObserverActionResult
+from mobipick_pick_n_place.msg import (
+    FtObserverAction,
+    FtObserverActionFeedback,
+    FtObserverActionGoal,
+    FtObserverActionResult,
+)
 from geometry_msgs.msg import WrenchStamped
 from robotiq_ft_sensor.srv import sensor_accessor, sensor_accessorRequest
+
 
 class ForceTorqueObserver(object):
     _feedback = FtObserverActionFeedback
     _result = FtObserverActionResult
     _wrench = WrenchStamped
     _actual_force = 0.0
-    _timer_is_running=False
+    _timer_is_running = False
 
     def __init__(self, name):
         rospy.wait_for_service('/mobipick/ft_sensor/sensor_acc')
@@ -22,7 +28,9 @@ class ForceTorqueObserver(object):
         rospy.Subscriber("/mobipick/ft_sensor/wrench", WrenchStamped, self.wrench_cb)
         rospy.loginfo("Subscribed to ft_sensor/wrench")
         self._action_name = name
-        self._as = actionlib.SimpleActionServer(self._action_name, FtObserverAction, execute_cb=self.execute_cb, auto_start = False)
+        self._as = actionlib.SimpleActionServer(
+            self._action_name, FtObserverAction, execute_cb=self.execute_cb, auto_start=False
+        )
         self._as.start()
 
     def execute_cb(self, goal):
@@ -31,14 +39,14 @@ class ForceTorqueObserver(object):
         try:
             sensor_acc = rospy.ServiceProxy('/mobipick/ft_sensor/sensor_acc', sensor_accessor)
             acc_srv = sensor_accessorRequest()
-            acc_srv.command_id=8
+            acc_srv.command_id = 8
             respond = sensor_acc(acc_srv)
             if respond.success:
                 rospy.loginfo("ft sensor set to zero")
                 wait_for_detection = True
                 rospy.sleep(1)
         except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+            print("Service call failed: %s" % e)
 
         # helper variables
         r = rospy.Rate(10)
@@ -47,9 +55,9 @@ class ForceTorqueObserver(object):
         # start executing the action
         while wait_for_detection and self._timer_is_running:
             if self._actual_force > goal.threshold:
-                success=True
+                success = True
                 wait_for_detection = False
-                self._feedback.actualForce=self._actual_force
+                self._feedback.actualForce = self._actual_force
             rospy.loginfo("actual force: %f" % self._actual_force)
 
             # check that preempt has not been requested by the client
@@ -57,9 +65,8 @@ class ForceTorqueObserver(object):
                 rospy.loginfo('%s: Preempted' % self._action_name)
                 self._as.set_preempted()
 
-
             # publish the feedback
-            #self._as.publish_feedback(self._feedback)
+            # self._as.publish_feedback(self._feedback)
             # this step is not necessary, the sequence is computed at 1 Hz for demonstration purposes
             r.sleep()
 
@@ -73,10 +80,10 @@ class ForceTorqueObserver(object):
 
     def wrench_cb(self, data):
         self._wrench = data.wrench
-        self._actual_force = - data.wrench.force.z
+        self._actual_force = -data.wrench.force.z
 
     def timer_cb(self, time):
-        self._timer_is_running=False
+        self._timer_is_running = False
 
 
 if __name__ == '__main__':

@@ -5,22 +5,30 @@ import rospy
 import actionlib
 
 import geometry_msgs.msg._WrenchStamped
-from mobipick_pick_n_place.msg import FtObserverAction, FtObserverActionFeedback, FtObserverActionGoal, FtObserverActionResult
+from mobipick_pick_n_place.msg import (
+    FtObserverAction,
+    FtObserverActionFeedback,
+    FtObserverActionGoal,
+    FtObserverActionResult,
+)
 from geometry_msgs.msg import WrenchStamped
 from robotiq_ft_sensor.srv import sensor_accessor, sensor_accessorRequest
 from std_srvs.srv import Empty
+
 
 class ForceTorqueObserver(object):
     _feedback = FtObserverActionFeedback
     _result = FtObserverActionResult
     _wrench = WrenchStamped
     _actual_force = 0.0
-    _timer_is_running=False
-    _user_interaction_simulated=False
+    _timer_is_running = False
+    _user_interaction_simulated = False
 
     def __init__(self, name):
         self._action_name = name
-        self._as = actionlib.SimpleActionServer(self._action_name, FtObserverAction, execute_cb=self.execute_cb, auto_start = False)
+        self._as = actionlib.SimpleActionServer(
+            self._action_name, FtObserverAction, execute_cb=self.execute_cb, auto_start=False
+        )
         self._as.start()
         self._srv = rospy.Service("simulate_user_interaction", Empty, self.interact_cb)
         rospy.loginfo("ft observer action server in simulation mode started")
@@ -39,7 +47,7 @@ class ForceTorqueObserver(object):
                 self._as.set_preempted()
 
             # publish the feedback
-            #self._as.publish_feedback(self._feedback)
+            # self._as.publish_feedback(self._feedback)
             # this step is not necessary, the sequence is computed at 1 Hz for demonstration purposes
             r.sleep()
         if self._user_interaction_simulated:
@@ -50,12 +58,12 @@ class ForceTorqueObserver(object):
             self._as.set_aborted()
 
     def timer_cb(self, time):
-        self._timer_is_running=False
+        self._timer_is_running = False
 
     def interact_cb(self, req):
         if not self._user_interaction_simulated and self._timer_is_running:
             self._user_interaction_simulated = True
-            self._timer_is_running=False
+            self._timer_is_running = False
             rospy.loginfo("User interaction simulated")
         return []
 

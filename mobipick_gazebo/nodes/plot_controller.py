@@ -5,7 +5,8 @@ from control_msgs.msg import (
     FollowJointTrajectoryGoal,
     FollowJointTrajectoryActionGoal,
     FollowJointTrajectoryResult,
-    JointTrajectoryControllerState)
+    JointTrajectoryControllerState,
+)
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from moveit_msgs.msg import PickupAction, PickupGoal
@@ -16,6 +17,7 @@ import sys
 import threading
 from trajectory_msgs.msg import JointTrajectory
 
+
 def add_goal(msg):
     trajectory_start_time = msg.goal.trajectory.header.stamp.to_sec()
     if trajectory_start_time == 0.0:
@@ -23,9 +25,11 @@ def add_goal(msg):
     with goals_lock:
         goals.append((trajectory_start_time, msg.goal))
 
+
 def add_controller_state(msg):
     with controller_states_lock:
         controller_states.append(msg)
+
 
 def update(foo):
     # Plot any new tractories
@@ -35,10 +39,10 @@ def update(foo):
         for (trajectory_start_time, goal) in goals:
             trajectory = goal.trajectory
             joint_index = trajectory.joint_names.index(g_joint_name)
-            planned_times.extend(np.array(
-                [point.time_from_start.to_sec() for point in trajectory.points]) + trajectory_start_time)
-            planned_positions.extend(np.array(
-                [point.positions[joint_index] for point in trajectory.points]))
+            planned_times.extend(
+                np.array([point.time_from_start.to_sec() for point in trajectory.points]) + trajectory_start_time
+            )
+            planned_positions.extend(np.array([point.positions[joint_index] for point in trajectory.points]))
     planned_positions_line.set_xdata(np.array(planned_times))
     planned_positions_line.set_ydata(np.array(planned_positions))
 
@@ -63,6 +67,7 @@ def update(foo):
     errors_line.set_ydata(np.array(errors))
     return planned_positions_line, desired_positions_line, actual_positions_line, errors_line
 
+
 base_topic = sys.argv[1]
 g_joint_name = sys.argv[2]
 
@@ -84,15 +89,9 @@ t_start = rospy.Time.now().to_sec()
 plt.xlim(t_start, t_start + 500.0)
 plt.ylim(-np.pi, np.pi)
 
-follow_trajectory_goal_sub = rospy.Subscriber(
-    goal_topic,
-    FollowJointTrajectoryActionGoal,
-    callback=add_goal)
+follow_trajectory_goal_sub = rospy.Subscriber(goal_topic, FollowJointTrajectoryActionGoal, callback=add_goal)
 
-controller_state_sub = rospy.Subscriber(
-    state_topic,
-    JointTrajectoryControllerState,
-    add_controller_state)
+controller_state_sub = rospy.Subscriber(state_topic, JointTrajectoryControllerState, add_controller_state)
 
 plt.xlabel('Time from start (s)')
 plt.ylabel('Position (radians)')

@@ -32,8 +32,12 @@ from math import pi
 
 import actionlib
 import rospy
-from control_msgs.msg import FollowJointTrajectoryAction, FollowJointTrajectoryGoal, FollowJointTrajectoryResult, \
-    JointTolerance
+from control_msgs.msg import (
+    FollowJointTrajectoryAction,
+    FollowJointTrajectoryGoal,
+    FollowJointTrajectoryResult,
+    JointTolerance,
+)
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectoryPoint
 
@@ -56,17 +60,16 @@ class Trajectory(object):
     def __init__(self, joint_names):
         self.joint_names = joint_names
         ns = 'arm_controller/'
-        self._client = actionlib.SimpleActionClient(
-            ns + "follow_joint_trajectory",
-            FollowJointTrajectoryAction,
-        )
+        self._client = actionlib.SimpleActionClient(ns + "follow_joint_trajectory", FollowJointTrajectoryAction)
         self._goal_time_tolerance = rospy.Time.from_seconds(10.0)
 
         server_up = self._client.wait_for_server(timeout=rospy.Duration.from_sec(10.0))
         if not server_up:
-            rospy.logerr("Timed out waiting for Joint Trajectory"
-                         " Action Server to connect. Start the action server"
-                         " before running example.")
+            rospy.logerr(
+                "Timed out waiting for Joint Trajectory"
+                " Action Server to connect. Start the action server"
+                " before running example."
+            )
             rospy.signal_shutdown("Timed out waiting for Action Server")
             sys.exit(1)
         self.clear()
@@ -112,8 +115,14 @@ def print_result(res):
     :type res: FollowJointTrajectoryResult
     :return:
     """
-    error_codes = ['SUCCESSFUL', 'INVALID_GOAL', 'INVALID_JOINTS', 'OLD_HEADER_TIMESTAMP', 'PATH_TOLERANCE_VIOLATED',
-                   'GOAL_TOLERANCE_VIOLATED']
+    error_codes = [
+        'SUCCESSFUL',
+        'INVALID_GOAL',
+        'INVALID_JOINTS',
+        'OLD_HEADER_TIMESTAMP',
+        'PATH_TOLERANCE_VIOLATED',
+        'GOAL_TOLERANCE_VIOLATED',
+    ]
 
     print('\n--- result --------------------------------------')
     print("error_code: %s (%d)" % (error_codes[-res.error_code], res.error_code))
@@ -138,9 +147,17 @@ def main():
 
     prefix = rospy.get_param("~prefix", "mobipick")
     prefix = prefix.rstrip('/') + '/'
-    joint_names = [prefix + j for j in
-                   ['ur5_shoulder_pan_joint', 'ur5_shoulder_lift_joint', 'ur5_elbow_joint', 'ur5_wrist_1_joint',
-                    'ur5_wrist_2_joint', 'ur5_wrist_3_joint']]
+    joint_names = [
+        prefix + j
+        for j in [
+            'ur5_shoulder_pan_joint',
+            'ur5_shoulder_lift_joint',
+            'ur5_elbow_joint',
+            'ur5_wrist_1_joint',
+            'ur5_wrist_2_joint',
+            'ur5_wrist_3_joint',
+        ]
+    ]
 
     traj = Trajectory(joint_names)
     rospy.on_shutdown(traj.stop)
