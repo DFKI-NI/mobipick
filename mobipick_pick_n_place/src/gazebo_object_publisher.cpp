@@ -12,7 +12,7 @@ std::shared_ptr<ros::Publisher> pose_power_drill_pub;
 std::shared_ptr<ros::Publisher> pose_table_pub;
 std::shared_ptr<ros::Publisher> marker_pub;
 
-void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
+void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
 {
   // input topic has 1000 Hz, output topic should have 10 Hz
   static size_t counter = 0;
@@ -67,7 +67,8 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
           pose_msg.header = det3d.header;
           pose_msg.pose = det3d.bbox.center;
           pose_table_pub->publish(pose_msg);
-        } else if (msg->name[i] == "cokecan_1::coke_can")
+        }
+        else if (msg->name[i] == "cokecan_1::coke_can")
         {
           // add coke_can
           vision_msgs::Detection3D det3d;
@@ -88,7 +89,8 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
           tf::poseEigenToMsg((mobipick_pose * object_pose), det3d.results[0].pose.pose);
           det3d.results[0].score = 1.0;
           detections.detections.push_back(det3d);
-        } else if (msg->name[i] == "powerdrill_1::powerdrill")
+        }
+        else if (msg->name[i] == "powerdrill_1::powerdrill")
         {
           // add powerdrill
           vision_msgs::Detection3D det3d;
@@ -119,7 +121,8 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
           pose_msg.header = det3d.header;
           pose_msg.pose = det3d.bbox.center;
           pose_power_drill_pub->publish(pose_msg);
-        } else if (msg->name[i] == "powerdrill_with_grip_1::powerdrill_with_grip")
+        }
+        else if (msg->name[i] == "powerdrill_with_grip_1::powerdrill_with_grip")
         {
           // add powerdrill
           vision_msgs::Detection3D det3d;
@@ -161,7 +164,7 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
   visualization_msgs::MarkerArray markers;
 
   int32_t id = 0;
-  for (auto det: detections.detections)
+  for (auto det : detections.detections)
   {
     std::string name = id_to_string(det.results.at(0).id);
 
@@ -262,14 +265,14 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr &msg)
   marker_pub->publish(markers);
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "gazebo_object_publisher");
   ros::NodeHandle nh;
   detection_pub =
       std::make_shared<ros::Publisher>(nh.advertise<vision_msgs::Detection3DArray>("dope/detected_objects", 10));
-  pose_power_drill_pub = std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>(
-      "/mobipick/dope/pose_power_drill_with_grip", 10));
+  pose_power_drill_pub = std::make_shared<ros::Publisher>(
+      nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_power_drill_with_grip", 10));
   pose_table_pub =
       std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_table", 10));
   marker_pub =

@@ -95,7 +95,7 @@ struct GrapsPoseDefine
 bool paused = true;
 bool failed = false;
 
-void openGripper(trajectory_msgs::JointTrajectory &posture)
+void openGripper(trajectory_msgs::JointTrajectory& posture)
 {
   posture.joint_names.resize(1);
   posture.joint_names[0] = "mobipick/gripper_finger_joint";
@@ -109,7 +109,7 @@ void openGripper(trajectory_msgs::JointTrajectory &posture)
   posture.points[0].time_from_start.fromSec(5.0);
 }
 
-void closedGripper(trajectory_msgs::JointTrajectory &posture, std::float_t gripper_width = 0.63)
+void closedGripper(trajectory_msgs::JointTrajectory& posture, std::float_t gripper_width = 0.63)
 {
   posture.joint_names.resize(1);
   posture.joint_names[0] = "mobipick/gripper_finger_joint";
@@ -124,7 +124,7 @@ void closedGripper(trajectory_msgs::JointTrajectory &posture, std::float_t gripp
   posture.points[0].time_from_start.fromSec(5.0);
 }
 
-moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterface &group)
+moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterface& group)
 {
   std::vector<moveit_msgs::Grasp> grasps;
 
@@ -169,7 +169,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     }
   */
 
-  for (auto &&grasp_pose : grasp_poses)
+  for (auto&& grasp_pose : grasp_poses)
   {
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
     // Eigen quaternion = wxyz, not xyzw
@@ -212,7 +212,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   return group.pick("power_drill", grasps);
 }
 
-moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterface &group)
+moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterface& group)
 {
   std::vector<moveit_msgs::PlaceLocation> loc;
 
@@ -263,7 +263,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   return error_code;
 }
 
-void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &group, double factor_pi = 0.3)
+void setOrientationContraints(moveit::planning_interface::MoveGroupInterface& group, double factor_pi = 0.3)
 {
   moveit_msgs::Constraints constr;
 
@@ -298,8 +298,8 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface &gr
   group.setPathConstraints(constr);
 }
 
-int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &planning_scene_interface,
-                        ros::NodeHandle &nh, moveit::planning_interface::MoveGroupInterface &group)
+int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& planning_scene_interface,
+                        ros::NodeHandle& nh, moveit::planning_interface::MoveGroupInterface& group)
 {
   // get objects from object detection
   bool found_power_drill = false;
@@ -321,7 +321,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
     bool found_table = false;
     bool found_roof = false;
     std::vector<moveit_msgs::CollisionObject> collision_objects;
-    for (auto &&det3d : detections->detections)
+    for (auto&& det3d : detections->detections)
     {
       if (det3d.results.empty())
       {
@@ -406,14 +406,14 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface &plan
 
   // detach all objects
   auto attached_objects = planning_scene_interface.getAttachedObjects();
-  for (auto &&object : attached_objects)
+  for (auto&& object : attached_objects)
   {
     group.detachObject(object.first);
   }
   return 1;
 }
 
-moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface &group, double dx = 0.0,
+moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface& group, double dx = 0.0,
                                                  double dy = 0.0, double dz = 0.0, double droll = 0.0,
                                                  double dpitch = 0.0, double dyaw = 0.0)
 {
@@ -445,7 +445,7 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
   return error_code;
 }
 
-moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface &group,
+moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface& group,
                                                            Eigen::Isometry3d cartesian_pose,
                                                            std::string base_frame = "mobipick/ur5_base_link",
                                                            std::string target_frame = "mobipick/gripper_tcp")
@@ -472,7 +472,7 @@ moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_inte
   return error_code;
 }
 
-bool pause_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+bool pause_service(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
   if (!paused)
   {
@@ -482,7 +482,7 @@ bool pause_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res
   return true;
 }
 
-bool continue_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+bool continue_service(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
   if (paused || failed)
   {
@@ -493,7 +493,7 @@ bool continue_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &
   return true;
 }
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "mobipick_pick_n_place");
   ros::AsyncSpinner spinner(1);
@@ -503,22 +503,25 @@ int main(int argc, char **argv)
   state task_state = ST_INIT;
   state paused_state = ST_INIT;
 
-
   geometry_msgs::Pose base_pick_pose;
   geometry_msgs::Pose base_handover_pose;
   geometry_msgs::Pose base_place_pose;
   geometry_msgs::Pose base_home_pose;
   std::string world_name;
   bool handover_planned;
-  
+
   // Load rosparams
   ros::NodeHandle rpnh(nh, "poses");
   std::size_t error = 0;
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_pick_pose", base_pick_pose);              // geometry_msgs::Pose base_pick_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_handover_pose", base_handover_pose);              // geometry_msgs::Pose base_handover_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_place_pose", base_place_pose);              // geometry_msgs::Pose base_place_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_home_pose", base_home_pose);              // geometry_msgs::Pose base_home_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "handover_planned", handover_planned);              // bool
+  error +=
+      !rosparam_shortcuts::get("poses", rpnh, "base_pick_pose", base_pick_pose);  // geometry_msgs::Pose base_pick_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_handover_pose",
+                                    base_handover_pose);  // geometry_msgs::Pose base_handover_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_place_pose",
+                                    base_place_pose);  // geometry_msgs::Pose base_place_pose
+  error +=
+      !rosparam_shortcuts::get("poses", rpnh, "base_home_pose", base_home_pose);  // geometry_msgs::Pose base_home_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "handover_planned", handover_planned);  // bool
   error += !rosparam_shortcuts::get("poses", rpnh, "world_name", world_name);              // string
   // add more parameters here to load if desired
   rosparam_shortcuts::shutdownIfError("poses", error);
@@ -579,7 +582,7 @@ int main(int argc, char **argv)
           ROS_INFO("Waiting for the gripper action server to come up");
         }
         ROS_INFO("Connected to gripper action server");
-        
+
         task_state = ST_ARM_TO_HOME_START;
         break;
       }
@@ -635,7 +638,6 @@ int main(int argc, char **argv)
         mb_goal.target_pose.header.frame_id = "map";
         mb_goal.target_pose.header.stamp = ros::Time::now();
 
-        
         /*
         if (world_name.compare("smart_factory") == 0)
         {
@@ -646,7 +648,7 @@ int main(int argc, char **argv)
           mb_goal.target_pose.pose.orientation.y = 0.00926916067662;
           mb_goal.target_pose.pose.orientation.z = -0.00176109502733;
           mb_goal.target_pose.pose.orientation.w = 0.999942333612;
-         
+
           ROS_INFO("Send base to Smart Factory's Pick pose and wait...");
         }
         else
@@ -658,10 +660,10 @@ int main(int argc, char **argv)
           mb_goal.target_pose.pose.orientation.y = 0.000;
           mb_goal.target_pose.pose.orientation.z = 1.000;
           mb_goal.target_pose.pose.orientation.w = 0.000;
-        
+
         }*/
-         mb_goal.target_pose.pose = base_pick_pose;
-          ROS_INFO("Send base to Pick pose and wait...");
+        mb_goal.target_pose.pose = base_pick_pose;
+        ROS_INFO("Send base to Pick pose and wait...");
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
@@ -830,10 +832,10 @@ int main(int argc, char **argv)
           mb_goal.target_pose.pose.orientation.y = 0.0;
           mb_goal.target_pose.pose.orientation.z = 0.914895905969;
           mb_goal.target_pose.pose.orientation.w = 0.403689832967;
-          
+
         }*/
-         mb_goal.target_pose.pose = base_handover_pose;
-         ROS_INFO("Send base to Hand Over pose and wait...");
+        mb_goal.target_pose.pose = base_handover_pose;
+        ROS_INFO("Send base to Hand Over pose and wait...");
         move_base_ac.sendGoal(mb_goal);
 
         move_base_ac.waitForResult();
@@ -903,7 +905,7 @@ int main(int argc, char **argv)
             // detach all objects
             auto attached_objects = planning_scene_interface.getAttachedObjects();
             std::vector<std::string> objects_to_remove;
-            for (auto &&object : attached_objects)
+            for (auto&& object : attached_objects)
             {
               ROS_INFO_STREAM("Detach object " << object.first);
               group.detachObject(object.first);
@@ -953,8 +955,8 @@ int main(int argc, char **argv)
           mb_goal.target_pose.pose.orientation.x = 0.0;
           mb_goal.target_pose.pose.orientation.y = 0.0;
           mb_goal.target_pose.pose.orientation.z = 0.0;
-          mb_goal.target_pose.pose.orientation.w = 1; 
-          
+          mb_goal.target_pose.pose.orientation.w = 1;
+
           ROS_INFO("Send base to Moelks place pose and wait...");
         }
         */

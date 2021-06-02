@@ -60,244 +60,270 @@
 
 namespace mobipick
 {
+bool paused = true;
+bool failed = false;
+bool pause_active = false;
 
-  bool paused = true;
-  bool failed = false;
-  bool pause_active = false;
-
-  bool pause_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+bool pause_service(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
+{
+  if (!paused)
   {
-    if (!paused)
+    ROS_INFO_STREAM("Pause behavior tree after current task is completed");
+    paused = true;
+  }
+  return true;
+}
+
+bool continue_service(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
+{
+  if (paused || failed)
+  {
+    paused = false;
+    failed = false;
+    ROS_INFO_STREAM("Continue behavior tree");
+  }
+  return true;
+}
+
+std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> move_base_ac_ptr;
+std::unique_ptr<actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction>> ft_observer_ac_ptr;
+std::unique_ptr<actionlib::SimpleActionClient<mobipick_pick_n_place::MoveItMacroAction>> moveit_macros_ac_ptr;
+
+class ROSTaskNode : public BehaviorTree::TaskNode
+{
+public:
+  virtual void preprocess()
+  {
+    ROS_INFO_STREAM("TASK " << get_task_name());
+  }
+};
+
+class InitTask : public ROSTaskNode
+{
+public:
+  virtual std::string get_task_name() override
+  {
+    return "Init";
+  }
+  virtual bool main() override
+  {
+    // wait for the move base action server to come up
+    while (!move_base_ac_ptr->waitForServer(ros::Duration(5.0)))
     {
-      ROS_INFO_STREAM("Pause behavior tree after current task is completed");
-      paused = true;
+      ROS_INFO("Waiting for the move_base action server to come up");
     }
+    ROS_INFO("Connected to mb action server");
+
+    // wait for the ft observer action server to come up
+    while (!ft_observer_ac_ptr->waitForServer(ros::Duration(5.0)))
+    {
+      ROS_INFO("Waiting for the ft_observer action server to come up");
+    }
+    ROS_INFO("Connected to ft observer action server");
+
+    // wait for the moveit macros action server to come up
+    while (!moveit_macros_ac_ptr->waitForServer(ros::Duration(5.0)))
+    {
+      ROS_INFO("Waiting for moveit_macros action server to come up");
+    }
+    ROS_INFO("Connected to moveit macros action server");
     return true;
   }
+};
 
-  bool continue_service(std_srvs::Empty::Request &req, std_srvs::Empty::Response &res)
+bool hasAttachedObjects()
+{
+  mobipick_pick_n_place::MoveItMacroGoal goal;
+  goal.type = "function";
+  goal.name = "HasAttachedObjects";
+  moveit_macros_ac_ptr->sendGoal(goal);
+  moveit_macros_ac_ptr->waitForResult();
+  return moveit_macros_ac_ptr->getResult()->result;
+}
+
+class HasAttachedObjectsTask : public ROSTaskNode
+{
+private:
+  const bool check;
+
+public:
+  HasAttachedObjectsTask(const bool& check) : check(check)
   {
-    if (paused || failed)
-    {
-      paused = false;
-      failed = false;
-      ROS_INFO_STREAM("Continue behavior tree");
-    }
-    return true;
   }
-
-  std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> move_base_ac_ptr;
-  std::unique_ptr<actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction>> ft_observer_ac_ptr;
-  std::unique_ptr<actionlib::SimpleActionClient<mobipick_pick_n_place::MoveItMacroAction>> moveit_macros_ac_ptr;
-
-  class ROSTaskNode : public BehaviorTree::TaskNode
+  virtual std::string get_task_name() override
   {
-  public:
-    virtual void preprocess()
-    {
-      ROS_INFO_STREAM("TASK " << get_task_name());
-    }
-  };
-
-  class InitTask : public ROSTaskNode
+    return "HasAttachedObjects(check if " + std::string(check ? "true" : "false") +
+           ")";  // Note: std::string is required for +.
+  }
+  virtual bool main() override
   {
-  public:
-    virtual std::string get_task_name() override { return "Init"; }
-    virtual bool main() override
+    return hasAttachedObjects() == check;
+  }
+};
+
+class MoveArmForDriveTask : public ROSTaskNode
+{
+public:
+  virtual std::string get_task_name() override
+  {
+    return "MoveArmForDrive";
+  }
+  virtual bool main() override
+  {
+    const std::string target_name = (hasAttachedObjects() ? "transport" : "home");
+    const std::string TARGET_NAME = boost::to_upper_copy<std::string>(target_name);
+
+    mobipick_pick_n_place::MoveItMacroGoal goal;
+    goal.type = "target";
+    goal.name = target_name;
+    moveit_macros_ac_ptr->sendGoal(goal);
+    moveit_macros_ac_ptr->waitForResult();
+    failed = !moveit_macros_ac_ptr->getResult()->result;
+    return !failed;
+  }
+};
+
+class MoveBaseTask : public ROSTaskNode
+{
+private:
+  const std::string target_name;
+  const std::string TARGET_NAME;
+  const geometry_msgs::Pose goal_pose;
+
+public:
+  MoveBaseTask(const std::string& target_name, const geometry_msgs::Pose& pose)
+    : target_name(target_name), TARGET_NAME(boost::to_upper_copy<std::string>(target_name)), goal_pose(pose)
+  {
+  }
+  virtual std::string get_task_name() override
+  {
+    return "MoveBase(" + target_name + ")";
+  }
+  virtual bool main() override
+  {
+    /* ******************* MOVE TO TABLE ****************************** */
+
+    move_base_msgs::MoveBaseGoal mb_goal;
+    mb_goal.target_pose.header.frame_id = "map";
+    mb_goal.target_pose.header.stamp = ros::Time::now();
+
+    mb_goal.target_pose.pose = goal_pose;
+    ROS_INFO_STREAM("Send base to " << target_name << " pose and wait...");
+    move_base_ac_ptr->sendGoal(mb_goal);
+
+    move_base_ac_ptr->waitForResult();
+
+    if (move_base_ac_ptr->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
     {
-      // wait for the move base action server to come up
-      while (!move_base_ac_ptr->waitForServer(ros::Duration(5.0)))
-      {
-        ROS_INFO("Waiting for the move_base action server to come up");
-      }
-      ROS_INFO("Connected to mb action server");
-
-      // wait for the ft observer action server to come up
-      while (!ft_observer_ac_ptr->waitForServer(ros::Duration(5.0)))
-      {
-        ROS_INFO("Waiting for the ft_observer action server to come up");
-      }
-      ROS_INFO("Connected to ft observer action server");
-
-      // wait for the moveit macros action server to come up
-      while (!moveit_macros_ac_ptr->waitForServer(ros::Duration(5.0)))
-      {
-        ROS_INFO("Waiting for moveit_macros action server to come up");
-      }
-      ROS_INFO("Connected to moveit macros action server");
-      return true;
+      ROS_INFO_STREAM("Moving base to " << target_name << " pose SUCCESSFUL");
     }
-  };
+    else
+    {
+      ROS_INFO_STREAM("Moving base to " << target_name << " pose FAILED");
+      failed = true;
+    }
+    return !failed;
+  }
+};
 
-  bool hasAttachedObjects()
+class DriveToNode : public BehaviorTree::Sequence
+{
+private:
+  static MoveArmForDriveTask move_arm_for_drive_task;
+
+public:
+  DriveToNode(const std::string& target_name, const geometry_msgs::Pose& pose)
+    : BehaviorTree::Sequence("DriveTo(" + target_name + ")",
+                             { &move_arm_for_drive_task, new MoveBaseTask(target_name, pose) })
+  {
+  }
+};
+
+MoveArmForDriveTask DriveToNode::move_arm_for_drive_task;
+
+class MoveItTask : public ROSTaskNode
+{
+private:
+  const std::string name;
+
+public:
+  MoveItTask(const std::string& name) : name(name)
+  {
+  }
+  virtual std::string get_task_name() override
+  {
+    return name;
+  }
+  virtual bool main() override
   {
     mobipick_pick_n_place::MoveItMacroGoal goal;
     goal.type = "function";
-    goal.name = "HasAttachedObjects";
+    goal.name = name;
     moveit_macros_ac_ptr->sendGoal(goal);
     moveit_macros_ac_ptr->waitForResult();
-    return moveit_macros_ac_ptr->getResult()->result;
+    failed = !moveit_macros_ac_ptr->getResult()->result;
+    return !failed;
   }
+};
 
-  class HasAttachedObjectsTask : public ROSTaskNode
+class UserInteractionTask : public ROSTaskNode
+{
+public:
+  virtual std::string get_task_name() override
   {
-  private:
-    const bool check;
-
-  public:
-    HasAttachedObjectsTask(const bool &check) : check(check) {}
-    virtual std::string get_task_name() override
-    {
-      return "HasAttachedObjects(check if " + std::string(check ? "true" : "false") + ")"; // Note: std::string is required for +.
-    }
-    virtual bool main() override
-    {
-      return hasAttachedObjects() == check;
-    }
-  };
-
-  class MoveArmForDriveTask : public ROSTaskNode
+    return "UserInteraction";
+  }
+  virtual bool main() override
   {
-  public:
-    virtual std::string get_task_name() override { return "MoveArmForDrive"; }
-    virtual bool main() override
+    /* ********************* WAIT FOR USER ********************* */
+    mobipick_pick_n_place::FtObserverGoal ft_goal;
+
+    ft_goal.threshold = 5.0;
+    ft_goal.timeout = 30.0;
+
+    ft_observer_ac_ptr->sendGoal(ft_goal);
+
+    ft_observer_ac_ptr->waitForResult();
+
+    if (ft_observer_ac_ptr->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
     {
-      const std::string target_name = (hasAttachedObjects() ? "transport" : "home");
-      const std::string TARGET_NAME = boost::to_upper_copy<std::string>(target_name);
-
-      mobipick_pick_n_place::MoveItMacroGoal goal;
-      goal.type = "target";
-      goal.name = target_name;
-      moveit_macros_ac_ptr->sendGoal(goal);
-      moveit_macros_ac_ptr->waitForResult();
-      failed = !moveit_macros_ac_ptr->getResult()->result;
-      return !failed;
-    }
-  };
-
-  class MoveBaseTask : public ROSTaskNode
-  {
-  private:
-    const std::string target_name;
-    const std::string TARGET_NAME;
-    const geometry_msgs::Pose goal_pose;
-
-  public:
-    MoveBaseTask(const std::string &target_name, const geometry_msgs::Pose &pose) : target_name(target_name),
-                                                                                    TARGET_NAME(boost::to_upper_copy<std::string>(target_name)), goal_pose(pose) {}
-    virtual std::string get_task_name() override { return "MoveBase(" + target_name + ")"; }
-    virtual bool main() override
-    {
-      /* ******************* MOVE TO TABLE ****************************** */
-
-      move_base_msgs::MoveBaseGoal mb_goal;
-      mb_goal.target_pose.header.frame_id = "map";
-      mb_goal.target_pose.header.stamp = ros::Time::now();
-
-      mb_goal.target_pose.pose = goal_pose;
-      ROS_INFO_STREAM("Send base to " << target_name << " pose and wait...");
-      move_base_ac_ptr->sendGoal(mb_goal);
-
-      move_base_ac_ptr->waitForResult();
-
-      if (move_base_ac_ptr->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-      {
-        ROS_INFO_STREAM("Moving base to " << target_name << " pose SUCCESSFUL");
-      }
-      else
-      {
-        ROS_INFO_STREAM("Moving base to " << target_name << " pose FAILED");
-        failed = true;
-      }
-      return !failed;
-    }
-  };
-
-  class DriveToNode : public BehaviorTree::Sequence
-  {
-  private:
-    static MoveArmForDriveTask move_arm_for_drive_task;
-
-  public:
-    DriveToNode(const std::string &target_name, const geometry_msgs::Pose &pose)
-        : BehaviorTree::Sequence("DriveTo(" + target_name + ")", {&move_arm_for_drive_task,
-                                                                  new MoveBaseTask(target_name, pose)}) {}
-  };
-
-  MoveArmForDriveTask DriveToNode::move_arm_for_drive_task;
-
-  class MoveItTask : public ROSTaskNode
-  {
-  private:
-    const std::string name;
-
-  public:
-    MoveItTask(const std::string &name) : name(name) {}
-    virtual std::string get_task_name() override { return name; }
-    virtual bool main() override
-    {
+      ROS_INFO("Detection user interaction SUCCESSFUL");
       mobipick_pick_n_place::MoveItMacroGoal goal;
       goal.type = "function";
-      goal.name = name;
+      goal.name = "ReleaseGripper";
       moveit_macros_ac_ptr->sendGoal(goal);
       moveit_macros_ac_ptr->waitForResult();
       failed = !moveit_macros_ac_ptr->getResult()->result;
-      return !failed;
     }
-  };
-
-  class UserInteractionTask : public ROSTaskNode
-  {
-  public:
-    virtual std::string get_task_name() override { return "UserInteraction"; }
-    virtual bool main() override
+    else
     {
-      /* ********************* WAIT FOR USER ********************* */
-      mobipick_pick_n_place::FtObserverGoal ft_goal;
-
-      ft_goal.threshold = 5.0;
-      ft_goal.timeout = 30.0;
-
-      ft_observer_ac_ptr->sendGoal(ft_goal);
-
-      ft_observer_ac_ptr->waitForResult();
-
-      if (ft_observer_ac_ptr->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-      {
-        ROS_INFO("Detection user interaction SUCCESSFUL");
-        mobipick_pick_n_place::MoveItMacroGoal goal;
-        goal.type = "function";
-        goal.name = "ReleaseGripper";
-        moveit_macros_ac_ptr->sendGoal(goal);
-        moveit_macros_ac_ptr->waitForResult();
-        failed = !moveit_macros_ac_ptr->getResult()->result;
-      }
-      else
-      {
-        // Note: Task still counts as success, so the behavior tree continues. However, trigger a pause.
-        ROS_INFO("Detection user interaction FAILED, start placing Object");
-        paused = true;
-        failed = false;
-      }
-      return !failed;
+      // Note: Task still counts as success, so the behavior tree continues. However, trigger a pause.
+      ROS_INFO("Detection user interaction FAILED, start placing Object");
+      paused = true;
+      failed = false;
     }
-  };
+    return !failed;
+  }
+};
 
-  class DoneTask : public ROSTaskNode
+class DoneTask : public ROSTaskNode
+{
+public:
+  virtual std::string get_task_name() override
   {
-  public:
-    virtual std::string get_task_name() override { return "Done"; }
-    virtual bool main() override
-    {
-      return true;
-    }
-  };
+    return "Done";
+  }
+  virtual bool main() override
+  {
+    return true;
+  }
+};
 
-}
+}  // namespace mobipick
 
 using namespace mobipick;
 
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "mobipick_pick_n_place");
   ros::AsyncSpinner spinner(1);
@@ -314,38 +340,41 @@ int main(int argc, char **argv)
   // Load rosparams
   ros::NodeHandle rpnh(nh, "poses");
   std::size_t error = 0;
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_pick_pose", base_pick_pose);         // geometry_msgs::Pose base_pick_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_handover_pose", base_handover_pose); // geometry_msgs::Pose base_handover_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_place_pose", base_place_pose);       // geometry_msgs::Pose base_place_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_home_pose", base_home_pose);         // geometry_msgs::Pose base_home_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "world_name", world_name);                 // string
+  error +=
+      !rosparam_shortcuts::get("poses", rpnh, "base_pick_pose", base_pick_pose);  // geometry_msgs::Pose base_pick_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_handover_pose",
+                                    base_handover_pose);  // geometry_msgs::Pose base_handover_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "base_place_pose",
+                                    base_place_pose);  // geometry_msgs::Pose base_place_pose
+  error +=
+      !rosparam_shortcuts::get("poses", rpnh, "base_home_pose", base_home_pose);  // geometry_msgs::Pose base_home_pose
+  error += !rosparam_shortcuts::get("poses", rpnh, "world_name", world_name);     // string
   // add more parameters here to load if desired
   rosparam_shortcuts::shutdownIfError("poses", error);
 
   ROS_INFO_STREAM("Current world name: " << world_name);
 
   // The Get Tool Task lets mobipick fetch the tool from the table if it is not holding any objects already.
-  BehaviorTree::Selector get_tool_task("GetTool", {new HasAttachedObjectsTask(true),
-                                                   new BehaviorTree::Sequence("FetchTool", {new DriveToNode("pick", base_pick_pose),
-                                                                                            new MoveItTask("CaptureObject"),
-                                                                                            new MoveItTask("PickUpObject")})});
+  BehaviorTree::Selector get_tool_task(
+      "GetTool",
+      { new HasAttachedObjectsTask(true),
+        new BehaviorTree::Sequence("FetchTool", { new DriveToNode("pick", base_pick_pose),
+                                                  new MoveItTask("CaptureObject"), new MoveItTask("PickUpObject") }) });
 
   // The Clear Gripper Task lets mobipick place any object it is holding onto the table.
-  BehaviorTree::Selector clear_gripper_task("ClearGripper", {new HasAttachedObjectsTask(false),
-                                                             new BehaviorTree::Sequence("StashTool", {new DriveToNode("place", base_place_pose),
-                                                                                                      new MoveItTask("PlaceObject")})});
+  BehaviorTree::Selector clear_gripper_task(
+      "ClearGripper", { new HasAttachedObjectsTask(false),
+                        new BehaviorTree::Sequence("StashTool", { new DriveToNode("place", base_place_pose),
+                                                                  new MoveItTask("PlaceObject") }) });
 
   // The PickNPlace Behavior Tree lets mobipick fetch the tool, offer it to a person, stow it away if needed,
   //   and finally drive back home.
-  BehaviorTree behavior_tree(new BehaviorTree::Sequence("PickNPlace", {new InitTask(),
-                                                                       &get_tool_task,
-                                                                       new DriveToNode("handover", base_handover_pose),
-                                                                       new MoveItTask("MoveArmToHandover"),
-                                                                       new UserInteractionTask(),
-                                                                       &clear_gripper_task,
-                                                                       new DriveToNode("home", base_home_pose),
-                                                                       new DoneTask()}),
-                             &paused);
+  BehaviorTree behavior_tree(
+      new BehaviorTree::Sequence("PickNPlace",
+                                 { new InitTask(), &get_tool_task, new DriveToNode("handover", base_handover_pose),
+                                   new MoveItTask("MoveArmToHandover"), new UserInteractionTask(), &clear_gripper_task,
+                                   new DriveToNode("home", base_home_pose), new DoneTask() }),
+      &paused);
 
   // pause service
   ros::ServiceServer pause_state = nh.advertiseService("pause_behavior_tree", pause_service);
@@ -356,9 +385,11 @@ int main(int argc, char **argv)
   // MOVE BASE
   move_base_ac_ptr = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>("move_base", true);
   // FT Observer
-  ft_observer_ac_ptr = std::make_unique<actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction>>("ft_observer", true);
+  ft_observer_ac_ptr =
+      std::make_unique<actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction>>("ft_observer", true);
   // MOVE IT MACROS
-  moveit_macros_ac_ptr = std::make_unique<actionlib::SimpleActionClient<mobipick_pick_n_place::MoveItMacroAction>>("moveit_macros", true);
+  moveit_macros_ac_ptr =
+      std::make_unique<actionlib::SimpleActionClient<mobipick_pick_n_place::MoveItMacroAction>>("moveit_macros", true);
 
   while (ros::ok())
   {

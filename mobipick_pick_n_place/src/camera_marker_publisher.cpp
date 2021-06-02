@@ -9,7 +9,7 @@ static const double RANGE_MIN = 0.35;
 static const double RANGE_MAX = 1.0;
 static const std::string CAMERA_FRAME = "gripper_astra_depth_frame";
 
-static tf::Vector3 sphericalToCartesian(const double &range, const double &elevation, const double &azimuth)
+static tf::Vector3 sphericalToCartesian(const double& range, const double& elevation, const double& azimuth)
 {
   using namespace std;
 
@@ -19,8 +19,7 @@ static tf::Vector3 sphericalToCartesian(const double &range, const double &eleva
   return range_adjusted * tf::Vector3(cos(elevation) * cos(azimuth), cos(elevation) * sin(azimuth), sin(elevation));
 }
 
-
-int main(int argc, char **argv)
+int main(int argc, char** argv)
 {
   ros::init(argc, argv, "camera_marker_publisher");
   ros::NodeHandle nh;
@@ -37,7 +36,6 @@ int main(int argc, char **argv)
   marker.frame_locked = 1;
   double lr = HFOV / 2.0;
   double td = VFOV / 2.0;
-
 
   /* ********************** white frustum ********************** */
   marker.color.r = 1.0;

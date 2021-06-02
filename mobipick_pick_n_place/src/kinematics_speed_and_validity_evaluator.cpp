@@ -50,10 +50,10 @@ double angle_diff(double x, double y)
 double angle_diffs(std::vector<double> xs, std::vector<double> ys)
 {
   double result = 0.0;
-  assert (xs.size() == ys.size());
+  assert(xs.size() == ys.size());
   for (size_t i = 0; i < xs.size(); ++i)
   {
-    result += fabs(angle_diff(xs[i], ys[i])) / (double) xs.size();
+    result += fabs(angle_diff(xs[i], ys[i])) / (double)xs.size();
   }
   return result;
 }
@@ -61,10 +61,10 @@ double angle_diffs(std::vector<double> xs, std::vector<double> ys)
 double unnormalized_angle_diffs(std::vector<double> xs, std::vector<double> ys)
 {
   double result = 0.0;
-  assert (xs.size() == ys.size());
+  assert(xs.size() == ys.size());
   for (size_t i = 0; i < xs.size(); ++i)
   {
-    result += fabs(xs[i] - ys[i]) / (double) xs.size();
+    result += fabs(xs[i] - ys[i]) / (double)xs.size();
   }
   return result;
 }
