@@ -47,4 +47,3 @@ The UR5 is not started yet. Press "POWER ON" on the teach in pendant.
 > ```
 
 After running `mobipick_bringup.launch` the `move_group` tries to connect to the controllers run in `mobipick_bringup_control.launch`, and times out after a while. Run  `mobipick_bringup.launch` again.
-

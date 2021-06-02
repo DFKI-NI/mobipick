@@ -1,10 +1,10 @@
 <robot  xmlns:xacro="http://ros.org/wiki/xacro" name="smart_factory">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
-  
+
   <xacro:property name="mass" value="500" />
   <link name="smart_factory_link">
     <inertial>
-      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />      
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       <mass value="10000" />
       <inertia
         ixx="${mass * 0.003988511412844956}"

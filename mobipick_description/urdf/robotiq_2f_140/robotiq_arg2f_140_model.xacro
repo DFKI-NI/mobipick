@@ -8,7 +8,7 @@
     <parent link="base_link" />
     <child link="robotiq_arg2f_base_link" />
     <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint> 
- 
+  </joint>
+
   <xacro:robotiq_arg2f_140 prefix=""/>
 </robot>

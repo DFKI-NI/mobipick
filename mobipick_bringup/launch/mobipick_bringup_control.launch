@@ -4,7 +4,7 @@
     the UR5-pc.
 -->
 <launch>
-    <!-- launch the driver for the UR5. 
+    <!-- launch the driver for the UR5.
          This is mostly copied from ur_modern_driver/launch/ur5_ros_control.launch,
          but adjusted for our mobipick:
          Nodes that are already started on the sensor pc (e.g. robot_state_publisher)
@@ -57,7 +57,7 @@
           <remap from="input" to="gripper_hw/input" />
           <remap from="joint_states" to="gripper_joint_states" />
         </node>
-        
+
         <!-- activate the gripper -->
         <node name="gripper_initialization" pkg="mobipick_bringup" type="initialize_gripper.sh" />
     </group>

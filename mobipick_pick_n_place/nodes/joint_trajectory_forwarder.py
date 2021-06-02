@@ -55,7 +55,7 @@ class JointTrajectoryForwarder(object):
         else:
             rospy.loginfo('%s: Error code: %d', rospy.get_name(), self.status)
 
-    def callback_preempt_external(self, data):      
+    def callback_preempt_external(self, data):
         rospy.loginfo('%s: Received explicit request for preempting the goal- %d', rospy.get_name(), data.data)
         if data.data == 1:
             rospy.loginfo('%s: Received explicit request for preempting the goal- %d', rospy.get_name(), data.data)

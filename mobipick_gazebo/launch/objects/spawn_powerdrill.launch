@@ -28,4 +28,3 @@
     -reference_frame '$(arg reference_frame)'
     -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />
 </launch>
-

@@ -14,7 +14,7 @@
     <arg name="robot_yaw" value="1.57" />
     <arg name="start_paused" value="$(arg start_paused)" />
   </include>
-  
+
   <!-- spawn power drill -->
   <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
     <arg name="x"     default="9.85" />

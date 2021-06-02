@@ -1,4 +1,4 @@
-<?xml version="1.0" ?> 
+<?xml version="1.0" ?>
 <sdf version="1.5">
   <world name="rh5_mrk_lab_world">
     <!-- A global light source -->

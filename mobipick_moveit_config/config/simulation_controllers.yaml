@@ -12,10 +12,9 @@ controller_list:
       - $(arg prefix)ur5_wrist_2_joint
       - $(arg prefix)ur5_wrist_3_joint
 
-  - name: "gripper_hw" 
-    action_ns: "" 
+  - name: "gripper_hw"
+    action_ns: ""
     type: GripperCommand
     default: true
     joints:
       - $(arg prefix)gripper_finger_joint
-

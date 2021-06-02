@@ -29,9 +29,9 @@ joint_limits:
     # roughly [-222.4, ..., 42.4] for the shoulder_lift_joint. It's important
     # to restrict the joint angles to less than the full 720 degrees, otherwise
     # the planning space is discontinuous (also see comment for elbow_joint).
-    # 
+    #
     # Reasons for position limits:
-    # * shoulder_lift.min_position=-pi and elbow_joint.min_position=0: 
+    # * shoulder_lift.min_position=-pi and elbow_joint.min_position=0:
     #   The combination of these two limits ensures that there are no IK solutions
     #   which require full arm reconfigurations during picking from table height.
     #   These IK solutions would lead to undesirable "overhead" trajectories and also

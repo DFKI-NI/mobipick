@@ -3,7 +3,7 @@
          It launches mobipick_bringup.launch locally,
          and         mobipick_bringup_control.launch on mobipick-os-control. -->
 
-    
+
     <!-- arguments are simply passed down to the other include files -->
     <!-- Note: Not all arguments have been added here. For more see the included files -->
     <arg name="namespace" default="mobipick" /> <!-- node namespace -->
@@ -23,7 +23,7 @@
     </group>
 
     <!-- from now on: everything remotely -->
-    <machine name="control" address="mobipick-os-control" user="robot" default="true" 
+    <machine name="control" address="mobipick-os-control" user="robot" default="true"
       env-loader="/home/robot/ros/devel/env.sh" />
 
     <!-- remotely (mobipick-os-control) -->

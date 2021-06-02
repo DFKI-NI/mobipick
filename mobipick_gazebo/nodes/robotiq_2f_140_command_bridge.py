@@ -46,7 +46,7 @@ class GripperBridgeAction(object):
         jt.joint_names.append('mobipick/gripper_finger_joint')
         self._actual_goal.trajectory = jt
 
-      
+
     def execute_cb(self, goal):
         # helper variables
         rospy.loginfo("Recieved gripper command with position=%.3f and effort=%.3f" % (goal.command.position, goal.command.max_effort))
@@ -78,12 +78,12 @@ class GripperBridgeAction(object):
         if success:
             self._result.reached_goal=True
             rospy.loginfo('%s: Succeeded' % self._action_name)
-            
+
         else:
             self._result.reached_goal=False
             rospy.loginfo('%s: Failed with error code %d' % (self._action_name, result.error_code))
         self._as.set_succeeded(self._result)
-        
+
 if __name__ == '__main__':
     rospy.init_node('gripper_command_bridge')
     server = GripperBridgeAction(rospy.get_name())

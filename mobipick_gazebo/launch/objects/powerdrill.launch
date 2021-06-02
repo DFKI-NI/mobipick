@@ -23,4 +23,3 @@
       -x $(arg x) -y $(arg y) -z $(arg z)" respawn="false" output="screen" />
   </group>
 </launch>
-

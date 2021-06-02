@@ -56,7 +56,7 @@ class PoseTeacher(object):
         goal.command.position = 0.1
         self.gripperClient.send_goal_and_wait(goal)
         return EmptyResponse()
-        
+
     def closeGripper(self, request):
         goal = control_msgs.msg.GripperCommandGoal()
         goal.command.max_effort = 50.
@@ -108,7 +108,7 @@ class PoseTeacher(object):
                 print("Could not open %s to read poses" % self.filename)
                 print(err)
                 poses = {}
-            
+
             joints = {}
             if request.name in poses:
                 joints = poses[request.name]

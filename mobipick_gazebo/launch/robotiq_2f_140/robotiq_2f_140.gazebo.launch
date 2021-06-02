@@ -23,7 +23,7 @@
   <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" subst_value="true" />
 
   <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/spawn_robotiq_2f_140.launch">
-        <arg name="namespace" value="$(arg gripper_ns)" /> 
+        <arg name="namespace" value="$(arg gripper_ns)" />
    </include>
 
   <!-- load the controllers -->

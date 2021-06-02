@@ -19,7 +19,7 @@
   </include>
 
   <!-- The semantic description that corresponds to the URDF -->
-  <param name="$(arg robot_description)_semantic" 
+  <param name="$(arg robot_description)_semantic"
          command="xacro $(find mobipick_moveit_config)/config/mobipick.srdf.xacro tf_prefix:=$(arg tf_prefix)" />
 
   <!-- Load updated joint limits (override information from URDF) -->

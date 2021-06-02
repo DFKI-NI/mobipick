@@ -5,7 +5,7 @@
 
   <arg name="pipeline" default="ompl" />
 
-  <!-- A prefix for link and joint names in the robot --> 
+  <!-- A prefix for link and joint names in the robot -->
   <arg name="prefix" default="" />
 
   <include file="$(find mobipick_moveit_config)/launch/$(arg pipeline)_planning_pipeline.launch.xml">

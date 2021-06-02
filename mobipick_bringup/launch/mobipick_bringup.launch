@@ -18,7 +18,7 @@
 
   <group ns="$(arg namespace)">
     <!-- not needed, use xacro and rosparam with subst_value instead
-    <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/> 
+    <param name="tf_prefix" type="string" value="$(arg tf_prefix)"/>
     -->
 
     <!-- URDF -->
