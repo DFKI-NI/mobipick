@@ -8,5 +8,5 @@ set -e
 cd ..   # now in catkin_ws/
 source /opt/ros/noetic/setup.bash
 catkin init
-catkin config --install --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
+catkin config --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebugInfo
 catkin build --limit-status-rate 0.1 --no-notify
