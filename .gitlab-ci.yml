@@ -1,7 +1,3 @@
-cache:
-  paths:
-    - .ccache/
-
 stages:
   - build_docker
   - build
@@ -37,6 +33,9 @@ build:
   variables:
     IMAGE_TAG: $CI_REGISTRY_IMAGE:noetic
   image: $IMAGE_TAG
+  cache:
+    paths:
+      - .ccache/
   before_script:
     # Enable system-wide authentication for git cloning via https
     - '[ ! -z "$CI_DISPOSABLE_ENVIRONMENT" ] && echo -e "machine git.ni.dfki.de\nlogin gitlab-ci-token\npassword ${CI_JOB_TOKEN}" > ~/.netrc'
