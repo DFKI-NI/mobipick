@@ -65,7 +65,9 @@ will be called so it will be run in python2, which will fail on Noetic.
 Quick start
 -----------
 
-The following examples describe how to use the robot in simulation. For more information on how to use the real mobipick robot have a look at the README.md in `mobipick_bringup`.
+The following examples describe how to use the robot in simulation. For more
+information on how to use the real mobipick robot have a look at the README.md
+in `mobipick_bringup`.
 
 ### Pick + Place with move_base demo (Berghoffstraße)
 
@@ -94,7 +96,8 @@ roslaunch mobipick_pick_n_place mobipick_pick_n_place_bt.launch simulation:=true
 rosservice call /mobipick/continue_behavior_tree
 ```
 
-Optionally execute `rosservice call /mobipick/simulate_user_interaction` during the user interaction step to fake taking the power drill.
+Optionally execute `rosservice call /mobipick/simulate_user_interaction` during
+the user interaction step to fake taking the power drill.
 
 ### Pick + Place demo (Gazebo)
 
@@ -230,120 +233,3 @@ sed -i 's/mobipick\//${tf_prefix}/g' mobipick.srdf
 meld mobipick.srdf mobipick.srdf.xacro   # compare and apply all relevant changes
 rm mobipick.srdf
 ```
-
-
-Troubleshooting
-------------
-
-##### Error on "catkin_make -DCMAKE_BUILD_TYPE=Release install":
-
- ```bash
- /usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/libgazebo_ode.so: error: undefined reference to 'CProfileManager::Start_Profile(char const*)'
- /usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/libgazebo_ode.so: error: undefined reference to 'btLemkeAlgorithm::solve(unsigned int)'
- /usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/libgazebo_ode.so: error: undefined reference to 'CProfileManager::Stop_Profile()'
- collect2: error: ld returned 1 exit status
- gazebo-pkgs/gazebo_test_tools/CMakeFiles/cube_spawner.dir/build.make:186: recipe for target '/home/dfki.uni-bremen.de/dmronga/Workspace/catkin_ws/devel/lib/gazebo_test_tools/cube_spawner' failed
- make[2]: *** [/home/dfki.uni-bremen.de/dmronga/Workspace/catkin_ws/devel/lib/gazebo_test_tools/cube_spawner] Error 1
- CMakeFiles/Makefile2:8145: recipe for target 'gazebo-pkgs/gazebo_test_tools/CMakeFiles/cube_spawner.dir/all' failed
- make[1]: *** [gazebo-pkgs/gazebo_test_tools/CMakeFiles/cube_spawner.dir/all] Error 2
- make[1]: *** Waiting for unfinished jobs....
- ```
-
- * Workaround: Delete the gazebo_test_tools package
-
-#####  Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"
-
-* Mobipick package is missing!
-* Solution:
-
- ```bash
-git clone git@git.ni.dfki.de:mobipick/mobipick.git
- ```
-
-##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"
-
- ```bash
- ERROR: cannot launch node of type [joint_state_publisher/joint_state_publisher]: joint_state_publisher
- ROS path [0]=/opt/ros/kinetic/share/ros
- ROS path [1]=/home/dfki.uni-bremen.de/dmronga/Workspace/catkin_ws/src
- ROS path [2]=/opt/ros/kinetic/share
- ```
- * Tried the following:
-
- ``` bash
- cd ~/catkin_ws/src
- rosdep install --from-paths ./ -i -y --rosdistro "kinetic"
- ```
- * got the following error:
-
- ```bash
- ERROR: the following packages/stacks could not have their rosdep keys resolved
- to system dependencies:
- mobipick_pick_n_place: Cannot locate rosdep definition for [vision_msgs]
- ```
-
- * Solution:
-
- ```bash
- cd ~/catkin_ws/src
- sudo rosdep init
- rosdep update
- rosdep install --from-paths ./ -i -y --rosdistro "kinetic"
- ```
-
-
-##### Error on "roslaunch mobipick_gazebo mobipick_table_world.launch"
-
-```bash
-[rqt_joint_trajectory_controller-13] process has died [pid 30256, exit code 1, cmd /opt/ros/kinetic/lib/rqt_joint_trajectory_controller/rqt_joint_trajectory_controller __name:=rqt_joint_trajectory_controller __log:=/home/dfki.uni-bremen.de/dmronga/.ros/log/0b98ae40-3d82-11e8-a99f-f46d04cef46e/rqt_joint_trajectory_controller-13.log].
-log file: /home/dfki.uni-bremen.de/dmronga/.ros/log/0b98ae40-3d82-11e8-a99f-f46d04cef46e/rqt_joint_trajectory_controller-13*.log
-```
-
-The log file then says:
-
-```bash
-qt_gui_main() found no plugin matching "rqt_joint_trajectory_controller"
-```
-
-* Solution (from [here](https://answers.ros.org/question/91231/rqt-plugin-not-listedfound-in-list-returned-by-rqt-list-plugins/?answer=91386#post-id-91386)):
-
-```bash
-rm ~/.config/ros.org/rqt_gui.ini
-```
-
-
-##### Errors related to missing packages
-
-```bash
-[ERROR] [1523449370.789220962]: Could not load controller 'gripper_controller' because controller type 'position_controllers/JointTrajectoryController' does not exist.
-[ERROR] [1523449370.789260021]: Use 'rosservice call controller_manager/list_controller_types' to get the available types
-```
-
-... or:
-
-
-```bash
-[Err] [Plugin.hh:165] Failed to load plugin libgazebo_ros_control.so: libgazebo_ros_control.so: cannot open shared object file: No such file or directory
-```
-
-... or:
-
-```bash
-[ERROR] [1531143358.907155735]: Could not load controller 'arm_controller' because controller type 'velocity_controllers/JointTrajectoryController' does not exist.
-[ERROR] [1531143358.907247601]: Use 'rosservice call controller_manager/list_controller_types' to get the available types
-```
-
-* Solution:
-
- ```bash
- sudo apt-get install ros-kinetic-joint-trajectory-controller
- sudo apt-get install ros-kinetic-gazebo-ros-control
- sudo apt-get install ros-kinetic-joint-trajectory-controller
- ```
-
- or better: Add an `exec_depend` to the `package.xml` of the package that uses the missing package (e.g., `mobipick_description`), and then:
-
- ```bash
- rosdep update
- rosdep install -i --from-paths .
- ```
