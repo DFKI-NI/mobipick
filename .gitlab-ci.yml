@@ -23,6 +23,7 @@ build_docker:
       - dependencies.rosinstall
       - install-deps.sh
       - build.sh
+      - .pre-commit-config.yaml
 
   script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -66,13 +67,6 @@ build:
     - echo "================= ccache stats (after build) =================="
     - ccache -s
     - echo "==============================================================="
-
-    # catkin_lint
-    - cd $CATKIN_WS
-    - source install/setup.bash
-    - apt-get install -y python3-catkin-lint
-    - cd $CATKIN_PROJECT_DIR
-    - catkin_lint . --skip-pkg mobipick_moveit_config   # have to skip this package because of the missing warehouse_ros_mongo dependency
 
     # NOTE on testing: `catkin_make run_tests` will show the output of the tests
     # (gtest, nosetest, etc..) but always returns 0 (success) even if a test
