@@ -15,6 +15,18 @@ RUN echo -e "machine git.ni.dfki.de\nlogin ${GITLAB_USER}\npassword ${CI_JOB_TOK
 # Enable caching of APT packages (only works for packages.ubuntu.com and packages.ros.org)
 RUN echo "Acquire::http::Proxy \"http://apt-cache.ni.dfki:8000\";" > /etc/apt/apt.conf.d/00proxy
 
+# Install pre-commit hooks to /root/.cache/pre-commit/
+RUN apt-get update -qq \
+    && apt-get install -y -qq --no-install-recommends git python3-pip ruby shellcheck clang-format-10 python3-catkin-lint \
+    && rm -rf /var/lib/apt/lists/*
+RUN pip3 install pre-commit
+RUN mkdir -p /tmp/pre-commit
+COPY .pre-commit-config.yaml /tmp/pre-commit/
+RUN cd /tmp/pre-commit \
+    && git init \
+    && pre-commit install-hooks \
+    && rm -rf /tmp/pre-commit
+
 # install dependencies
 COPY mobipick_bringup/package.xml       $CATKIN_PROJECT_DIR/mobipick_bringup/package.xml
 COPY mobipick_description/package.xml   $CATKIN_PROJECT_DIR/mobipick_description/package.xml

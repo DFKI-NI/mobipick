@@ -68,6 +68,12 @@ build:
     - ccache -s
     - echo "==============================================================="
 
+    # Run pre-commit tests
+    - cd $CATKIN_WS
+    - source devel/setup.bash
+    - cd $CATKIN_PROJECT_DIR
+    - pre-commit run -a
+
     # NOTE on testing: `catkin_make run_tests` will show the output of the tests
     # (gtest, nosetest, etc..) but always returns 0 (success) even if a test
     # fails. Running `catkin_test_results` aggregates all the results and returns
