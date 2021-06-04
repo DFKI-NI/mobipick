@@ -56,6 +56,11 @@ repos:
     - id: shell-lint
       args: [--external-sources]
 
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.11.0
+    hooks:
+    - id: markdownlint
+
   - repo: https://github.com/pryorda/dockerfilelint-precommit-hooks
     rev: v0.1.0
     hooks:
