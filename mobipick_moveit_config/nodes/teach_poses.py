@@ -81,7 +81,7 @@ class PoseTeacher(object):
             # read the config file
             try:
                 with open(self.filename) as poseFile:
-                    poses = yaml.load(poseFile)
+                    poses = yaml.load(poseFile, Loader=yaml.SafeLoader)
             except IOError as err:
                 print("Could not open %s to read poses" % self.filename)
                 print(err)
@@ -110,7 +110,7 @@ class PoseTeacher(object):
             # read from file
             try:
                 with open(self.filename) as poseFile:
-                    poses = yaml.load(poseFile)
+                    poses = yaml.load(poseFile, Loader=yaml.SafeLoader)
             except IOError as err:
                 print("Could not open %s to read poses" % self.filename)
                 print(err)
