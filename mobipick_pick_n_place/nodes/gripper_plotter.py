@@ -38,8 +38,8 @@ def cb(msg):
     """
     try:
         trans = tf_buffer.lookup_transform(
-            'gripper_right_robotiq_fingertip_65mm',
-            'gripper_left_robotiq_fingertip_65mm',
+            'mobipick/gripper_right_robotiq_fingertip_65mm',
+            'mobipick/gripper_left_robotiq_fingertip_65mm',
             msg.header.stamp,
             rospy.Duration(1),
         )
@@ -48,7 +48,7 @@ def cb(msg):
 
     opening_gap = -trans.transform.translation.z - 0.014
     try:
-        angle = msg.position[msg.name.index('gripper_finger_joint')]
+        angle = msg.position[msg.name.index('mobipick/gripper_finger_joint')]
         buckets[angle_to_idx(angle)] = (angle, opening_gap, calc_opening_gap(angle))
     except ValueError:
         pass
