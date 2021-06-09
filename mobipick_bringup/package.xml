@@ -33,7 +33,7 @@
   <exec_depend>robotiq_ft_sensor</exec_depend>
   <exec_depend>rospy</exec_depend>  <!-- for normalize_image node -->
   <exec_depend>sensor_msgs</exec_depend>  <!-- for normalize_image node -->
-  <exec_depend>tf</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
   <exec_depend>ur_robot_driver</exec_depend>
   <exec_depend>xacro</exec_depend>
 </package>
