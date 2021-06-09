@@ -1,3 +1,4 @@
+#catkin_lint: ignore launch_depend
 cmake_minimum_required(VERSION 3.5.1)
 project(mobipick_moveit_config)
 

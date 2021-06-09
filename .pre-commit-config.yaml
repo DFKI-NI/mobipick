@@ -82,4 +82,4 @@ repos:
         language: system
         always_run: true
         pass_filenames: false
-        args: [ "--strict", "--skip-pkg", "mobipick_moveit_config" ]   # have to skip this package because of the missing warehouse_ros_mongo dependency
+        args: [ "--strict" ]   # have to skip this package because of the missing warehouse_ros_mongo dependency
