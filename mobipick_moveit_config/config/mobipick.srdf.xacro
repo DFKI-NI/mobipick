@@ -122,7 +122,7 @@
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="end_effector" parent_link="${tf_prefix}gripper_tcp" group="gripper"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
-    <virtual_joint name="${tf_prefix}virtual_joint" type="floating" parent_frame="${tf_prefix}odom_comb" child_link="${tf_prefix}base_footprint"/>
+    <virtual_joint name="${tf_prefix}virtual_joint" type="floating" parent_frame="${tf_prefix}odom" child_link="${tf_prefix}base_footprint"/>
     <!--PASSIVE JOINT: Purpose: this element is used to mark joints that are not actuated-->
     <passive_joint name="${tf_prefix}virtual_joint"/>
     <passive_joint name="${tf_prefix}bl_caster_rotation_joint"/>

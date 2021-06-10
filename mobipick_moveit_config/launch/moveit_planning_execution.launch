@@ -20,5 +20,5 @@
   </include-->
 
   # Needed as long as robot_pose_ekf isn't running
-  <!--node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 odom_comb base_footprint 100" /-->
+  <!--node pkg="tf" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 odom base_footprint 100" /-->
 </launch>

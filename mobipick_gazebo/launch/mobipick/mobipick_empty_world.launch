@@ -14,7 +14,7 @@
 
   <group>
     <remap from="mobipick/mobile_base_controller/cmd_vel" to="mobipick/cmd_vel" />
-    <remap from="mobipick/mobile_base_controller/odom"    to="mobipick/odom_comb" />
+    <remap from="mobipick/mobile_base_controller/odom"    to="mobipick/odom" />
     <remap from="mobipick/joint_states"                   to="mobipick/gazebo_joint_states" />
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">

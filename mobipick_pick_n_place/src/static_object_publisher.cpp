@@ -12,7 +12,7 @@ int main(int argc, char** argv)
   vision_msgs::Detection3DArray detections;
 
   detections.header.stamp = ros::Time::now();
-  detections.header.frame_id = "odom_comb";
+  detections.header.frame_id = "odom";
 
   {
     // add table

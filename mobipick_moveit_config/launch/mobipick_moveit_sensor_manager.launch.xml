@@ -3,7 +3,7 @@
   <arg name="use_pointcloud" default="false"/>
 
   <!-- Params for the octomap monitor -->
-  <param name="octomap_frame" type="string" value="/mobipick/odom_comb" />
+  <param name="octomap_frame" type="string" value="/mobipick/odom" />
   <param name="octomap_resolution" type="double" value="0.025" />
   <param name="max_range" type="double" value="1.0" />
 

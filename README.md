@@ -74,7 +74,7 @@ in `mobipick_bringup`.
 ```bash
 roslaunch mobipick_gazebo mobipick_moelk.launch
 rosservice call /gazebo/unpause_physics
-roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint"
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom" base_frame_id:="mobipick/base_footprint"
 roslaunch mir_navigation start_planner.launch map_file:=$(rospack find pbr_maps)/maps/moelk/pbr_robot_lab.yaml prefix:="mobipick/"
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
@@ -87,7 +87,7 @@ There exists also an analogous demo using a behavior tree instead of a state mac
 ```bash
 roslaunch mobipick_gazebo mobipick_moelk.launch
 rosservice call /gazebo/unpause_physics
-roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint"
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom" base_frame_id:="mobipick/base_footprint"
 roslaunch mir_navigation start_planner.launch map_file:=$(rospack find pbr_maps)/maps/moelk/pbr_robot_lab.yaml prefix:="mobipick/"
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
@@ -149,7 +149,7 @@ Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for mov
 ```bash
 roslaunch mobipick_gazebo mobipick_mrk_lab_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
-roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint"
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom" base_frame_id:="mobipick/base_footprint"
 ROS_NAMESPACE=mobipick rosrun mobipick_gazebo move_arm_to_home
 roslaunch mir_navigation start_planner.launch \
     map_file:=$(rospack find mobipick_gazebo)/maps/rh5_mrk_lab.yaml prefix:="mobipick/"
@@ -164,7 +164,7 @@ Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for mov
 ```bash
 roslaunch mobipick_gazebo mobipick_smart_factory.launch
 rosservice call /gazebo/unpause_physics
-roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom_comb" base_frame_id:="mobipick/base_footprint" delta_yaw:=1.57 delta_x:=0.2
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom" base_frame_id:="mobipick/base_footprint" delta_yaw:=1.57 delta_x:=0.2
 roslaunch mir_navigation start_planner.launch map_file:=$(rospack find mobipick_gazebo)/maps/smart_factory_merged.yaml prefix:="mobipick/" __ns:="mobipick"
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick" world:="smart_factory"
