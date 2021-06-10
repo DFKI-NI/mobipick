@@ -5,7 +5,7 @@
   <!-- The name of the parameter under which the URDF is loaded -->
   <arg name="robot_description" default="robot_description"/>
 
-  <arg name="shape_transform_cache_lookup_wait_time" default="0.05" doc="How long to wait (in seconds) for tf transforms during self filtering (default: 0.05)" />
+  <arg name="shape_transform_cache_lookup_wait_time" default="0.1" doc="How long to wait (in seconds) for tf transforms during self filtering (default: 0.05)" />
 
   <!-- A prefix for all joints and links in the robot, without trailing / -->
   <arg name="tf_prefix" default="" />
