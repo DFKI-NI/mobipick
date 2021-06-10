@@ -35,25 +35,25 @@
 
     <!-- Robot state publisher -->
     <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
-      <remap from="/tf"        to="tf_mobipick" />
-      <remap from="/tf_static" to="tf_static_mobipick" />
+      <remap from="/tf"        to="tf_robot_state_publisher" />
+      <remap from="/tf_static" to="tf_static_robot_state_publisher" />
     </node>
 
     <!-- remove those TFs that are also published by the MiR to avoid conflicts -->
     <node name="tf_remove_child_frames" pkg="mir_driver" type="tf_remove_child_frames.py" output="screen">
-      <remap from="tf_in"         to="tf_mobipick" />
+      <remap from="tf_in"         to="tf_robot_state_publisher" />
       <remap from="tf_out"        to="/tf" />
-      <remap from="tf_static_in"  to="tf_static_mobipick" />
+      <remap from="tf_static_in"  to="tf_static_robot_state_publisher" />
       <remap from="tf_static_out" to="/tf_static" />
-      <rosparam param="remove_frames">
-        - base_link
-        - front_laser_link
-        - back_laser_link
-        - camera_top_link
-        - camera_top_depth_optical_frame
-        - camera_floor_link
-        - camera_floor_depth_optical_frame
-        - imu_link
+      <rosparam param="remove_frames" subst_value="True">
+        - $(arg prefix)base_link
+        - $(arg prefix)front_laser_link
+        - $(arg prefix)back_laser_link
+        - $(arg prefix)camera_top_link
+        - $(arg prefix)camera_top_depth_optical_frame
+        - $(arg prefix)camera_floor_link
+        - $(arg prefix)camera_floor_depth_optical_frame
+        - $(arg prefix)imu_link
       </rosparam>
     </node>
 
