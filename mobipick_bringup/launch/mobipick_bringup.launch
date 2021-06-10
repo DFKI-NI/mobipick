@@ -66,6 +66,7 @@
       <remap from="rosout" to="/rosout" />
       <remap from="rosout_agg" to="/rosout_agg" />
       <remap from="tf" to="/tf" />
+      <remap from="tf_static" to="/tf_static" />
     </node>
 
     <node name="b_rep117_laser_filter" pkg="mir_driver" type="rep117_filter.py" output="screen">
