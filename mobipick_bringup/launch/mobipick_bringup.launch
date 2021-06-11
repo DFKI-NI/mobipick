@@ -61,12 +61,6 @@
     <node name="mir_bridge" pkg="mir_driver" type="mir_bridge.py" output="screen">
       <param name="hostname" value="$(arg mir_hostname)" />
       <param name="tf_prefix" value="$(arg tf_prefix)" />
-      <remap from="map" to="/map" />
-      <remap from="map_metadata" to="/map_metadata" />
-      <remap from="rosout" to="/rosout" />
-      <remap from="rosout_agg" to="/rosout_agg" />
-      <remap from="tf" to="/tf" />
-      <remap from="tf_static" to="/tf_static" />
     </node>
 
     <node name="b_rep117_laser_filter" pkg="mir_driver" type="rep117_filter.py" output="screen">
