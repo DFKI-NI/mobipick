@@ -19,7 +19,7 @@ def img_cb(imgmsg_in, callback_args):
     img_in = bridge.imgmsg_to_cv2(imgmsg_in, desired_encoding='mono16')
 
     cv_img_out = img_in[:, :] - img_in.min()
-    cv_img_out[:, :] *= 2 ** 16 / (img_in.max() - img_in.min())
+    cv_img_out[:, :] *= 2 ** 16 // (img_in.max() - img_in.min())
 
     imgmsg_out = bridge.cv2_to_imgmsg(cv_img_out, encoding='mono16')
     imgmsg_out.header = imgmsg_in.header
