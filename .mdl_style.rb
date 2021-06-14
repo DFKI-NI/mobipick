@@ -12,7 +12,7 @@ exclude_rule 'no-multiple-blanks'
 exclude_rule 'header-style'
 
 # Line lenght
-rule 'MD013', :line_length => 120, :code_blocks => false
+rule 'MD013', :line_length => 120, :code_blocks => false, :tables => false
 
 # Unordered list indentation
 rule 'MD007', :indent => 2
