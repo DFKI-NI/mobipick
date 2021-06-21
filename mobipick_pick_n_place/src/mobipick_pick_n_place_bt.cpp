@@ -35,7 +35,7 @@
 
 /* Authors: Ioan Sucan, Martin Günther, Alexander Sung */
 
-#include "mobipick_pick_n_place/pausable_behavior_tree.h"
+#include "behaviortree_cpp_v3/bt_factory.h"
 
 #include <ros/ros.h>
 
@@ -60,52 +60,19 @@
 
 namespace mobipick
 {
-bool paused = true;
 bool failed = false;
-bool pause_active = false;
-
-bool pause_service(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
-{
-  if (!paused)
-  {
-    ROS_INFO_STREAM("Pause behavior tree after current task is completed");
-    paused = true;
-  }
-  return true;
-}
-
-bool continue_service(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
-{
-  if (paused || failed)
-  {
-    paused = false;
-    failed = false;
-    ROS_INFO_STREAM("Continue behavior tree");
-  }
-  return true;
-}
 
 std::unique_ptr<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>> move_base_ac_ptr;
 std::unique_ptr<actionlib::SimpleActionClient<mobipick_pick_n_place::FtObserverAction>> ft_observer_ac_ptr;
 std::unique_ptr<actionlib::SimpleActionClient<mobipick_pick_n_place::MoveItMacroAction>> moveit_macros_ac_ptr;
 
-class ROSTaskNode : public BehaviorTree::TaskNode
+class InitNode : public BT::SyncActionNode
 {
 public:
-  virtual void preprocess()
+  InitNode(const std::string& name) : BT::SyncActionNode(name, {})
   {
-    ROS_INFO_STREAM("TASK " << get_task_name());
   }
-};
-
-class InitTask : public ROSTaskNode
-{
-public:
-  virtual std::string get_task_name() override
-  {
-    return "Init";
-  }
-  virtual bool main() override
+  BT::NodeStatus tick() override
   {
     // wait for the move base action server to come up
     while (!move_base_ac_ptr->waitForServer(ros::Duration(5.0)))
@@ -127,87 +94,62 @@ public:
       ROS_INFO("Waiting for moveit_macros action server to come up");
     }
     ROS_INFO("Connected to moveit macros action server");
-    return true;
+    return BT::NodeStatus::SUCCESS;
   }
 };
 
-bool hasAttachedObjects()
+BT::NodeStatus hasAttachedObjects()
 {
   mobipick_pick_n_place::MoveItMacroGoal goal;
   goal.type = "function";
   goal.name = "HasAttachedObjects";
   moveit_macros_ac_ptr->sendGoal(goal);
   moveit_macros_ac_ptr->waitForResult();
-  return moveit_macros_ac_ptr->getResult()->result;
+  return moveit_macros_ac_ptr->getResult()->result ? BT::NodeStatus::SUCCESS : BT::NodeStatus::FAILURE;
 }
 
-class HasAttachedObjectsTask : public ROSTaskNode
+class DriveToNode : public BT::SyncActionNode
 {
 private:
-  const bool check;
+  const std::map<std::string, geometry_msgs::Pose> base_poses;
 
 public:
-  HasAttachedObjectsTask(const bool& check) : check(check)
+  DriveToNode(const std::string& name, const BT::NodeConfiguration& config,
+              const std::map<std::string, geometry_msgs::Pose>& base_poses)
+    : BT::SyncActionNode(name, config), base_poses(base_poses)
   {
   }
-  virtual std::string get_task_name() override
+  static BT::PortsList providedPorts()
   {
-    return "HasAttachedObjects(check if " + std::string(check ? "true" : "false") +
-           ")";  // Note: std::string is required for +.
+    return { BT::InputPort<std::string>("goal") };
   }
-  virtual bool main() override
+  BT::NodeStatus tick() override
   {
-    return hasAttachedObjects() == check;
-  }
-};
-
-class MoveArmForDriveTask : public ROSTaskNode
-{
-public:
-  virtual std::string get_task_name() override
-  {
-    return "MoveArmForDrive";
-  }
-  virtual bool main() override
-  {
-    const std::string target_name = (hasAttachedObjects() ? "transport" : "home");
-    const std::string TARGET_NAME = boost::to_upper_copy<std::string>(target_name);
-
     mobipick_pick_n_place::MoveItMacroGoal goal;
     goal.type = "target";
-    goal.name = target_name;
+    goal.name = (hasAttachedObjects() == BT::NodeStatus::SUCCESS ? "transport" : "home");
     moveit_macros_ac_ptr->sendGoal(goal);
     moveit_macros_ac_ptr->waitForResult();
     failed = !moveit_macros_ac_ptr->getResult()->result;
-    return !failed;
-  }
-};
+    if (failed)
+    {
+      return BT::NodeStatus::FAILURE;
+    }
 
-class MoveBaseTask : public ROSTaskNode
-{
-private:
-  const std::string target_name;
-  const std::string TARGET_NAME;
-  const geometry_msgs::Pose goal_pose;
+    /* ******************* MOVE TO GOAL ****************************** */
 
-public:
-  MoveBaseTask(const std::string& target_name, const geometry_msgs::Pose& pose)
-    : target_name(target_name), TARGET_NAME(boost::to_upper_copy<std::string>(target_name)), goal_pose(pose)
-  {
-  }
-  virtual std::string get_task_name() override
-  {
-    return "MoveBase(" + target_name + ")";
-  }
-  virtual bool main() override
-  {
-    /* ******************* MOVE TO TABLE ****************************** */
+    BT::Optional<std::string> msg = getInput<std::string>("goal");
+    if (!msg)
+    {
+      throw BT::RuntimeError("missing required input [goal]: ", msg.error());
+    }
 
     move_base_msgs::MoveBaseGoal mb_goal;
     mb_goal.target_pose.header.frame_id = "map";
     mb_goal.target_pose.header.stamp = ros::Time::now();
 
-    mb_goal.target_pose.pose = goal_pose;
+    std::string target_name = msg.value();
+    mb_goal.target_pose.pose = base_poses.at(target_name);
     ROS_INFO_STREAM("Send base to " << target_name << " pose and wait...");
     move_base_ac_ptr->sendGoal(mb_goal);
 
@@ -222,58 +164,45 @@ public:
       ROS_INFO_STREAM("Moving base to " << target_name << " pose FAILED");
       failed = true;
     }
-    return !failed;
+    return failed ? BT::NodeStatus::FAILURE : BT::NodeStatus::SUCCESS;
   }
 };
 
-class DriveToNode : public BehaviorTree::Sequence
+class MoveItNode : public BT::SyncActionNode
 {
-private:
-  static MoveArmForDriveTask move_arm_for_drive_task;
-
 public:
-  DriveToNode(const std::string& target_name, const geometry_msgs::Pose& pose)
-    : BehaviorTree::Sequence("DriveTo(" + target_name + ")",
-                             { &move_arm_for_drive_task, new MoveBaseTask(target_name, pose) })
+  MoveItNode(const std::string& name, const BT::NodeConfiguration& config) : BT::SyncActionNode(name, config)
   {
   }
-};
-
-MoveArmForDriveTask DriveToNode::move_arm_for_drive_task;
-
-class MoveItTask : public ROSTaskNode
-{
-private:
-  const std::string name;
-
-public:
-  MoveItTask(const std::string& name) : name(name)
+  static BT::PortsList providedPorts()
   {
+    return { BT::InputPort<std::string>("function") };
   }
-  virtual std::string get_task_name() override
+  BT::NodeStatus tick() override
   {
-    return name;
-  }
-  virtual bool main() override
-  {
+    BT::Optional<std::string> msg = getInput<std::string>("function");
+    if (!msg)
+    {
+      throw BT::RuntimeError("missing required input [function]: ", msg.error());
+    }
+
     mobipick_pick_n_place::MoveItMacroGoal goal;
     goal.type = "function";
-    goal.name = name;
+    goal.name = msg.value();
     moveit_macros_ac_ptr->sendGoal(goal);
     moveit_macros_ac_ptr->waitForResult();
     failed = !moveit_macros_ac_ptr->getResult()->result;
-    return !failed;
+    return failed ? BT::NodeStatus::FAILURE : BT::NodeStatus::SUCCESS;
   }
 };
 
-class UserInteractionTask : public ROSTaskNode
+class UserInteractionNode : public BT::SyncActionNode
 {
 public:
-  virtual std::string get_task_name() override
+  UserInteractionNode(const std::string& name) : BT::SyncActionNode(name, {})
   {
-    return "UserInteraction";
   }
-  virtual bool main() override
+  BT::NodeStatus tick() override
   {
     /* ********************* WAIT FOR USER ********************* */
     mobipick_pick_n_place::FtObserverGoal ft_goal;
@@ -297,25 +226,22 @@ public:
     }
     else
     {
-      // Note: Task still counts as success, so the behavior tree continues. However, trigger a pause.
       ROS_INFO("Detection user interaction FAILED, start placing Object");
-      paused = true;
       failed = false;
     }
-    return !failed;
+    return failed ? BT::NodeStatus::FAILURE : BT::NodeStatus::SUCCESS;
   }
 };
 
-class DoneTask : public ROSTaskNode
+class DoneNode : public BT::SyncActionNode
 {
 public:
-  virtual std::string get_task_name() override
+  DoneNode(const std::string& name) : BT::SyncActionNode(name, {})
   {
-    return "Done";
   }
-  virtual bool main() override
+  BT::NodeStatus tick() override
   {
-    return true;
+    return BT::NodeStatus::SUCCESS;
   }
 };
 
@@ -352,35 +278,40 @@ int main(int argc, char** argv)
   // add more parameters here to load if desired
   rosparam_shortcuts::shutdownIfError("poses", error);
 
+  std::map<std::string, geometry_msgs::Pose> base_poses{ { "pick", base_pick_pose },
+                                                         { "handover", base_handover_pose },
+                                                         { "place", base_place_pose },
+                                                         { "home", base_home_pose } };
+
   ROS_INFO_STREAM("Current world name: " << world_name);
 
-  // The Get Tool Task lets mobipick fetch the tool from the table if it is not holding any objects already.
-  BehaviorTree::Selector get_tool_task(
-      "GetTool",
-      { new HasAttachedObjectsTask(true),
-        new BehaviorTree::Sequence("FetchTool", { new DriveToNode("pick", base_pick_pose),
-                                                  new MoveItTask("CaptureObject"), new MoveItTask("PickUpObject") }) });
+  // Get behavior tree config filepath from command line arguments.
+  char* behavior_tree_filepath = nullptr;
+  for (char** pargv = argv + 1; *pargv != argv[argc]; ++pargv)
+  {
+    if (boost::ends_with(*pargv, "_bt.xml"))
+    {
+      behavior_tree_filepath = *pargv;
+      break;
+    }
+  }
+  if (behavior_tree_filepath == nullptr)
+  {
+    ROS_ERROR("Behavior tree filepath *_bt.xml not specified in command line arguments.");
+    std::exit(2);
+  }
 
-  // The Clear Gripper Task lets mobipick place any object it is holding onto the table.
-  BehaviorTree::Selector clear_gripper_task(
-      "ClearGripper", { new HasAttachedObjectsTask(false),
-                        new BehaviorTree::Sequence("StashTool", { new DriveToNode("place", base_place_pose),
-                                                                  new MoveItTask("PlaceObject") }) });
-
-  // The PickNPlace Behavior Tree lets mobipick fetch the tool, offer it to a person, stow it away if needed,
-  //   and finally drive back home.
-  BehaviorTree behavior_tree(
-      new BehaviorTree::Sequence("PickNPlace",
-                                 { new InitTask(), &get_tool_task, new DriveToNode("handover", base_handover_pose),
-                                   new MoveItTask("MoveArmToHandover"), new UserInteractionTask(), &clear_gripper_task,
-                                   new DriveToNode("home", base_home_pose), new DoneTask() }),
-      &paused);
-
-  // pause service
-  ros::ServiceServer pause_state = nh.advertiseService("pause_behavior_tree", pause_service);
-
-  // pause service
-  ros::ServiceServer continue_state = nh.advertiseService("continue_behavior_tree", continue_service);
+  BT::BehaviorTreeFactory factory;
+  factory.registerNodeType<DoneNode>("DoneNode");
+  factory.registerNodeType<InitNode>("InitNode");
+  factory.registerSimpleCondition("HasAttachedObjects", std::bind(hasAttachedObjects));
+  BT::NodeBuilder builder_drive_to = [&base_poses](const std::string& name, const BT::NodeConfiguration& config) {
+    return std::make_unique<DriveToNode>(name, config, base_poses);
+  };
+  factory.registerBuilder<DriveToNode>("DriveToNode", builder_drive_to);
+  factory.registerNodeType<MoveItNode>("MoveItNode");
+  factory.registerNodeType<UserInteractionNode>("UserInteractionNode");
+  BT::Tree tree = factory.createTreeFromFile(behavior_tree_filepath);
 
   // MOVE BASE
   move_base_ac_ptr = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>("move_base", true);
@@ -391,25 +322,9 @@ int main(int argc, char** argv)
   moveit_macros_ac_ptr =
       std::make_unique<actionlib::SimpleActionClient<mobipick_pick_n_place::MoveItMacroAction>>("moveit_macros", true);
 
-  while (ros::ok())
+  if (ros::ok())
   {
-    if (paused || failed)
-    {
-      if (!pause_active)
-      {
-        ROS_INFO_STREAM("PAUSED before task: " << behavior_tree.get_next_task_name());
-        ROS_INFO_STREAM("Call service continue_behavior_tree to resume");
-        pause_active = true;
-      }
-      continue;
-    }
-
-    if (pause_active)
-    {
-      ROS_INFO_STREAM("Next task: " << behavior_tree.get_next_task_name());
-      pause_active = false;
-    }
-    if (behavior_tree.run())
+    if (tree.tickRoot() == BT::NodeStatus::SUCCESS)
     {
       ROS_INFO("Behavior tree completed.");
       return 0;

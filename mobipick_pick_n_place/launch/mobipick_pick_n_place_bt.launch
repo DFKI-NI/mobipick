@@ -6,7 +6,8 @@
 
   <group ns="mobipick">
   <rosparam file="$(find mobipick_pick_n_place)/config/$(arg world).yaml" command="load"/>
-  <node name="mobipick_pick_n_place_bt" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place_bt" output="screen">
+  <node name="mobipick_pick_n_place_bt" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place_bt"
+      args="$(find mobipick_pick_n_place)/config/mobipick_pick_n_place_bt.xml" output="screen">
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
   </node>
   <group if="$(arg simulation)">
