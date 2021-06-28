@@ -42,7 +42,3 @@
     local-name: robotiq
     uri: https://github.com/Krause92/robotiq.git
     version: noetic-position-feedback
-- git:
-    uri: https://github.com/ros-industrial/ur_msgs.git
-    local-name: ur_msgs
-    version: melodic-devel
