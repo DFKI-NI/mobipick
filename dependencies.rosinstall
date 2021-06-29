@@ -46,7 +46,3 @@
     uri: https://github.com/ros-industrial/ur_msgs.git
     local-name: ur_msgs
     version: melodic-devel
-- git:
-    local-name: BehaviorTree.CPP
-    uri: https://github.com/BehaviorTree/BehaviorTree.CPP.git
-    version: master
