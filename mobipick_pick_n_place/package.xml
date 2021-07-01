@@ -21,6 +21,7 @@
   <build_depend>genmsg</build_depend>
 
   <depend>actionlib_msgs</depend>
+  <depend>behaviortree_cpp_v3</depend>
   <depend>eigen_conversions</depend>
   <depend>gazebo_msgs</depend>
   <depend>geometry_msgs</depend>

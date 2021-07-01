@@ -1,0 +1,33 @@
+<root main_tree_to_execute = "MainTree" >
+    <!-- This behavior tree lets mobipick fetch the tool, offer it to a person, stow it away if needed,
+        and finally drive back home. -->
+    <BehaviorTree ID="MainTree">
+        <SequenceStar name="mobipick_pick_n_place">
+            <InitNode name="Init"/>
+            <!-- The get_tool_fallback lets mobipick fetch the tool from the table if it is not holding any objects already. -->
+            <Fallback name="get_tool_fallback">
+                <HasAttachedObjects name="HasAttachedObjects"/>
+                <SequenceStar name="fetch_tool_sequence">
+                    <DriveToNode name="DriveTo" goal="pick"/>
+                    <MoveItNode name="MoveIt" function="CaptureObject"/>
+                    <MoveItNode name="MoveIt" function="PickUpObject"/>
+                </SequenceStar>
+            </Fallback>
+            <DriveToNode name="DriveTo" goal="handover"/>
+            <MoveItNode name="MoveIt" function="MoveArmToHandover"/>
+            <UserInteractionNode name="UserInteraction"/>
+            <!-- The clear_gripper_fallback lets mobipick place any object it is holding onto the table. -->
+            <Fallback name="clear_gripper_fallback">
+                <Inverter>
+                    <HasAttachedObjects name="HasAttachedObjects"/>
+                </Inverter>
+                <SequenceStar name="stash_tool_sequence">
+                    <DriveToNode name="DriveTo" goal="place"/>
+                    <MoveItNode name="MoveIt" function="PlaceObject"/>
+                </SequenceStar>
+            </Fallback>
+            <DriveToNode name="DriveTo" goal="home"/>
+            <DoneNode name="Done"/>
+        </SequenceStar>
+    </BehaviorTree>
+</root>

@@ -83,6 +83,7 @@ rosservice call /mobipick/continue_statemachine
 ```
 
 There exists also an analogous demo using a behavior tree instead of a state machine.
+The BehaviorTree.CPP implementation doesn't support pausing as easily, however, so this functionality is removed.
 
 ```bash
 roslaunch mobipick_gazebo mobipick_moelk.launch
@@ -93,7 +94,6 @@ roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
 roslaunch mobipick_pick_n_place moveit_macros.launch
 roslaunch mobipick_pick_n_place mobipick_pick_n_place_bt.launch simulation:=true
-rosservice call /mobipick/continue_behavior_tree
 ```
 
 Optionally execute `rosservice call /mobipick/simulate_user_interaction` during

@@ -20,6 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   vision_msgs
   visualization_msgs
+  behaviortree_cpp_v3
 )
 
 add_action_files(DIRECTORY action FILES FtObserver.action MoveItMacro.action)
