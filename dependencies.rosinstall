@@ -1,4 +1,8 @@
 - git:
+    local-name: Groot
+    uri: https://github.com/BehaviorTree/Groot.git
+    version: master
+- git:
     local-name: Universal_Robots_ROS_Driver
     uri: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver.git
     version: master

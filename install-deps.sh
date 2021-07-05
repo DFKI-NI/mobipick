@@ -17,7 +17,7 @@ wstool merge --merge-keep -y mobipick/dependencies.rosinstall
 wstool update
 
 # use rosdep to install all dependencies (including ROS itself)
-sudo apt-get install -qq -y libuvc-dev                          # for astra_camera
+sudo apt-get install -qq -y libuvc-dev                                    # for astra_camera
 sudo apt-get install -qq -y python3-rosdep
 sudo rosdep init > /dev/null 2>&1 || true
 rosdep update
