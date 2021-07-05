@@ -35,7 +35,8 @@
 
 /* Authors: Ioan Sucan, Martin Günther, Alexander Sung */
 
-#include "behaviortree_cpp_v3/bt_factory.h"
+#include <behaviortree_cpp_v3/bt_factory.h>
+#include <behaviortree_cpp_v3/loggers/bt_zmq_publisher.h>
 
 #include <ros/ros.h>
 
@@ -312,6 +313,7 @@ int main(int argc, char** argv)
   factory.registerNodeType<MoveItNode>("MoveItNode");
   factory.registerNodeType<UserInteractionNode>("UserInteractionNode");
   BT::Tree tree = factory.createTreeFromFile(behavior_tree_filepath);
+  BT::PublisherZMQ publisher_zmq(tree);
 
   // MOVE BASE
   move_base_ac_ptr = std::make_unique<actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>>("move_base", true);

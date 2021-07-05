@@ -84,6 +84,9 @@ rosservice call /mobipick/continue_statemachine
 
 There exists also an analogous demo using a behavior tree instead of a state machine.
 The BehaviorTree.CPP implementation doesn't support pausing as easily, however, so this functionality is removed.
+The graphical editor BehaviorTree.CPP/Groot is directly supported in this demo.
+To see its visualization, find and run its executable, e.g. `~/catkin_ws/install/lib/groot/Groot`
+and connect with default settings after the behavior tree started.
 
 ```bash
 roslaunch mobipick_gazebo mobipick_moelk.launch
