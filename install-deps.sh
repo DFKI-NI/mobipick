@@ -18,8 +18,6 @@ wstool update
 
 # use rosdep to install all dependencies (including ROS itself)
 sudo apt-get install -qq -y libuvc-dev                                    # for astra_camera
-sudo apt-get install -qq -y libzmq3-dev libboost-dev                      # for BehaviorTree.CPP
-sudo apt install -qq -y qtbase5-dev libqt5svg5-dev libzmq3-dev libdw-dev  # for BehaviorTree/Groot
 sudo apt-get install -qq -y python3-rosdep
 sudo rosdep init > /dev/null 2>&1 || true
 rosdep update
