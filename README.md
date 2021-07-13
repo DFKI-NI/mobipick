@@ -50,16 +50,13 @@ You should add the following line to the end of your `~/.bashrc`, and then
 close and reopen all terminals:
 
 ```bash
-source ~/catkin_ws/install/setup.bash
+source ~/catkin_ws/devel/setup.bash
 ```
 
-**Note:** It's important to source the `install` space (not the `devel` space)
-when running on the real robot because of the following: There's a ROS node in
-`Universal_Robots_ROS_Driver/ur_robot_driver/scripts/tool_communication` that
-has a `#!/usr/bin/env python` shebang line. During installation, the
-`catkin_install_python` macro changes this line to `#!/usr/bin/env python3`. If
-you source the devel space, the version from `src` with the unchanged shebang
-will be called so it will be run in python2, which will fail on Noetic.
+**Note:** Since we are using the `devel` space, some nodes (for example in
+Universal_Robots_ROS_Driver) still have the `#!/usr/bin/env python` shebang
+line. If this leads to an error, simply install the package
+`python-is-python3`.
 
 
 Quick start
