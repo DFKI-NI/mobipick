@@ -170,7 +170,8 @@ roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="m
 roslaunch mir_navigation start_planner.launch map_file:=$(rospack find mobipick_gazebo)/maps/smart_factory_merged.yaml prefix:="mobipick/"
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick" world:="smart_factory"
-roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true
+roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true world:="smart_factory"
+rosservice call /mobipick/continue_statemachine
 ```
 
 ### Rosbridge with websockets
