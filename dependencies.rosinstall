@@ -35,6 +35,10 @@
     uri: https://github.com/ros-planning/geometric_shapes.git
     version: noetic-devel
 - git:
+    local-name: moveit_task_constructor
+    uri: https://github.com/ros-planning/moveit_task_constructor.git
+    version: master
+- git:
     local-name: pbr_tools
     uri: https://github.com/DFKI-NI/pbr_tools.git
     version: master
