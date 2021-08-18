@@ -22,5 +22,5 @@ sudo apt-get install -qq -y python3-rosdep
 sudo rosdep init > /dev/null 2>&1 || true
 rosdep update
 rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO} --skip-keys=libuvc
-sudo apt-get install -qq -y python3-catkin-tools python3-osrf-pycommon build-essential  # python3-osrf-pycommon has to be installed manually for python3-catkin-tools to work (see https://github.com/catkin/catkin_tools/issues/594)
+sudo apt-get install -qq -y python3-catkin-tools build-essential
 sudo apt-get install -qq -y ccache
