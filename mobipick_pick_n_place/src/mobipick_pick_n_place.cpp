@@ -303,7 +303,6 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
 {
   // get objects from object detection
   bool found_power_drill = false;
-  uint visionCounter = 0;
   while (!found_power_drill)
   {
     if (!ros::ok())
