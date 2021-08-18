@@ -409,7 +409,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
   {
     group.detachObject(object.first);
   }
-  return 1;
+  return 0;
 }
 
 moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface& group, double dx = 0.0,
@@ -732,7 +732,14 @@ int main(int argc, char** argv)
         {
           clear_octomap.call(srv);
 
-          updatePlanningScene(planning_scene_interface, nh, group);
+          int result = updatePlanningScene(planning_scene_interface, nh, group);
+          if (result != 0)
+          {
+            ROS_ERROR("Updating planning scene FAILED");
+            failed = true;
+            break;
+          }
+
           error_code = pick(group);
           ++pickPlanAttempts;
 
