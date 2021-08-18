@@ -613,6 +613,7 @@ int main(int argc, char** argv)
         {
           ROS_ERROR("Planning to home pose FAILED");
           failed = true;
+          break;
         }
 
         // move
@@ -697,6 +698,7 @@ int main(int argc, char** argv)
         {
           ROS_ERROR("Planning to observation pose FAILED");
           failed = true;
+          break;
         }
 
         // move to observation pose
@@ -782,6 +784,7 @@ int main(int argc, char** argv)
         {
           ROS_ERROR("Planning to transport pose FAILED");
           failed = true;
+          break;
         }
 
         // move to transport pose
@@ -1039,6 +1042,7 @@ int main(int argc, char** argv)
         {
           ROS_ERROR("Planning to home pose FAILED");
           failed = true;
+          break;
         }
 
         // move to home
