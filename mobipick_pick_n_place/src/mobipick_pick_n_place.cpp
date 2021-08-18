@@ -149,7 +149,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   {
     // GRASP 2: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
-    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
     grasp_pose_define.grasp_pose.rotate(rotation);
@@ -176,7 +176,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
     bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0d, 0.0d, 1.0d)));
 
-    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
 
     // --- calculate desired pose of gripper_tcp when grasping
     // pose of power drill
@@ -232,8 +232,8 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
 
   Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
   place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.11d));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI / 2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
   p.header.frame_id = "mobipick/base_link";
   tf::poseEigenToMsg(place_pose, p.pose);
 
@@ -769,8 +769,8 @@ int main(int argc, char** argv)
         // -1.5847457090960901, 3.8100781440734863
         /*        Eigen::Isometry3d transport_pose = Eigen::Isometry3d::Identity();
                 transport_pose.translate(Eigen::Vector3d(0.3, -0.2, 0.07));
-                transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
-                transport_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+                transport_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+                transport_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
         */
         group.setStartStateToCurrentState();
         group.setNamedTarget("transport");
@@ -862,9 +862,9 @@ int main(int argc, char** argv)
         setOrientationContraints(group, 0.666666);
         Eigen::Isometry3d hand_over_pose = Eigen::Isometry3d::Identity();
         hand_over_pose.translate(Eigen::Vector3d(0.8, -0.4, 0.2));
-        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 1.0, 0.0)));
-        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(1.0, 0.0, 0.0)));
-        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI / 2, Eigen::Vector3d(0.0, 0.0, 1.0)));
+        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+        hand_over_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 0.0, 1.0)));
 
         if (moveToCartPose(group, hand_over_pose) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
         {
