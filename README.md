@@ -63,8 +63,8 @@ Quick start
 -----------
 
 The following examples describe how to use the robot in simulation. For more
-information on how to use the real mobipick robot have a look at the README.md
-in `mobipick_bringup`.
+information on how to use the real mobipick robot have a look at the
+[README.md in `mobipick_bringup`](mobipick_bringup/README.md).
 
 ### Pick + Place with move_base demo (Berghoffstraße)
 
@@ -259,4 +259,32 @@ To run pre-commit automatically before committing in the local repo, install the
 
 ```bash
 pre-commit install
+```
+
+
+Troubleshooting
+---------------
+
+### Problem: Arm doesn't move
+
+Sometimes the arm doesn't move, and the following errors appear in the log:
+
+```text
+[ WARN] [1625228178.110222489]: Controller scaled_pos_traj_controller failed with error INVALID_GOAL:  (/mobipick/move_group)
+[ WARN] [1625228178.110321441]: Controller handle scaled_pos_traj_controller reports status FAILED (/mobipick/move_group)
+[ INFO] [1625228178.110378244]: Completed trajectory execution with status FAILED ... (/mobipick/move_group)
+```
+
+This happens every time that `roslaunch mobipick_bringup
+mobipick_bringup_control.launch` is restarted, because the program on the UR5
+robot must be started **after** that launch file is run.
+
+**Solution:** First make sure that `mobipick_bringup_control.launch` is
+running, then stop and restart the UR program on the robot. You can do this by
+pressing "stop" and then "start on the teaching pendant. Alternatively, call
+the following services:
+
+```bash
+rosservice call /mobipick/ur_hardware_interface/dashboard/stop
+rosservice call /mobipick/ur_hardware_interface/dashboard/play
 ```

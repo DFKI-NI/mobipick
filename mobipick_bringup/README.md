@@ -43,3 +43,30 @@ versa.
 **mobipick_bringup_both.launch** wraps both steps above into one single
 launch file. Start this from the mobipick-os-sensor pc and it will automatically
 run mobipick_bringup_control.launch on the mobipick-os-control pc.
+
+## Running the demos
+
+After starting `mobipick_bringup_both.launch` as described above, you can start
+one of the following demos. These are mostly identical to the simulation demos
+described in the top-level README.md.
+
+Simple state machine pick-and-place and `move_base` demo:
+
+```bash
+roslaunch hybrit_dope dope.launch
+roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch
+rosservice call /mobipick/continue_statemachine
+```
+
+Same, but with a behavior tree instead:
+
+```bash
+roslaunch hybrit_dope dope.launch
+roslaunch mobipick_pick_n_place mobipick_pick_n_place_bt.launch
+```
+
+Ultra-simple demo with hard-coded navigation targets and arm movements:
+
+```bash
+ROS_NAMESPACE=mobipick rosrun pbr_mobipick_demo waypoint_demo.py
+```
