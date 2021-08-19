@@ -108,7 +108,7 @@ roslaunch mobipick_gazebo mobipick_mrk_lab_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 roslaunch mir_gazebo fake_localization.launch __ns:="mobipick"
 roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true __ns:="mobipick"
-roslaunch mobipick_moveit_config moveit_rviz.launch config:=true   # not required, just for visualization
+roslaunch mobipick_moveit_config moveit_rviz.launch    # not required, just for visualization
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch
 ```
 
