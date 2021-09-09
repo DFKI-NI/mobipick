@@ -13,9 +13,9 @@
   <arg name="start_paused" default="true" />
 
   <group>
-    <remap from="mobipick/mobile_base_controller/cmd_vel" to="mobipick/cmd_vel" />
-    <remap from="mobipick/mobile_base_controller/odom"    to="mobipick/odom" />
-    <remap from="mobipick/joint_states"                   to="mobipick/gazebo_joint_states" />
+    <remap from="$(arg namespace)/mobile_base_controller/cmd_vel" to="$(arg namespace)/cmd_vel" />
+    <remap from="$(arg namespace)/mobile_base_controller/odom"    to="$(arg namespace)/odom" />
+    <remap from="$(arg namespace)/joint_states"                   to="$(arg namespace)/gazebo_joint_states" />
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="$(arg world_name)"/>
@@ -27,7 +27,7 @@
   <!-- Add passive + mimic joints to joint_states topic -->
   <group ns="$(arg namespace)">
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-      <rosparam param="source_list">[/mobipick/gazebo_joint_states]</rosparam>
+      <rosparam param="source_list">[gazebo_joint_states]</rosparam>
       <param name="rate" value="60.0" />
     </node>
   </group>
