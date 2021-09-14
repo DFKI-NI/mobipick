@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="model_name" default="powerdrill_1" />
   <arg name="wait_for_table" default="true" />
   <arg name="wait_for_table_name" default="table_1" />
   <arg name="x" default="0.90" />
@@ -13,13 +14,13 @@
     command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/powerdrill.urdf.xacro'" />
 
   <group if="$(arg wait_for_table)">
-    <node name="spawn_powerdrill1" pkg="gazebo_ros" type="spawn_model" args="-urdf
-      -param powerdrill_description -model powerdrill_1 -wait '$(arg wait_for_table_name)'
+    <node name="spawn_$(arg model_name)" pkg="gazebo_ros" type="spawn_model" args="-urdf
+      -param powerdrill_description -model $(arg model_name) -wait '$(arg wait_for_table_name)'
       -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />
   </group>
   <group unless="$(arg wait_for_table)">
-    <node name="spawn_powerdrill1" pkg="gazebo_ros" type="spawn_model" args="-urdf
-      -param powerdrill_description -model powerdrill_1
+    <node name="spawn_$(arg model_name)" pkg="gazebo_ros" type="spawn_model" args="-urdf
+      -param powerdrill_description -model $(arg model_name)
       -x $(arg x) -y $(arg y) -z $(arg z)" respawn="false" output="screen" />
   </group>
 </launch>
