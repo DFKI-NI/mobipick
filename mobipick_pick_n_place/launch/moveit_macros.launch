@@ -1,9 +1,10 @@
 <launch>
+  <arg name="namespace" default="mobipick" />
   <arg name="prefix" default="mobipick/" />
 
-  <group ns="mobipick">
-  <node name="moveit_macros" pkg="mobipick_pick_n_place" type="moveit_macros" output="screen">
-    <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
-  </node>
+  <group ns="$(arg namespace)">
+    <node name="moveit_macros" pkg="mobipick_pick_n_place" type="moveit_macros" output="screen">
+      <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
+    </node>
   </group>
 </launch>
