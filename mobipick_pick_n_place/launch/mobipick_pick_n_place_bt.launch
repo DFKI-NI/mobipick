@@ -1,21 +1,22 @@
 <launch>
+  <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="object_source" default="gazebo" doc="Where to get objects from. Possible values: 'gazebo' (for gazebo) or 'static' (for moveit demo mode)." />
-  <arg name="prefix" default="mobipick/" />
+  <arg name="prefix" default="$(arg namespace)/" />
   <arg name="simulation" default="false" />
   <arg name="world" default="moelk" />
 
-  <group ns="mobipick">
-  <rosparam file="$(find mobipick_pick_n_place)/config/$(arg world).yaml" command="load"/>
-  <node name="mobipick_pick_n_place_bt" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place_bt"
-      args="$(find mobipick_pick_n_place)/config/mobipick_pick_n_place_bt.xml" output="screen">
-    <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
-  </node>
-  <group if="$(arg simulation)">
-    <node name="$(arg object_source)_object_publisher" pkg="mobipick_pick_n_place" type="$(arg object_source)_object_publisher" output="screen" />
+  <group ns="$(arg namespace)">
+    <rosparam file="$(find mobipick_pick_n_place)/config/$(arg world).yaml" command="load"/>
+    <node name="mobipick_pick_n_place_bt" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place_bt"
+        args="$(find mobipick_pick_n_place)/config/mobipick_pick_n_place_bt.xml" output="screen">
+      <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
+    </node>
+    <group if="$(arg simulation)">
+      <node name="$(arg object_source)_object_publisher" pkg="mobipick_pick_n_place" type="$(arg object_source)_object_publisher" output="screen" />
 
-    <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
-    <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer_sim.py" output="screen" />
-  </group>
+      <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
+      <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer_sim.py" output="screen" />
+    </group>
 
     <!-- fake actions for MoveIt demo mode -->
     <group if="$(eval arg('object_source') == 'static')">
@@ -23,6 +24,6 @@
       <node name="fake_gripper_command_action" pkg="mobipick_pick_n_place" type="fake_gripper_command_action.py" />
     </group>
 
-  <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer.py" output="screen" unless="$(arg simulation)" />
+    <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer.py" output="screen" unless="$(arg simulation)" />
   </group>
 </launch>

@@ -42,6 +42,8 @@
       <arg name="robot_x"   value="$(arg robot_x)" />
       <arg name="robot_y"   value="$(arg robot_y)" />
       <arg name="robot_yaw" value="$(arg robot_yaw)" />
+      <arg name="tf_prefix" value="$(arg namespace)" />
+      <arg name="robot_name" value="$(arg namespace)" />
     </include>
   </group>
 
