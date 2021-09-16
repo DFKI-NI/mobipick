@@ -271,12 +271,10 @@ int main(int argc, char** argv)
   ros::NodeHandle nh;
   detection_pub =
       std::make_shared<ros::Publisher>(nh.advertise<vision_msgs::Detection3DArray>("dope/detected_objects", 10));
-  pose_power_drill_pub = std::make_shared<ros::Publisher>(
-      nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_power_drill_with_grip", 10));
-  pose_table_pub =
-      std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("/mobipick/dope/pose_table", 10));
-  marker_pub =
-      std::make_shared<ros::Publisher>(nh.advertise<visualization_msgs::MarkerArray>("/mobipick/dope/markers", 10));
+  pose_power_drill_pub =
+      std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("dope/pose_power_drill_with_grip", 10));
+  pose_table_pub = std::make_shared<ros::Publisher>(nh.advertise<geometry_msgs::PoseStamped>("dope/pose_table", 10));
+  marker_pub = std::make_shared<ros::Publisher>(nh.advertise<visualization_msgs::MarkerArray>("dope/markers", 10));
   ros::Subscriber sub = nh.subscribe("/gazebo/link_states", 10, gazebo_cb);
 
   ros::spin();
