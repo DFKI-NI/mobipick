@@ -82,7 +82,7 @@ rosservice call /mobipick/continue_statemachine
 There exists also an analogous demo using [BehaviorTree.CPP](https://github.com/BehaviorTree/BehaviorTree.CPP)
 instead of a state machine. The implementation doesn't support pausing as easily, however,
 so this functionality is removed.
-The graphical editor [Groot](https://github.com/BehaviorTree/Groot) is directly supported in this demo.
+The graphical editor [Groot](https://github.com/BehaviorTree/Groot) is integrated in this demo.
 To see its visualization, run `rosrun groot Groot` and connect the monitor with default settings
 after the behavior tree started.
 
@@ -95,11 +95,11 @@ roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud
 rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
 roslaunch mobipick_pick_n_place moveit_macros.launch
 roslaunch mobipick_pick_n_place mobipick_pick_n_place_bt.launch simulation:=true
-rosrun groot Groot
+rosrun groot Groot  # and connect the monitor with default settings
 ```
 
-Optionally execute `rosservice call /mobipick/simulate_user_interaction` during
-the user interaction step to fake taking the power drill.
+For both state machine and behavior tree version, optionally execute
+`rosservice call /mobipick/simulate_user_interaction` during the user interaction step to fake taking the power drill.
 
 ### Pick + Place demo (Gazebo)
 
