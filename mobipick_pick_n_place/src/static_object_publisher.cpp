@@ -7,12 +7,12 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "static_object_publisher");
   ros::NodeHandle nh;
-  ros::Publisher detection_pub = nh.advertise<vision_msgs::Detection3DArray>("detected_objects", 10);
+  ros::Publisher detection_pub = nh.advertise<vision_msgs::Detection3DArray>("dope/detected_objects", 10);
 
   vision_msgs::Detection3DArray detections;
 
   detections.header.stamp = ros::Time::now();
-  detections.header.frame_id = "odom";
+  detections.header.frame_id = "mobipick/odom";
 
   {
     // add table
