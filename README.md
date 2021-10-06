@@ -121,8 +121,21 @@ roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch
 
 ```bash
 roslaunch mobipick_moveit_config demo.launch
-roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch object_source:=static
+roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true object_source:=static
+rosservice call /mobipick/continue_statemachine
 ```
+
+* Make sure that the parameter `use_sim_time` is set to `false`.
+* You can play around with different planning pipelines, which you can select
+  in the the "MotionPlanning" pane in RViz under "Context".
+  - `chomp` (with our current configuration) is very slow (takes 50 s on my
+    machine). `chomp` is the default *in RViz* (because RViz uses alphabetical
+    sorting).
+  - `ompl` is much faster and is used in the `pick_n_place` demos. `ompl` is
+    the default *in MoveIt*.
+  - `pilz_industrial_motion_planner` is a simplistic motion planning pipeline
+    that works for easy motions. It is somewhat hard to control from RViz, but
+    the `PTP` planner works.
 
 [![Mobipick pick + place demo (MoveIt! demo mode)](https://i.vimeocdn.com/video/683635444.jpg?mw=640)](https://vimeo.com/256064108)
 
