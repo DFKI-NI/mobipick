@@ -12,21 +12,21 @@ int main(int argc, char** argv)
   vision_msgs::Detection3DArray detections;
 
   detections.header.stamp = ros::Time::now();
-  detections.header.frame_id = "mobipick/odom";
+  detections.header.frame_id = "mobipick/base_link";
 
   {
     // add table
     geometry_msgs::Pose object_pose_msg;
-    object_pose_msg.position.x = 1.1;
-    object_pose_msg.position.y = 0.0;
+    object_pose_msg.position.x = 0.11;
+    object_pose_msg.position.y = -0.84;
     object_pose_msg.position.z = 0.0;
-    object_pose_msg.orientation.w = 1.0;
+    object_pose_msg.orientation.z = -1.0;
 
     vision_msgs::Detection3D det3d;
     det3d.header = detections.header;
     det3d.bbox.size.x = 0.70;
     det3d.bbox.size.y = 0.70;
-    det3d.bbox.size.z = 0.94;
+    det3d.bbox.size.z = 0.73;
 
     // shift to center of bbox
     Eigen::Isometry3d object_pose;
@@ -71,27 +71,27 @@ int main(int argc, char** argv)
   //  }
 
   {
-    // add powerdrill
+    // add powerdrill_with_grip
     geometry_msgs::Pose object_pose_msg;
-    object_pose_msg.position.x = 0.90;
-    object_pose_msg.position.y = -0.20;
-    object_pose_msg.position.z = 1.10;
-    object_pose_msg.orientation.x = 0.0;
-    object_pose_msg.orientation.y = -0.707106781;
-    object_pose_msg.orientation.z = -0.707106781;
-    object_pose_msg.orientation.w = 0.0;
+    object_pose_msg.position.x = 0.11;
+    object_pose_msg.position.y = -0.84;
+    object_pose_msg.position.z = 0.83;
+    object_pose_msg.orientation.x = -0.6194878998936445;
+    object_pose_msg.orientation.y = -0.344329398453028;
+    object_pose_msg.orientation.z = 0.3426231915182013;
+    object_pose_msg.orientation.w = 0.6166695678239843;
 
     vision_msgs::Detection3D det3d;
     det3d.header = detections.header;
-    det3d.bbox.size.x = 0.184208;
-    det3d.bbox.size.y = 0.187514;
-    det3d.bbox.size.z = 0.057294;
+    det3d.bbox.size.x = 0.18002399444580078;
+    det3d.bbox.size.y = 0.22317399978637695;
+    det3d.bbox.size.z = 0.082321996688842773;
 
     // shift to center of bbox
     Eigen::Isometry3d object_pose;
     tf::poseMsgToEigen(object_pose_msg, object_pose);
     Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
-    object_to_bbox.translation() = Eigen::Vector3d(-0.046d, 0.01055d, 0.02545d);
+    object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, 0.0);
     tf::poseEigenToMsg((object_pose * object_to_bbox), det3d.bbox.center);
 
     det3d.results.resize(1);
