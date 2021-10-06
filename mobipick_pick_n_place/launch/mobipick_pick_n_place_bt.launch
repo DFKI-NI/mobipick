@@ -17,6 +17,12 @@
     <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer_sim.py" output="screen" />
   </group>
 
+    <!-- fake actions for MoveIt demo mode -->
+    <group if="$(eval arg('object_source') == 'static')">
+      <node name="fake_move_base" pkg="mobipick_pick_n_place" type="fake_move_base.py" />
+      <node name="fake_gripper_command_action" pkg="mobipick_pick_n_place" type="fake_gripper_command_action.py" />
+    </group>
+
   <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer.py" output="screen" unless="$(arg simulation)" />
   </group>
 </launch>
