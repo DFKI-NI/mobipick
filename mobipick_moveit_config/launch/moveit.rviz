@@ -14,6 +14,8 @@ Panels:
       - /Current View1
     Name: Views
     Splitter Ratio: 0.5
+Preferences:
+  PromptSaveOnExit: true
 Toolbars:
   toolButtonStyle: 2
 Visualization Manager:
@@ -100,6 +102,51 @@ Visualization Manager:
             Show Trail: false
             Value: true
           mobipick/br_caster_wheel_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp3_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp4_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_forearm_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_terminal_element_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_upper_arm_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_wrist_3_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_wrist_clamp_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -334,7 +381,15 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+          mobipick/ur5_base_link_inertia:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
             Value: true
+          mobipick/ur5_flange:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           mobipick/ur5_forearm_link:
             Alpha: 1
             Show Axes: false
@@ -456,6 +511,51 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
+          mobipick/cable_guide_clamp1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp3_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp4_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_forearm_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_terminal_element_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_upper_arm_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_wrist_3_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_wrist_clamp_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
           mobipick/fl_caster_rotation_link:
             Alpha: 1
             Show Axes: false
@@ -686,7 +786,15 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+          mobipick/ur5_base_link_inertia:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
             Value: true
+          mobipick/ur5_flange:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           mobipick/ur5_forearm_link:
             Alpha: 1
             Show Axes: false
@@ -765,9 +873,7 @@ Visualization Manager:
       Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 4096
       Min Color: 0; 0; 0
-      Min Intensity: 0
       Name: PointCloud2
       Position Transformer: XYZ
       Queue Size: 10
@@ -828,6 +934,24 @@ Visualization Manager:
         mobipick/br_caster_rotation_link:
           Value: false
         mobipick/br_caster_wheel_link:
+          Value: false
+        mobipick/cable_guide_clamp1_link:
+          Value: false
+        mobipick/cable_guide_clamp2_link:
+          Value: false
+        mobipick/cable_guide_clamp3_link:
+          Value: false
+        mobipick/cable_guide_clamp4_link:
+          Value: false
+        mobipick/cable_guide_forearm_tube_link:
+          Value: false
+        mobipick/cable_guide_terminal_element_link:
+          Value: false
+        mobipick/cable_guide_upper_arm_tube_link:
+          Value: false
+        mobipick/cable_guide_wrist_3_tube_link:
+          Value: false
+        mobipick/cable_guide_wrist_clamp_link:
           Value: false
         mobipick/fl_caster_rotation_link:
           Value: false
@@ -930,6 +1054,10 @@ Visualization Manager:
         mobipick/ur5_base:
           Value: false
         mobipick/ur5_base_link:
+          Value: true
+        mobipick/ur5_base_link_inertia:
+          Value: false
+        mobipick/ur5_flange:
           Value: false
         mobipick/ur5_forearm_link:
           Value: false
@@ -951,110 +1079,123 @@ Visualization Manager:
           Value: false
         mobipick/us_2_frame:
           Value: false
+      Marker Alpha: 1
       Marker Scale: 1
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        map:
-          mobipick/odom:
-            mobipick/base_footprint:
-              mobipick/base_link:
-                mobipick/back_laser_link:
+        mobipick/odom:
+          mobipick/base_footprint:
+            mobipick/base_link:
+              mobipick/back_laser_link:
+                {}
+              mobipick/bl_caster_rotation_link:
+                mobipick/bl_caster_wheel_link:
                   {}
-                mobipick/bl_caster_rotation_link:
-                  mobipick/bl_caster_wheel_link:
-                    {}
-                mobipick/br_caster_rotation_link:
-                  mobipick/br_caster_wheel_link:
-                    {}
-                mobipick/fl_caster_rotation_link:
-                  mobipick/fl_caster_wheel_link:
-                    {}
-                mobipick/fr_caster_rotation_link:
-                  mobipick/fr_caster_wheel_link:
-                    {}
-                mobipick/front_laser_link:
+              mobipick/br_caster_rotation_link:
+                mobipick/br_caster_wheel_link:
                   {}
-                mobipick/imu_link:
-                  mobipick/imu_frame:
+              mobipick/fl_caster_rotation_link:
+                mobipick/fl_caster_wheel_link:
+                  {}
+              mobipick/fr_caster_rotation_link:
+                mobipick/fr_caster_wheel_link:
+                  {}
+              mobipick/front_laser_link:
+                {}
+              mobipick/imu_link:
+                mobipick/imu_frame:
+                  {}
+              mobipick/left_wheel_link:
+                {}
+              mobipick/right_wheel_link:
+                {}
+              mobipick/surface:
+                mobipick/structure_part_down:
+                  mobipick/structure_cover_back_link:
                     {}
-                mobipick/left_wheel_link:
-                  {}
-                mobipick/right_wheel_link:
-                  {}
-                mobipick/surface:
-                  mobipick/structure_part_down:
-                    mobipick/structure_cover_back_link:
-                      {}
-                    mobipick/structure_cover_front_link:
-                      {}
-                    mobipick/structure_cover_left_link:
-                      {}
-                    mobipick/structure_cover_right_link:
-                      {}
-                    mobipick/structure_cover_top_back_link:
-                      {}
-                    mobipick/structure_cover_top_front_link:
-                      {}
-                    mobipick/structure_part_up:
-                      mobipick/structure_pedestal:
-                        mobipick/structure_pedestal_surface:
-                          mobipick/ur5_base_link:
-                            mobipick/ur5_base:
-                              mobipick/ur5_tool0_controller:
-                                {}
+                  mobipick/structure_cover_front_link:
+                    {}
+                  mobipick/structure_cover_left_link:
+                    {}
+                  mobipick/structure_cover_right_link:
+                    {}
+                  mobipick/structure_cover_top_back_link:
+                    {}
+                  mobipick/structure_cover_top_front_link:
+                    {}
+                  mobipick/structure_part_up:
+                    mobipick/structure_pedestal:
+                      mobipick/structure_pedestal_surface:
+                        mobipick/ur5_base_link:
+                          mobipick/ur5_base:
+                            {}
+                          mobipick/ur5_base_link_inertia:
                             mobipick/ur5_shoulder_link:
                               mobipick/ur5_upper_arm_link:
+                                mobipick/cable_guide_clamp1_link:
+                                  mobipick/cable_guide_upper_arm_tube_link:
+                                    {}
+                                mobipick/cable_guide_clamp2_link:
+                                  {}
                                 mobipick/ur5_forearm_link:
+                                  mobipick/cable_guide_clamp3_link:
+                                    mobipick/cable_guide_forearm_tube_link:
+                                      {}
+                                  mobipick/cable_guide_clamp4_link:
+                                    {}
                                   mobipick/ur5_wrist_1_link:
                                     mobipick/ur5_wrist_2_link:
                                       mobipick/ur5_wrist_3_link:
-                                        mobipick/ur5_tool0:
-                                          mobipick/fts_robotside:
-                                            mobipick/fts_toolside:
-                                              mobipick/gripper_coupling_link:
-                                                mobipick/gripper_robotiq_arg2f_base_link:
-                                                  mobipick/gripper_left_inner_knuckle:
-                                                    {}
-                                                  mobipick/gripper_left_outer_knuckle:
-                                                    mobipick/gripper_left_outer_finger:
-                                                      mobipick/gripper_left_inner_finger:
-                                                        mobipick/gripper_left_robotiq_fingertip_65mm:
-                                                          {}
-                                                  mobipick/gripper_right_inner_knuckle:
-                                                    {}
-                                                  mobipick/gripper_right_outer_knuckle:
-                                                    mobipick/gripper_right_outer_finger:
-                                                      mobipick/gripper_right_inner_finger:
-                                                        mobipick/gripper_right_robotiq_fingertip_65mm:
-                                                          {}
-                                                  mobipick/gripper_tcp:
-                                                    {}
-                                              mobipick/sensor_mount_link:
-                                                mobipick/gripper_astra_link:
-                                                  mobipick/gripper_astra_depth_frame:
-                                                    {}
-                                                  mobipick/gripper_astra_rgb_frame:
-                                                    mobipick/gripper_astra_rgb_optical_frame:
-                                                      mobipick/gripper_astra_depth_optical_frame:
-                                                        {}
-                                                mobipick/sensor_mount_bracket_link:
-                                                  {}
-                                                mobipick/sensor_mount_pico_holder_link:
-                                                  mobipick/gripper_pico_flexx_link:
-                                                    mobipick/gripper_pico_flexx_frame:
-                                                      mobipick/gripper_pico_flexx_optical_frame:
-                                                        {}
-                                            mobipick/robotiq_force_torque_frame_id:
+                                        mobipick/cable_guide_wrist_clamp_link:
+                                          mobipick/cable_guide_terminal_element_link:
+                                            mobipick/cable_guide_wrist_3_tube_link:
                                               {}
-                mobipick/us_1_frame:
-                  {}
-                mobipick/us_2_frame:
-                  {}
-            mobipick/odom_comb:
-              {}
+                                        mobipick/ur5_flange:
+                                          mobipick/ur5_tool0:
+                                            mobipick/fts_robotside:
+                                              mobipick/fts_toolside:
+                                                mobipick/gripper_coupling_link:
+                                                  mobipick/gripper_robotiq_arg2f_base_link:
+                                                    mobipick/gripper_left_inner_knuckle:
+                                                      {}
+                                                    mobipick/gripper_left_outer_knuckle:
+                                                      mobipick/gripper_left_outer_finger:
+                                                        mobipick/gripper_left_inner_finger:
+                                                          mobipick/gripper_left_robotiq_fingertip_65mm:
+                                                            {}
+                                                    mobipick/gripper_right_inner_knuckle:
+                                                      {}
+                                                    mobipick/gripper_right_outer_knuckle:
+                                                      mobipick/gripper_right_outer_finger:
+                                                        mobipick/gripper_right_inner_finger:
+                                                          mobipick/gripper_right_robotiq_fingertip_65mm:
+                                                            {}
+                                                    mobipick/gripper_tcp:
+                                                      {}
+                                                mobipick/sensor_mount_link:
+                                                  mobipick/gripper_astra_link:
+                                                    mobipick/gripper_astra_depth_frame:
+                                                      {}
+                                                    mobipick/gripper_astra_rgb_frame:
+                                                      mobipick/gripper_astra_rgb_optical_frame:
+                                                        mobipick/gripper_astra_depth_optical_frame:
+                                                          {}
+                                                  mobipick/sensor_mount_bracket_link:
+                                                    {}
+                                                  mobipick/sensor_mount_pico_holder_link:
+                                                    mobipick/gripper_pico_flexx_link:
+                                                      mobipick/gripper_pico_flexx_frame:
+                                                        mobipick/gripper_pico_flexx_optical_frame:
+                                                          {}
+                                              mobipick/robotiq_force_torque_frame_id:
+                                                {}
+              mobipick/us_1_frame:
+                {}
+              mobipick/us_2_frame:
+                {}
       Update Interval: 0
       Value: true
     - Class: moveit_rviz_plugin/PlanningScene
@@ -1108,6 +1249,51 @@ Visualization Manager:
             Show Trail: false
             Value: true
           mobipick/br_caster_wheel_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp1_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp2_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp3_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_clamp4_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_forearm_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_terminal_element_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_upper_arm_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_wrist_3_tube_link:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
+            Value: true
+          mobipick/cable_guide_wrist_clamp_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -1342,7 +1528,15 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+          mobipick/ur5_base_link_inertia:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
             Value: true
+          mobipick/ur5_flange:
+            Alpha: 1
+            Show Axes: false
+            Show Trail: false
           mobipick/ur5_forearm_link:
             Alpha: 1
             Show Axes: false
@@ -1438,7 +1632,6 @@ Visualization Manager:
       Near Clip Distance: 0.00999999978
       Pitch: 0.48020345
       Target Frame: base_footprint
-      Value: XYOrbit (rviz)
       Yaw: 4.05860853
     Saved: ~
 Window Geometry:
