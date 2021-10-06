@@ -178,8 +178,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
     bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
 
-    // --- calculate desired pose of gripper_tcp when grasping
-    // pose of power drill
+    // --- calculate desired pose of gripper_tcp (in power drill frame) when grasping
     geometry_msgs::PoseStamped p;
     p.header.frame_id = "power_drill";
     tf::poseEigenToMsg(bbox_center_rotated * grasp_pose.grasp_pose, p.pose);
@@ -225,8 +224,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   double table_height = table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z];
   ROS_INFO("Table height: %f", table_height);
 
-  // --- calculate desired pose of gripper_tcp when placing
-  // desired pose of power drill
+  // --- calculate desired pose of power drill (in base_link frame) when placing
   geometry_msgs::PoseStamped p;
 
   Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
