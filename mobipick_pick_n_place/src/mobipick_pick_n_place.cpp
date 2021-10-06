@@ -133,40 +133,39 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
 
   std::vector<GrapsPoseDefine> grasp_poses;
   /*
-    {
-      // GRASP 1: pitch = pi/8  (grasp handle from upper back)
-      GrapsPoseDefine grasp_pose_define;
+  {
+    // GRASP 1: pitch = pi/8  (grasp handle from upper back)
+    GrapsPoseDefine grasp_pose_define;
 
-      Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
-      grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-      grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
-      grasp_pose_define.grasp_pose.rotate(rotation);
-      grasp_pose_define.gripper_width=0.03;
-      grasp_poses.push_back(grasp_pose_define);
-
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
+    grasp_pose_define.grasp_pose.rotate(rotation);
+    grasp_pose_define.gripper_width=0.03;
+    grasp_poses.push_back(grasp_pose_define);
     }
   */
   {
     // GRASP 2: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
-    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
     grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-    grasp_pose_define.grasp_pose.rotate(rotation);
-    grasp_pose_define.gripper_width = 0.03;  //
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+    grasp_pose_define.gripper_width = 0.03;
     grasp_poses.push_back(grasp_pose_define);
   }
+  // commented out because if used, move to transport will fail
   /*
-    {
-      // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
-      GrapsPoseDefine grasp_pose_define;
-      grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-      grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-      grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI/2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
-      grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-      grasp_pose_define.gripper_width=0.03; //
-      grasp_poses.push_back(grasp_pose_define);
-    }
+  {
+    // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
+    GrapsPoseDefine grasp_pose_define;
+    grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    grasp_pose_define.gripper_width = 0.03;
+    grasp_poses.push_back(grasp_pose_define);
+  }
   */
 
   for (auto&& grasp_pose : grasp_poses)
