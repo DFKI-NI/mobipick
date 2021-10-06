@@ -195,8 +195,7 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   std::vector<std::string> object_ids;
   object_ids.push_back("table");
   auto table = planning_scene_interface.getObjects(object_ids).at("table");
-  double table_height =
-      table.primitive_poses[0].position.z + table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] / 2.0;
+  double table_height = table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z];
   ROS_INFO("Table height: %f", table_height);
 
   // --- calculate desired pose of gripper_tcp when placing
