@@ -237,13 +237,14 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface& gr
 {
   moveit_msgs::Constraints constr;
 
-  tf::TransformListener tf_listener_;
+  // TODO: don't recreate tf_listener all the time
+  tf::TransformListener tf_listener;
   tf::StampedTransform transform;
 
-  ros::Duration(1).sleep();
   try
   {
-    tf_listener_.lookupTransform("mobipick/gripper_tcp", "mobipick/base_link", ros::Time(0), transform);
+    tf_listener.waitForTransform("mobipick/gripper_tcp", "mobipick/base_link", ros::Time(0), ros::Duration(1.0));
+    tf_listener.lookupTransform("mobipick/gripper_tcp", "mobipick/base_link", ros::Time(0), transform);
   }
   catch (tf::TransformException ex)
   {
