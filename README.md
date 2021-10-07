@@ -101,22 +101,6 @@ rosrun groot Groot  # and connect the monitor with default settings
 For both state machine and behavior tree version, optionally execute
 `rosservice call /mobipick/simulate_user_interaction` during the user interaction step to fake taking the power drill.
 
-### Pick + Place demo (Gazebo)
-
-```bash
-roslaunch mobipick_gazebo mobipick_mrk_lab_world.launch
-rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
-roslaunch mir_gazebo fake_localization.launch __ns:="mobipick"
-roslaunch mobipick_moveit_config moveit_planning_execution.launch use_pointcloud:=true simulation:=true
-roslaunch mobipick_moveit_config moveit_rviz.launch    # not required, just for visualization
-roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch
-```
-
-[![Mobipick pick + place demo (Gazebo)](https://i.vimeocdn.com/video/683635424.jpg?mw=640)](https://vimeo.com/256064111)
-
-(Click image to see video)
-
-
 ### Pick + Place demo (MoveIt! demo mode)
 
 ```bash
