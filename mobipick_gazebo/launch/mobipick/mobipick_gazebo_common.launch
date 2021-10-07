@@ -10,7 +10,7 @@
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
-  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" />
+  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" /> <!-- Cannot use '$(arg tf_prefix)/' instead because '/' would be included if tf_prefix = '', and tf frames cannot start with '/' in tf2 -->
 
 
   <!-- Load URDF -->
@@ -74,7 +74,7 @@
 
   <!-- Load teleop -->
   <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
-    <param name="default_topic" value="/mobipick/cmd_vel"/>
+    <param name="default_topic" value="cmd_vel"/>
     <param name="default_vx_max" value="1.0" />
     <param name="default_vx_min" value="-1.0" />
     <param name="default_vw_max" value="1.5" />

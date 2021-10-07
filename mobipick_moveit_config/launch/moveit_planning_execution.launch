@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="namespace" default="mobipick"         doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
+
   # whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater
   <arg name="use_pointcloud" default="false"/>
   <arg name="simulation" default="false"/>
@@ -7,13 +10,15 @@
   # The planning and execution components of MoveIt! configured to
   # publish the current configuration of the robot (simulated or real)
   # and the current state of the world as seen by the planner
-  <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
-    <arg name="publish_monitored_planning_scene" value="true" />
-    <arg name="info" value="true" />
-    <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
-    <arg name="simulation" value="$(arg simulation)"/>
-    <arg name="prefix" value="mobipick" />
-  </include>
+  <group ns="$(arg namespace)">
+    <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
+      <arg name="publish_monitored_planning_scene" value="true" />
+      <arg name="info" value="true" />
+      <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
+      <arg name="simulation" value="$(arg simulation)"/>
+      <arg name="prefix" value="$(arg tf_prefix)" />
+    </include>
+  </group>
   # The visualization component of MoveIt!
   <!--include file="$(find mobipick_moveit_config)/launch/moveit_rviz.launch">
     <arg name="config" value="true"/>

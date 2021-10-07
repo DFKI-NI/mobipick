@@ -9,6 +9,8 @@
   <arg name="robot_yaw" default="0.0" />
 
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="mobipick" doc="tf_prefix to be used" />
+  <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
   <arg name="start_paused" default="true" />
 
@@ -42,6 +44,8 @@
       <arg name="robot_x"   value="$(arg robot_x)" />
       <arg name="robot_y"   value="$(arg robot_y)" />
       <arg name="robot_yaw" value="$(arg robot_yaw)" />
+      <arg name="tf_prefix" value="$(arg tf_prefix)" />
+      <arg name="robot_name" value="$(arg robot_name)" />
     </include>
   </group>
 
