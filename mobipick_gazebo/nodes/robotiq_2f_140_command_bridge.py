@@ -14,7 +14,8 @@ class GripperBridgeAction(object):
     _feedback = control_msgs.msg.GripperCommandFeedback()
     _result = control_msgs.msg.GripperCommandResult()
 
-    def __init__(self, name):
+    def __init__(self, name, tf_prefix):
+        self.tf_prefix = tf_prefix
         self.joint_trajectory_client()
         rospy.loginfo("Client connected")
 
@@ -49,7 +50,7 @@ class GripperBridgeAction(object):
         jt_point.time_from_start = rospy.Duration(2.0)
         jt_point.effort.append(effort)
         jt.points.append(jt_point)
-        jt.joint_names.append('mobipick/gripper_finger_joint')
+        jt.joint_names.append(self.tf_prefix + 'gripper_finger_joint')
         self._actual_goal.trajectory = jt
 
     def execute_cb(self, goal):
@@ -70,7 +71,7 @@ class GripperBridgeAction(object):
                 rospy.loginfo('%s: Preempted' % self._action_name)
                 self._as.set_preempted()
                 success = False
-                self._feedback.stalled = true
+                self._feedback.stalled = True
             self._feedback.reached_goal = False
             self._feedback.position = 0.14 - 0.14 / 0.76 * self._joint_state.actual.positions[0]
             # publish the feedback
@@ -95,5 +96,17 @@ class GripperBridgeAction(object):
 
 if __name__ == '__main__':
     rospy.init_node('gripper_command_bridge')
-    server = GripperBridgeAction(rospy.get_name())
+
+    param_path = rospy.search_param('tf_prefix')
+    if param_path is not None:
+        tf_prefix = rospy.get_param(param_path)
+    else:
+        tf_prefix = 'mobipick'
+
+    #  ensure tf_prefix_ ends with exactly 1 '/' if nonempty, or "" if empty
+    tf_prefix = tf_prefix.rstrip('/') + '/'
+    if len(tf_prefix) == 1:
+        tf_prefix = ""
+
+    server = GripperBridgeAction(rospy.get_name(), tf_prefix)
     rospy.spin()

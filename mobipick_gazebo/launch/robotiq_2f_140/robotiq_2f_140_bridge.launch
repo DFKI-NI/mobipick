@@ -1,9 +1,11 @@
 <?xml version="1.0" ?>
 
 <launch>
-  <arg name="gripper_ns" default="mobipick" />
+  <arg name="namespace" default="mobipick"         doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
 
-  <!-- Start gripper command bridge from  gripper command to follow joint trajectory-->
-  <node name="gripper_hw" pkg="mobipick_gazebo" type="robotiq_2f_140_command_bridge.py" ns="$(arg gripper_ns)" output="screen">
+  <!-- Start gripper command bridge from gripper command to follow joint trajectory-->
+  <node name="gripper_hw" pkg="mobipick_gazebo" type="robotiq_2f_140_command_bridge.py" ns="$(arg namespace)" output="screen">
+    <param name="tf_prefix"  value="$(arg tf_prefix)" />
   </node>
 </launch>
