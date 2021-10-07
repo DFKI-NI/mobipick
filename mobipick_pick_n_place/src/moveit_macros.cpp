@@ -280,8 +280,8 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
     if (!ros::ok())
       return 0;
 
-    vision_msgs::Detection3DArrayConstPtr detections = ros::topic::waitForMessage<vision_msgs::Detection3DArray>(
-        "/mobipick/dope/detected_objects", nh, ros::Duration(30.0));
+    vision_msgs::Detection3DArrayConstPtr detections =
+        ros::topic::waitForMessage<vision_msgs::Detection3DArray>("dope/detected_objects", nh, ros::Duration(30.0));
     if (!detections)
     {
       ROS_ERROR("Timed out while waiting for a message on topic detected_objects!");
