@@ -34,9 +34,6 @@
     </node>
   </group>
 
-  <!-- This namespace has two effects:
-       1. pushing all topics into the namespace
-       2. adding the namespace prefix to the header.frame_id field of the laser scanner messages. -->
   <group ns="$(arg namespace)">
     <!-- spawn robot and bring up controllers etc. -->
     <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_gazebo_common.launch">
