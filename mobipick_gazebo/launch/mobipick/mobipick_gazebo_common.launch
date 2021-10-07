@@ -61,9 +61,6 @@
     <node name="arm_velocity_controller_spawner" pkg="controller_manager" type="controller_manager" output="screen" args="spawn arm_velocity_controller"/>
   </group>
 
-  <!-- Fake calibration -->
-  <node pkg="rostopic" type="rostopic" name="fake_joint_calibration" args="pub /calibrated std_msgs/Bool true"/>
-
   <!-- EKF -->
   <include file="$(find mir_gazebo)/launch/includes/ekf.launch.xml">
       <arg name="tf_prefix" value="$(arg prefix)" />
