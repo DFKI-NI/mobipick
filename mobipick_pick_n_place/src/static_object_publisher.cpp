@@ -7,12 +7,24 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "static_object_publisher");
   ros::NodeHandle nh;
+  ros::NodeHandle nh_priv("~");
+
+  std::string tf_prefix = "mobipick";
+  std::string param_path;
+  if (nh_priv.searchParam("tf_prefix", param_path))
+    nh.getParam(param_path, tf_prefix);
+
+  // ensure tf_prefix ends with exactly 1 '/' if nonempty, or "" if empty
+  tf_prefix = tf_prefix.erase(tf_prefix.find_last_not_of('/') + 1) + "/";
+  if (tf_prefix.length() == 1)
+    tf_prefix = "";
+
   ros::Publisher detection_pub = nh.advertise<vision_msgs::Detection3DArray>("dope/detected_objects", 10);
 
   vision_msgs::Detection3DArray detections;
 
   detections.header.stamp = ros::Time::now();
-  detections.header.frame_id = "mobipick/base_link";
+  detections.header.frame_id = tf_prefix + "base_link";
 
   {
     // add table

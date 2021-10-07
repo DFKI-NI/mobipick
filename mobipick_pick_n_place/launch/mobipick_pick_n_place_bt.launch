@@ -17,7 +17,10 @@
       <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
     </node>
     <group if="$(arg simulation)">
-      <node name="$(arg object_source)_object_publisher" pkg="mobipick_pick_n_place" type="$(arg object_source)_object_publisher" output="screen" />
+      <node name="$(arg object_source)_object_publisher" pkg="mobipick_pick_n_place" type="$(arg object_source)_object_publisher" output="screen">
+        <param name="tf_prefix"  value="$(arg prefix)" />
+        <param name="robot_name" value="$(arg robot_name)" />
+      </node>
 
       <node name="camera_marker_publisher" pkg="mobipick_pick_n_place" type="camera_marker_publisher" output="screen" />
       <node name="ft_observer" pkg="mobipick_pick_n_place" type="ft_observer_sim.py" output="screen" />

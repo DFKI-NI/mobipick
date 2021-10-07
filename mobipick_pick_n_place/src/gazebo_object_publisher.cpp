@@ -12,6 +12,9 @@ std::shared_ptr<ros::Publisher> pose_power_drill_pub;
 std::shared_ptr<ros::Publisher> pose_table_pub;
 std::shared_ptr<ros::Publisher> marker_pub;
 
+std::string robot_name_ = "mobipick";
+std::string tf_prefix_ = "mobipick";
+
 void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
 {
   // input topic has 1000 Hz, output topic should have 10 Hz
@@ -23,7 +26,7 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
   vision_msgs::Detection3DArray detections;
 
   detections.header.stamp = ros::Time::now();
-  detections.header.frame_id = "mobipick/base_link";
+  detections.header.frame_id = tf_prefix_ + "base_link";
 
   assert(msg->name.size() == msg->pose.size());
   bool base_link_found = false;
@@ -33,7 +36,7 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
     for (size_t i = 0; i < msg->name.size(); ++i)
     {
       // TODO: Change to tf listener?
-      if (msg->name[i] == "mobipick::mobipick/base_footprint" && !base_link_found)
+      if (msg->name[i] == robot_name_ + "::" + tf_prefix_ + "base_footprint" && !base_link_found)
       {
         base_link_found = true;
         tf::poseMsgToEigen(msg->pose[i], mobipick_pose);
@@ -269,6 +272,21 @@ int main(int argc, char** argv)
 {
   ros::init(argc, argv, "gazebo_object_publisher");
   ros::NodeHandle nh;
+  ros::NodeHandle nh_priv("~");
+  std::string param_path;
+  if (nh_priv.searchParam("robot_name", param_path))
+    nh.getParam(param_path, robot_name_);
+  if (nh_priv.searchParam("tf_prefix", param_path))
+    nh.getParam(param_path, tf_prefix_);
+
+  nh_priv.param<std::string>("robot_name", robot_name_, "mobipick");
+  nh_priv.param<std::string>("tf_prefix", tf_prefix_, "mobipick");
+
+  // ensure tf_prefix_ ends with exactly 1 '/' if nonempty, or "" if empty
+  tf_prefix_ = tf_prefix_.erase(tf_prefix_.find_last_not_of('/') + 1) + "/";
+  if (tf_prefix_.length() == 1)
+    tf_prefix_ = "";
+
   detection_pub =
       std::make_shared<ros::Publisher>(nh.advertise<vision_msgs::Detection3DArray>("dope/detected_objects", 10));
   pose_power_drill_pub =
