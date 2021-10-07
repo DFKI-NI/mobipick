@@ -1,7 +1,12 @@
 <launch>
-  <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
+  <arg name="namespace" default="mobipick"          doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="$(arg namespace)"  doc="tf_prefix to be used" />
+  <arg name="robot_name" default="$(arg namespace)" doc="the name of the robot in gazebo" />
+
+  <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />     <!-- $(arg prefix) is used in all the config files! -->
+  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" /> <!-- Cannot use '$(arg tf_prefix)/' instead because '/' would be included if tf_prefix = '', and tf frames cannot start with '/' in tf2 -->
+
   <arg name="object_source" default="gazebo" doc="Where to get objects from. Possible values: 'gazebo' (for gazebo) or 'static' (for moveit demo mode)." />
-  <arg name="prefix" default="$(arg namespace)/" />
   <arg name="simulation" default="false" />
   <arg name="world" default="moelk" />
 

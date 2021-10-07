@@ -11,6 +11,9 @@
   <!-- By default, we are not in debug mode -->
   <arg name="debug" default="false" />
 
+  <!-- The namespace for all topics -->
+  <arg name="namespace" default="mobipick"          doc="Namespace to push all topics into"/>
+
   <!-- A prefix for all joints and links of the robot -->
   <arg name="prefix" default="mobipick" />
 
@@ -41,30 +44,30 @@
   <!-- If needed, broadcast static tf for robot root -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 $(arg prefix_)odom $(arg prefix_)base_footprint" />
 
-  <group ns="$(arg prefix)">
-  <!-- We do not have a robot connected, so publish fake joint states -->
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
-    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
-  </node>
-  <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)">
-    <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
-  </node>
+  <group ns="$(arg namespace)">
+    <!-- We do not have a robot connected, so publish fake joint states -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)">
+      <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    </node>
+    <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)">
+      <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    </node>
 
-  <!-- Given the published joint states, publish tf for the robot links -->
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
+    <!-- Given the published joint states, publish tf for the robot links -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="true" output="screen" />
 
-  <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
-  <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
-    <arg name="allow_trajectory_execution" value="true"/>
-    <arg name="fake_execution" value="true"/>
-    <arg name="execution_type" value="$(arg execution_type)"/>
-    <arg name="info" value="true"/>
-    <arg name="debug" value="$(arg debug)"/>
-    <arg name="pipeline" value="$(arg pipeline)"/>
-    <arg name="load_robot_description" value="$(arg load_robot_description)"/>
-    <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
-    <arg name="prefix" value="$(arg prefix)" />
-  </include>
+      <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
+    <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
+      <arg name="allow_trajectory_execution" value="true"/>
+      <arg name="fake_execution" value="true"/>
+      <arg name="execution_type" value="$(arg execution_type)"/>
+      <arg name="info" value="true"/>
+      <arg name="debug" value="$(arg debug)"/>
+      <arg name="pipeline" value="$(arg pipeline)"/>
+      <arg name="load_robot_description" value="$(arg load_robot_description)"/>
+      <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
+      <arg name="prefix" value="$(arg prefix)" />
+    </include>
   </group>
   <!-- Run Rviz and load the default config to see the state of the move_group node -->
   <include file="$(find mobipick_moveit_config)/launch/moveit_rviz.launch" if="$(arg use_rviz)">

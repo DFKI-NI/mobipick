@@ -1,6 +1,9 @@
 <launch>
-  <arg name="namespace" default="mobipick" />
-  <arg name="prefix" default="$(arg namespace)/" />
+  <arg name="namespace" default="mobipick"         doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
+
+  <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />     <!-- $(arg prefix) is used in all the config files! -->
+  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" /> <!-- Cannot use '$(arg tf_prefix)/' instead because '/' would be included if tf_prefix = '', and tf frames cannot start with '/' in tf2 -->
 
   <group ns="$(arg namespace)">
     <node name="moveit_macros" pkg="mobipick_pick_n_place" type="moveit_macros" output="screen">

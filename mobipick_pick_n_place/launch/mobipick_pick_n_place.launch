@@ -1,10 +1,16 @@
 <launch>
+  <arg name="namespace" default="mobipick"          doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="$(arg namespace)"  doc="tf_prefix to be used" />
+  <arg name="robot_name" default="$(arg namespace)" doc="the name of the robot in gazebo" />
+
+  <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />     <!-- $(arg prefix) is used in all the config files! -->
+  <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" /> <!-- Cannot use '$(arg tf_prefix)/' instead because '/' would be included if tf_prefix = '', and tf frames cannot start with '/' in tf2 -->
+
   <arg name="object_source" default="gazebo" doc="Where to get objects from. Possible values: 'gazebo' (for gazebo) or 'static' (for moveit demo mode)." />
-  <arg name="prefix" default="mobipick/" />
   <arg name="simulation" default="false" />
   <arg name="world" default="moelk" />
 
-  <group ns="mobipick">
+  <group ns="$(arg namespace)">
     <rosparam file="$(find mobipick_pick_n_place)/config/$(arg world).yaml" command="load"/>
     <node name="mobipick_pick_n_place" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place" output="screen">
       <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>

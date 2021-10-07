@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
+  <arg name="namespace" default="mobipick"         doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
+
   # whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater
   <arg name="use_pointcloud" default="false"/>
   <arg name="simulation" default="false"/>
@@ -14,7 +16,7 @@
       <arg name="info" value="true" />
       <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
       <arg name="simulation" value="$(arg simulation)"/>
-      <arg name="prefix" value="$(arg namespace)" />
+      <arg name="prefix" value="$(arg tf_prefix)" />
     </include>
   </group>
   # The visualization component of MoveIt!
