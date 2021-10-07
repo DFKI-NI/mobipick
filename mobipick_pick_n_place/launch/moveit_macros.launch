@@ -7,6 +7,7 @@
 
   <group ns="$(arg namespace)">
     <node name="moveit_macros" pkg="mobipick_pick_n_place" type="moveit_macros" output="screen">
+      <param name="tf_prefix"  value="$(arg prefix)" />
       <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
     </node>
   </group>

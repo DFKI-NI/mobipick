@@ -65,7 +65,7 @@
 #include <rosparam_shortcuts/rosparam_shortcuts.h>
 #include <sstream>
 
-typedef actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction> MoveBaseClient;
+std::string tf_prefix_ = "mobipick";
 
 enum state
 {
@@ -98,7 +98,7 @@ bool failed = false;
 void openGripper(trajectory_msgs::JointTrajectory& posture)
 {
   posture.joint_names.resize(1);
-  posture.joint_names[0] = "mobipick/gripper_finger_joint";
+  posture.joint_names[0] = tf_prefix_ + "gripper_finger_joint";
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
@@ -112,7 +112,7 @@ void openGripper(trajectory_msgs::JointTrajectory& posture)
 void closedGripper(trajectory_msgs::JointTrajectory& posture, std::float_t gripper_width = 0.63)
 {
   posture.joint_names.resize(1);
-  posture.joint_names[0] = "mobipick/gripper_finger_joint";
+  posture.joint_names[0] = tf_prefix_ + "gripper_finger_joint";
 
   posture.points.resize(1);
   posture.points[0].positions.resize(1);
@@ -190,11 +190,11 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
     ROS_INFO_STREAM("Grasp pose:\n" << p.pose);
 
     g.pre_grasp_approach.direction.vector.x = 1.0;
-    g.pre_grasp_approach.direction.header.frame_id = "mobipick/gripper_tcp";
+    g.pre_grasp_approach.direction.header.frame_id = tf_prefix_ + "gripper_tcp";
     g.pre_grasp_approach.min_distance = 0.08;
     g.pre_grasp_approach.desired_distance = 0.25;
 
-    g.post_grasp_retreat.direction.header.frame_id = "mobipick/base_link";
+    g.post_grasp_retreat.direction.header.frame_id = tf_prefix_ + "base_link";
     g.post_grasp_retreat.direction.vector.z = 1.0;
     g.post_grasp_retreat.min_distance = 0.1;
     g.post_grasp_retreat.desired_distance = 0.15;
@@ -230,18 +230,18 @@ moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::Mo
   place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.11d));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
   place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
-  p.header.frame_id = "mobipick/base_link";
+  p.header.frame_id = tf_prefix_ + "base_link";
   tf::poseEigenToMsg(place_pose, p.pose);
 
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
   g.allowed_touch_objects.push_back("table");
 
-  g.pre_place_approach.direction.header.frame_id = "mobipick/base_link";
+  g.pre_place_approach.direction.header.frame_id = tf_prefix_ + "base_link";
   g.pre_place_approach.desired_distance = 0.2;
   g.pre_place_approach.direction.vector.z = -1.0;
   g.pre_place_approach.min_distance = 0.1;
-  g.post_place_retreat.direction.header.frame_id = "mobipick/gripper_tcp";
+  g.post_place_retreat.direction.header.frame_id = tf_prefix_ + "gripper_tcp";
   g.post_place_retreat.direction.vector.x = -1.0;
   g.post_place_retreat.desired_distance = 0.25;
   g.post_place_retreat.min_distance = 0.1;
@@ -269,8 +269,8 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface& gr
 
   try
   {
-    tf_listener.waitForTransform("mobipick/gripper_tcp", "mobipick/base_link", ros::Time(0), ros::Duration(1.0));
-    tf_listener.lookupTransform("mobipick/gripper_tcp", "mobipick/base_link", ros::Time(0), transform);
+    tf_listener.waitForTransform(tf_prefix_ + "gripper_tcp", tf_prefix_ + "base_link", ros::Time(0), ros::Duration(1.0));
+    tf_listener.lookupTransform(tf_prefix_ + "gripper_tcp", tf_prefix_ + "base_link", ros::Time(0), transform);
   }
   catch (tf::TransformException ex)
   {
@@ -278,8 +278,8 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface& gr
     ROS_INFO("Transformation not found!");
   }
   moveit_msgs::OrientationConstraint ocm;
-  ocm.link_name = "mobipick/gripper_tcp";
-  ocm.header.frame_id = "mobipick/base_link";
+  ocm.link_name = tf_prefix_ + "gripper_tcp";
+  ocm.header.frame_id = tf_prefix_ + "base_link";
 
   ocm.orientation.x = -0.5;
   ocm.orientation.y = 0.5;
@@ -443,8 +443,8 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
 
 moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface& group,
                                                            Eigen::Isometry3d cartesian_pose,
-                                                           std::string base_frame = "mobipick/ur5_base_link",
-                                                           std::string target_frame = "mobipick/gripper_tcp")
+                                                           std::string base_frame = tf_prefix_ + "ur5_base_link",
+                                                           std::string target_frame = tf_prefix_ + "gripper_tcp")
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
@@ -507,6 +507,17 @@ int main(int argc, char** argv)
   bool handover_planned;
 
   // Load rosparams
+  ros::NodeHandle nh_priv("~");
+  std::string param_path;
+  if (nh_priv.searchParam("tf_prefix", param_path))
+    nh_priv.getParam(param_path, tf_prefix_);
+  nh_priv.param<std::string>("tf_prefix", tf_prefix_, "mobipick");
+
+  // ensure tf_prefix_ ends with exactly 1 '/' if nonempty, or "" if empty
+  tf_prefix_ = tf_prefix_.erase(tf_prefix_.find_last_not_of('/') + 1) + "/";
+  if (tf_prefix_.length() == 1)
+    tf_prefix_ = "";
+
   ros::NodeHandle rpnh(nh, "poses");
   std::size_t error = 0;
   error +=

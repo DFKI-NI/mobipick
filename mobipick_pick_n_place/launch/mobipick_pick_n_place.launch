@@ -13,6 +13,7 @@
   <group ns="$(arg namespace)">
     <rosparam file="$(find mobipick_pick_n_place)/config/$(arg world).yaml" command="load"/>
     <node name="mobipick_pick_n_place" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place" output="screen">
+      <param name="tf_prefix"  value="$(arg prefix)" />
       <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
     </node>
     <group if="$(arg simulation)">
