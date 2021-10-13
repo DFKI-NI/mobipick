@@ -131,13 +131,12 @@ rosservice call /mobipick/continue_statemachine
 ```bash
 roslaunch mobipick_gazebo mobipick_maze_world.launch
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
-roslaunch mir_gazebo fake_localization.launch delta_x:=-10.0 delta_y:=-10.0
-# or alternatively: roslaunch mir_gazebo fake_localization.launch delta_x:=-10.0 delta_y:=-10.0
-rosrun mobipick_gazebo move_arm_to_home
+roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom" base_frame_id:="mobipick/base_footprint" delta_x:=-10.0 delta_y:=-10.0
+ROS_NAMESPACE=mobipick rosrun mobipick_gazebo move_arm_to_home
 roslaunch mir_navigation start_planner.launch \
-    map_file:=$(rospack find mir_gazebo)/maps/maze.yaml \
+    map_file:=$(rospack find mir_gazebo)/maps/maze.yaml prefix:="mobipick/" \
     virtual_walls_map_file:=$(rospack find mir_gazebo)/maps/maze_virtual_walls.yaml
-rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz
+rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
 ```
 
 Now, you can use the "2D Nav Goal" tool in RViz to set a navigation goal for move_base.
