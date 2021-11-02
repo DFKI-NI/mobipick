@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
   <xacro:macro name="robotiq_fingertip_65mm" params="prefix fingerprefix stroke">
     <link name="${prefix}${fingerprefix}_robotiq_fingertip_65mm">
@@ -19,9 +20,7 @@
         <geometry>
           <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_fingertip_65mm.stl" />
         </geometry>
-        <material name="robotiq_light_grey /">
-          <color rgba="0.5 0.5 0.5 1" />
-        </material>
+        <xacro:insert_block name="material_grey" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />

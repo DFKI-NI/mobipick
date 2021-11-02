@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="robotiq_fts150">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
 
     <xacro:macro name="robotiq_fts150" params="parent prefix *origin">
 
@@ -23,7 +25,7 @@
                 <geometry>
                     <mesh filename="package://robotiq_force_torque_sensor/meshes/visual/robotiq_fts150.stl"/>
                 </geometry>
-                <material name="black"/>
+                <xacro:insert_block name="material_black" />
             </visual>
 
             <collision>
