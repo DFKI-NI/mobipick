@@ -13,23 +13,19 @@
     <arg name="robot_ip" default="192.168.100.64" /> <!-- UR5 -->
 
     <!-- locally (mobipick-os-sensor) -->
-    <group>
-        <include file="$(find mobipick_bringup)/launch/mobipick_bringup.launch">
-            <arg name="namespace" value="$(arg namespace)" />
-            <arg name="tf_prefix" value="$(arg tf_prefix)" />
-            <arg name="robot_version" value="$(arg robot_version)" />
-            <arg name="mir_hostname" value="$(arg mir_hostname)" />
-        </include>
-    </group>
+    <include file="$(find mobipick_bringup)/launch/mobipick_bringup.launch">
+        <arg name="namespace" value="$(arg namespace)" />
+        <arg name="tf_prefix" value="$(arg tf_prefix)" />
+        <arg name="robot_version" value="$(arg robot_version)" />
+        <arg name="mir_hostname" value="$(arg mir_hostname)" />
+    </include>
 
     <!-- from now on: everything remotely -->
     <machine name="control" address="mobipick-os-control" user="robot" default="true"
       env-loader="/home/robot/ros/devel/env.sh" />
 
     <!-- remotely (mobipick-os-control) -->
-    <group>
-        <include file="$(find mobipick_bringup)/launch/mobipick_bringup_control.launch">
-            <arg name="robot_ip" value="$(arg robot_ip)" />
-        </include>
-    </group>
+    <include file="$(find mobipick_bringup)/launch/mobipick_bringup_control.launch">
+        <arg name="robot_ip" value="$(arg robot_ip)" />
+    </include>
 </launch>
