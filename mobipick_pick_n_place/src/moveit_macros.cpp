@@ -745,7 +745,15 @@ public:
       ROS_ERROR_STREAM("Invalid type '" << goal_ptr->type << "' used in moveit macro.");
       result_.result = false;
     }
-    as_.setSucceeded(result_);
+    if (result_.result)
+    {
+      as_.setSucceeded(result_);
+    }
+    else
+    {
+      // Note: There is no setFailed() method. Aborted is the default value used when no result is set.
+      as_.setAborted(result_);
+    }
   }
 };
 
