@@ -1,25 +1,25 @@
 <robot  xmlns:xacro="http://ros.org/wiki/xacro" name="relay_model">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
-  <xacro:property name="mass" value="0.500" />
+  <xacro:property name="mass" value="0.1" />
+  <xacro:property name="bb_width" value="0.106" />
+  <xacro:property name="bb_length" value="0.046" />
+  <xacro:property name="bb_height" value="0.056" />
+
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertia   ixx="${m*(y*y+z*z)/12}" ixy = "0" ixz = "0"
+               iyy="${m*(x*x+z*z)/12}" iyz = "0"
+               izz="${m*(x*x+z*z)/12}" />
+  </xacro:macro>
 
   <link name="relay">
-    <!-- <xacro:cylinder_inertial radius="${radius}" length="${height}" mass="${mass}">
-      <origin xyz="0 0 ${height/2}" rpy="0 0 0" />
-    </xacro:cylinder_inertial> -->
     <inertial>
-      <origin xyz="-0.03071469 0.02435085 0.02356763" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 1.57" />
       <mass value="${mass}" />
-      <inertia
-        ixx="${mass * 0.003988511412844956}"
-        ixy="${mass * 0.0004112614213275305}"
-        ixz="${mass * 0.00003166287680811595}"
-        iyy="${mass * 0.0016270423052260282}"
-        iyz="${mass * 0.0000807201704454}"
-        izz="${mass * 0.00534355593909}" />
+      <xacro:box_inertia m="${mass}" x="${bb_width}" y="${bb_length}" z="${bb_height}" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <origin xyz="-0.0025 -0.0445 -0.022" rpy="0 0 0" />
       <geometry>
         <mesh filename="package://mobipick_gazebo/meshes/relay.stl" scale="0.1 0.1 0.1" />
       </geometry>
@@ -27,7 +27,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/relay.stl" scale="0.1 0.1 0.1" />
+        <box size="${bb_height} ${bb_width} ${bb_length}" />
       </geometry>
     </collision>
   </link>
