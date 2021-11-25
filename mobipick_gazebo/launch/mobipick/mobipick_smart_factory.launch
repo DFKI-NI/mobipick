@@ -2,35 +2,58 @@
 <launch>
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="gui" default="true" />
-  <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
+  <arg name="arm_velocity_controller" default="false"
+       doc="Start the arm velocity controller instead of the trajectory controller?" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="gui" value="$(arg gui)" />
     <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
     <arg name="world_name" value="$(find mobipick_gazebo)/worlds/smart_factory.sdf"/>
-    <arg name="robot_x"   value="0.00" />
-    <arg name="robot_y"   value="0.00" />
+    <arg name="robot_x"   value="5.00" />
+    <arg name="robot_y"   value="2.00" />
     <arg name="robot_yaw" value="0.00" />
   </include>
   <param name="world" type="str" value="smart_factory" />
+
   <!-- spawn power drill -->
-  <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
+  <!--<include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
     <arg name="x"     default="0.750" />
     <arg name="y"     default="1.0" />
     <arg name="z"     default="0.90" />
     <arg name="roll"  default="$(eval pi / 2)" />
     <arg name="pitch" default="0.0" />
     <arg name="yaw"   default="$(eval -pi  *2  / 3)" />
-  </include>
+  </include>-->
 
-
-  <!-- spawn table -->
-
+  <!-- spawn 2 tables -->
   <param name="table_description"
-    command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
-  <node name="spawn_pick_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 0.75 -y 1.0"
-    respawn="false" output="screen" />
-<node name="spawn_place_table" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_2 -x 2.8 -y -4.85"
-    respawn="false" output="screen" />
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/tall_table.urdf.xacro'" />
+  <node name="spawn_pick_table" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param table_description -model table_1 -x 0.75 -y 1.0"
+        respawn="false" output="screen" />
+  <node name="spawn_place_table" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param table_description -model table_2 -x 2.8 -y -4.85"
+        respawn="false" output="screen" />
+
+  <!-- spawn multimeter -->
+  <param name="multimeter"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
+  <node name="spawn_multimeter" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param multimeter -model multimiter_1 -x 0.75 -y 1.0 -z 0.75 -R 1.5708 -Y 0.3"
+        respawn="false" output="screen" />
+
+  <!-- spawn relay -->
+  <param name="relay"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
+  <node name="spawn_relay" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param relay -model relay_1 -x 1.0 -y 1.25 -z 0.75 -Y 0.3"
+        respawn="false" output="screen" />
+
+  <!-- spawn screwdriver -->
+  <param name="screwdriver"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/screwdriver.urdf.xacro'" />
+  <node name="spawn_screwdriver" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param screwdriver -model screwdriver_1 -x 0.6 -y 0.8 -z 0.75 -Y -0.4"
+        respawn="false" output="screen" />
 
 </launch>
