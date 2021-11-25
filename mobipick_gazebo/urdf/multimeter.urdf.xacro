@@ -16,7 +16,7 @@
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <mass value="${mass}" />
-      <xacro:box_inertia m="${mass}" x="${bb_width}" y="${bb_length}" z="${bb_height}" />
+      <xacro:box_inertia m="${mass}" x="${bb_height}" y="${bb_length}" z="${bb_width}" />
     </inertial>
     <visual>
       <origin xyz="-0.075 -0.089 -0.154" rpy="0 0 0" />
