@@ -56,9 +56,4 @@
         args="-urdf -param screwdriver -model screwdriver_1 -x 0.6 -y 0.8 -z 0.75 -Y -0.4"
         respawn="false" output="screen" />
 
-  <!-- spawn worker -->
-  <node name="spawn_worker" pkg="gazebo_ros" type="spawn_model"
-        args="-sdf -file $(find april_environments)/models/person_standing/model.sdf -model worker -x 1.8 -y -5.0 -z 0 -Y 3.1415"
-        respawn="false" output="screen" />
-
 </launch>
