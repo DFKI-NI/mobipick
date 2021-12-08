@@ -68,6 +68,8 @@ information on how to use the real mobipick robot have a look at the
 
 ### Pick + Place with move_base demo (Berghoffstraße)
 
+![Video: Mobipick pick + place demo (Gazebo)](doc/img/mobipick_gazebo_moelk_5x.mp4)
+
 ```bash
 roslaunch mobipick_gazebo mobipick_moelk.launch
 rosservice call /gazebo/unpause_physics
