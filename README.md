@@ -105,6 +105,8 @@ For both state machine and behavior tree version, optionally execute
 
 ### Pick + Place demo (MoveIt! demo mode)
 
+![Video: Mobipick pick + place demo (Gazebo)](doc/img/mobipick_moveit_demo_mode_5x.mp4)
+
 ```bash
 roslaunch mobipick_moveit_config demo.launch
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true object_source:=static
@@ -122,10 +124,6 @@ rosservice call /mobipick/continue_statemachine
   - `pilz_industrial_motion_planner` is a simplistic motion planning pipeline
     that works for easy motions. It is somewhat hard to control from RViz, but
     the `PTP` planner works.
-
-[![Mobipick pick + place demo (MoveIt! demo mode)](https://i.vimeocdn.com/video/683635444.jpg?mw=640)](https://vimeo.com/256064108)
-
-(Click image to see video)
 
 
 ### move_base demo (maze world)
