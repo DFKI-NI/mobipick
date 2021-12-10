@@ -39,7 +39,7 @@
   <param name="multimeter"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
   <node name="spawn_multimeter" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param multimeter -model multimiter_1 -x 0.75 -y 1.0 -z 0.75 -R 1.5708 -Y 0.3"
+        args="-urdf -param multimeter -model multimeter_1 -x 0.75 -y 1.0 -z 0.75 -R 1.5708 -Y 0.3"
         respawn="false" output="screen" />
 
   <!-- spawn relay -->
