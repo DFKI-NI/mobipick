@@ -15,6 +15,7 @@
     <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>
     <remap from="planning_scene" to="mobipick/planning_scene" />
     <remap from="planning_scene_world" to="mobipick/planning_scene_world" />
+    <remap from="move_group/monitored_planning_scene" to="mobipick/move_group/monitored_planning_scene" />
   </node>
 
 </launch>
