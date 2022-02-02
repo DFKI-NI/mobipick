@@ -164,6 +164,32 @@
     </joint>
     <link name="${prefix}${camera_name}_rgb_optical_frame"/>
 
+    <joint name="${prefix}${camera_name}_rgb_logical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}${camera_name}_rgb_frame" />
+      <child link="${prefix}${camera_name}_rgb_logical_frame" />
+    </joint>
+    <link name="${prefix}${camera_name}_rgb_logical_frame"/>
+
+    <gazebo reference="${prefix}${camera_name}_rgb_logical_frame">
+      <sensor name="logical_camera" type="logical_camera">
+        <logical_camera>
+          <near>0.05</near>
+          <far>3.50</far>
+          <horizontal_fov>${60.0 * pi/180.0}</horizontal_fov>
+          <aspect_ratio>${640.0/480.0}</aspect_ratio>
+        </logical_camera>
+        <visualize>false</visualize>
+        <always_on>true</always_on>
+        <update_rate>10</update_rate>
+        <plugin name="logical_camera_plugin" filename="liblogical_camera_plugin.so">
+          <cameraName>${prefix}${camera_name}</cameraName>
+          <imageTopicName>rgb/logical_image</imageTopicName>
+          <frameName>${prefix}${camera_name}_rgb_logical_frame</frameName>
+        </plugin>
+      </sensor>
+    </gazebo>
+
     <joint name="${prefix}${camera_name}_depth_joint" type="fixed">
       <origin xyz="0 -0.02 0" rpy="0 0 0" />
       <parent link="${prefix}${camera_name}_link"/>
