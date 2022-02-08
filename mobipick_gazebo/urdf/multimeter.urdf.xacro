@@ -19,9 +19,9 @@
       <xacro:box_inertia m="${mass}" x="${bb_height}" y="${bb_length}" z="${bb_width}" />
     </inertial>
     <visual>
-      <origin xyz="-0.075 -0.089 -0.154" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="-1.5708 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/multimeter.stl" scale="0.001 0.001 0.001" />
+        <mesh filename="package://mobipick_gazebo/meshes/multimeter.dae" scale="1 1 1" />
       </geometry>
     </visual>
     <collision>

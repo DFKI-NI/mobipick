@@ -1,0 +1,39 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="multimeter_model">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="mass" value="0.1" />
+  <xacro:property name="bb_width" value="0.042" />
+  <xacro:property name="bb_length" value="0.086" />
+  <xacro:property name="bb_height" value="0.177" />
+
+  <xacro:macro name="box_inertia" params="m x y z">
+    <inertia   ixx="${m*(y*y+z*z)/12}" ixy = "0" ixz = "0"
+               iyy="${m*(x*x+z*z)/12}" iyz = "0"
+               izz="${m*(x*x+z*z)/12}" />
+  </xacro:macro>
+
+  <link name="multimeter">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="${mass}" />
+      <xacro:box_inertia m="${mass}" x="${bb_height}" y="${bb_length}" z="${bb_width}" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="-1.5708 0 0" />
+      <geometry>
+        <mesh filename="package://mobipick_gazebo/meshes/multimeter.dae" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="${bb_height} ${bb_width} ${bb_length}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo>
+    <static>true</static>
+  </gazebo>
+
+</robot>
