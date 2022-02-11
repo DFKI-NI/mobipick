@@ -3,7 +3,7 @@
        name="mobipick">
 
   <xacro:arg name="robot" default="mobipick-os" />      <!-- can be "mobipick-hb" or "mobipick-os" -->
-  <xacro:property name="robot" value="$(arg robot)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
+  <xacro:property name="robot" value="$(arg robot)" />  <!-- necessary because args cannot be accessed inside $ {} expressions -->
 
   <xacro:arg name="tf_prefix" default="" />
   <xacro:property name="tf_prefix_" value="$(arg tf_prefix)" />
