@@ -33,6 +33,7 @@ COPY mobipick_description/package.xml   $CATKIN_PROJECT_DIR/mobipick_description
 COPY mobipick_gazebo/package.xml        $CATKIN_PROJECT_DIR/mobipick_gazebo/package.xml
 COPY mobipick_moveit_config/package.xml $CATKIN_PROJECT_DIR/mobipick_moveit_config/package.xml
 COPY mobipick_pick_n_place/package.xml  $CATKIN_PROJECT_DIR/mobipick_pick_n_place/package.xml
+COPY pose_teacher/package.xml           $CATKIN_PROJECT_DIR/pose_teacher/package.xml
 COPY dependencies.rosinstall            $CATKIN_PROJECT_DIR/
 COPY install-deps.sh                    $CATKIN_PROJECT_DIR/
 

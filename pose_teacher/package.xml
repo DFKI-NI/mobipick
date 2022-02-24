@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>pose_teacher</name>
+  <version>0.0.0</version>
+  <description>Easy saving and playing back of joint pose targets, opening + closing the gripper.</description>
+
+  <maintainer email="martin.guenther@dfki.de">Martin Günther</maintainer>
+  <author email="martin.guenther@dfki.de">Martin Günther</author>
+
+  <license>BSD</license>
+
+  <url>https://git.ni.dfki.de/mobipick/mobipick</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>actionlib</build_depend>
+  <build_depend>control_msgs</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>std_srvs</build_depend>
+  <build_depend>trajectory_msgs</build_depend>
+  <build_export_depend>actionlib</build_export_depend>
+  <build_export_depend>control_msgs</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
+  <build_export_depend>std_srvs</build_export_depend>
+  <build_export_depend>trajectory_msgs</build_export_depend>
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
+  <exec_depend>python3-rospkg</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
+  <exec_depend>std_srvs</exec_depend>
+  <exec_depend>trajectory_msgs</exec_depend>
+</package>
