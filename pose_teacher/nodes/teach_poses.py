@@ -29,7 +29,7 @@ class PoseTeacher(object):
 
         # get a filename to save the poses to
         rospack = rospkg.RosPack()
-        package = "mobipick_moveit_config"
+        package = "pose_teacher"
         self.filename = rospack.get_path(package) + "/config/teached_poses.yml"
 
         # subscribe to joint states

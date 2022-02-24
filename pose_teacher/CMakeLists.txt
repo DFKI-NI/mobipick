@@ -24,3 +24,5 @@ catkin_install_python(PROGRAMS
   nodes/teach_poses.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+install(DIRECTORY config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
