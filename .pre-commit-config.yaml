@@ -82,4 +82,4 @@ repos:
         language: system
         always_run: true
         pass_filenames: false
-        args: [ "--strict", "--skip-pkg", "mobipick_pick_n_place" ]   # have to skip mobipick_pick_n_place because behaviortree_cpp_v3 has a funky package.xml and cannot be detected as a catkin package
+        args: [ "--strict" ]
