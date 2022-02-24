@@ -1,0 +1,4 @@
+# Publish the desired joint states saved under the given name to the arm controller
+string name
+---
+string result

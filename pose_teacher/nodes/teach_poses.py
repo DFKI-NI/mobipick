@@ -8,7 +8,7 @@ import yaml
 import actionlib
 import control_msgs.msg
 
-from environment_msgs.srv import SaveArmPose, SetArmPose
+from pose_teacher.srv import SaveArmPose, SetArmPose
 from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from std_srvs.srv import Empty, EmptyResponse

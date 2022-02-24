@@ -1,0 +1,4 @@
+# save the current joint states of the arm under the given name
+string name
+---
+string result
