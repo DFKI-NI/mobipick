@@ -46,7 +46,7 @@
   <param name="relay"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
   <node name="spawn_relay" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param relay -model relay_1 -x 1.0 -y 1.25 -z 0.75 -Y 0.3"
+        args="-urdf -param relay -model relay_1 -x 1.0 -y 1.25 -z 0.78 -Y 0.3"
         respawn="false" output="screen" />
 
   <!-- spawn screwdriver -->

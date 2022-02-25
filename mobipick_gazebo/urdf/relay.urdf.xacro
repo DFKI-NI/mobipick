@@ -2,9 +2,9 @@
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
   <xacro:property name="mass" value="0.1" />
-  <xacro:property name="bb_width" value="0.106" />
-  <xacro:property name="bb_length" value="0.046" />
-  <xacro:property name="bb_height" value="0.056" />
+  <xacro:property name="bb_size_x" value="0.0575" />
+  <xacro:property name="bb_size_y" value="0.0451" />
+  <xacro:property name="bb_size_z" value="0.104364" />
 
   <xacro:macro name="box_inertia" params="m x y z">
     <inertia   ixx="${m*(y*y+z*z)/12}" ixy = "0" ixz = "0"
@@ -14,12 +14,12 @@
 
   <link name="relay">
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 1.57" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <mass value="${mass}" />
-      <xacro:box_inertia m="${mass}" x="${bb_width}" y="${bb_length}" z="${bb_height}" />
+      <xacro:box_inertia m="${mass}" x="${bb_size_x}" y="${bb_size_y}" z="${bb_size_z}" />
     </inertial>
     <visual>
-      <origin xyz="0 -0.015 0" rpy="-1.5708 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <mesh filename="package://mobipick_gazebo/meshes/relay.dae" scale="1 1 1" />
       </geometry>
@@ -27,7 +27,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <box size="${bb_height} ${bb_width} ${bb_length}" />
+        <box size="${bb_size_x} ${bb_size_y} ${bb_size_z}" />
       </geometry>
     </collision>
   </link>
