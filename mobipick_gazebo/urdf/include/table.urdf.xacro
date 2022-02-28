@@ -1,15 +1,13 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
   <xacro:macro name="table" params="height:=0.72 width:=0.80 depth:=0.80 leg_radius:=0.02 table_top_thickness:=0.05 x:=0.0 y:=0.0 z:=0.0">
     <link name="table_top_link">
-      <inertial>
-        <mass value="1.0" />
+
+      <xacro:box_inertial x="${width}" y="${depth}" z="${table_top_thickness}" mass="10">
         <origin xyz="${x} ${y} ${z + height - table_top_thickness/2}" />
-        <inertia ixx="1" ixy="0"  ixz="0"
-                 iyy="1" iyz="0"
-                 izz="1" />
-      </inertial>
+      </xacro:box_inertial>
       <visual>
         <origin xyz="${x} ${y} ${z + height - table_top_thickness/2}" />
         <geometry>
@@ -37,13 +35,9 @@
       <child link="leg1_link" />
     </joint>
     <link name="leg1_link">
-      <inertial>
-        <mass value="1.0" />
+      <xacro:cylinder_inertial radius="${leg_radius}" length="${height}" mass="2.0">
         <origin xyz="0 0 ${-height/2}" />
-        <inertia ixx="0.1" ixy="0"  ixz="0"
-                 iyy="0.1" iyz="0"
-                 izz="0.01" />
-      </inertial>
+      </xacro:cylinder_inertial>
       <visual>
         <origin xyz="0.0 0.0 ${-height/2}" rpy="0 0 0" />
         <geometry>
@@ -67,13 +61,9 @@
       <child link="leg2_link" />
     </joint>
     <link name="leg2_link">
-      <inertial>
-        <mass value="1.0" />
+      <xacro:cylinder_inertial radius="${leg_radius}" length="${height}" mass="2.0">
         <origin xyz="0 0 ${-height/2}" />
-        <inertia ixx="0.1" ixy="0"  ixz="0"
-                 iyy="0.1" iyz="0"
-                 izz="0.01" />
-      </inertial>
+      </xacro:cylinder_inertial>
       <visual>
         <origin xyz="0.0 0.0 ${-height/2}" rpy="0 0 0" />
         <geometry>
@@ -97,13 +87,9 @@
       <child link="leg3_link" />
     </joint>
     <link name="leg3_link">
-      <inertial>
-        <mass value="1.0" />
+      <xacro:cylinder_inertial radius="${leg_radius}" length="${height}" mass="2.0">
         <origin xyz="0 0 ${-height/2}" />
-        <inertia ixx="0.1" ixy="0"  ixz="0"
-                 iyy="0.1" iyz="0"
-                 izz="0.01" />
-      </inertial>
+      </xacro:cylinder_inertial>
       <visual>
         <origin xyz="0.0 0.0 ${-height/2}" rpy="0 0 0" />
         <geometry>
@@ -127,13 +113,9 @@
       <child link="leg4_link" />
     </joint>
     <link name="leg4_link">
-      <inertial>
-        <mass value="1.0" />
+      <xacro:cylinder_inertial radius="${leg_radius}" length="${height}" mass="2.0">
         <origin xyz="0 0 ${-height/2}" />
-        <inertia ixx="0.1" ixy="0"  ixz="0"
-                 iyy="0.1" iyz="0"
-                 izz="0.01" />
-      </inertial>
+      </xacro:cylinder_inertial>
       <visual>
         <origin xyz="0.0 0.0 ${-height/2}" rpy="0 0 0" />
         <geometry>
@@ -152,7 +134,6 @@
     </gazebo>
     <gazebo>
       <static>true</static>
-      <canonicalBody>table_top_link</canonicalBody>
     </gazebo>
   </xacro:macro>
 </robot>
