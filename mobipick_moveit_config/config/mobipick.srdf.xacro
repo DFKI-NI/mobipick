@@ -1050,6 +1050,7 @@
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}gripper_right_inner_knuckle" reason="Never"/>
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}gripper_right_outer_finger" reason="Never"/>
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}gripper_right_outer_knuckle" reason="Never"/>
+    <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}gripper_right_robotiq_fingertip_65mm" reason="User"/>
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}gripper_robotiq_arg2f_base_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}left_wheel_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}gripper_left_robotiq_fingertip_65mm" link2="${tf_prefix}right_wheel_link" reason="Never"/>
