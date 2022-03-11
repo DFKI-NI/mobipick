@@ -3,8 +3,8 @@
     uri: https://github.com/flexible-collision-library/fcl.git
     version: master
 - git:
-    local-name: hybrit_objects
-    uri: https://git.ni.dfki.de/perception/hybrit_objects.git
+    local-name: pbr_objects
+    uri: https://git.ni.dfki.de/perception/pbr_objects.git
     version: master
 - git:
     local-name: mir_robot

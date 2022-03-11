@@ -53,7 +53,7 @@ described in the top-level README.md.
 Simple state machine pick-and-place and `move_base` demo:
 
 ```bash
-roslaunch hybrit_dope dope.launch
+roslaunch pbr_dope dope.launch
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch
 rosservice call /mobipick/continue_statemachine
 ```
@@ -61,7 +61,7 @@ rosservice call /mobipick/continue_statemachine
 Same, but with a behavior tree instead:
 
 ```bash
-roslaunch hybrit_dope dope.launch
+roslaunch pbr_dope dope.launch
 roslaunch mobipick_pick_n_place mobipick_pick_n_place_bt.launch
 ```
 
