@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="table">
+
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/include/table.urdf.xacro" />
+  <xacro:table height="0.72" width="1.40" depth="0.70" leg_radius="0.02" table_top_thickness="0.05" x="0.0" y="0.0" z="0.0" />
+</robot>
