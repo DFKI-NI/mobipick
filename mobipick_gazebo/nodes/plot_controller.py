@@ -81,10 +81,10 @@ controller_states = []
 
 rospy.init_node('plot_trajectory', anonymous=True)
 
-planned_positions_line, = plt.plot([0.0], label='Planned positions')
-desired_positions_line, = plt.plot([0.0], label='Desired positions')
-actual_positions_line, = plt.plot([0.0], label='Actual positions')
-errors_line, = plt.plot([0.0], label='Errors')
+(planned_positions_line,) = plt.plot([0.0], label='Planned positions')
+(desired_positions_line,) = plt.plot([0.0], label='Desired positions')
+(actual_positions_line,) = plt.plot([0.0], label='Actual positions')
+(errors_line,) = plt.plot([0.0], label='Errors')
 t_start = rospy.Time.now().to_sec()
 plt.xlim(t_start, t_start + 500.0)
 plt.ylim(-np.pi, np.pi)
