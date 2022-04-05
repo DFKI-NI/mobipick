@@ -1,6 +1,45 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="table">
 
+  <xacro:property name="width"               value="1.40" />
+  <xacro:property name="depth"               value="0.70" />
+  <xacro:property name="height"              value="0.72" />
+  <xacro:property name="leg_radius"          value="0.02" />
+  <xacro:property name="table_top_thickness" value="0.05" />
+  <xacro:property name="x"                   value="0.0" />
+  <xacro:property name="y"                   value="0.0" />
+  <xacro:property name="z"                   value="0.0" />
+
+  <xacro:property name="barrier_width"       value="${width + 2*leg_radius}" />
+  <xacro:property name="barrier_depth"       value="0.01" />
+  <xacro:property name="barrier_height"      value="0.30" />
+
   <xacro:include filename="$(find mobipick_gazebo)/urdf/include/table.urdf.xacro" />
-  <xacro:table height="0.72" width="1.40" depth="0.70" leg_radius="0.02" table_top_thickness="0.05" x="0.0" y="0.0" z="0.0" />
+  <xacro:table height="${height}" width="${width}" depth="${depth}" leg_radius="${leg_radius}" table_top_thickness="${table_top_thickness}" x="${x}" y="${y}" z="${z}" />
+
+  <joint name="barrier_joint" type="fixed" >
+    <parent link="table_top_link" />
+    <origin xyz="${x} ${y + depth/2 + leg_radius + barrier_depth/2} ${z + barrier_height/2}" rpy="0 0 0" />
+    <child link="barrier_link" />
+  </joint>
+  <link name="barrier_link">
+    <xacro:box_inertial x="${barrier_width}" y="${barrier_depth}" z="${barrier_height}" mass="10">
+      <origin xyz="0 0 0" />
+    </xacro:box_inertial>
+    <visual>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <box size="${barrier_width} ${barrier_depth} ${barrier_height}" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" />
+      <geometry>
+        <box size="${barrier_width} ${barrier_depth} ${barrier_height}" />
+      </geometry>
+    </collision>
+  </link>
+  <gazebo reference="barrier_link">
+    <material>Gazebo/Wood</material>
+  </gazebo>
 </robot>

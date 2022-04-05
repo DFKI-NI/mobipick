@@ -24,15 +24,15 @@
   <!-- spawn 6 tables -->
   <param name="table_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'" />
-  <node  name="spawn_model_table_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x -2.5 -y 0.0 -Y 1.5708"
+  <node  name="spawn_model_table_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x -2.5 -y 0.0 -Y -1.5708"
          respawn="false" output="screen" />
   <node  name="spawn_model_table_2" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_2 -x -0.85 -y -1.45 -Y 0.0"
          respawn="false" output="screen" />
-  <node  name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_3 -x -0.85 -y 1.45 -Y 0.0"
+  <node  name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_3 -x -0.85 -y 1.45 -Y 3.1416"
          respawn="false" output="screen" />
   <node  name="spawn_model_table_4" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_4 -x 0.85 -y -1.45 -Y 0.0"
          respawn="false" output="screen" />
-  <node  name="spawn_model_table_5" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_5 -x 0.85 -y 1.45 -Y 0.0"
+  <node  name="spawn_model_table_5" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_5 -x 0.85 -y 1.45 -Y 3.1416"
          respawn="false" output="screen" />
   <node  name="spawn_model_table_6" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_6 -x 2.5 -y 0.0 -Y 1.5708"
          respawn="false" output="screen" />
