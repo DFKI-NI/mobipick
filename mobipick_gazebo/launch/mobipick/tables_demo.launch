@@ -37,11 +37,11 @@
   <node  name="spawn_model_table_6" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_6 -x 6.45 -y 2.85 -Y 1.5708"
          respawn="false" output="screen" />
 
-  <!-- spawn powerdrill_1 on table 4 -->
-  <param name="powerdrill_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/powerdrill.urdf.xacro'" />
-  <node name="spawn_powerdrill_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param powerdrill_description -model powerdrill_1 -x 4.80 -y 1.40 -z 0.81 -R 1.5708 -P 0.0 -Y 0.7"
+  <!-- spawn powerdrill_with_grip_1 on table 4 -->
+  <param name="powerdrill_with_grip_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/powerdrill_with_grip.urdf.xacro'" />
+  <node name="spawn_powerdrill_with_grip_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param powerdrill_with_grip_description -model powerdrill_with_grip_1 -x 4.80 -y 1.40 -z 0.84 -R 1.5708 -P 0.0 -Y 0.7"
         respawn="false" output="screen" />
 
   <!-- spawn klt_1 on table 5 -->
