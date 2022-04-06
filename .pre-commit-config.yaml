@@ -15,11 +15,12 @@
 repos:
   # Standard hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.0.1
+    rev: v4.1.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
       - id: check-executables-have-shebangs
+      - id: check-docstring-first
       - id: check-merge-conflict
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
