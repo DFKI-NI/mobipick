@@ -23,6 +23,10 @@
     uri: https://github.com/fmauch/universal_robot.git
     version: calibration_devel
 - git:
+    local-name: gazebo_logical_camera_plugin_ros
+    uri: https://git.ni.dfki.de/environment_representation/gazebo_logical_camera_plugin_ros.git
+    version: master
+- git:
     local-name: gazebo_pkgs
     uri: https://github.com/JenniferBuehler/gazebo-pkgs.git
     version: master
@@ -34,6 +38,10 @@
     local-name: moveit_task_constructor
     uri: https://github.com/ros-planning/moveit_task_constructor.git
     version: master
+- git:
+    local-name: object_pose_msgs
+    uri: https://git.ni.dfki.de/environment_representation/object_pose_msgs.git
+    version: main
 - git:
     local-name: pbr_tools
     uri: https://github.com/DFKI-NI/pbr_tools.git
