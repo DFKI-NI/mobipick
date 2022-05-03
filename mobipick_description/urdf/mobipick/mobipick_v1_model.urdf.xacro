@@ -58,12 +58,19 @@
   <xacro:cable_guide prefix="${prefix}" />
 
   <!-- ############## FT SENSOR ############### -->
-  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_ft_300/robotiq_ft_300.urdf.xacro" />
+  <xacro:include filename="$(find robotiq_ft_sensor)/urdf/robotiq_ft300.urdf.xacro"/>
 
-  <xacro:robotiq_ft_300 parent="${prefix}ur5_tool0" prefix="${prefix}" >
-      <pose xyz="0 0 0" rpy="0 0 0" />
-      <!-- <pose xyz="0 0 0.009" rpy="0 0 0" /> -->
-  </xacro:robotiq_ft_300>
+  <xacro:robotiq_ft300 parent="${prefix}ur5_tool0" prefix="${prefix}">
+		<origin xyz="0 0 -0.004" rpy="0 0 ${-pi/2}"/>
+	</xacro:robotiq_ft300>
+  <!-- Colorize the sensor black  -->
+  <gazebo reference="${prefix}ft300_mounting_plate">
+      <material>Gazebo/FlatBlack</material>
+  </gazebo>
+  <gazebo reference="${prefix}ft300_sensor">
+      <material>Gazebo/FlatBlack</material>
+  </gazebo>
+
 
   <!-- ############### GRIPPER ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
@@ -76,7 +83,7 @@
 
   <joint name="${prefix}ft300_coupling_joint" type="fixed">
     <origin xyz="0 0 ${coupling_inner_length / 2}" rpy="0 0 ${-pi/2}" />
-    <parent link="${prefix}fts_toolside" />
+    <parent link="${prefix}robotiq_ft_frame_id" />
     <child link="${prefix}gripper_coupling_link" />
   </joint>
 
@@ -116,7 +123,7 @@
 
   <joint name="${prefix}sensor_mount_joint" type="fixed">
     <origin xyz="0.0 0.0 -0.005" rpy="0.0 ${-pi/2} 0.0" />
-    <parent link="${prefix}fts_toolside" />
+    <parent link="${prefix}robotiq_ft_frame_id" />
     <child link="${prefix}sensor_mount_link" />
   </joint>
 
