@@ -7,8 +7,8 @@ Panels:
         - /Global Options1
         - /MotionPlanning1
         - /PlanningScene1
-      Splitter Ratio: 0.742560029
-    Tree Height: 188
+      Splitter Ratio: 0.7425600290298462
+    Tree Height: 380
   - Class: rviz/Views
     Expanded:
       - /Current View1
@@ -27,7 +27,7 @@ Visualization Manager:
       Color: 160; 160; 164
       Enabled: true
       Line Style:
-        Line Width: 0.0299999993
+        Line Width: 0.029999999329447746
         Value: Lines
       Name: Grid
       Normal Cell Count: 0
@@ -51,8 +51,6 @@ Visualization Manager:
       MoveIt_Planning_Time: 5
       MoveIt_Use_Cartesian_Path: false
       MoveIt_Use_Constraint_Aware_IK: true
-      MoveIt_Warehouse_Host: 127.0.0.1
-      MoveIt_Warehouse_Port: 33829
       MoveIt_Workspace:
         Center:
           X: 0
@@ -176,15 +174,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/fts_robotside:
+          mobipick/ft300_mounting_plate:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/fts_toolside:
+          mobipick/ft300_sensor:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
           mobipick/gripper_astra_depth_frame:
             Alpha: 1
             Show Axes: false
@@ -301,7 +300,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/robotiq_force_torque_frame_id:
+          mobipick/robotiq_ft_frame_id:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -441,13 +440,14 @@ Visualization Manager:
         State Display Time: 0.05 s
         Trail Step Size: 1
         Trajectory Topic: mobipick/move_group/display_planned_path
+        Use Sim Time: false
       Planning Metrics:
         Payload: 1
         Show Joint Torques: false
         Show Manipulability: false
         Show Manipulability Index: false
         Show Weight Limit: false
-        TextHeight: 0.0799999982
+        TextHeight: 0.07999999821186066
       Planning Request:
         Colliding Link Color: 255; 0; 0
         Goal State Alpha: 1
@@ -465,7 +465,7 @@ Visualization Manager:
       Scene Geometry:
         Scene Alpha: 1
         Scene Color: 50; 230; 50
-        Scene Display Time: 0.200000003
+        Scene Display Time: 0.20000000298023224
         Show Scene Geometry: true
         Voxel Coloring: Z-Axis
         Voxel Rendering: Occupied Voxels
@@ -581,15 +581,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/fts_robotside:
+          mobipick/ft300_mounting_plate:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/fts_toolside:
+          mobipick/ft300_sensor:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
           mobipick/gripper_astra_depth_frame:
             Alpha: 1
             Show Axes: false
@@ -706,7 +707,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/robotiq_force_torque_frame_id:
+          mobipick/robotiq_ft_frame_id:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -879,7 +880,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
+      Size (m): 0.009999999776482582
       Style: Flat Squares
       Topic: /mobipick/gripper_astra/depth_registered/points
       Unreliable: false
@@ -891,25 +892,21 @@ Visualization Manager:
       Marker Topic: /mobipick/dope/markers
       Name: MarkerArray
       Namespaces:
-        bboxes: true
-        meshes: true
-        texts: true
-        unfiltered_bboxes: false
-        unfiltered_meshes: false
-        unfiltered_texts: false
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
-      Axes Length: 0.300000012
-      Axes Radius: 0.0299999993
+      Axes Length: 0.30000001192092896
+      Axes Radius: 0.029999999329447746
       Class: rviz/Pose
       Color: 255; 25; 0
       Enabled: true
-      Head Length: 0.300000012
-      Head Radius: 0.100000001
+      Head Length: 0.30000001192092896
+      Head Radius: 0.10000000149011612
       Name: Pose
+      Queue Size: 10
       Shaft Length: 1
-      Shaft Radius: 0.0500000007
+      Shaft Radius: 0.05000000074505806
       Shape: Axes
       Topic: /mobipick/dope/pose_power_drill_with_grip
       Unreliable: false
@@ -919,8 +916,6 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        map:
-          Value: false
         mobipick/back_laser_link:
           Value: false
         mobipick/base_footprint:
@@ -963,10 +958,10 @@ Visualization Manager:
           Value: false
         mobipick/front_laser_link:
           Value: false
-        mobipick/fts_robotside:
-          Value: false
-        mobipick/fts_toolside:
-          Value: false
+        mobipick/ft300_mounting_plate:
+          Value: true
+        mobipick/ft300_sensor:
+          Value: true
         mobipick/gripper_astra_depth_frame:
           Value: false
         mobipick/gripper_astra_depth_optical_frame:
@@ -1017,12 +1012,10 @@ Visualization Manager:
           Value: false
         mobipick/odom:
           Value: false
-        mobipick/odom_comb:
-          Value: false
         mobipick/right_wheel_link:
           Value: false
-        mobipick/robotiq_force_torque_frame_id:
-          Value: false
+        mobipick/robotiq_ft_frame_id:
+          Value: true
         mobipick/sensor_mount_bracket_link:
           Value: false
         mobipick/sensor_mount_link:
@@ -1064,8 +1057,6 @@ Visualization Manager:
         mobipick/ur5_shoulder_link:
           Value: false
         mobipick/ur5_tool0:
-          Value: false
-        mobipick/ur5_tool0_controller:
           Value: false
         mobipick/ur5_upper_arm_link:
           Value: false
@@ -1155,43 +1146,42 @@ Visualization Manager:
                                               {}
                                         mobipick/ur5_flange:
                                           mobipick/ur5_tool0:
-                                            mobipick/fts_robotside:
-                                              mobipick/fts_toolside:
-                                                mobipick/gripper_coupling_link:
-                                                  mobipick/gripper_robotiq_arg2f_base_link:
-                                                    mobipick/gripper_left_inner_knuckle:
-                                                      {}
-                                                    mobipick/gripper_left_outer_knuckle:
-                                                      mobipick/gripper_left_outer_finger:
-                                                        mobipick/gripper_left_inner_finger:
-                                                          mobipick/gripper_left_robotiq_fingertip_65mm:
+                                            mobipick/ft300_mounting_plate:
+                                              mobipick/ft300_sensor:
+                                                mobipick/robotiq_ft_frame_id:
+                                                  mobipick/gripper_coupling_link:
+                                                    mobipick/gripper_robotiq_arg2f_base_link:
+                                                      mobipick/gripper_left_inner_knuckle:
+                                                        {}
+                                                      mobipick/gripper_left_outer_knuckle:
+                                                        mobipick/gripper_left_outer_finger:
+                                                          mobipick/gripper_left_inner_finger:
+                                                            mobipick/gripper_left_robotiq_fingertip_65mm:
+                                                              {}
+                                                      mobipick/gripper_right_inner_knuckle:
+                                                        {}
+                                                      mobipick/gripper_right_outer_knuckle:
+                                                        mobipick/gripper_right_outer_finger:
+                                                          mobipick/gripper_right_inner_finger:
+                                                            mobipick/gripper_right_robotiq_fingertip_65mm:
+                                                              {}
+                                                      mobipick/gripper_tcp:
+                                                        {}
+                                                  mobipick/sensor_mount_link:
+                                                    mobipick/gripper_astra_link:
+                                                      mobipick/gripper_astra_depth_frame:
+                                                        {}
+                                                      mobipick/gripper_astra_rgb_frame:
+                                                        mobipick/gripper_astra_rgb_optical_frame:
+                                                          mobipick/gripper_astra_depth_optical_frame:
                                                             {}
-                                                    mobipick/gripper_right_inner_knuckle:
+                                                    mobipick/sensor_mount_bracket_link:
                                                       {}
-                                                    mobipick/gripper_right_outer_knuckle:
-                                                      mobipick/gripper_right_outer_finger:
-                                                        mobipick/gripper_right_inner_finger:
-                                                          mobipick/gripper_right_robotiq_fingertip_65mm:
+                                                    mobipick/sensor_mount_pico_holder_link:
+                                                      mobipick/gripper_pico_flexx_link:
+                                                        mobipick/gripper_pico_flexx_frame:
+                                                          mobipick/gripper_pico_flexx_optical_frame:
                                                             {}
-                                                    mobipick/gripper_tcp:
-                                                      {}
-                                                mobipick/sensor_mount_link:
-                                                  mobipick/gripper_astra_link:
-                                                    mobipick/gripper_astra_depth_frame:
-                                                      {}
-                                                    mobipick/gripper_astra_rgb_frame:
-                                                      mobipick/gripper_astra_rgb_optical_frame:
-                                                        mobipick/gripper_astra_depth_optical_frame:
-                                                          {}
-                                                  mobipick/sensor_mount_bracket_link:
-                                                    {}
-                                                  mobipick/sensor_mount_pico_holder_link:
-                                                    mobipick/gripper_pico_flexx_link:
-                                                      mobipick/gripper_pico_flexx_frame:
-                                                        mobipick/gripper_pico_flexx_optical_frame:
-                                                          {}
-                                              mobipick/robotiq_force_torque_frame_id:
-                                                {}
               mobipick/us_1_frame:
                 {}
               mobipick/us_2_frame:
@@ -1205,9 +1195,9 @@ Visualization Manager:
       Planning Scene Topic: move_group/monitored_planning_scene
       Robot Description: mobipick/robot_description
       Scene Geometry:
-        Scene Alpha: 0.899999976
+        Scene Alpha: 0.8999999761581421
         Scene Color: 50; 230; 50
-        Scene Display Time: 0.200000003
+        Scene Display Time: 0.20000000298023224
         Show Scene Geometry: true
         Voxel Coloring: Z-Axis
         Voxel Rendering: Occupied Voxels
@@ -1323,15 +1313,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/fts_robotside:
+          mobipick/ft300_mounting_plate:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/fts_toolside:
+          mobipick/ft300_sensor:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
           mobipick/gripper_astra_depth_frame:
             Alpha: 1
             Show Axes: false
@@ -1448,7 +1439,7 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/robotiq_force_torque_frame_id:
+          mobipick/robotiq_ft_frame_id:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -1584,17 +1575,18 @@ Visualization Manager:
         Show Robot Visual: true
       Value: true
     - Alpha: 1
-      Arrow Length: 0.300000012
-      Axes Length: 0.300000012
-      Axes Radius: 0.00999999978
+      Arrow Length: 0.30000001192092896
+      Axes Length: 0.30000001192092896
+      Axes Radius: 0.009999999776482582
       Class: rviz/PoseArray
       Color: 255; 25; 0
       Enabled: true
-      Head Length: 0.0700000003
-      Head Radius: 0.0299999993
+      Head Length: 0.07000000029802322
+      Head Radius: 0.029999999329447746
       Name: PoseArray
-      Shaft Length: 0.230000004
-      Shaft Radius: 0.00999999978
+      Queue Size: 10
+      Shaft Length: 0.23000000417232513
+      Shaft Radius: 0.009999999776482582
       Shape: Arrow (Flat)
       Topic: /mobipick/particlecloud
       Unreliable: false
@@ -1615,38 +1607,39 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/XYOrbit
-      Distance: 3.68494749
+      Distance: 3.6849474906921387
       Enable Stereo Rendering:
-        Stereo Eye Separation: 0.0599999987
+        Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
+      Field of View: 0.7853981852531433
       Focal Point:
-        X: 0.114557147
-        Y: 0.234284163
-        Z: -1.34109882e-07
+        X: 0.11455714702606201
+        Y: 0.2342841625213623
+        Z: -1.341098823104403e-07
       Focal Shape Fixed Size: true
-      Focal Shape Size: 0.0500000007
+      Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
-      Near Clip Distance: 0.00999999978
-      Pitch: 0.48020345
+      Near Clip Distance: 0.009999999776482582
+      Pitch: 0.48020344972610474
       Target Frame: base_footprint
-      Yaw: 4.05860853
+      Yaw: 4.058608531951904
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 851
+  Height: 1376
   Hide Left Dock: false
   Hide Right Dock: false
   MotionPlanning:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000001000000000000020b000002f2fc020000000afb000000100044006900730070006c0061007900730100000043000000fd000000e300fffffffb0000000800480065006c00700000000342000000bb0000000000000000fb0000000a0056006900650077007300000003b0000000b0000000b300fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c006900640065007201000001460000004b0000004300fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e006701000001970000019e0000017f00fffffffb0000000a0049006d00610067006501000002b1000000840000000000000000fb0000000a0049006d00610067006501000002a9000001220000000000000000fb0000001e0054006f006f006c002000500072006f007000650072007400690065007300000002ef0000006700000000000000000000042f000002f200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001f300000506fc020000000afb000000100044006900730070006c006100790073010000003d000001b9000000c900fffffffb0000000800480065006c00700000000342000000bb0000000000000000fb0000000a0056006900650077007300000003b0000000b0000000a400fffffffb0000000c00430061006d00650072006100000002ff000001610000000000000000fb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e00670100000374000001890000000000000000fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c006900640065007201000001fc0000006e0000004100fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e00670100000270000002d30000017d00fffffffb0000000a0049006d00610067006501000002b1000000840000000000000000fb0000000a0049006d00610067006501000002a9000001220000000000000000fb0000001e0054006f006f006c002000500072006f007000650072007400690065007300000002ef000000670000000000000000000007cb0000050600000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1600
-  X: 0
-  Y: 25
+  Width: 2500
+  X: 1980
+  Y: 1147
