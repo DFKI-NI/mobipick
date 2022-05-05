@@ -58,10 +58,16 @@
   <xacro:cable_guide prefix="${prefix}" />
 
   <!-- ############## FT SENSOR ############### -->
+  <!-- gripper coupling (ISO 9409-1-50-4-M / Robotiq AGC-CPL-062-002_20171219) -->
+  <xacro:property name="coupling_radius" value="0.0375" />
+  <xacro:property name="coupling_outer_length" value="0.014" />
+  <xacro:property name="coupling_inner_length" value="0.008" />
+  <xacro:property name="coupling_mass" value="0.100" />
+
   <xacro:include filename="$(find robotiq_ft_sensor)/urdf/robotiq_ft300.urdf.xacro"/>
 
   <xacro:robotiq_ft300 parent="${prefix}ur5_tool0" prefix="${prefix}">
-		<origin xyz="0 0 -0.004" rpy="0 0 ${-pi/2}"/>
+		<origin xyz="0 0 ${-coupling_inner_length / 2}" rpy="0 0 ${-pi/2}"/>
 	</xacro:robotiq_ft300>
   <!-- Colorize the sensor black  -->
   <gazebo reference="${prefix}ft300_mounting_plate">
@@ -74,12 +80,6 @@
 
   <!-- ############### GRIPPER ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
-
-  <!-- gripper coupling (ISO 9409-1-50-4-M / Robotiq AGC-CPL-062-002_20171219) -->
-  <xacro:property name="coupling_radius" value="0.0375" />
-  <xacro:property name="coupling_outer_length" value="0.014" />
-  <xacro:property name="coupling_inner_length" value="0.008" />
-  <xacro:property name="coupling_mass" value="0.100" />
 
   <joint name="${prefix}ft300_coupling_joint" type="fixed">
     <origin xyz="0 0 ${coupling_inner_length / 2}" rpy="0 0 ${-pi/2}" />
