@@ -258,6 +258,48 @@ pre-commit install
 ```
 
 
+Known Issues
+------------
+
+### Using MoveIt to plan for the "gripper" group does not work
+
+In Gazebo, trying to use MoveIt to plan a gripper movement to the "open" state
+closes the gripper and vice versa. This is caused by the following sequence of
+events:
+
+* MoveIt plans a joint trajectory for the gripper (e.g., it plans to the group
+  state **"closed"** with a `gripper_finger_joint` angle of 0.755 radians).
+* It then sends this trajectory to the controller.
+* However, in the `simulation_controllers.yaml` file, we only specify a
+  controller of type [`GripperCommand`](http://docs.ros.org/en/api/control_msgs/html/action/GripperCommand.html).
+  In that action, the `position` fields encodes the gripper gap size (in
+  meters). MoveIt incorrectly fills in 0.755 regardless.
+* The controller interprets this as 0.755 meters instead of radians (which is
+  the correct interpretation of the action definition) and **opens** the
+  gripper to the maximum gap size, even though we planned to the **closed**
+  state. The inverse case happens when planning to the open state.
+
+One solution to this problem would be to replace the gripper controller with a
+[`FollowJointTrajectory`](http://docs.ros.org/en/api/control_msgs/html/action/FollowJointTrajectory.html)
+controller in the `simulation_controllers.yaml` file, like this:
+
+```yaml
+  - name: "gripper_controller"
+    action_ns: "follow_joint_trajectory"
+    type: FollowJointTrajectory
+    default: false
+    joints:
+      - $(arg prefix)gripper_finger_joint
+```
+
+However, this would mean that the Gazebo simulation no longer mirrors the real
+robot (which does not have a `FollowJointTrajectory` controller), and also the
+pick and place demo would stop working in Gazebo. Therefore, we leave the controller
+configuration unchanged. Users should not use MoveIt to plan and execute
+gripper trajectories, but instead call the `/mobipick/gripper_hw` action (type:
+`GripperCommand`) directly.
+
+
 Troubleshooting
 ---------------
 

@@ -18,3 +18,11 @@ controller_list:
     default: true
     joints:
       - $(arg prefix)gripper_finger_joint
+
+  # NOTE: this controller is currently unused.
+  - name: "gripper_controller"
+    action_ns: "follow_joint_trajectory"
+    type: FollowJointTrajectory
+    default: false
+    joints:
+      - $(arg prefix)gripper_finger_joint

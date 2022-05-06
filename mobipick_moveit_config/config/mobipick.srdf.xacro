@@ -113,6 +113,7 @@
         <joint name="${tf_prefix}ur5_wrist_2_joint" value="1.57"/>
         <joint name="${tf_prefix}ur5_wrist_3_joint" value="4.71"/>
     </group_state>
+    <!-- NOTE: Using MoveIt to plan gripper opening/closing trajectories does not work (see README). -->
     <group_state name="open" group="gripper">
         <joint name="${tf_prefix}gripper_finger_joint" value="0"/>
     </group_state>
