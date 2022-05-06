@@ -15,7 +15,7 @@
   <xacro:property name="clamp_mass" value="0.50" />
 
   <xacro:property name="wrist_clamp_mass" value="0.200" />
-  <xacro:property name="wrist_clamp_yaw" value="0.5" />
+  <xacro:property name="wrist_clamp_yaw" value="0.2" />
 
   <xacro:property name="terminal_element_x_length" value="0.044" />
   <xacro:property name="terminal_element_y_length" value="0.045" />
@@ -182,7 +182,7 @@
     <!-- wrist_3 -->
 
     <joint name="${prefix}cable_guide_wrist_clamp_joint" type="fixed">
-      <origin xyz="0 0 -0.025" rpy="0 0 ${wrist_clamp_yaw}" />
+      <origin xyz="0 0 -0.03" rpy="0 0 ${wrist_clamp_yaw}" />
       <parent link="${prefix}ur5_wrist_3_link" />
       <child link="${prefix}cable_guide_wrist_clamp_link" />
     </joint>
