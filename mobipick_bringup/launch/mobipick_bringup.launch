@@ -83,16 +83,6 @@
       <param name="rate" value="200." />
     </node>
 
-    <!-- UR5 joint trajectory server -->
-    <node name="arm_joint_trajectory_forwarder" pkg="mobipick_pick_n_place" type="joint_trajectory_forwarder.py" output="screen">
-      <param name="controller_name" value="arm_controller" />
-    </node>
-
-    <!-- gripper joint trajectory server -->
-    <node name="gripper_joint_trajectory_forwarder" pkg="mobipick_pick_n_place" type="joint_trajectory_forwarder.py" output="screen">
-      <param name="controller_name" value="gripper_controller" />
-    </node>
-
     <!-- Astra gripper camera -->
     <include file="$(find mobipick_bringup)/launch/includes/gripper_astra.launch.xml">
       <arg name="tf_prefix"     value="$(arg tf_prefix)" />
