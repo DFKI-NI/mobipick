@@ -12,18 +12,18 @@
 
   <xacro:property name="barrier_width"       value="${width + 2*leg_radius}" />
   <xacro:property name="barrier_depth"       value="0.01" />
-  <xacro:property name="barrier_height"      value="0.30" />
+  <xacro:property name="barrier_height"      value="0.05" />
 
   <xacro:include filename="$(find mobipick_gazebo)/urdf/include/table.urdf.xacro" />
   <xacro:table height="${height}" width="${width}" depth="${depth}" leg_radius="${leg_radius}" table_top_thickness="${table_top_thickness}" x="${x}" y="${y}" z="${z}" />
 
   <joint name="barrier_joint" type="fixed" >
     <parent link="table_top_link" />
-    <origin xyz="${x} ${y + depth/2 + leg_radius + barrier_depth/2} ${z + barrier_height/2}" rpy="0 0 0" />
+    <origin xyz="${x} ${y + depth/2 + leg_radius + barrier_depth/2} 0.19" rpy="0 0 0" />
     <child link="barrier_link" />
   </joint>
   <link name="barrier_link">
-    <xacro:box_inertial x="${barrier_width}" y="${barrier_depth}" z="${barrier_height}" mass="10">
+    <xacro:box_inertial x="${barrier_width}" y="${barrier_depth}" z="${barrier_height}" mass="0.2">
       <origin xyz="0 0 0" />
     </xacro:box_inertial>
     <visual>
@@ -40,6 +40,6 @@
     </collision>
   </link>
   <gazebo reference="barrier_link">
-    <material>Gazebo/Wood</material>
+    <material>Gazebo/Black</material>
   </gazebo>
 </robot>

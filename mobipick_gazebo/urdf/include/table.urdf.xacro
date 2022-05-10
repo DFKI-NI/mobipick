@@ -52,7 +52,7 @@
       </collision>
     </link>
     <gazebo reference="leg1_link">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/Grey</material>
     </gazebo>
 
     <joint name="leg2_joint" type="fixed" >
@@ -78,7 +78,7 @@
       </collision>
     </link>
     <gazebo reference="leg2_link">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/Grey</material>
     </gazebo>
 
     <joint name="leg3_joint" type="fixed" >
@@ -104,7 +104,7 @@
       </collision>
     </link>
     <gazebo reference="leg3_link">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/Grey</material>
     </gazebo>
 
     <joint name="leg4_joint" type="fixed" >
@@ -130,7 +130,7 @@
       </collision>
     </link>
     <gazebo reference="leg4_link">
-      <material>Gazebo/Red</material>
+      <material>Gazebo/Grey</material>
     </gazebo>
     <gazebo>
       <static>true</static>
