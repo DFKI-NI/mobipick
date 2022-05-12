@@ -31,133 +31,136 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
   assert(msg->name.size() == msg->pose.size());
   bool base_link_found = false;
   Eigen::Isometry3d mobipick_pose;
-  while (!base_link_found)
+  for (size_t i = 0; i < msg->name.size(); ++i)
   {
-    for (size_t i = 0; i < msg->name.size(); ++i)
+    // TODO: Change to tf listener?
+    if (msg->name[i] == robot_name_ + "::" + tf_prefix_ + "base_footprint" && !base_link_found)
     {
-      // TODO: Change to tf listener?
-      if (msg->name[i] == robot_name_ + "::" + tf_prefix_ + "base_footprint" && !base_link_found)
-      {
-        base_link_found = true;
-        tf::poseMsgToEigen(msg->pose[i], mobipick_pose);
-        mobipick_pose = mobipick_pose.inverse();
-      }
-      if (base_link_found)
-      {
-        if (msg->name[i] == "table_1::table_top_link")
-        {
-          // add table
-          vision_msgs::Detection3D det3d;
-          det3d.header = detections.header;
-          det3d.bbox.size.x = 0.70;
-          det3d.bbox.size.y = 0.70;
-          det3d.bbox.size.z = 0.73;
+      tf::poseMsgToEigen(msg->pose[i], mobipick_pose);
+      mobipick_pose = mobipick_pose.inverse();
+      base_link_found = true;
+      break;
+    }
+  }
+  if (!base_link_found)
+  {
+    ROS_ERROR_THROTTLE(1.0, "Could not find base link!");
+    return;
+  }
+  for (size_t i = 0; i < msg->name.size(); ++i)
+  {
+    if (msg->name[i] == "table_1::table_top_link")
+    {
+      // add table
+      vision_msgs::Detection3D det3d;
+      det3d.header = detections.header;
+      det3d.bbox.size.x = 0.70;
+      det3d.bbox.size.y = 0.70;
+      det3d.bbox.size.z = 0.73;
 
-          // shift to center of bbox
-          Eigen::Isometry3d object_pose;
-          tf::poseMsgToEigen(msg->pose[i], object_pose);
-          Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
-          object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, det3d.bbox.size.z / 2.0);
-          tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox), det3d.bbox.center);
+      // shift to center of bbox
+      Eigen::Isometry3d object_pose;
+      tf::poseMsgToEigen(msg->pose[i], object_pose);
+      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
+      object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, det3d.bbox.size.z / 2.0);
+      tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox), det3d.bbox.center);
 
-          det3d.results.resize(1);
-          det3d.results[0].id = ObjectID::TABLE;
-          tf::poseEigenToMsg((mobipick_pose * object_pose), det3d.results[0].pose.pose);
-          det3d.results[0].score = 1.0;
-          detections.detections.push_back(det3d);
-          // publish table pose seperately
-          geometry_msgs::PoseStamped pose_msg;
-          pose_msg.header = det3d.header;
-          pose_msg.pose = det3d.bbox.center;
-          pose_table_pub->publish(pose_msg);
-        }
-        else if (msg->name[i] == "cokecan_1::coke_can")
-        {
-          // add coke_can
-          vision_msgs::Detection3D det3d;
-          det3d.header = detections.header;
-          det3d.bbox.size.x = 0.067;
-          det3d.bbox.size.y = 0.067;
-          det3d.bbox.size.z = 0.1239;
+      det3d.results.resize(1);
+      det3d.results[0].id = ObjectID::TABLE;
+      tf::poseEigenToMsg((mobipick_pose * object_pose), det3d.results[0].pose.pose);
+      det3d.results[0].score = 1.0;
+      detections.detections.push_back(det3d);
+      // publish table pose seperately
+      geometry_msgs::PoseStamped pose_msg;
+      pose_msg.header = det3d.header;
+      pose_msg.pose = det3d.bbox.center;
+      pose_table_pub->publish(pose_msg);
+    }
+    else if (msg->name[i] == "cokecan_1::coke_can")
+    {
+      // add coke_can
+      vision_msgs::Detection3D det3d;
+      det3d.header = detections.header;
+      det3d.bbox.size.x = 0.067;
+      det3d.bbox.size.y = 0.067;
+      det3d.bbox.size.z = 0.1239;
 
-          // shift to center of bbox
-          Eigen::Isometry3d object_pose;
-          tf::poseMsgToEigen(msg->pose[i], object_pose);
-          Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
-          object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, det3d.bbox.size.z / 2.0);
-          tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox), det3d.bbox.center);
+      // shift to center of bbox
+      Eigen::Isometry3d object_pose;
+      tf::poseMsgToEigen(msg->pose[i], object_pose);
+      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
+      object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, det3d.bbox.size.z / 2.0);
+      tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox), det3d.bbox.center);
 
-          det3d.results.resize(1);
-          det3d.results[0].id = ObjectID::COKE_CAN;
-          tf::poseEigenToMsg((mobipick_pose * object_pose), det3d.results[0].pose.pose);
-          det3d.results[0].score = 1.0;
-          detections.detections.push_back(det3d);
-        }
-        else if (msg->name[i] == "powerdrill_1::powerdrill")
-        {
-          // add powerdrill
-          vision_msgs::Detection3D det3d;
-          det3d.header = detections.header;
-          det3d.bbox.size.x = 0.18436100006103516;
-          det3d.bbox.size.y = 0.18683599472045898;
-          det3d.bbox.size.z = 0.057192001342773438;
+      det3d.results.resize(1);
+      det3d.results[0].id = ObjectID::COKE_CAN;
+      tf::poseEigenToMsg((mobipick_pose * object_pose), det3d.results[0].pose.pose);
+      det3d.results[0].score = 1.0;
+      detections.detections.push_back(det3d);
+    }
+    else if (msg->name[i] == "powerdrill_1::powerdrill")
+    {
+      // add powerdrill
+      vision_msgs::Detection3D det3d;
+      det3d.header = detections.header;
+      det3d.bbox.size.x = 0.18436100006103516;
+      det3d.bbox.size.y = 0.18683599472045898;
+      det3d.bbox.size.z = 0.057192001342773438;
 
-          // shift to center of bbox and rotate coordinate frames to match dope detection
-          Eigen::Isometry3d object_pose;
-          tf::poseMsgToEigen(msg->pose[i], object_pose);
+      // shift to center of bbox and rotate coordinate frames to match dope detection
+      Eigen::Isometry3d object_pose;
+      tf::poseMsgToEigen(msg->pose[i], object_pose);
 
-          Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
-          object_to_bbox.translation() = Eigen::Vector3d(-0.046, 0.01055, 0.02545);
+      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
+      object_to_bbox.translation() = Eigen::Vector3d(-0.046, 0.01055, 0.02545);
 
-          // rotate to dope orientation
-          Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
-          bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0, 0.0, 0.0)));
-          tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox * bbox_center_rotated), det3d.bbox.center);
+      // rotate to dope orientation
+      Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
+      bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0, 0.0, 0.0)));
+      tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox * bbox_center_rotated), det3d.bbox.center);
 
-          det3d.results.resize(1);
-          det3d.results[0].id = ObjectID::POWER_DRILL;
-          tf::poseEigenToMsg((mobipick_pose * object_pose * bbox_center_rotated), det3d.results[0].pose.pose);
-          det3d.results[0].score = 1.0;
-          detections.detections.push_back(det3d);
-          // publish power drill pose seperately
-          geometry_msgs::PoseStamped pose_msg;
-          pose_msg.header = det3d.header;
-          pose_msg.pose = det3d.bbox.center;
-          pose_power_drill_pub->publish(pose_msg);
-        }
-        else if (msg->name[i] == "powerdrill_with_grip_1::powerdrill_with_grip")
-        {
-          // add powerdrill
-          vision_msgs::Detection3D det3d;
-          det3d.header = detections.header;
-          det3d.bbox.size.x = 0.18002399444580078;
-          det3d.bbox.size.y = 0.22317399978637695;
-          det3d.bbox.size.z = 0.082321996688842773;
+      det3d.results.resize(1);
+      det3d.results[0].id = ObjectID::POWER_DRILL;
+      tf::poseEigenToMsg((mobipick_pose * object_pose * bbox_center_rotated), det3d.results[0].pose.pose);
+      det3d.results[0].score = 1.0;
+      detections.detections.push_back(det3d);
+      // publish power drill pose seperately
+      geometry_msgs::PoseStamped pose_msg;
+      pose_msg.header = det3d.header;
+      pose_msg.pose = det3d.bbox.center;
+      pose_power_drill_pub->publish(pose_msg);
+    }
+    else if (msg->name[i] == "powerdrill_with_grip_1::powerdrill_with_grip")
+    {
+      // add powerdrill
+      vision_msgs::Detection3D det3d;
+      det3d.header = detections.header;
+      det3d.bbox.size.x = 0.18002399444580078;
+      det3d.bbox.size.y = 0.22317399978637695;
+      det3d.bbox.size.z = 0.082321996688842773;
 
-          // shift to center of bbox and rotate coordinate frames to match dope detection
-          Eigen::Isometry3d object_pose;
-          tf::poseMsgToEigen(msg->pose[i], object_pose);
+      // shift to center of bbox and rotate coordinate frames to match dope detection
+      Eigen::Isometry3d object_pose;
+      tf::poseMsgToEigen(msg->pose[i], object_pose);
 
-          Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
-          object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, 0.0);
+      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
+      object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, 0.0);
 
-          // rotate to dope orientation
-          Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
-          bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0, 0.0, 0.0)));
-          tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox * bbox_center_rotated), det3d.bbox.center);
+      // rotate to dope orientation
+      Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
+      bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0, 0.0, 0.0)));
+      tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox * bbox_center_rotated), det3d.bbox.center);
 
-          det3d.results.resize(1);
-          det3d.results[0].id = ObjectID::POWER_DRILL;
-          tf::poseEigenToMsg((mobipick_pose * object_pose * bbox_center_rotated), det3d.results[0].pose.pose);
-          det3d.results[0].score = 1.0;
-          detections.detections.push_back(det3d);
-          // publish power drill pose seperately
-          geometry_msgs::PoseStamped pose_msg;
-          pose_msg.header = det3d.header;
-          pose_msg.pose = det3d.bbox.center;
-          pose_power_drill_pub->publish(pose_msg);
-        }
-      }
+      det3d.results.resize(1);
+      det3d.results[0].id = ObjectID::POWER_DRILL;
+      tf::poseEigenToMsg((mobipick_pose * object_pose * bbox_center_rotated), det3d.results[0].pose.pose);
+      det3d.results[0].score = 1.0;
+      detections.detections.push_back(det3d);
+      // publish power drill pose seperately
+      geometry_msgs::PoseStamped pose_msg;
+      pose_msg.header = det3d.header;
+      pose_msg.pose = det3d.bbox.center;
+      pose_power_drill_pub->publish(pose_msg);
     }
   }
   detection_pub->publish(detections);
