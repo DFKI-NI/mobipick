@@ -18,24 +18,24 @@
     <arg name="world_name" value="$(find mobipick_gazebo)/worlds/pbr_moelk.sdf"/>
     <arg name="robot_x"   value="11.3" />
     <arg name="robot_y"   value="2.15" />
-    <arg name="robot_yaw" value="0.37" />
+    <arg name="robot_yaw" value="0.0" />
   </include>
 
   <!-- spawn 3 tables -->
   <param name="table_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'" />
-  <node  name="spawn_model_table_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 13.3 -y 2.3 -Y 1.5708"
+  <node  name="spawn_model_table_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_1 -x 13.22 -y 2.15 -Y 1.5708"
          respawn="false" output="screen" />
-  <node  name="spawn_model_table_2" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_2 -x 12.15 -y 3.5 -Y 3.1416"
+  <node  name="spawn_model_table_2" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_2 -x 12.07 -y 3.25 -Y 3.1416"
          respawn="false" output="screen" />
-  <node  name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_3 -x 10.5 -y 3.5 -Y 3.1416"
+  <node  name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_3 -x 10.42 -y 3.25 -Y 3.1416"
          respawn="false" output="screen" />
 
-  <!-- spawn relay_1 on table 1 -->
+  <!-- spawn relay_1 on table 3 -->
   <param name="relay"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
   <node name="spawn_relay_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param relay -model relay_1 -x 13.3 -y 2.06 -z 0.75 -R 1.57 -P -1.57 -Y -2.65"
+        args="-urdf -param relay -model relay_1 -x 10.61 -y 2.97 -z 0.78 -R 0.0 -P 0.0 -Y -1.57"
         respawn="false" output="screen" />
 
   <!-- spawn klt_2 on table 1 -->
@@ -54,7 +54,7 @@
   <param name="powerdrill_with_grip_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/powerdrill_with_grip.urdf.xacro'" />
   <node name="spawn_powerdrill_with_grip_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param powerdrill_with_grip_description -model powerdrill_with_grip_1 -x 12.5 -y 3.47 -z 0.84 -R 1.5708 -P 0.0 -Y 0.7"
+        args="-urdf -param powerdrill_with_grip_description -model powerdrill_with_grip_1 -x 11.89 -y 3.09 -z 0.84 -R 1.5708 -P 0.0 -Y '-1.11'"
         respawn="false" output="screen" />
 
   <!-- spawn screwdriver_1 on table 2 -->
