@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
-  <xacro:macro name="table" params="height:=0.72 width:=0.80 depth:=0.80 leg_radius:=0.02 table_top_thickness:=0.05 x:=0.0 y:=0.0 z:=0.0">
+  <xacro:macro name="table" params="height:=0.72 width:=0.80 depth:=0.80 leg_radius:=0.02 leg_offet:=0.0 table_top_thickness:=0.05 x:=0.0 y:=0.0 z:=0.0">
     <link name="table_top_link">
 
       <xacro:box_inertial x="${width}" y="${depth}" z="${table_top_thickness}" mass="10">
@@ -31,7 +31,7 @@
 
     <joint name="leg1_joint" type="fixed" >
       <parent link="table_top_link" />
-      <origin xyz="${x + width/2} ${y + depth/2} ${z + height}" rpy="0 0 0" />
+      <origin xyz="${x + width/2} ${y + depth/2 - leg_offet} ${z + height}" rpy="0 0 0" />
       <child link="leg1_link" />
     </joint>
     <link name="leg1_link">
@@ -57,7 +57,7 @@
 
     <joint name="leg2_joint" type="fixed" >
       <parent link="table_top_link" />
-      <origin xyz="${x - width/2} ${y + depth/2} ${z + height}" rpy="0 0 0" />
+      <origin xyz="${x - width/2} ${y + depth/2 - leg_offet} ${z + height}" rpy="0 0 0" />
       <child link="leg2_link" />
     </joint>
     <link name="leg2_link">
@@ -83,7 +83,7 @@
 
     <joint name="leg3_joint" type="fixed" >
       <parent link="table_top_link" />
-      <origin xyz="${x + width/2} ${y - depth/2} ${z + height}" rpy="0 0 0" />
+      <origin xyz="${x + width/2} ${y - depth/2 + leg_offet} ${z + height}" rpy="0 0 0" />
       <child link="leg3_link" />
     </joint>
     <link name="leg3_link">
@@ -109,7 +109,7 @@
 
     <joint name="leg4_joint" type="fixed" >
       <parent link="table_top_link" />
-      <origin xyz="${x - width/2} ${y - depth/2} ${z + height}" rpy="0 0 0" />
+      <origin xyz="${x - width/2} ${y - depth/2 + leg_offet} ${z + height}" rpy="0 0 0" />
       <child link="leg4_link" />
     </joint>
     <link name="leg4_link">

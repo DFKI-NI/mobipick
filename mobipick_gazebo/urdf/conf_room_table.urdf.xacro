@@ -4,21 +4,23 @@
   <xacro:property name="width"               value="1.40" />
   <xacro:property name="depth"               value="0.70" />
   <xacro:property name="height"              value="0.72" />
-  <xacro:property name="leg_radius"          value="0.02" />
+  <xacro:property name="leg_radius"          value="0.015" />
+  <xacro:property name="leg_offet"           value="0.275" />
   <xacro:property name="table_top_thickness" value="0.05" />
   <xacro:property name="x"                   value="0.0" />
   <xacro:property name="y"                   value="0.0" />
   <xacro:property name="z"                   value="0.0" />
 
-  <xacro:property name="barrier_width"       value="${width + 2*leg_radius}" />
+  <xacro:property name="barrier_width"       value="${width}" />
   <xacro:property name="barrier_depth"       value="0.01" />
-  <xacro:property name="barrier_height"      value="0.05" />
+  <xacro:property name="barrier_height"      value="0.14" />
   <xacro:property name="barrier_x"           value="${x}" />
-  <xacro:property name="barrier_y"           value="${y + 0.10}" />
+  <xacro:property name="barrier_y"           value="${y + depth/2 + leg_radius - leg_offet + barrier_depth/2}" />
   <xacro:property name="barrier_z"           value="${z + 0.19}" />
 
   <xacro:include filename="$(find mobipick_gazebo)/urdf/include/table.urdf.xacro" />
-  <xacro:table height="${height}" width="${width}" depth="${depth}" leg_radius="${leg_radius}" table_top_thickness="${table_top_thickness}" x="${x}" y="${y}" z="${z}" />
+  <xacro:table height="${height}" width="${width}" depth="${depth}" leg_radius="${leg_radius}" leg_offet="${leg_offet}" table_top_thickness="${table_top_thickness}" x="${x}" y="${y}" z="${z}" />
+
 
   <joint name="barrier_joint" type="fixed" >
     <parent link="table_top_link" />
