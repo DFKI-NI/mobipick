@@ -106,7 +106,7 @@
 
     <!-- start pose teaching node. nice to open/close the gripper, and, well, teach poses -->
     <node name="pose_teacher" pkg="pose_teacher" type="teach_poses.py">
-      <remap from="command" to="scaled_pos_traj_controller/command" />
+      <remap from="command" to="arm_controller/command" />
       <remap from="gripper" to="gripper_hw" />
     </node>
   </group>

@@ -1,6 +1,6 @@
 controller_manager_ns: ""
 controller_list:
-  - name: "scaled_pos_traj_controller"
+  - name: "arm_controller"
     action_ns: follow_joint_trajectory
     type: FollowJointTrajectory
     default: true

@@ -308,8 +308,8 @@ Troubleshooting
 Sometimes the arm doesn't move, and the following errors appear in the log:
 
 ```text
-[ WARN] [1625228178.110222489]: Controller scaled_pos_traj_controller failed with error INVALID_GOAL:  (/mobipick/move_group)
-[ WARN] [1625228178.110321441]: Controller handle scaled_pos_traj_controller reports status FAILED (/mobipick/move_group)
+[ WARN] [1625228178.110222489]: Controller arm_controller failed with error INVALID_GOAL:  (/mobipick/move_group)
+[ WARN] [1625228178.110321441]: Controller handle arm_controller reports status FAILED (/mobipick/move_group)
 [ INFO] [1625228178.110378244]: Completed trajectory execution with status FAILED ... (/mobipick/move_group)
 ```
 
