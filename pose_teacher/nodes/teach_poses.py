@@ -13,6 +13,8 @@ from sensor_msgs.msg import JointState
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from std_srvs.srv import Empty, EmptyResponse
 
+TRAJECTORY_DURATION = 5  # duration of each trajectory in seconds
+
 
 class PoseTeacher(object):
     def __init__(self):
@@ -96,10 +98,13 @@ class PoseTeacher(object):
             for key, value in poses[request.name].items():
                 msg.joint_names.append(self.jointPrefix + key)
                 msg.points[0].positions.append(value)
-            msg.points[0].time_from_start.secs = 5
+            msg.points[0].time_from_start.secs = TRAJECTORY_DURATION
 
             # publish to drive the arm
             self.pubJointTrajectory.publish(msg)
+
+            # wait for trajectory to finish
+            rospy.sleep(TRAJECTORY_DURATION)
             return "ok"
 
     def saveArmPose(self, request):
