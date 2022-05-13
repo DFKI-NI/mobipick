@@ -136,6 +136,6 @@ class PoseTeacher(object):
 
 
 if __name__ == '__main__':
-    rospy.init_node("PoseTeacher")
+    rospy.init_node("pose_teacher")
     pt = PoseTeacher()
     rospy.spin()
