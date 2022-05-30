@@ -1,7 +1,7 @@
 <robot  xmlns:xacro="http://ros.org/wiki/xacro" name="powerdrill_model">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
-  <xacro:property name="mass" value="0.500" />
+  <xacro:property name="mass" value="1.284" />
 
   <link name="powerdrill">
     <!-- <xacro:cylinder_inertial radius="${radius}" length="${height}" mass="${mass}">
