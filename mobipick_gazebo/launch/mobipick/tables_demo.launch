@@ -16,9 +16,9 @@
     <arg name="gui" value="$(arg gui)" />
     <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
     <arg name="world_name" value="$(find mobipick_gazebo)/worlds/pbr_moelk.sdf"/>
-    <arg name="robot_x"   value="11.3" />
-    <arg name="robot_y"   value="2.15" />
-    <arg name="robot_yaw" value="0.0" />
+    <arg name="robot_x"   value="10.50" />
+    <arg name="robot_y"   value="2.30" />
+    <arg name="robot_yaw" value="3.1415" />
   </include>
 
   <!-- spawn 3 tables -->
@@ -31,23 +31,21 @@
   <node  name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model table_3 -x 10.42 -y 3.25 -Y 3.1416"
          respawn="false" output="screen" />
 
-  <!-- spawn relay_1 on table 3 -->
-  <param name="relay"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
-  <node name="spawn_relay_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param relay -model relay_1 -x 10.61 -y 2.97 -z 0.78 -R 0.0 -P 0.0 -Y -1.57"
+  <!-- spawn powerdrill_with_grip_2 on table 1 -->
+  <node name="spawn_powerdrill_with_grip_2" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param powerdrill_with_grip_description -model powerdrill_with_grip_2 -x 13.00 -y 2.05 -z 0.84 -R 1.5708 -P 0.0 -Y 2.88"
         respawn="false" output="screen" />
 
   <!-- spawn klt_2 on table 1 -->
   <param name="klt_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/klt.urdf.xacro'" />
   <node name="klt_2" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param klt_description -model klt_2 -x 13.31 -y 2.5 -z 0.81 -R 0.0 -P 0.0 -Y 0.5"
+        args="-urdf -param klt_description -model klt_2 -x 13.04 -y 2.5 -z 0.81 -R 0.0 -P 0.0 -Y 0.5"
         respawn="false" output="screen" />
 
   <!-- spawn klt_1 on table 2 -->
   <node name="spawn_klt_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param klt_description -model klt_1 -x 12.12 -y 3.57 -z 0.81 -R 0.0 -P 0.0 -Y -2.22"
+        args="-urdf -param klt_description -model klt_1 -x 12.43 -y 3.10 -z 0.81 -R 0.0 -P 0.0 -Y -2.22"
         respawn="false" output="screen" />
 
   <!-- spawn powerdrill_with_grip_1 on table 2 -->
@@ -57,28 +55,30 @@
         args="-urdf -param powerdrill_with_grip_description -model powerdrill_with_grip_1 -x 11.89 -y 3.09 -z 0.84 -R 1.5708 -P 0.0 -Y '-1.11'"
         respawn="false" output="screen" />
 
-  <!-- spawn screwdriver_1 on table 2 -->
+  <!-- spawn screwdriver_1 on table 3 -->
   <param name="screwdriver"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/screwdriver.urdf.xacro'" />
   <node name="spawn_screwdriver" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param screwdriver -model screwdriver_1 -x 11.72 -y 3.57 -z 0.75 -Y -1.09"
+        args="-urdf -param screwdriver -model screwdriver_1 -x 10.74 -y 3.06 -z 0.75 -Y 1.57"
         respawn="false" output="screen" />
 
-  <!-- spawn powerdrill_with_grip_2 on table 3 -->
-  <node name="spawn_powerdrill_with_grip_2" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param powerdrill_with_grip_description -model powerdrill_with_grip_2 -x 10.86 -y 3.54 -z 0.84 -R 1.5708 -P 0.0 -Y 2.114537"
+  <!-- spawn relay_1 on table 3 -->
+  <param name="relay"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
+  <node name="spawn_relay_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param relay -model relay_1 -x 10.54 -y 3.00 -z 0.78 -R 0.0 -P 0.0 -Y -1.57"
         respawn="false" output="screen" />
 
   <!-- spawn klt_3 on table 3 -->
   <node name="klt_3" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param klt_description -model klt_3 -x 10.19 -y 3.45 -z 0.81 -R 0.0 -P 0.0 -Y -1.07"
+        args="-urdf -param klt_description -model klt_3 -x 10.28 -y 3.09 -z 0.81 -R 0.0 -P 0.0 -Y 1.57"
         respawn="false" output="screen" />
 
   <!-- spawn multimeter_1 on table 3 -->
   <param name="multimeter"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
   <node name="spawn_multimeter_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param multimeter -model multimeter_1 -x 10.58 -y 3.5 -z 0.75 -Y -2.16"
+        args="-urdf -param multimeter -model multimeter_1 -x 10.03 -y 3.03 -z 0.75 -Y -1.57"
         respawn="false" output="screen" />
 
 </launch>
