@@ -3,11 +3,11 @@
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="gui" default="true" />
   <arg name="start_paused" default="true" />
-  <arg name="arm_velocity_controller" default="false" doc="Start the arm velocity controller instead of the trajectory controller?" />
+  <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="gui" value="$(arg gui)" />
-    <arg name="arm_velocity_controller" value="$(arg arm_velocity_controller)" />
+    <arg name="arm_controller" value="$(arg arm_controller)" />
     <arg name="world_name" value="$(find mobipick_gazebo)/worlds/rh5_mrk_lab.sdf"/>
     <arg name="robot_x"   value="9.00" />
     <arg name="robot_y"   value="11.327" />

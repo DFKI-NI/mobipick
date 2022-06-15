@@ -176,13 +176,14 @@ rosservice call /mobipick/continue_statemachine
 roslaunch rosbridge_server rosbridge_websocket.launch port:=9090
 ```
 
-### Using the arm velocity controller
+### Using the arm velocity controller or position controller
 
-If you want to use the velocity controller for the arm, add
-`arm_velocity_controller:=true` to any of the launch files, like so:
+If you want to use the velocity/position controller for the arm, add
+`arm_controller:=velocity/position` to any of the launch files, like so:
+
 
 ```bash
-roslaunch mobipick_gazebo mobipick_table_world.launch arm_velocity_controller:=true
+roslaunch mobipick_gazebo mobipick_table_world.launch arm_controller:=velocity # or arm_controller:=position
 rosservice call /gazebo/unpause_physics   # or click the "start" button in the Gazebo GUI
 ```
 
@@ -204,7 +205,7 @@ rosrun controller_manager controller_manager start arm_controller
 ```
 
 This also works the other way around, e.g. if you didn't add the
-`arm_velocity_controller:=true` argument to the launch file:
+`arm_controller:=velocity` argument to the launch file:
 
 ```bash
 rosrun controller_manager controller_manager stop arm_controller
