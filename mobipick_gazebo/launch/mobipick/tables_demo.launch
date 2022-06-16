@@ -8,6 +8,11 @@
   <arg name="start_paused" default="true" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
 
+  <!-- the pose where to spawn the robot in simulation -->
+  <arg name="robot_x"   default="10.50" />
+  <arg name="robot_y"   default="2.30" />
+  <arg name="robot_yaw" default="3.1415" />
+
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="namespace" value="$(arg namespace)" />
     <arg name="tf_prefix" value="$(arg tf_prefix)" />
@@ -16,9 +21,9 @@
     <arg name="gui" value="$(arg gui)" />
     <arg name="arm_controller" value="$(arg arm_controller)" />
     <arg name="world_name" value="$(find mobipick_gazebo)/worlds/pbr_moelk.sdf"/>
-    <arg name="robot_x"   value="10.50" />
-    <arg name="robot_y"   value="2.30" />
-    <arg name="robot_yaw" value="3.1415" />
+    <arg name="robot_x"   value="$(arg robot_x)" />
+    <arg name="robot_y"   value="$(arg robot_y)" />
+    <arg name="robot_yaw" value="$(arg robot_yaw)" />
   </include>
 
   <!-- spawn 3 tables -->
