@@ -1,0 +1,39 @@
+# Picking parameters
+
+# the name of the arm kinematic chain group given when moveit was configured
+arm_group_name: arm
+
+# the name of the moveit gripper group
+hand_group_name: gripper
+
+# how accurate you want a cartesian pose to be achieved
+# if set too low IK is likely to fail, if set too high arm will not reach accurately
+arm_goal_tolerance: 0.01   # default: 0.01
+
+# timeout for the pick - planning
+planning_time: 20.0        # default: 5.0
+
+# if true, before picking the arm will go to a predefined posture (pregrasp_posture)
+pregrasp_posture_required: False # default: True
+
+# the predefined arm posture to go before picking an object
+# this posture will be applied only if pregrasp_posture_required is set to True, otherwise is ignored
+pregrasp_posture: 'home'
+
+# a list of boxes to add to the planning scene
+planning_scene_boxes:
+  - scene_name: 'table_1'
+    frame_id: 'map'
+    box_x_dimension: 1.4
+    box_y_dimension: 0.7
+    box_z_dimension: 0.7 # real dimension from sdf: 0.72 but we need to give padding, otherwise it does not work...
+    box_position_x: 0.0
+    box_position_y: 1.0
+    box_position_z: 0.35 # box_z_dimension: 0.72 /2.0 = 0.36 -> + padding = 0.35
+    box_orientation_x: 0.0
+    box_orientation_y: 0.0
+    box_orientation_z: 0.0
+    box_orientation_w: 1.0
+
+# if True all objects from the planning scene are removed before every pick takes place
+clear_planning_scene: True   # default: False

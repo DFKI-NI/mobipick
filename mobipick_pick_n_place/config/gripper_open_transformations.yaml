@@ -1,0 +1,100 @@
+# This file was automatically generated, manual editing is not recommended
+
+gripper_left_outer_knuckle:
+  v0:
+    tf_translation: [-0.1425949999999998, -0.03060099999999999, 0.0]
+    tf_rotation: [0.6421437619129102, 0.2960597727424917, -0.64214376191291, 0.29605977274249184]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_outer_knuckle.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_left_outer_finger:
+  v0:
+    tf_translation: [-0.14562501674816297, -0.06220608659228531, 0.0]
+    tf_rotation: [0.6421437619129102, 0.2960597727424917, -0.64214376191291, 0.29605977274249184]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_outer_finger.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_left_inner_finger:
+  v0:
+    tf_translation: [-0.06512784392429394, -0.09383737979464059, 0.0]
+    tf_rotation: [0.5000000000000003, 0.5, -0.5000000000000003, 0.5000000000000001]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_inner_finger.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_left_inner_knuckle:
+  v0:
+    tf_translation: [-0.1360800000000002, -0.01269999999999992, 0.0]
+    tf_rotation: [0.6421437619129102, 0.2960597727424917, -0.64214376191291, 0.29605977274249184]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_inner_knuckle.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_right_outer_knuckle:
+  v0:
+    tf_translation: [-0.14259500000000025, 0.030601000000000073, 0.0]
+    tf_rotation: [0.2960597727424918, 0.6421437619129101, 0.2960597727424917, -0.6421437619129102]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_outer_knuckle.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_right_outer_finger:
+  v0:
+    tf_translation: [-0.14562501674816297, 0.062206086592285326, 0.0]
+    tf_rotation: [0.2960597727424918, 0.6421437619129101, 0.2960597727424917, -0.6421437619129102]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_outer_finger.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_right_inner_finger:
+  v0:
+    tf_translation: [-0.06512784392429394, 0.0938373797946406, 0.0]
+    tf_rotation: [0.5000000000000002, 0.5000000000000004, 0.5, -0.5]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_inner_finger.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_right_inner_knuckle:
+  v0:
+    tf_translation: [-0.1360800000000002, 0.012700000000000017, 0.0]
+    tf_rotation: [0.2960597727424918, 0.6421437619129101, 0.2960597727424917, -0.6421437619129102]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_inner_knuckle.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_left_robotiq_fingertip_65mm:
+  v0:
+    tf_translation: [-0.05161484392429405, -0.0753683797946405, 0.0]
+    tf_rotation: [0.5000000000000003, 0.5, -0.5000000000000003, 0.5]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_fingertip_65mm.stl'
+    mesh_scale: [1.0, 1.0, 1.0]
+
+
+gripper_right_robotiq_fingertip_65mm:
+  v0:
+    tf_translation: [-0.051614843924294274, 0.07536837979464062, 0.0]
+    tf_rotation: [0.5000000000000002, 0.5000000000000004, 0.5, -0.5]
+    mesh_translation: [0.0, 0.0, 0.0]
+    mesh_rotation: [0.0, 0.0, 0.0]
+    mesh_path: 'package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_140_fingertip_65mm.stl'
+    mesh_scale: [1.0, 1.0, 1.0]

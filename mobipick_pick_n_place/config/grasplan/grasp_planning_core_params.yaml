@@ -1,0 +1,41 @@
+# Picking parameters
+
+# the list of names of the gripper joint
+gripper_joint_names:
+    - mobipick/gripper_finger_joint
+
+# the joint angle value of the gripper when its closed
+gripper_close:
+    - 0.042 # 0.01   # 0.04 is good enough for multimeter and relay but not for screwdriver
+
+# the joint angle value of the gripper when its open
+gripper_open:
+    - 0.6 # 0.6
+
+# the list of max torque values to apply while closing the gripper around the object
+gripper_joint_efforts:
+    - 1000.0
+
+# The estimated probability of success for this grasp, or some other measure of how 'good' it is.
+# for now we set all grasp quality to 1.0, later on this value needs to be taken from the grasp planner
+grasp_quality: 1.0
+
+# the maximum contact force to use while grasping (<=0 to disable)
+max_contact_force: 1.0
+
+# the detected object bounding box will be enlarged by adding this value to its 3 dimensions (in meters)
+object_padding: 0.0   # default: 0.04
+
+# The approach direction to take before picking an object
+# values are expressed w.r.t end_effector reference frame
+pre_grasp_approach:
+    min_dist: 0.08
+    desired: 0.25
+    axis: [1.0, 0.0, 0.0] # side grasp, approach in "x" axis to object
+
+# The retreat direction to take after a grasp has been completed (object is attached)
+post_grasp_retreat:
+    frame_id: 'mobipick/odom_comb'
+    min_dist: 0.1
+    desired: 0.15
+    axis: [0.0, 0.0, 1.0] # lift object up in "z" direction
