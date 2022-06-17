@@ -20,20 +20,20 @@ pregrasp_posture_required: False # default: True
 # this posture will be applied only if pregrasp_posture_required is set to True, otherwise is ignored
 pregrasp_posture: 'home'
 
-# a list of boxes to add to the planning scene
-planning_scene_boxes:
-  - scene_name: 'table_1'
-    frame_id: 'map'
-    box_x_dimension: 1.4
-    box_y_dimension: 0.7
-    box_z_dimension: 0.7 # real dimension from sdf: 0.72 but we need to give padding, otherwise it does not work...
-    box_position_x: 0.0
-    box_position_y: 1.0
-    box_position_z: 0.35 # box_z_dimension: 0.72 /2.0 = 0.36 -> + padding = 0.35
-    box_orientation_x: 0.0
-    box_orientation_y: 0.0
-    box_orientation_z: 0.0
-    box_orientation_w: 1.0
+# Example: a list of boxes to add to the planning scene can be described here
+#planning_scene_boxes:
+  #- scene_name: 'table_1'
+    #frame_id: 'map'
+    #box_x_dimension: 1.4
+    #box_y_dimension: 0.7
+    #box_z_dimension: 0.7
+    #box_position_x: 0.0
+    #box_position_y: 1.0
+    #box_position_z: 0.35
+    #box_orientation_x: 0.0
+    #box_orientation_y: 0.0
+    #box_orientation_z: 0.0
+    #box_orientation_w: 1.0
 
 # if True all objects from the planning scene are removed before every pick takes place
 clear_planning_scene: True   # default: False
