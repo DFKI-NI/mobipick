@@ -1,0 +1,9 @@
+# this file was generated automatically by grasplan grasp editor
+powerdrill_with_grip:
+  grasp_poses:
+    -
+      translation: [0.025000, -0.110000, 0.000000]
+      rotation: [0.500000, 0.500000, 0.500000, 0.500000]
+    -
+      translation: [0.025000, -0.110000, 0.000000]
+      rotation: [0.500000, 0.500000, -0.500000, -0.500000]
