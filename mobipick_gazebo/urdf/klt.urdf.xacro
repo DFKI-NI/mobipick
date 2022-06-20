@@ -18,13 +18,13 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/klt3147.dae" />
+        <mesh filename="package://mobipick_gazebo/meshes/klt.dae" />
       </geometry>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/collision/klt3147.stl" />
+        <mesh filename="package://mobipick_gazebo/meshes/collision/klt.stl" />
       </geometry>
     </collision>
   </link>
