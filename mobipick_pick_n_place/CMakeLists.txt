@@ -5,9 +5,11 @@ add_compile_options(-std=c++14)
 
 find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs
+  behaviortree_cpp_v3
   eigen_conversions
   gazebo_msgs
   genmsg
+  geometric_shapes
   geometry_msgs
   message_generation
   message_runtime
@@ -20,7 +22,6 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   vision_msgs
   visualization_msgs
-  behaviortree_cpp_v3
 )
 
 add_action_files(DIRECTORY action FILES FtObserver.action MoveItMacro.action)

@@ -24,6 +24,7 @@
   <depend>behaviortree_cpp_v3</depend>
   <depend>eigen_conversions</depend>
   <depend>gazebo_msgs</depend>
+  <depend>geometric_shapes</depend>
   <depend>geometry_msgs</depend>
   <depend>message_runtime</depend>
   <depend>moveit_msgs</depend>
