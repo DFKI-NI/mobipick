@@ -21,11 +21,56 @@
         <mesh filename="package://mobipick_gazebo/meshes/klt.dae" />
       </geometry>
     </visual>
-    <collision>
+
+    <!--<collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <mesh filename="package://mobipick_gazebo/meshes/collision/klt.stl" />
       </geometry>
+    </collision>-->
+
+    <!--klt collision model made up from boxes, klt bounding box as reported from dope : 0.297 0.197 0.1469-->
+
+    <!-- klt base -->
+    <collision>
+      <origin xyz="0 0 -0.06345" rpy="0 0 0" /> <!--klt thickness = 0.02 ; (0.1469 - 0.02 = 0.1269) / 2-->
+      <geometry>
+
+            <box size="0.297 0.197 0.02" />
+      </geometry>
     </collision>
+
+    <!-- right klt wall -->
+    <collision>
+      <origin xyz="0 0.0885 0" rpy="0 0 0" /> <!--(0.197 - 0.02 = 0.177) / 2-->
+      <geometry>
+        <box size="0.297 0.02 0.1469" />
+      </geometry>
+    </collision>
+
+    <!-- left klt wall -->
+    <collision>
+      <origin xyz="0 -0.0885 0" rpy="0 0 0" /> <!--(0.197 - 0.02 = 0.177) / 2-->
+      <geometry>
+        <box size="0.297 0.02 0.1469" />
+      </geometry>
+    </collision>
+
+    <!-- front klt wall -->
+    <collision>
+      <origin xyz="0.1385 0 0" rpy="0 0 0" /> <!--(0.297 - 0.02 = 0.277 ) / 2-->
+      <geometry>
+        <box size="0.02 0.197 0.1469" />
+      </geometry>
+    </collision>
+
+    <!-- back klt wall -->
+    <collision>
+      <origin xyz="-0.1385 0 0" rpy="0 0 0" /> <!--(0.297 - 0.02 = 0.277 ) / 2-->
+      <geometry>
+        <box size="0.02 0.197 0.1469" />
+      </geometry>
+    </collision>
+
   </link>
 </robot>
