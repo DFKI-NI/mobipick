@@ -4,13 +4,17 @@
 gripper_joint_names:
     - mobipick/gripper_finger_joint
 
-# the joint angle value of the gripper when its closed
+# the distance in meters that the gripper should close to grasp objects by default
+# this value can be override by "distance_gripper_close_per_obj" param
+#   which is a dictionary with object_class vs custom values per object
 gripper_close:
-    - 0.042 # 0.01   # 0.04 is good enough for multimeter and relay but not for screwdriver
+    - 0.0 # close gripper completely
 
-# the joint angle value of the gripper when its open
+# the distance in meters that the gripper should have when opening by default
+# this value can be override by "distance_gripper_open_per_obj" param
+#   which is a dictionary with object_class vs custom values per object
 gripper_open:
-    - 0.6 # 0.6
+    - 0.6
 
 # the list of max torque values to apply while closing the gripper around the object
 gripper_joint_efforts:
