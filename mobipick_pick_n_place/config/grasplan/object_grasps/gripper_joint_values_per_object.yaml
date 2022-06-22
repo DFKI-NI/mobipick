@@ -1,5 +1,0 @@
-# default : 0.042
-joint_value_obj_dic:
-    klt: 0.0005 # 0.011 works fine but close a bit more
-    multimeter: 0.052
-    relay: 0.04
