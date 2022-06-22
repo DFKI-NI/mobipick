@@ -1,8 +1,28 @@
-home: {elbow_joint: 2.44, shoulder_lift_joint: -2.60,
-  shoulder_pan_joint: 0.0, wrist_1_joint: -2.05, wrist_2_joint: -1.57,
-  wrist_3_joint: 3.14}
-home_up: {elbow_joint: 2.14, shoulder_lift_joint: -2.6, shoulder_pan_joint: 0, wrist_1_joint: -2.39,
-  wrist_2_joint: -1.57, wrist_3_joint: 3.14}
-observe: {elbow_joint: 1.8664660453796387, shoulder_lift_joint: -1.0228155295001429,
-  shoulder_pan_joint: -0.04586774507631475, wrist_1_joint: -2.0844295660602015, wrist_2_joint: -1.610323731099264,
-  wrist_3_joint: 4.597344875335693}
+home:
+  elbow_joint: 2.44
+  shoulder_lift_joint: -2.6
+  shoulder_pan_joint: 0.0
+  wrist_1_joint: -2.05
+  wrist_2_joint: -1.57
+  wrist_3_joint: 3.14
+home_up:
+  elbow_joint: 2.14
+  shoulder_lift_joint: -2.6
+  shoulder_pan_joint: 0
+  wrist_1_joint: -2.39
+  wrist_2_joint: -1.57
+  wrist_3_joint: 3.14
+observe:
+  elbow_joint: 1.8664660453796387
+  shoulder_lift_joint: -1.0228155295001429
+  shoulder_pan_joint: -0.04586774507631475
+  wrist_1_joint: -2.0844295660602015
+  wrist_2_joint: -1.610323731099264
+  wrist_3_joint: 4.597344875335693
+ready_for_packing:
+  elbow_joint: 2.7993922233581543
+  shoulder_lift_joint: -2.6808717886554163
+  shoulder_pan_joint: 0.0012100322637706995
+  wrist_1_joint: -1.8461745421039026
+  wrist_2_joint: -1.575557057057516
+  wrist_3_joint: 3.136849880218506
