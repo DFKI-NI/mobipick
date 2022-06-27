@@ -39,7 +39,7 @@ pre_grasp_approach:
 
 # The retreat direction to take after a grasp has been completed (object is attached)
 post_grasp_retreat:
-    frame_id: 'mobipick/odom_comb'
+    frame_id: 'mobipick/odom'
     min_dist: 0.1
     desired: 0.15
     axis: [0.0, 0.0, 1.0] # lift object up in "z" direction
