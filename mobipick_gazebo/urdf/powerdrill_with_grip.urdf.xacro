@@ -19,13 +19,13 @@
         izz="${mass * 0.00534355593909}" />
     </inertial>
     <visual>
-      <origin xyz="0 0 0" rpy="${pi} 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <mesh filename="package://mobipick_gazebo/meshes/powerdrill_with_grip.dae" />
       </geometry>
     </visual>
     <collision>
-      <origin xyz="0 0 0" rpy="${pi} 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <mesh filename="package://mobipick_gazebo/meshes/powerdrill_with_grip.dae" />
       </geometry>

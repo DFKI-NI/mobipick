@@ -139,21 +139,14 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
       det3d.bbox.size.y = 0.22317399978637695;
       det3d.bbox.size.z = 0.082321996688842773;
 
-      // shift to center of bbox and rotate coordinate frames to match dope detection
+      // transform from gazebo world frame to base_link
       Eigen::Isometry3d object_pose;
       tf::poseMsgToEigen(msg->pose[i], object_pose);
-
-      Eigen::Isometry3d object_to_bbox = Eigen::Isometry3d::Identity();
-      object_to_bbox.translation() = Eigen::Vector3d(0.0, 0.0, 0.0);
-
-      // rotate to dope orientation
-      Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
-      bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0, 0.0, 0.0)));
-      tf::poseEigenToMsg((mobipick_pose * object_pose * object_to_bbox * bbox_center_rotated), det3d.bbox.center);
+      tf::poseEigenToMsg((mobipick_pose * object_pose), det3d.bbox.center);
 
       det3d.results.resize(1);
       det3d.results[0].id = ObjectID::POWER_DRILL;
-      tf::poseEigenToMsg((mobipick_pose * object_pose * bbox_center_rotated), det3d.results[0].pose.pose);
+      det3d.results[0].pose.pose = det3d.bbox.center;
       det3d.results[0].score = 1.0;
       detections.detections.push_back(det3d);
       // publish power drill pose seperately
