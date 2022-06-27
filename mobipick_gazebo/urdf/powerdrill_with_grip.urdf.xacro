@@ -4,19 +4,16 @@
   <xacro:property name="mass" value="1.284" />
 
   <link name="powerdrill_with_grip">
-    <!-- <xacro:cylinder_inertial radius="${radius}" length="${height}" mass="${mass}">
-      <origin xyz="0 0 ${height/2}" rpy="0 0 0" />
-    </xacro:cylinder_inertial> -->
     <inertial>
-      <origin xyz="0.01524081 -0.01376334 0.00190586" rpy="0 0 0" />
+      <origin xyz="0.01572397 0.00627010 -0.00088096" rpy="0 0 0" />
       <mass value="${mass}" />
       <inertia
-        ixx="${mass * 0.003988511412844956}"
-        ixy="${mass * -0.0004112614213275305}"
-        ixz="${mass * -0.00003166287680811595}"
-        iyy="${mass * 0.0016270423052260282}"
-        iyz="${mass * 0.0000807201704454}"
-        izz="${mass * 0.00534355593909}" />
+        ixx="${mass * 0.006644088398958405}"
+        ixy="${mass * -0.00021896180608560679}"
+        ixz="${mass * -4.562260404751529e-06}"
+        iyy="${mass * 0.002253199387886466}"
+        iyz="${mass * -3.265842622139487e-05}"
+        izz="${mass * 0.007951044267639611}" />
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
