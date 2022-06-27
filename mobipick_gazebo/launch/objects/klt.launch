@@ -20,6 +20,6 @@
   <group unless="$(arg wait_for_table)">
     <node name="spawn_klt1" pkg="gazebo_ros" type="spawn_model" args="-urdf
       -param klt_description -model klt_1
-      -x $(arg x) -y $(arg y) -z $(arg z)" respawn="false" output="screen" />
+      -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />
   </group>
 </launch>

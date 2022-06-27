@@ -21,6 +21,6 @@
   <group unless="$(arg wait_for_table)">
     <node name="spawn_$(arg model_name)" pkg="gazebo_ros" type="spawn_model" args="-urdf
       -param powerdrill_with_grip_description -model '$(arg model_name)'
-      -x $(arg x) -y $(arg y) -z $(arg z)" respawn="false" output="screen" />
+      -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />
   </group>
 </launch>
