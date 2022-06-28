@@ -9,7 +9,7 @@
   </include>
 
   <!-- spawn power drill -->
-  <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch" />
+  <include file="$(find mobipick_gazebo)/launch/objects/power_drill.launch" />
 
   <!-- spawn table -->
   <param name="table_description"

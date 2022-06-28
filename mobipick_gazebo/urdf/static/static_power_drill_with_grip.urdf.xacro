@@ -1,0 +1,7 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="power_drill_with_grip_model">
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/power_drill_with_grip.urdf.xacro" />
+
+  <gazebo>
+    <static>true</static>
+  </gazebo>
+</robot>

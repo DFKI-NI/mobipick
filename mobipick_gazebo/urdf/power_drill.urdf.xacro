@@ -1,9 +1,9 @@
-<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="powerdrill_model">
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="power_drill_model">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
   <xacro:property name="mass" value="1.284" />
 
-  <link name="powerdrill">
+  <link name="power_drill">
     <!-- <xacro:cylinder_inertial radius="${radius}" length="${height}" mass="${mass}">
       <origin xyz="0 0 ${height/2}" rpy="0 0 0" />
     </xacro:cylinder_inertial> -->
@@ -21,13 +21,13 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/powerdrill.dae" />
+        <mesh filename="package://mobipick_gazebo/meshes/power_drill.dae" />
       </geometry>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/powerdrill.dae" />
+        <mesh filename="package://mobipick_gazebo/meshes/power_drill.dae" />
       </geometry>
     </collision>
   </link>

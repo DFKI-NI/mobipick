@@ -15,7 +15,7 @@
   <param name="world" type="str" value="smart_factory" />
 
   <!-- spawn power drill -->
-  <!--<include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
+  <!--<include file="$(find mobipick_gazebo)/launch/objects/power_drill.launch">
     <arg name="x"     default="0.750" />
     <arg name="y"     default="1.0" />
     <arg name="z"     default="0.90" />

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="name" default="powerdrill_1" />
+  <arg name="name" default="power_drill_1" />
   <arg name="relative_to" default="" />
 
   <!-- if relative_to is set, include a "-wait '...'" parameter. -->
@@ -19,11 +19,11 @@
   <arg name="pitch" default="0.0" />
   <arg name="yaw" default="$(eval pi)" />
 
-  <param name="powerdrill_description"
-    command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/powerdrill.urdf.xacro'" />
+  <param name="power_drill_description"
+    command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/power_drill.urdf.xacro'" />
 
-  <node name="spawn_powerdrill_$(arg name)" pkg="gazebo_ros" type="spawn_model" args="-urdf
-    -param powerdrill_description -model $(arg name)
+  <node name="spawn_power_drill_$(arg name)" pkg="gazebo_ros" type="spawn_model" args="-urdf
+    -param power_drill_description -model $(arg name)
     $(arg wait_param)
     -reference_frame '$(arg reference_frame)'
     -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)" respawn="false" output="screen" />

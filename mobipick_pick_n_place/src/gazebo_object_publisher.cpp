@@ -98,9 +98,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
       det3d.results[0].score = 1.0;
       detections.detections.push_back(det3d);
     }
-    else if (msg->name[i] == "powerdrill_1::powerdrill")
+    else if (msg->name[i] == "power_drill_1::power_drill")
     {
-      // add powerdrill
+      // add power_drill
       vision_msgs::Detection3D det3d;
       det3d.header = detections.header;
       det3d.bbox.size.x = 0.18436100006103516;
@@ -130,9 +130,9 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
       pose_msg.pose = det3d.bbox.center;
       pose_power_drill_pub->publish(pose_msg);
     }
-    else if (msg->name[i] == "powerdrill_with_grip_1::powerdrill_with_grip")
+    else if (msg->name[i] == "power_drill_with_grip_1::power_drill_with_grip")
     {
-      // add powerdrill
+      // add power_drill
       vision_msgs::Detection3D det3d;
       det3d.header = detections.header;
       det3d.bbox.size.x = 0.18002399444580078;

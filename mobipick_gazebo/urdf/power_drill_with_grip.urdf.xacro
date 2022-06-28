@@ -1,9 +1,9 @@
-<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="powerdrill_with_grip_model">
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="power_drill_with_grip_model">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
   <xacro:property name="mass" value="1.284" />
 
-  <link name="powerdrill_with_grip">
+  <link name="power_drill_with_grip">
     <inertial>
       <origin xyz="0.01572397 0.00627010 -0.00088096" rpy="0 0 0" />
       <mass value="${mass}" />
@@ -18,13 +18,13 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/powerdrill_with_grip.dae" />
+        <mesh filename="package://mobipick_gazebo/meshes/power_drill_with_grip.dae" />
       </geometry>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/powerdrill_with_grip.dae" />
+        <mesh filename="package://mobipick_gazebo/meshes/power_drill_with_grip.dae" />
       </geometry>
     </collision>
   </link>

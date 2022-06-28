@@ -16,7 +16,7 @@
   </include>
 
   <!-- spawn power drill -->
-  <include file="$(find mobipick_gazebo)/launch/objects/powerdrill.launch">
+  <include file="$(find mobipick_gazebo)/launch/objects/power_drill.launch">
     <arg name="x"     default="9.85" />
     <arg name="y"     default="11.38" />
     <arg name="z"     default="1.02" />

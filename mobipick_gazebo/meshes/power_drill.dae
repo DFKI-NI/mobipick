@@ -11,7 +11,7 @@
     </asset>
     <library_images>
         <image id="texture0" name="texture0">
-            <init_from>powerdrill_texture_map.png</init_from>
+            <init_from>power_drill_texture_map.png</init_from>
         </image>
     </library_images>
     <library_materials>

@@ -83,7 +83,7 @@ int main(int argc, char** argv)
   //  }
 
   {
-    // add powerdrill_with_grip
+    // add power_drill_with_grip
     geometry_msgs::Pose object_pose_msg;
     object_pose_msg.position.x = 0.11;
     object_pose_msg.position.y = -0.84;

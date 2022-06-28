@@ -1,5 +1,5 @@
 # this file was generated automatically by grasplan grasp editor
-powerdrill_with_grip:
+power_drill_with_grip:
   grasp_poses:
     -
       translation: [0.030000, -0.085000, 0.000000]

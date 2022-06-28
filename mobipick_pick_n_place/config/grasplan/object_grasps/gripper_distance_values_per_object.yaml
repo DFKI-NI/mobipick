@@ -5,7 +5,7 @@ distance_gripper_close_per_obj:
     klt: 0.0005
     multimeter: 0.052
     relay: 0.04
-    powerdrill_with_grip: 0.03
+    power_drill_with_grip: 0.03
 
 # dictionary of distances in meters that the gripper should open before grasping the objects
 # if object is not specified, it will open the default value
