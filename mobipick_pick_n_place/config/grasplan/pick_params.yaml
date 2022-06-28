@@ -11,7 +11,7 @@ hand_group_name: gripper
 arm_goal_tolerance: 0.01   # default: 0.01
 
 # timeout for the pick - planning
-planning_time: 20.0        # default: 5.0
+planning_time: 20.0        # default: 20.0
 
 # if true, before picking the arm will go to a predefined posture (pregrasp_posture)
 pregrasp_posture_required: False # default: True
