@@ -113,6 +113,14 @@
         <joint name="${tf_prefix}ur5_wrist_2_joint" value="1.57"/>
         <joint name="${tf_prefix}ur5_wrist_3_joint" value="4.71"/>
     </group_state>
+    <group_state name="ready_for_packing" group="arm">
+        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="0.0"/>
+        <joint name="${tf_prefix}ur5_shoulder_lift_joint" value="-2.68"/>
+        <joint name="${tf_prefix}ur5_elbow_joint" value="2.80"/>
+        <joint name="${tf_prefix}ur5_wrist_1_joint" value="-1.84"/>
+        <joint name="${tf_prefix}ur5_wrist_2_joint" value="-1.57"/>
+        <joint name="${tf_prefix}ur5_wrist_3_joint" value="3.14"/>
+    </group_state>
     <!-- NOTE: Using MoveIt to plan gripper opening/closing trajectories does not work (see README). -->
     <group_state name="open" group="gripper">
         <joint name="${tf_prefix}gripper_finger_joint" value="0"/>
