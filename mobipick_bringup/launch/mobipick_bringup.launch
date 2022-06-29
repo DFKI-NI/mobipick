@@ -75,11 +75,12 @@
 
     <node name="fake_mir_joint_publisher" pkg="mir_driver" type="fake_mir_joint_publisher.py" output="screen">
       <param name="prefix" value="$(arg prefix)" />
+      <remap from="joint_states" to="mir_joint_states" />
     </node>
 
     <!-- a joint state publisher to get the mimic joints of the gripper, too! -->
     <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
-      <rosparam param="source_list">[joint_states, gripper_joint_states]</rosparam>
+      <rosparam param="source_list">[joint_states, gripper_joint_states, mir_joint_states, ur5_joint_states]</rosparam>
       <param name="rate" value="200." />
     </node>
 
