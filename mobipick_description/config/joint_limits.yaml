@@ -73,7 +73,9 @@ joint_limits:
     has_position_limits: true
     has_velocity_limits: true
     max_effort: 28.0
-    max_position: !degrees  180.0 # =  pi, default: -360.0
+    # Reasons for additional position limits:
+    # * wrist_1.max_position=0: avoid overstretching the cable guide
+    max_position: !degrees    0.0 # =  pi, default: -360.0
     max_velocity: !degrees  180.0
     min_position: !degrees -180.0 # = -pi, default:  360.0
   wrist_2:
@@ -97,6 +99,9 @@ joint_limits:
     # * wrist_3 limits: It's nice to center the range around (pi - 0.25),
     #   because that is where our "home" position is and where the cables are
     #   least stretched. From there, wrist_3 can move pi in either direction.
-    max_position: !degrees  315.0 # =  1.75 * pi, default: -360.0
+    # Reasons for additional position limits:
+    # * wrist_3 limits reduced by 40 degrees to avoid overstretching the cable guide
+    #   (we have some predefined poses which use wrist_3 = 270 deg, so choose 275 to be on the safe side)
+    max_position: !degrees  275.0 #               default:  360.0
     max_velocity: !degrees  180.0
     min_position: !degrees  -45.0 # = -0.25 * pi, default:  360.0
