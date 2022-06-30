@@ -98,12 +98,12 @@
         <joint name="${tf_prefix}ur5_wrist_3_joint" value="2.89"/>
     </group_state>
     <group_state name="above" group="arm">
-        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="-1.72"/>
-        <joint name="${tf_prefix}ur5_shoulder_lift_joint" value="-0.79"/>
-        <joint name="${tf_prefix}ur5_elbow_joint" value="0.71"/>
-        <joint name="${tf_prefix}ur5_wrist_1_joint" value="-1.52"/>
+        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="-1.57"/>
+        <joint name="${tf_prefix}ur5_shoulder_lift_joint" value="-0.42"/>
+        <joint name="${tf_prefix}ur5_elbow_joint" value="0.74"/>
+        <joint name="${tf_prefix}ur5_wrist_1_joint" value="-1.94"/>
         <joint name="${tf_prefix}ur5_wrist_2_joint" value="-1.57"/>
-        <joint name="${tf_prefix}ur5_wrist_3_joint" value="1.1"/>
+        <joint name="${tf_prefix}ur5_wrist_3_joint" value="1.57"/>
     </group_state>
     <group_state name="tucked" group="arm">
         <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="0.0"/>
