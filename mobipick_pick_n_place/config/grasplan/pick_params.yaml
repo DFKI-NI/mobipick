@@ -36,7 +36,7 @@ pregrasp_posture: 'home'
     #box_orientation_w: 1.0
 
 # if True all objects from the planning scene are removed before every pick takes place
-clear_planning_scene: False   # default: False
+clear_planning_scene: True   # default: True
 
 # if true the octomap is cleared just before picking
 clear_octomap: True # default: False
@@ -45,3 +45,16 @@ clear_octomap: True # default: False
 # this is useful for when you open the gripper manually (after picking) and want to pick another object
 # if you are picking from a state machine or planning module this param should be false, if in doubt leave this param False
 detach_all_objects: False # default: False
+
+# default: empty list, a list of arm poses to visit before picking an object takes place to disentangle the cable
+# for specific objects (see list_of_disentangle_objects param)
+poses_to_go_before_pick:
+    - 'untangle_cable_guide_1_right'
+    - 'untangle_cable_guide_2_right'
+
+list_of_disentangle_objects:
+    - 'multimeter'
+    - 'klt'
+    - 'relay'
+    - 'power_drill_with_grip'
+    - 'screwdriver'

@@ -14,11 +14,12 @@ gripper_close:
 # this value can be override by "distance_gripper_open_per_obj" param
 #   which is a dictionary with object_class vs custom values per object
 gripper_open:
-    - 0.1
+    - 0.14
 
 # the list of max torque values to apply while closing the gripper around the object
+# for the Robotiq 2F gripper on Mobipick: min: 30.0, max: 100.0
 gripper_joint_efforts:
-    - 80.0
+    - 100.0
 
 # The estimated probability of success for this grasp, or some other measure of how 'good' it is.
 # for now we set all grasp quality to 1.0, later on this value needs to be taken from the grasp planner

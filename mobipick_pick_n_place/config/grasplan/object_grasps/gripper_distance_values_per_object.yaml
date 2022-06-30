@@ -11,4 +11,4 @@ distance_gripper_close_per_obj:
 # if object is not specified, it will open the default value
 # specified in grasp_planning_core_params -> "gripper_open"
 distance_gripper_open_per_obj:
-    klt: 0.03
+    klt: 0.06

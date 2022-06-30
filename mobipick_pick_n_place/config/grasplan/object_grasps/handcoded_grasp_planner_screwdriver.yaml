@@ -1,9 +1,9 @@
-# this file was generated automatically by tf_gripper_listener node
+# this file was generated automatically by grasplan grasp editor
 screwdriver:
   grasp_poses:
     -
       translation: [-0.077018, 0.000569, 0.028499]
       rotation: [0.707084, 0.001218, -0.707127, -0.001218]
     -
-      translation: [-0.076824, 0.005841, 0.027760]
-      rotation: [0.791489, -0.004996, -0.611101, 0.008711]
+      translation: [-0.077018, 0.000569, 0.028499]
+      rotation: [-0.001218, 0.707084, -0.001218, 0.707127]

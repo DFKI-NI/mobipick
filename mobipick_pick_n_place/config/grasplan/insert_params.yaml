@@ -4,22 +4,15 @@
 gripper_joint_names:
     - mobipick/gripper_finger_joint
 
-# the list of max torque values to apply while opening the gripper after placing
+# the list of max torque values to apply while opening the gripper after inserting
 gripper_joint_efforts:
     - 30.0
 
 # the distance between the gripper fingers such that the object is released
 gripper_release_distance: 0.12 # 0.1 is not sufficient for multimeter for some reason... however it should
 
-# if possible, place poses will be generated min_dist meters apart
-min_dist: 0.2
-
-# ignore min_dist param for some objects
-ignore_min_dist_list:
-    - 'klt'
-
-# default: empty list, a list of arm poses to visit before placing an object to disentangle the cable
+# default: empty list, a list of arm poses to visit before inserting an object to disentangle the cable
 disentangle_required: True
-poses_to_go_before_place:
+poses_to_go_before_insert:
     - 'untangle_cable_guide_1_right'
     - 'untangle_cable_guide_2_right'
