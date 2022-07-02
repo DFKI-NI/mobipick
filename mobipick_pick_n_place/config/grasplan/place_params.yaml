@@ -1,0 +1,12 @@
+# TODO: merge some? of this params with the one in "grasp_planning_core_params.yaml"
+
+# the list of names of the gripper joint
+gripper_joint_names:
+    - mobipick/gripper_finger_joint
+
+# the list of max torque values to apply while closing the gripper around the object
+gripper_joint_efforts:
+    - 1000.0
+
+# the distance between the gripper fingers such that the object is released
+gripper_release_distance: 0.1
