@@ -27,9 +27,6 @@ grasp_quality: 1.0
 # the maximum contact force to use while grasping (<=0 to disable)
 max_contact_force: 1.0
 
-# the detected object bounding box will be enlarged by adding this value to its 3 dimensions (in meters)
-object_padding: 0.0   # default: 0.04
-
 # The approach direction to take before picking an object
 # values are expressed w.r.t end_effector reference frame
 pre_grasp_approach:
