@@ -37,3 +37,5 @@ pregrasp_posture: 'home'
 
 # if True all objects from the planning scene are removed before every pick takes place
 clear_planning_scene: True   # default: False
+# if true the octomap is cleared just before picking
+clear_octomap: True # default: False
