@@ -40,3 +40,8 @@ clear_planning_scene: False   # default: False
 
 # if true the octomap is cleared just before picking
 clear_octomap: True # default: False
+
+# if true all objects from the gripper are detach before picking
+# this is useful for when you open the gripper manually (after picking) and want to pick another object
+# if you are picking from a state machine or planning module this param should be false, if in doubt leave this param False
+detach_all_objects: False # default: False
