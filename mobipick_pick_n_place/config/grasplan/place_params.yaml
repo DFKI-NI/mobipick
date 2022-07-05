@@ -9,7 +9,7 @@ gripper_joint_efforts:
     - 1000.0
 
 # the distance between the gripper fingers such that the object is released
-gripper_release_distance: 0.1
+gripper_release_distance: 0.12 # 0.1 is not sufficient for multimeter for some reason... however it should
 
 # if possible, place poses will be generatd min_dist meters apart
 min_dist: 0.2
