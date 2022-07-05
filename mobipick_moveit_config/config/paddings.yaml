@@ -1,5 +1,5 @@
 # padding parameters for robot-object collision checks (not used for self collision checks, see https://github.com/ros-planning/moveit/issues/683)
-default_robot_padding: 0.04
+default_robot_padding: 0.0
 default_robot_scale: 1.0
 default_object_padding: 0.0
 default_attached_padding: 0.0
