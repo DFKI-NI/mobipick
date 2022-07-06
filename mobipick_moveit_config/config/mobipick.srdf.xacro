@@ -121,6 +121,23 @@
         <joint name="${tf_prefix}ur5_wrist_2_joint" value="-1.57"/>
         <joint name="${tf_prefix}ur5_wrist_3_joint" value="3.14"/>
     </group_state>
+    <group_state name="untangle_cable_guide_1_right" group="arm">
+        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="-1.57"/>
+        <joint name="${tf_prefix}ur5_shoulder_lift_joint" value="-2.30"/>
+        <joint name="${tf_prefix}ur5_elbow_joint" value="2.44"/>
+        <joint name="${tf_prefix}ur5_wrist_1_joint" value="-2.59"/>
+        <joint name="${tf_prefix}ur5_wrist_2_joint" value="-1.57"/>
+        <joint name="${tf_prefix}ur5_wrist_3_joint" value="3.88"/>
+    </group_state>
+    <group_state name="untangle_cable_guide_2_right" group="arm">
+        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="-1.57"/>
+        <joint name="${tf_prefix}ur5_shoulder_lift_joint" value="-2.30"/>
+        <joint name="${tf_prefix}ur5_elbow_joint" value="2.44"/>
+        <joint name="${tf_prefix}ur5_wrist_1_joint" value="-2.59"/>
+        <joint name="${tf_prefix}ur5_wrist_2_joint" value="-1.58"/>
+        <joint name="${tf_prefix}ur5_wrist_3_joint" value="3.10"/>
+    </group_state>
+
     <!-- NOTE: Using MoveIt to plan gripper opening/closing trajectories does not work (see README). -->
     <group_state name="open" group="gripper">
         <joint name="${tf_prefix}gripper_finger_joint" value="0"/>
