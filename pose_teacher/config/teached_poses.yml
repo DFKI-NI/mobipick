@@ -26,3 +26,17 @@ ready_for_packing:
   wrist_1_joint: -1.8461745421039026
   wrist_2_joint: -1.575557057057516
   wrist_3_joint: 3.136849880218506
+untangle_cable_guide_1_right:
+  elbow_joint: 2.1237072944641113
+  shoulder_lift_joint: -1.6323874632464808
+  shoulder_pan_joint: -1.6754463354693812
+  wrist_1_joint: -2.5890429655658167
+  wrist_2_joint: -1.5856803099261683
+  wrist_3_joint: 3.8812122344970703
+untangle_cable_guide_2_right:
+  elbow_joint: 2.1237072944641113
+  shoulder_lift_joint: -1.6323874632464808
+  shoulder_pan_joint: -1.6754220167743128
+  wrist_1_joint: -2.58937913576235
+  wrist_2_joint: -1.585871998463766
+  wrist_3_joint: 3.0976638793945312
