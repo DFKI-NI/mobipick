@@ -15,7 +15,7 @@
   <xacro:property name="clamp_mass" value="0.50" />
 
   <xacro:property name="wrist_clamp_mass" value="0.200" />
-  <xacro:property name="wrist_clamp_yaw" value="0.2" />
+  <xacro:property name="wrist_clamp_yaw" value="0.36" />
 
   <xacro:property name="terminal_element_x_length" value="0.044" />
   <xacro:property name="terminal_element_y_length" value="0.045" />
@@ -236,7 +236,7 @@
     </link>
 
     <joint name="${prefix}cable_guide_wrist_3_tube_joint" type="fixed">
-      <origin xyz="0 0 ${-(0.05 / 2)}" rpy="0 0 0" />
+      <origin xyz="0 0 ${-(0.08 / 2)}" rpy="0 0 0" />
       <parent link="${prefix}cable_guide_terminal_element_link" />
       <child link="${prefix}cable_guide_wrist_3_tube_link" />
     </joint>
@@ -244,17 +244,17 @@
     <link name="${prefix}cable_guide_wrist_3_tube_link">
       <visual>
         <geometry>
-          <cylinder radius="${tube_radius}" length="0.05"/>
+          <cylinder radius="${tube_radius}" length="0.08"/>
         </geometry>
         <xacro:insert_block name="material_black" />
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <cylinder radius="${tube_radius}" length="0.05"/>
+          <cylinder radius="${tube_radius}" length="0.08"/>
         </geometry>
       </collision>
-      <xacro:cylinder_inertial radius="${tube_radius}" length="0.05" mass="${tube_mass}">
+      <xacro:cylinder_inertial radius="${tube_radius}" length="0.08" mass="${tube_mass}">
         <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
       </xacro:cylinder_inertial>
     </link>
