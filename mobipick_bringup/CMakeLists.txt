@@ -33,6 +33,7 @@ install(PROGRAMS
   nodes/gripper_joint_state_publisher.py
   nodes/initialize_gripper.sh
   nodes/normalize_image
+  nodes/reset_arm.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -26,9 +26,9 @@
     <!-- load the controller parameters here, not in the ur_control.launch, to be able to substitute the prefix arg -->
     <rosparam file="$(find mobipick_bringup)/config/ur5_controllers.yaml" command="load" subst_value="True" ns="$(arg namespace)" />
 
-    <group>
+    <group ns="$(arg namespace)">
       <remap from="joint_states" to="ur5_joint_states" />
-      <include file="$(find ur_robot_driver)/launch/ur_control.launch" ns="$(arg namespace)">
+      <include file="$(find ur_robot_driver)/launch/ur_control.launch">
         <arg name="controller_config_file" value="$(find mobipick_bringup)/config/empty.yaml" /> <!-- hack: avoid loading wrong parameters by loading none -->
         <arg name="robot_ip" value="$(arg robot_ip)" />
         <arg name="kinematics_config" value="$(arg ur5_kinematics_file)" />
@@ -36,6 +36,8 @@
         <arg name="use_tool_communication" value="false" />
         <arg name="controllers" value="joint_state_controller arm_controller force_torque_sensor_controller" />
       </include>
+
+      <node name="reset_arm" pkg="mobipick_bringup" type="reset_arm.py" />
     </group>
 
     <!-- launch the driver for the robotiq 2f gripper -->
