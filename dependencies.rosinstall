@@ -9,7 +9,7 @@
 - git:
     local-name: astra_camera
     uri: https://github.com/orbbec/ros_astra_camera.git
-    version: aff227d6
+    version: master
 - git:
     local-name: astra_depth_filters
     uri: https://github.com/DFKI-NI/astra_depth_filters.git
