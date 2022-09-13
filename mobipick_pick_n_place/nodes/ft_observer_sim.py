@@ -4,15 +4,12 @@ import rospy
 
 import actionlib
 
-import geometry_msgs.msg._WrenchStamped
 from mobipick_pick_n_place.msg import (
     FtObserverAction,
     FtObserverActionFeedback,
-    FtObserverActionGoal,
     FtObserverActionResult,
 )
 from geometry_msgs.msg import WrenchStamped
-from robotiq_ft_sensor.srv import sensor_accessor, sensor_accessorRequest
 from std_srvs.srv import Empty
 
 

@@ -89,7 +89,7 @@ class PoseTeacher(object):
                 print(err)
                 raise
 
-            if not request.name in poses:
+            if request.name not in poses:
                 raise Exception("Unknown pose: %s" % request.name)
 
             # create a JointTrajectory message

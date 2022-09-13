@@ -1,21 +1,11 @@
 #!/usr/bin/env python3
-import actionlib
-from control_msgs.msg import (
-    FollowJointTrajectoryAction,
-    FollowJointTrajectoryGoal,
-    FollowJointTrajectoryActionGoal,
-    FollowJointTrajectoryResult,
-    JointTrajectoryControllerState,
-)
+from control_msgs.msg import FollowJointTrajectoryActionGoal, JointTrajectoryControllerState
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from moveit_msgs.msg import PickupAction, PickupGoal
 import numpy as np
 import rospy
-from std_msgs.msg import Header
 import sys
 import threading
-from trajectory_msgs.msg import JointTrajectory
 
 
 def add_goal(msg):

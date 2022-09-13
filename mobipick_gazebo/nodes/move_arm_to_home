@@ -109,11 +109,9 @@ class Trajectory(object):
             self._goal.path_tolerance.append(tol)
 
 
-def print_result(res):
+def print_result(res: FollowJointTrajectoryResult) -> None:
     """
     :param res:
-    :type res: FollowJointTrajectoryResult
-    :return:
     """
     error_codes = [
         'SUCCESSFUL',

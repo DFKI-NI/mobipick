@@ -74,12 +74,11 @@ class JointTrajectoryForwarder(object):
         rospy.loginfo('%s: Received new error code- %d', rospy.get_name(), data.data)
         self.error_code = data.data
 
-    def execute_cb(self, goal):
+    def execute_cb(self, goal: FollowJointTrajectoryGoal):
         """
         Process a new goal (i.e., execute the joint trajectory contained in the goal).
 
         :param goal: The goal to be executed.
-        :type goal FollowJointTrajectoryGoal
         """
 
         rospy.loginfo('%s: Received new goal with %d points', rospy.get_name(), len(goal.trajectory.points))
@@ -148,7 +147,7 @@ def main():
     except KeyError:
         rospy.logfatal('Parameter ~controller_name was not set!')
         sys.exit(1)
-    server = JointTrajectoryForwarder(controller_name)
+    _ = JointTrajectoryForwarder(controller_name)
     rospy.spin()
 
 
