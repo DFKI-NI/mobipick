@@ -50,7 +50,7 @@
 
   <!-- spawn klt_1 on table 2 -->
   <node name="spawn_klt_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param klt_description -model klt_1 -x 12.43 -y 3.10 -z 0.81 -R 0.0 -P 0.0 -Y -2.22"
+        args="-urdf -param klt_description -model klt_1 -x 11.65 -y 3.10 -z 0.81 -R 0.0 -P 0.0 -Y -2.22"
         respawn="false" output="screen" />
 
   <!-- spawn power_drill_with_grip_1 on table 2 -->
