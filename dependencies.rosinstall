@@ -24,7 +24,7 @@
     version: calibration_devel
 - git:
     local-name: gazebo_logical_camera_plugin_ros
-    uri: https://git.ni.dfki.de/environment_representation/gazebo_logical_camera_plugin_ros.git
+    uri: https://github.com/DFKI-NI/gazebo_logical_camera_plugin_ros
     version: master
 - git:
     local-name: gazebo_pkgs
@@ -40,7 +40,7 @@
     version: master
 - git:
     local-name: object_pose_msgs
-    uri: https://git.ni.dfki.de/environment_representation/object_pose_msgs.git
+    uri: https://github.com/DFKI-NI/object_pose_msgs.git
     version: main
 - git:
     local-name: pbr_tools
