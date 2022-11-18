@@ -4,7 +4,7 @@
     version: master
 - git:
     local-name: pbr_objects
-    uri: https://git.ni.dfki.de/perception/pbr_objects.git
+    uri: https://github.com/DFKI-NI/pbr_objects.git
     version: master
 - git:
     local-name: mir_robot
