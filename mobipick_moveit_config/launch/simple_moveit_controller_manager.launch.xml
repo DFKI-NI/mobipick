@@ -11,5 +11,5 @@
   <!-- prefix for the joints specified in the controllers.yaml -->
   <arg name="prefix" default="" />
   <!-- loads ros_controllers to the param server -->
-  <rosparam file="$(find mobipick_moveit_config)/config/controllers.yaml" subst_value="true" />
+  <rosparam file="$(find mobipick_moveit_config)/config/simple_moveit_controllers.yaml" subst_value="true" />
 </launch>

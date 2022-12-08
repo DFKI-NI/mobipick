@@ -271,7 +271,7 @@ events:
 * MoveIt plans a joint trajectory for the gripper (e.g., it plans to the group
   state **"closed"** with a `gripper_finger_joint` angle of 0.755 radians).
 * It then sends this trajectory to the controller.
-* However, in the `simulation_controllers.yaml` file, we only specify a
+* However, in the `simple_moveit_controllers.yaml` file, we only specify a
   controller of type [`GripperCommand`](http://docs.ros.org/en/api/control_msgs/html/action/GripperCommand.html).
   In that action, the `position` fields encodes the gripper gap size (in
   meters). MoveIt incorrectly fills in 0.755 regardless.
@@ -282,7 +282,7 @@ events:
 
 One solution to this problem would be to replace the gripper controller with a
 [`FollowJointTrajectory`](http://docs.ros.org/en/api/control_msgs/html/action/FollowJointTrajectory.html)
-controller in the `simulation_controllers.yaml` file, like this:
+controller in the `simple_moveit_controllers.yaml` file, like this:
 
 ```yaml
   - name: "gripper_controller"
