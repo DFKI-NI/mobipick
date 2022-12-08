@@ -34,7 +34,8 @@
   <!-- whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater -->
   <arg name="use_pointcloud" default="false"/>
 
-  <arg name="capabilities" default=""/>
+  <!-- Load  ExecuteTaskSolutionCapability so we can execute found solutions in simulation -->
+  <arg name="capabilities" default="move_group/ExecuteTaskSolutionCapability"/>
   <arg name="disable_capabilities" default=""/>
   <!-- load these non-default MoveGroup capabilities (space seperated) -->
   <!--
@@ -135,8 +136,5 @@
     <remap from="~gripper_astra/depth_registered/camera_info" to="gripper_astra/depth_registered/camera_info" />
     <remap from="~gripper_astra/depth_registered/points" to="gripper_astra/depth_registered/points" />
   </node>
-
-  <!-- Load  ExecuteTaskSolutionCapability so we can execute found solutions in simulation -->
-  <param name="move_group/capabilities" value="move_group/ExecuteTaskSolutionCapability" />
 
 </launch>
