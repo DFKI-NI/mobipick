@@ -8,8 +8,7 @@
   <!-- A prefix for link and joint names in the robot -->
   <arg name="prefix" default="" />
 
-  <include file="$(find mobipick_moveit_config)/launch/$(arg pipeline)_planning_pipeline.launch.xml">
-      <arg name="prefix" value="$(arg prefix)" />
-  </include>
+  <!-- We use pass_all_args=true here to pass `prefix`, which is required by some but not all planning pipelines. -->
+  <include ns="$(arg pipeline)" file="$(dirname)/$(arg pipeline)_planning_pipeline.launch.xml" pass_all_args="true" />
 
 </launch>

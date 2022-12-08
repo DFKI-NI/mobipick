@@ -1,6 +1,6 @@
 controller_list:
   - name: fake_arm_controller
-    type: $(arg execution_type)
+    type: $(arg fake_execution_type)
     joints:
       - $(arg prefix)ur5_shoulder_pan_joint
       - $(arg prefix)ur5_shoulder_lift_joint
@@ -9,10 +9,10 @@ controller_list:
       - $(arg prefix)ur5_wrist_2_joint
       - $(arg prefix)ur5_wrist_3_joint
   - name: fake_gripper_controller
-    type: $(arg execution_type)
+    type: $(arg fake_execution_type)
     joints:
       - $(arg prefix)gripper_finger_joint
-initial:  # Define initial robot poses.
+initial:  # Define initial robot poses per group
   - group: arm
     pose: home
   - group: gripper

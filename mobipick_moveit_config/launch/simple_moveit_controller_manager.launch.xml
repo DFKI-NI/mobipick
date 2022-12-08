@@ -1,15 +1,9 @@
 <launch>
-
-  <!-- this argument is not used here, only necessary so that this launch file has the same args as fake_moveit_controller_manager.launch -->
-  <arg name="execution_type" default="unused" />
-
-  <!-- loads moveit_controller_manager on the parameter server which is taken as argument
-    if no argument is passed, moveit_simple_controller_manager will be set -->
-  <arg name="moveit_controller_manager" default="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
-  <param name="moveit_controller_manager" value="$(arg moveit_controller_manager)"/>
+  <!-- Define the MoveIt controller manager plugin to use for trajectory execution -->
+  <param name="moveit_controller_manager" value="moveit_simple_controller_manager/MoveItSimpleControllerManager" />
 
   <!-- prefix for the joints specified in the controllers.yaml -->
   <arg name="prefix" default="" />
-  <!-- loads ros_controllers to the param server -->
+  <!-- Load controller list to the parameter server -->
   <rosparam file="$(find mobipick_moveit_config)/config/simple_moveit_controllers.yaml" subst_value="true" />
 </launch>

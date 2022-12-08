@@ -10,7 +10,7 @@
   # publish the current configuration of the robot (simulated or real)
   # and the current state of the world as seen by the planner
   <group ns="$(arg namespace)">
-    <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
+    <include file="$(dirname)/move_group.launch">
       <arg name="publish_monitored_planning_scene" value="true" />
       <arg name="info" value="true" />
       <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
@@ -18,7 +18,7 @@
     </include>
   </group>
   # The visualization component of MoveIt!
-  <!--include file="$(find mobipick_moveit_config)/launch/moveit_rviz.launch">
+  <!--include file="$(dirname)/moveit_rviz.launch">
     <arg name="config" value="true"/>
   </include-->
 
