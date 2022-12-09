@@ -87,11 +87,25 @@ class GripperBridgeAction(object):
         if success:
             self._result.reached_goal = True
             rospy.loginfo('%s: Succeeded' % self._action_name)
-
         else:
             self._result.reached_goal = False
-            rospy.loginfo('%s: Failed with error code %d' % (self._action_name, result.error_code))
+            rospy.logerr('%s: Failed with error code %s', self._action_name, error_code_to_string(result.error_code))
         self._as.set_succeeded(self._result)
+
+
+def error_code_to_string(error_code):
+    from control_msgs.msg import FollowJointTrajectoryResult as Res
+
+    error_codes = {
+        Res.SUCCESSFUL: 'SUCCESSFUL',
+        Res.INVALID_GOAL: 'INVALID_GOAL',
+        Res.INVALID_JOINTS: 'INVALID_JOINTS',
+        Res.OLD_HEADER_TIMESTAMP: 'OLD_HEADER_TIMESTAMP',
+        Res.PATH_TOLERANCE_VIOLATED: 'PATH_TOLERANCE_VIOLATED',
+        Res.GOAL_TOLERANCE_VIOLATED: 'GOAL_TOLERANCE_VIOLATED',
+    }
+
+    return error_codes[error_code]
 
 
 if __name__ == '__main__':
