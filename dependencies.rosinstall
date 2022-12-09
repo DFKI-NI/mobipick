@@ -19,10 +19,6 @@
     uri: https://github.com/orbbec/ros_astra_launch.git
     version: 0.2.2
 - git:
-    local-name: fmauch_universal_robot
-    uri: https://github.com/fmauch/universal_robot.git
-    version: calibration_devel
-- git:
     local-name: gazebo_logical_camera_plugin_ros
     uri: https://github.com/DFKI-NI/gazebo_logical_camera_plugin_ros
     version: master
