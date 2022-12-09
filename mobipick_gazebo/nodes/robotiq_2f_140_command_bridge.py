@@ -90,7 +90,10 @@ class GripperBridgeAction(object):
         else:
             self._result.reached_goal = False
             rospy.logerr('%s: Failed with error code %s', self._action_name, error_code_to_string(result.error_code))
-        self._as.set_succeeded(self._result)
+        if success:
+            self._as.set_succeeded(self._result)
+        else:
+            self._as.set_aborted(self._result)
 
 
 def error_code_to_string(error_code):
