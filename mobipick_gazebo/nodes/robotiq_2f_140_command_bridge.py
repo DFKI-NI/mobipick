@@ -86,7 +86,11 @@ class GripperBridgeAction(object):
         self._result.position = 0.14 - 0.14 / 0.76 * self._joint_state.actual.positions[0]
         if success:
             self._result.reached_goal = True
-            rospy.loginfo('%s: Succeeded' % self._action_name)
+            rospy.loginfo('%s: Succeeded', self._action_name)
+        elif result.error_code == control_msgs.msg.FollowJointTrajectoryResult.GOAL_TOLERANCE_VIOLATED:
+            self._result.reached_goal = False
+            success = True
+            rospy.loginfo('%s: Gripper stalled (this is okay when grasping an object)', self._action_name)
         else:
             self._result.reached_goal = False
             rospy.logerr('%s: Failed with error code %s', self._action_name, error_code_to_string(result.error_code))
