@@ -43,10 +43,6 @@
     uri: https://github.com/DFKI-NI/pbr_tools.git
     version: master
 - git:
-    local-name: roboticsgroup_gazebo_plugins
-    uri: https://github.com/roboticsgroup/roboticsgroup_gazebo_plugins.git
-    version: master
-- git:
     local-name: robotiq
     uri: https://github.com/Krause92/robotiq.git
     version: noetic-position-feedback
