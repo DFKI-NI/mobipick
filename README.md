@@ -116,14 +116,17 @@ rosservice call /mobipick/continue_statemachine
 * Make sure that the parameter `use_sim_time` is set to `false`.
 * You can play around with different planning pipelines, which you can select
   in the the "MotionPlanning" pane in RViz under "Context".
-  - `chomp` (with our current configuration) is very slow (takes 50 s on my
-    machine). `chomp` is the default *in RViz* (because RViz uses alphabetical
-    sorting).
-  - `ompl` is much faster and is used in the `pick_n_place` demos. `ompl` is
-    the default *in MoveIt*.
-  - `pilz_industrial_motion_planner` is a simplistic motion planning pipeline
-    that works for easy motions. It is somewhat hard to control from RViz, but
-    the `PTP` planner works.
+  - [`ompl`](https://ros-planning.github.io/moveit_tutorials/doc/ompl_interface/ompl_interface_tutorial.html)
+    is a collection of sampling-based motion planning algorithms and is used in
+    the `pick_n_place` demos. `ompl` is the **default in MoveIt**.
+  - [`chomp`](https://ros-planning.github.io/moveit_tutorials/doc/chomp_planner/chomp_planner_tutorial.html)
+    is a gradient-based trajectory optimization procedure that can be used
+    instead of a motion planner. `chomp` is the default **in RViz** (because RViz uses alphabetical sorting).
+  - [`ompl_chomp`](https://ros-planning.github.io/moveit_tutorials/doc/planning_adapters/planning_adapters_tutorial.html#running-ompl-as-a-pre-processor-for-chomp)
+    uses the OMPL planning pipeline, but adds the CHOMP planning adapter.
+  - [`pilz_industrial_motion_planner`](https://ros-planning.github.io/moveit_tutorials/doc/pilz_industrial_motion_planner/pilz_industrial_motion_planner.html)
+    is a simplistic motion planning pipeline that works for simple motions. It
+    is somewhat hard to control from RViz, but the `PTP` planner works.
 
 
 ### move_base demo (maze world)
