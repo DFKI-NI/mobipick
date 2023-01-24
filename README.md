@@ -118,10 +118,10 @@ rosservice call /mobipick/continue_statemachine
   in the the "MotionPlanning" pane in RViz under "Context".
   - [`ompl`](https://ros-planning.github.io/moveit_tutorials/doc/ompl_interface/ompl_interface_tutorial.html)
     is a collection of sampling-based motion planning algorithms and is used in
-    the `pick_n_place` demos. `ompl` is the **default in MoveIt**.
+    the `pick_n_place` demos. `ompl` is the default in MoveIt.
   - [`chomp`](https://ros-planning.github.io/moveit_tutorials/doc/chomp_planner/chomp_planner_tutorial.html)
     is a gradient-based trajectory optimization procedure that can be used
-    instead of a motion planner. `chomp` is the default **in RViz** (because RViz uses alphabetical sorting).
+    instead of a motion planner.
   - [`ompl_chomp`](https://ros-planning.github.io/moveit_tutorials/doc/planning_adapters/planning_adapters_tutorial.html#running-ompl-as-a-pre-processor-for-chomp)
     uses the OMPL planning pipeline, but adds the CHOMP planning adapter.
   - [`pilz_industrial_motion_planner`](https://ros-planning.github.io/moveit_tutorials/doc/pilz_industrial_motion_planner/pilz_industrial_motion_planner.html)
