@@ -78,7 +78,6 @@ build:
     # fails. Running `catkin_test_results` aggregates all the results and returns
     # non-zero when a test fails (which notifies Gitlab CI that the build failed).
     - cd $CATKIN_WS
-    - touch src/Universal_Robots_ROS_Driver/ur_robot_driver/CATKIN_IGNORE   # these tests now require a docker simulation of an UR running on the CI server: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/pull/209
     - catkin build --limit-status-rate 0.1 --no-notify --make-args tests
     - source devel/setup.bash
     - catkin run_tests --limit-status-rate 0.1 --no-notify

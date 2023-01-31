@@ -53,8 +53,8 @@ close and reopen all terminals:
 source ~/catkin_ws/devel/setup.bash
 ```
 
-**Note:** Since we are using the `devel` space, some nodes (for example in
-Universal_Robots_ROS_Driver) still have the `#!/usr/bin/env python` shebang
+**Note:** Since we are using the `devel` space, some nodes
+still have the `#!/usr/bin/env python` shebang
 line. If this leads to an error, simply install the package
 `python-is-python3`.
 
