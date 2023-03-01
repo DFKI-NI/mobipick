@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import rospy
 import robotiq_2f_gripper_control.msg as gripper_msg
