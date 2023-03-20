@@ -8,7 +8,7 @@
     version: master
 - git:
     local-name: mir_robot
-    uri: https://github.com/dfki-ric/mir_robot.git
+    uri: https://github.com/DFKI-NI/mir_robot.git
     version: noetic
 - git:
     local-name: moveit
