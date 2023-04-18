@@ -27,10 +27,6 @@
     uri: https://github.com/JenniferBuehler/general-message-pkgs.git
     version: master
 - git:
-    local-name: moveit_task_constructor
-    uri: https://github.com/ros-planning/moveit_task_constructor.git
-    version: master
-- git:
     local-name: object_pose_msgs
     uri: https://github.com/DFKI-NI/object_pose_msgs.git
     version: main
