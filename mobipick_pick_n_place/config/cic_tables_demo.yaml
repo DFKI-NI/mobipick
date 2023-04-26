@@ -1,0 +1,17 @@
+poses:
+  # geometry_msgs/Pose - x, y, z, qw, qx, qy, qz (WARNING! quaternion order wxyz!)
+  #
+  # All poses have to be unique, otherwise you will get the following warning:
+  #
+  #     Duplicate poses in 'cic_tables_demo.yaml' might let checks fail whether something is at a specific symbolic pose.
+  #
+  base_pick_pose:     [19.61, 14.70, 0.0, 1.0  , 0.0, 0.0,  0.0  ]
+  base_handover_pose: [21.58, 14.80, 0.0, 0.979, 0.0, 0.0, -0.205]
+  base_place_pose:    [20.83, 14.70, 0.0, 1.0  , 0.0, 0.0,  0.0  ]
+  base_home_pose:     [20.50, 15.20, 0.0, 0.0  , 0.0, 0.0,  1.0  ]
+  base_table_1_pose:  [19.18, 15.40, 0.0, 0.707, 0.0, 0.0, -0.707]
+  base_table_2_pose:  [19.44, 14.70, 0.0, 1.0  , 0.0, 0.0,  0.0  ]
+  base_table_3_pose:  [21.00, 14.70, 0.0, 1.0  , 0.0, 0.0,  0.0  ]
+  base_table_4_pose:  [21.80, 14.90, 0.0, 0.707, 0.0, 0.0,  0.707]   # unused
+  handover_planned: true # bool
+  world_name: "cic"   # TODO: create gazebo launch file with this name
