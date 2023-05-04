@@ -489,6 +489,32 @@ bool continue_service(std_srvs::Empty::Request& req, std_srvs::Empty::Response& 
   return true;
 }
 
+double cast_value(const XmlRpc::XmlRpcValue& value)
+{
+  // Note: Casting an int XmlRpcValue to double directly, throws an XmlRpc::XmlRpcException.
+  return value.getType() == XmlRpc::XmlRpcValue::TypeInt ? int(value) : double(value);
+}
+
+bool get_pose(XmlRpc::XmlRpcValue& poses, const std::string& key, geometry_msgs::Pose& pose)
+{
+  if (!poses.hasMember(key))
+  {
+    return false;
+  }
+
+  const auto& tokens = poses[key];
+  const auto& position = tokens[0];
+  const auto& orientation = tokens[1];
+  pose.position.x = cast_value(position[0]);
+  pose.position.y = cast_value(position[1]);
+  pose.position.z = cast_value(position[2]);
+  pose.orientation.x = cast_value(orientation[0]);
+  pose.orientation.y = cast_value(orientation[1]);
+  pose.orientation.z = cast_value(orientation[2]);
+  pose.orientation.w = cast_value(orientation[3]);
+  return true;
+}
+
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "mobipick_pick_n_place");
@@ -518,16 +544,14 @@ int main(int argc, char** argv)
   if (tf_prefix_.length() == 1)
     tf_prefix_ = "";
 
+  XmlRpc::XmlRpcValue poses;
   ros::NodeHandle rpnh(nh, "poses");
   std::size_t error = 0;
-  error +=
-      !rosparam_shortcuts::get("poses", rpnh, "base_pick_pose", base_pick_pose);  // geometry_msgs::Pose base_pick_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_handover_pose",
-                                    base_handover_pose);  // geometry_msgs::Pose base_handover_pose
-  error += !rosparam_shortcuts::get("poses", rpnh, "base_place_pose",
-                                    base_place_pose);  // geometry_msgs::Pose base_place_pose
-  error +=
-      !rosparam_shortcuts::get("poses", rpnh, "base_home_pose", base_home_pose);  // geometry_msgs::Pose base_home_pose
+  error += !nh.getParam("poses", poses);
+  error += !get_pose(poses, "base_pick_pose", base_pick_pose);          // geometry_msgs::Pose base_pick_pose
+  error += !get_pose(poses, "base_handover_pose", base_handover_pose);  // geometry_msgs::Pose base_handover_pose
+  error += !get_pose(poses, "base_place_pose", base_place_pose);        // geometry_msgs::Pose base_place_pose
+  error += !get_pose(poses, "base_home_pose", base_home_pose);          // geometry_msgs::Pose base_home_pose
   error += !rosparam_shortcuts::get("poses", rpnh, "handover_planned", handover_planned);  // bool
   error += !rosparam_shortcuts::get("poses", rpnh, "world_name", world_name);              // string
   // add more parameters here to load if desired
