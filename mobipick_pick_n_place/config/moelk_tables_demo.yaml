@@ -1,8 +1,9 @@
+base_pick_pose_name:     "base_table_2_pose"
+base_place_pose_name:    "base_table_3_pose"
+
 poses:
   # geometry_msgs/Pose - [x, y, z], [qx, qy, qz, qw]
-  base_pick_pose:     [[12.07, 2.45, 0.0], [0.0, 0.0, 1.0  , 0.0  ]]
   base_handover_pose: [[10.16, 1.76, 0.0], [0.0, 0.0, 0.707, 0.707]]
-  base_place_pose:    [[10.42, 2.45, 0.0], [0.0, 0.0, 1.0  , 0.0  ]]
   base_home_pose:     [[12.00, 2.00, 0.0], [0.0, 0.0, 0.0  , 1.0  ]]
   base_table_1_pose:  [[12.21, 2.10, 0.0], [0.0, 0.0, 0.707, 0.707]]
   base_table_2_pose:  [[11.85, 2.45, 0.0], [0.0, 0.0, 1.0  , 0.0  ]]
