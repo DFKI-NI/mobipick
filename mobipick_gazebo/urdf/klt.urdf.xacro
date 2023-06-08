@@ -25,7 +25,7 @@
     <!--<collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/collision/klt.stl" />
+        <mesh filename="package://pbr_objects/meshes/klt/klt_simplified.stl" />
       </geometry>
     </collision>-->
 

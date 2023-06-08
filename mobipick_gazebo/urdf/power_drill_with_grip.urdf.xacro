@@ -24,7 +24,7 @@
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://pbr_objects/meshes/power_drill_with_grip/power_drill_with_grip.stl" />
+        <mesh filename="package://pbr_objects/meshes/power_drill_with_grip/power_drill_with_grip_simplified.stl" />
       </geometry>
     </collision>
   </link>

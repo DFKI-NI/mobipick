@@ -28,7 +28,7 @@
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
         <box size="${bb_size_x} ${bb_size_y} ${bb_size_z}" />
-        <!-- mesh filename="package://mobipick_gazebo/meshes/collision/screwdriver.stl" / -->
+        <!-- mesh filename="package://pbr_objects/meshes/screwdriver/screwdriver_simplified.stl" / -->
       </geometry>
     </collision>
   </link>
