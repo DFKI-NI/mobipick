@@ -31,6 +31,10 @@
     uri: https://github.com/DFKI-NI/object_pose_msgs.git
     version: main
 - git:
+    local-name: pbr_objects
+    uri: https://github.com/DFKI-NI/pbr_objects.git
+    version: master
+- git:
     local-name: pbr_tools
     uri: https://github.com/DFKI-NI/pbr_tools.git
     version: master

@@ -21,7 +21,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/multimeter.dae" scale="1 1 1" />
+        <mesh filename="package://pbr_objects/meshes/multimeter/multimeter.obj" scale="1 1 1" />
       </geometry>
     </visual>
     <collision>

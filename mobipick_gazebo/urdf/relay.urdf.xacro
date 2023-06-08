@@ -21,7 +21,7 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/relay.dae" scale="1 1 1" />
+        <mesh filename="package://pbr_objects/meshes/relay/relay.obj" scale="1 1 1" />
       </geometry>
     </visual>
     <collision>

@@ -3,10 +3,6 @@
     uri: https://github.com/flexible-collision-library/fcl.git
     version: master
 - git:
-    local-name: pbr_objects
-    uri: https://github.com/DFKI-NI/pbr_objects.git
-    version: master
-- git:
     local-name: mir_robot
     uri: https://github.com/DFKI-NI/mir_robot.git
     version: noetic

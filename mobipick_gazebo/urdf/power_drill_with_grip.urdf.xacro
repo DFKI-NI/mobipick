@@ -18,13 +18,13 @@
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/power_drill_with_grip.dae" />
+        <mesh filename="package://pbr_objects/meshes/power_drill_with_grip/power_drill_with_grip.obj" />
       </geometry>
     </visual>
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh filename="package://mobipick_gazebo/meshes/power_drill_with_grip.dae" />
+        <mesh filename="package://pbr_objects/meshes/power_drill_with_grip/power_drill_with_grip.stl" />
       </geometry>
     </collision>
   </link>
