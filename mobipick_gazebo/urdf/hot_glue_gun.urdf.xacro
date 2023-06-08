@@ -1,0 +1,31 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="power_drill_with_grip_model">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="mass" value="0.260" />
+
+  <link name="hot_glue_gun">
+    <inertial>
+      <origin xyz="0.023881 0.00018257 0.00030596" rpy="0 0 0" />
+      <mass value="${mass}" />
+      <inertia
+        ixx="${mass * 0.0037461108970791796}"
+        ixy="${mass * -0.0008398385788978603}"
+        ixz="${mass * 5.863529594301863e-06}"
+        iyy="${mass * 0.0010291436266240152}"
+        iyz="${mass * 1.5733772593462977e-05}"
+        izz="${mass * 0.00456422430796019}" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://pbr_objects/meshes/hot_glue_gun/hot_glue_gun.obj" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://pbr_objects/meshes/hot_glue_gun/hot_glue_gun_simplified.stl" />
+      </geometry>
+    </collision>
+  </link>
+</robot>
