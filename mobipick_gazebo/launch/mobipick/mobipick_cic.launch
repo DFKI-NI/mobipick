@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<launch>
+    <arg name="namespace" default="mobipick" doc="Namespace to push all topics into" />
+    <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
+    <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
+
+    <arg name="gui" default="true" />
+    <arg name="start_paused" default="true" />
+    <arg name="arm_controller" default="trajectory"
+        doc="Which arm controller to start. Options are trajectory, velocity, position" />
+
+    <!-- the pose where to spawn the robot in simulation -->
+    <arg name="robot_x" default="21.68" />
+    <arg name="robot_y" default="15.42" />
+    <arg name="robot_yaw" default="-3.11" />
+
+    <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
+        <arg name="namespace" value="$(arg namespace)" />
+        <arg name="tf_prefix" value="$(arg tf_prefix)" />
+        <arg name="robot_name" value="$(arg robot_name)" />
+        <arg name="start_paused" value="$(arg start_paused)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="arm_controller" value="$(arg arm_controller)" />
+        <arg name="world_name" value="$(find pbr_gazebo)/worlds/pbr_cic.sdf" />
+        <arg name="robot_x" value="$(arg robot_x)" />
+        <arg name="robot_y" value="$(arg robot_y)" />
+        <arg name="robot_yaw" value="$(arg robot_yaw)" />
+    </include>
+
+    <!-- spawn two tables -->
+    <param name="table_description"
+        command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'" />
+    <node name="spawn_model_table_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param table_description -model parts_table -x 19.73 -y 15.37 -Y 1.58"
+        respawn="false" output="screen" />
+    <node name="spawn_model_table_2" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param table_description -model assembly_table -x 23.23 -y 15.37 -Y 1.58"
+        respawn="false" output="screen" />
+
+    <!-- spwan to klts on the parts table -->
+    <param name="klt_description"
+        command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/klt.urdf.xacro'" />
+    <node name="klt_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param klt_description -model klt_1 -x 19.74 -y 15.75 -z 0.8 -R 0.0 -P 0.0 -Y 0.23"
+        respawn="false" output="screen" />
+    <node name="klt_2" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param klt_description -model klt_2 -x 19.74 -y 15.11 -z 0.8 -R 0.0 -P 0.0 -Y 0.0"
+        respawn="false" output="screen" />
+</launch>
