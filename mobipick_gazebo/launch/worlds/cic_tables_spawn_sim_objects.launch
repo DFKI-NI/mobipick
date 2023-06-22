@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- upload urdf models to param server -->
+  <param name="table_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'" />
+  <param name="power_drill_with_grip_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/power_drill_with_grip.urdf.xacro'" />
+  <param name="klt_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/klt.urdf.xacro'" />
+  <param name="screwdriver_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/screwdriver.urdf.xacro'" />
+  <param name="relay_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
+  <param name="multimeter_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
+  <param name="hot_glue_gun_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/hot_glue_gun.urdf.xacro'" />
+
+  <!-- spawn two tables -->
+  <node name="spawn_model_table_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param table_description -model table_1 -x 19.79 -y 13.99 -Y 0.0127"
+        respawn="false" output="screen" />
+  <node name="spawn_model_table_2" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param table_description -model table_2 -x 21.34 -y 14.0 -Y 0.0125"
+        respawn="false" output="screen" />
+
+  <!-- table 1 objects -->
+  <node name="relay_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param relay_description -model relay_1 -x 19.77 -y 13.99 -z 0.77 -Y 0.1579" />
+  <node name="spawn_multimeter_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param multimeter_description -model multimeter_1 -x 19.9 -y 14.17 -z 0.74 -Y -1.7969"
+        respawn="false" output="screen" />
+  <node name="klt_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param klt_description -model klt_1 -x 19.54 -y 14.10 -z 0.8 -Y 0.7572"
+        respawn="false" output="screen" />
+  <node name="hot_glue_gun" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param hot_glue_gun_description -model hot_glue_gun -x 20.15 -y 14.08 -z 0.81 -R -1.5687 -Y -1.3675" />
+
+  <!-- table 2 objects -->
+  <node name="spawn_power_drill_with_grip_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param power_drill_with_grip_description -model power_drill_with_grip_1 -x 21.13 -y 14.09 -z 0.83 -R -1.5869 -Y 2.3352"
+        respawn="false" output="screen" />
+  <node name="screwdriver_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param screwdriver_description -model screwdriver_1 -x 21.36 -y 14.19 -z 0.74 -Y 0.8895" />
+  <node name="klt_2" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param klt_description -model klt_2 -x 21.73 -y 14.06 -z 0.8 -Y -0.5459"
+        respawn="false" output="screen" />
+
+</launch>
