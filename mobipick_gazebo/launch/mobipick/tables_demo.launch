@@ -4,7 +4,7 @@
   <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
-  <arg name="world" default="pbr_moelk"/>
+  <arg name="world" default="pbr_moelk" doc="options: pbr_moelk, pbr_cic" />
   <arg name="world_config" default="moelk_tables" doc="objects arrangement, options: moelk_tables, cic_tables, truck_assembly" />
 
   <arg name="gui" default="true" />
