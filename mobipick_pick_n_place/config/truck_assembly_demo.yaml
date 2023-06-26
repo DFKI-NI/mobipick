@@ -1,0 +1,6 @@
+poses:
+  # geometry_msgs/Pose - [x, y, z], [qx, qy, qz, qw]
+  parts_table_pose:     [[20.62, 15.33, 0.0], [0.0, 0.0, 0.69971608, 0.71442103]]
+  assembly_table_pose: [[23.18, 14.10, 0.0], [0.0, 0.0, 0.00434999, 0.99999054]]
+  handover_planned: false # bool
+  world_name: "cic"
