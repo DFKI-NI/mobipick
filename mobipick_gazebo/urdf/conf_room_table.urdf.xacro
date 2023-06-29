@@ -1,25 +1,34 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="table">
 
-  <xacro:property name="width"               value="1.40" />
-  <xacro:property name="depth"               value="0.70" />
-  <xacro:property name="height"              value="0.72" />
-  <xacro:property name="leg_radius"          value="0.015" />
-  <xacro:property name="leg_offet"           value="0.275" />
-  <xacro:property name="table_top_thickness" value="0.05" />
-  <xacro:property name="x"                   value="0.0" />
-  <xacro:property name="y"                   value="0.0" />
-  <xacro:property name="z"                   value="0.0" />
+  <xacro:arg name="width"               default="1.40" />
+  <xacro:arg name="depth"               default="0.70" />
+  <xacro:arg name="height"              default="0.72" />
+  <xacro:arg name="leg_radius"          default="0.015" />
+  <xacro:arg name="leg_offset"           default="0.275" />
+  <xacro:arg name="table_top_thickness" default="0.05" />
+  <xacro:arg name="x"                   default="0.0" />
+  <xacro:arg name="y"                   default="0.0" />
+  <xacro:arg name="z"                   default="0.0" />
+  <xacro:property name="width"               value="$(arg width)" />
+  <xacro:property name="depth"               value="$(arg depth)" />
+  <xacro:property name="height"              value="$(arg height)" />
+  <xacro:property name="leg_radius"          value="$(arg leg_radius)" />
+  <xacro:property name="leg_offset"           value="$(arg leg_offset)" />
+  <xacro:property name="table_top_thickness" value="$(arg table_top_thickness)" />
+  <xacro:property name="x"                   value="$(arg x)" />
+  <xacro:property name="y"                   value="$(arg y)" />
+  <xacro:property name="z"                   value="$(arg z)" />
 
   <xacro:property name="barrier_width"       value="${width}" />
   <xacro:property name="barrier_depth"       value="0.01" />
   <xacro:property name="barrier_height"      value="0.14" />
   <xacro:property name="barrier_x"           value="${x}" />
-  <xacro:property name="barrier_y"           value="${y + depth/2 + leg_radius - leg_offet + barrier_depth/2}" />
+  <xacro:property name="barrier_y"           value="${y + depth/2 + leg_radius - leg_offset + barrier_depth/2}" />
   <xacro:property name="barrier_z"           value="${z + 0.19}" />
 
   <xacro:include filename="$(find mobipick_gazebo)/urdf/include/table.urdf.xacro" />
-  <xacro:table height="${height}" width="${width}" depth="${depth}" leg_radius="${leg_radius}" leg_offet="${leg_offet}" table_top_thickness="${table_top_thickness}" x="${x}" y="${y}" z="${z}" />
+  <xacro:table height="${height}" width="${width}" depth="${depth}" leg_radius="${leg_radius}" leg_offset="${leg_offset}" table_top_thickness="${table_top_thickness}" x="${x}" y="${y}" z="${z}" />
 
 
   <joint name="barrier_joint" type="fixed" >
