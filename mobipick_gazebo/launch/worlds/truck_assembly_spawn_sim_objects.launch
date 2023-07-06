@@ -52,11 +52,7 @@
   <!-- put placeholder item in the klts -->
   <node name="screwdriver_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param screwdriver_description -model screwdriver_1 -x 18.46 -y 15.03 -z 0.76 -R 0.0 -P 0.0 -Y 0.22" />
-  <node name="screwdriver_2" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param screwdriver_description -model screwdriver_2 -x 18.47 -y 15.08 -z 0.8 -R 0.0 -P 0.0 -Y -3.14" />
   <node name="relay_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param relay_description -model relay_1 -x 18.09 -y 15.24 -z 0.8 -R 0.0 -P 0.0 -Y 0.0" />
-  <node name="relay_2" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param relay_description -model relay_2 -x 18.19 -y 15.28 -z 0.8 -R 0.0 -P 0.0 -Y -2.75" />
 
 </launch>
