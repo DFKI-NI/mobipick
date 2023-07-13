@@ -98,6 +98,7 @@
 
     <!-- start moveit -->
     <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
+      <arg name="robot_version" value="$(arg robot_version)" />
       <arg name="prefix" value="$(arg tf_prefix)" />
       <arg name="use_pointcloud" value="false" />
     </include>

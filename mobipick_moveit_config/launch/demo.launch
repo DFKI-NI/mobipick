@@ -14,6 +14,8 @@
   <!-- The namespace for all topics -->
   <arg name="namespace" default="mobipick"          doc="Namespace to push all topics into"/>
 
+  <arg name="robot_version" default="os" doc="robot version, can be 'hb' for Bremen or 'os' for Osnabrück" />
+
   <!-- A prefix for all joints and links of the robot -->
   <arg name="prefix" default="mobipick" />
 
@@ -60,6 +62,7 @@
 
     <!-- Run the main MoveIt executable without trajectory execution (we do not have controllers configured by default) -->
     <include file="$(dirname)/move_group.launch">
+      <arg name="robot_version" value="$(arg robot_version)" />
       <arg name="allow_trajectory_execution" value="true"/>
       <arg name="moveit_controller_manager" value="$(arg moveit_controller_manager)" />
       <arg name="fake_execution_type" value="$(arg fake_execution_type)"/>

@@ -18,6 +18,9 @@
   <xacro:arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml"/>  <!-- path the to the yaml with the ur5 joint limits. -->
   <xacro:arg name="kinematics_config" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>  <!-- path the to the yaml with the arms calibration parameters. -->
 
+  <!-- mobipick-hb does not have a cable guide at the wrist, allowing it to take pictures facing up -->
+  <xacro:arg name="cable_guide_wrist_3" default="${str(robot == 'mobipick-os')}" />
+
   <!-- ############# MIR100 BASE ############## -->
   <xacro:include filename="$(find mir_description)/urdf/include/mir_100_v1.urdf.xacro" />
 

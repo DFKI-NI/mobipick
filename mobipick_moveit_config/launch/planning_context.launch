@@ -4,6 +4,7 @@
 
   <!-- The name of the parameter under which the URDF is loaded -->
   <arg name="robot_description" default="robot_description"/>
+  <arg name="robot_version" default="os" />
 
   <arg name="shape_transform_cache_lookup_wait_time" default="0.1" doc="How long to wait (in seconds) for tf transforms during self filtering (default: 0.05)" />
 
@@ -15,12 +16,13 @@
 
   <!-- Load universal robot description format (URDF) -->
   <include if="$(arg load_robot_description)" file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
+    <arg name="robot" value="mobipick-$(arg robot_version)" />
     <arg name="tf_prefix" value="$(arg tf_prefix)" />
   </include>
 
   <!-- The semantic description that corresponds to the URDF -->
   <param name="$(arg robot_description)_semantic"
-         command="xacro $(find mobipick_moveit_config)/config/mobipick.srdf.xacro tf_prefix:=$(arg tf_prefix)" />
+         command="xacro $(find mobipick_moveit_config)/config/mobipick.srdf.xacro tf_prefix:=$(arg tf_prefix) robot_version:=$(arg robot_version)" />
 
   <!-- Load updated joint limits (override information from URDF), padding etc. -->
   <group ns="$(arg robot_description)_planning">

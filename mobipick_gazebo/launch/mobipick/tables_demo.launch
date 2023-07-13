@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="namespace" default="mobipick"         doc="Namespace to push all topics into"/>
+  <arg name="robot"     default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
   <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
@@ -17,6 +18,7 @@
   <arg name="robot_yaw" default="3.1415" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
+    <arg name="robot" value="$(arg robot)" />
     <arg name="namespace" value="$(arg namespace)" />
     <arg name="tf_prefix" value="$(arg tf_prefix)" />
     <arg name="robot_name" value="$(arg robot_name)" />

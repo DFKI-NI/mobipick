@@ -3,6 +3,8 @@
   <arg name="namespace" default="mobipick"         doc="Namespace to push all topics into"/>
   <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
 
+  <arg name="robot_version" default="os" doc="Can be hb or os, changes some parts in the urdf, hardware serials etc." />
+
   # whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater
   <arg name="use_pointcloud" default="false"/>
 
@@ -11,6 +13,7 @@
   # and the current state of the world as seen by the planner
   <group ns="$(arg namespace)">
     <include file="$(dirname)/move_group.launch">
+      <arg name="robot_version" value="$(arg robot_version)" />
       <arg name="publish_monitored_planning_scene" value="true" />
       <arg name="info" value="true" />
       <arg name="use_pointcloud" value="$(arg use_pointcloud)" />

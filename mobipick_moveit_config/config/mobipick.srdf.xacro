@@ -17,6 +17,14 @@
     </xacro:unless>
 
 
+
+    <xacro:arg name="robot_version" default="os" />      <!-- can be "mobipick-hb" or "mobipick-os" -->
+    <xacro:property name="robot_version" value="$(arg robot_version)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
+
+    <!-- mobipick-hb does not have a cable guide at the wrist, allowing it to take pictures facing up -->
+    <xacro:arg name="cable_guide_wrist_3" default="${str(robot_version == 'os')}" />
+    <xacro:property name="cable_guide_wrist_3" value="$(arg cable_guide_wrist_3)" />
+
     <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
     <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
     <!--JOINTS: When a joint is specified, the child link of that joint (which will always exist) is automatically included-->
@@ -180,7 +188,9 @@
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -235,7 +245,9 @@
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="User"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}eef_forward_cam_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}eef_main_cam_link" reason="User"/>
@@ -289,7 +301,9 @@
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -342,7 +356,9 @@
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -394,7 +410,9 @@
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -445,7 +463,9 @@
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -525,7 +545,9 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Default"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -567,7 +589,9 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Adjacent"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -639,7 +663,9 @@
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Adjacent"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Adjacent"/>
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -696,6 +722,7 @@
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never"/>
+    <xacro:if value="${cable_guide_wrist_3}">
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
@@ -727,6 +754,7 @@
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}structure_part_up" reason="User"/>
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never"/>
+    </xacro:if>
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}eef_main_cam_link" reason="Default"/>
     <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
