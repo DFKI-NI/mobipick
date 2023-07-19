@@ -1,6 +1,6 @@
 poses:
   base_home_pose:           [[14.313, 20.629, 0.0], [0.0, 0.0,  1.0  ,  0.0  ]]
   base_handover_pose:       [[11.657, 20.793, 0.0], [0.0, 0.0,  0.975, -0.221]]
-  base_parts_table_pose:    [[16.05 , 20.7  , 0.0], [0.0, 0.0, -0.704,  0.711]]
+  base_parts_table_pose:    [[16.05 , 20.5  , 0.0], [0.0, 0.0,  0.711,  0.704]]
   handover_planned: false # bool
   world_name: "smart_factory"
