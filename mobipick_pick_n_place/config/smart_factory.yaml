@@ -1,7 +1,6 @@
 poses:
-  base_pick_pose: [[0.8, 0.1, 0], [-0.00512939136499, 0.00926916067662, -0.00176109502733, 0.999942333612]] # geometry_msgs::Pose - [x, y, z], [qx, qy, qz, qw]
-  base_handover_pose: [[7.84681434123, -3.15925832165, 0], [0.000360226159889, 3.46092411389e-05, -0.015630101472, 0.999877777014]] # geometry_msgs::Pose - [x, y, z], [qx, qy, qz, qw]
-  base_place_pose: [[-4.28, -2.65, 0], [-0.000126278942224, -7.57474832314e-05, -0.706054951754, 0.708157033022]] # geometry_msgs::Pose - [x, y, z], [qx, qy, qz, qw]
-  base_home_pose: [[-4, 2.2, 0], [0, 0, 0, 1.0]] # geometry_msgs::Pose - [x, y, z], [qx, qy, qz, qw]
+  base_home_pose:           [[14.313, 20.629, 0.0], [0.0, 0.0,  1.0  ,  0.0  ]]
+  base_handover_pose:       [[11.657, 20.793, 0.0], [0.0, 0.0,  0.975, -0.221]]
+  base_parts_table_pose:    [[16.05 , 20.7  , 0.0], [0.0, 0.0, -0.704,  0.711]]
   handover_planned: false # bool
   world_name: "smart_factory"
