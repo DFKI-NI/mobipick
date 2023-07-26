@@ -11,10 +11,6 @@
     uri: https://github.com/DFKI-NI/astra_depth_filters.git
     version: master
 - git:
-    local-name: astra_launch
-    uri: https://github.com/orbbec/ros_astra_launch.git
-    version: 0.2.2
-- git:
     local-name: gazebo_logical_camera_plugin_ros
     uri: https://github.com/DFKI-NI/gazebo_logical_camera_plugin_ros
     version: master

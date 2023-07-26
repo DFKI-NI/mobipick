@@ -114,7 +114,7 @@
 
   <!-- Load reasonable defaults for the relative pose between cameras -->
   <include if="$(arg publish_tf)"
-	   file="$(find astra_launch)/launch/includes/astra_frames.launch">
+	   file="$(find astra_camera)/launch/includes/astra_frames.launch">
     <arg name="camera" value="$(arg camera)" />
   </include>
 
