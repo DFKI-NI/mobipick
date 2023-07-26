@@ -137,150 +137,148 @@
       <child link="${prefix}pedestal_surface" />
     </joint>
 
-    <xacro:if value="${variant == 'v2'}">
-      <!-- cover_front -->
-      <joint name="${prefix}cover_front_joint" type="fixed">
-        <origin xyz="${structure_length / 2 + cover_thickness / 2} 0 ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 0" />
-        <parent link="${prefix}part_down" />
-        <child link="${prefix}cover_front_link" />
-      </joint>
-      <link name="${prefix}cover_front_link">
-        <xacro:box_inertial mass="1.648" x="${cover_thickness}" y="${structure_width + 2 * cover_thickness}" z="${cover_height}">
-          <origin xyz="0 0 0" />
-        </xacro:box_inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
-          </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
-          </geometry>
-        </collision>
-      </link>
+    <!-- cover_front -->
+    <joint name="${prefix}cover_front_joint" type="fixed">
+      <origin xyz="${structure_length / 2 + cover_thickness / 2} 0 ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 0" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}cover_front_link" />
+    </joint>
+    <link name="${prefix}cover_front_link">
+      <xacro:box_inertial mass="1.648" x="${cover_thickness}" y="${structure_width + 2 * cover_thickness}" z="${cover_height}">
+        <origin xyz="0 0 0" />
+      </xacro:box_inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+        </geometry>
+      </collision>
+    </link>
 
-      <!-- cover_back -->
-      <joint name="${prefix}cover_back_joint" type="fixed">
-        <origin xyz="${-(structure_length / 2 + cover_thickness / 2)} 0 ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${pi}" />
-        <parent link="${prefix}part_down" />
-        <child link="${prefix}cover_back_link" />
-      </joint>
-      <link name="${prefix}cover_back_link">
-        <xacro:box_inertial mass="1.648" x="${cover_thickness}" y="${structure_width + 2 * cover_thickness}" z="${cover_height}">
-          <origin xyz="0 0 0" />
-        </xacro:box_inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
-          </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
-          </geometry>
-        </collision>
-      </link>
+    <!-- cover_back -->
+    <joint name="${prefix}cover_back_joint" type="fixed">
+      <origin xyz="${-(structure_length / 2 + cover_thickness / 2)} 0 ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${pi}" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}cover_back_link" />
+    </joint>
+    <link name="${prefix}cover_back_link">
+      <xacro:box_inertial mass="1.648" x="${cover_thickness}" y="${structure_width + 2 * cover_thickness}" z="${cover_height}">
+        <origin xyz="0 0 0" />
+      </xacro:box_inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+        </geometry>
+      </collision>
+    </link>
 
-      <!-- cover_left -->
-      <joint name="${prefix}cover_left_joint" type="fixed">
-        <origin xyz="0 ${structure_width / 2 + cover_thickness / 2} ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${pi / 2}" />
-        <parent link="${prefix}part_down" />
-        <child link="${prefix}cover_left_link" />
-      </joint>
-      <link name="${prefix}cover_left_link">
-        <xacro:box_inertial mass="2.266" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
-          <origin xyz="0 0 0" />
-        </xacro:box_inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
-          </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
-          </geometry>
-        </collision>
-      </link>
+    <!-- cover_left -->
+    <joint name="${prefix}cover_left_joint" type="fixed">
+      <origin xyz="0 ${structure_width / 2 + cover_thickness / 2} ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${pi / 2}" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}cover_left_link" />
+    </joint>
+    <link name="${prefix}cover_left_link">
+      <xacro:box_inertial mass="2.266" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
+        <origin xyz="0 0 0" />
+      </xacro:box_inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+        </geometry>
+      </collision>
+    </link>
 
-      <!-- cover_right -->
-      <joint name="${prefix}cover_right_joint" type="fixed">
-        <origin xyz="0 ${-(structure_width / 2 + cover_thickness / 2)} ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${-pi / 2}" />
-        <parent link="${prefix}part_down" />
-        <child link="${prefix}cover_right_link" />
-      </joint>
-      <link name="${prefix}cover_right_link">
-        <xacro:box_inertial mass="2.266" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
-          <origin xyz="0 0 0" />
-        </xacro:box_inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
-          </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
-          </geometry>
-        </collision>
-      </link>
+    <!-- cover_right -->
+    <joint name="${prefix}cover_right_joint" type="fixed">
+      <origin xyz="0 ${-(structure_width / 2 + cover_thickness / 2)} ${structure_height - cover_height / 2 + cover_thickness}" rpy="0 0 ${-pi / 2}" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}cover_right_link" />
+    </joint>
+    <link name="${prefix}cover_right_link">
+      <xacro:box_inertial mass="2.266" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
+        <origin xyz="0 0 0" />
+      </xacro:box_inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+        </geometry>
+      </collision>
+    </link>
 
-      <!-- cover_top_front -->
-      <joint name="${prefix}cover_top_front_joint" type="fixed">
-        <origin xyz="${structure_length / 4} 0 ${structure_height + cover_thickness / 2}" rpy="0 0 ${pi}" />
-        <parent link="${prefix}part_down" />
-        <child link="${prefix}cover_top_front_link" />
-      </joint>
-      <link name="${prefix}cover_top_front_link">
-        <xacro:box_inertial mass="0.946" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
-          <origin xyz="0 0 0" />
-        </xacro:box_inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
-          </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
-          </geometry>
-        </collision>
-      </link>
+    <!-- cover_top_front -->
+    <joint name="${prefix}cover_top_front_joint" type="fixed">
+      <origin xyz="${structure_length / 4} 0 ${structure_height + cover_thickness / 2}" rpy="0 0 ${pi}" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}cover_top_front_link" />
+    </joint>
+    <link name="${prefix}cover_top_front_link">
+      <xacro:box_inertial mass="0.946" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
+        <origin xyz="0 0 0" />
+      </xacro:box_inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+        </geometry>
+      </collision>
+    </link>
 
-      <!-- cover_top_back -->
-      <joint name="${prefix}cover_top_back_joint" type="fixed">
-        <origin xyz="${-structure_length / 4} 0 ${structure_height + cover_thickness / 2}" rpy="0 0 0" />
-        <parent link="${prefix}part_down" />
-        <child link="${prefix}cover_top_back_link" />
-      </joint>
-      <link name="${prefix}cover_top_back_link">
-        <xacro:box_inertial mass="0.946" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
-          <origin xyz="0 0 0" />
-        </xacro:box_inertial>
-        <visual>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
-          </geometry>
-        </visual>
-        <collision>
-          <origin xyz="0 0 0" rpy="0 0 0" />
-          <geometry>
-            <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
-          </geometry>
-        </collision>
-      </link>
-    </xacro:if>
+    <!-- cover_top_back -->
+    <joint name="${prefix}cover_top_back_joint" type="fixed">
+      <origin xyz="${-structure_length / 4} 0 ${structure_height + cover_thickness / 2}" rpy="0 0 0" />
+      <parent link="${prefix}part_down" />
+      <child link="${prefix}cover_top_back_link" />
+    </joint>
+    <link name="${prefix}cover_top_back_link">
+      <xacro:box_inertial mass="0.946" x="${cover_thickness}" y="${structure_length}" z="${cover_height}">
+        <origin xyz="0 0 0" />
+      </xacro:box_inertial>
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+        </geometry>
+      </collision>
+    </link>
   </xacro:macro>
 </robot>
