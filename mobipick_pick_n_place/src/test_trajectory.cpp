@@ -18,14 +18,14 @@ int main(int argc, char** argv)
 
     std::vector<double> joint_group_positions{ 0.0, 0.0, 0.0, 0.0, 0.0, -3.10 };
     move_group.setJointValueTarget(joint_group_positions);
-    bool success = (move_group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    bool success = (move_group.plan(plan) == moveit::core::MoveItErrorCode::SUCCESS);
     ROS_INFO("Planning to joint space goal 1 %s", success ? "" : "FAILED");
     if (success)
       move_group.move();
 
     joint_group_positions = { 0.0, 0.0, 0.0, 0.0, 0.0, 3.10 };
     move_group.setJointValueTarget(joint_group_positions);
-    success = (move_group.plan(plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+    success = (move_group.plan(plan) == moveit::core::MoveItErrorCode::SUCCESS);
     ROS_INFO("Planning to joint space goal 2 %s", success ? "" : "FAILED");
     if (success)
       move_group.move();

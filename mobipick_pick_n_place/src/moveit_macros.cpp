@@ -99,7 +99,7 @@ void closedGripper(trajectory_msgs::JointTrajectory& posture, std::float_t gripp
   posture.points[0].time_from_start.fromSec(5.0);
 }
 
-moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterface& group)
+moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterface& group)
 {
   std::vector<moveit_msgs::Grasp> grasps;
 
@@ -186,7 +186,7 @@ moveit::planning_interface::MoveItErrorCode pick(moveit::planning_interface::Mov
   return group.pick("power_drill", grasps);
 }
 
-moveit::planning_interface::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterface& group)
+moveit::core::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterface& group)
 {
   std::vector<moveit_msgs::PlaceLocation> loc;
 
@@ -389,9 +389,9 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
   return 1;
 }
 
-moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface& group, double dx = 0.0,
-                                                 double dy = 0.0, double dz = 0.0, double droll = 0.0,
-                                                 double dpitch = 0.0, double dyaw = 0.0)
+moveit::core::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterface& group, double dx = 0.0,
+                                   double dy = 0.0, double dz = 0.0, double droll = 0.0, double dpitch = 0.0,
+                                   double dyaw = 0.0)
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
@@ -411,7 +411,7 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   auto error_code = group.plan(my_plan);
-  bool success = (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  bool success = (error_code == moveit::core::MoveItErrorCode::SUCCESS);
 
   ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
   if (success)
@@ -421,10 +421,10 @@ moveit::planning_interface::MoveItErrorCode move(moveit::planning_interface::Mov
   return error_code;
 }
 
-moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface& group,
-                                                           Eigen::Isometry3d cartesian_pose,
-                                                           std::string base_frame = tf_prefix_ + "ur5_base_link",
-                                                           std::string target_frame = tf_prefix_ + "gripper_tcp")
+moveit::core::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface& group,
+                                             Eigen::Isometry3d cartesian_pose,
+                                             std::string base_frame = tf_prefix_ + "ur5_base_link",
+                                             std::string target_frame = tf_prefix_ + "gripper_tcp")
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
@@ -438,7 +438,7 @@ moveit::planning_interface::MoveItErrorCode moveToCartPose(moveit::planning_inte
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
   auto error_code = group.plan(my_plan);
-  bool success = (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  bool success = (error_code == moveit::core::MoveItErrorCode::SUCCESS);
 
   ROS_INFO("Move planning (pose goal) %s", success ? "" : "FAILED");
   if (success)
@@ -509,8 +509,8 @@ public:
     group_ptr->setPlannerId("RRTConnect");
     group_ptr->setStartStateToCurrentState();
     group_ptr->setNamedTarget(target_name);
-    moveit::planning_interface::MoveItErrorCode error_code = group_ptr->plan(*plan_ptr);
-    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    moveit::core::MoveItErrorCode error_code = group_ptr->plan(*plan_ptr);
+    if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO_STREAM("Planning to " << target_name << " pose SUCCESSFUL");
     }
@@ -522,7 +522,7 @@ public:
 
     // move
     error_code = group_ptr->execute(*plan_ptr);
-    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO_STREAM("Moving to " << target_name << " pose SUCCESSFUL");
     }
@@ -541,8 +541,8 @@ public:
 
     // plan to observe the table
     group_ptr->setNamedTarget("observe100cm_right");
-    moveit::planning_interface::MoveItErrorCode error_code = group_ptr->plan(*plan_ptr);
-    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    moveit::core::MoveItErrorCode error_code = group_ptr->plan(*plan_ptr);
+    if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO("Planning to observation pose SUCCESSFUL");
     }
@@ -554,7 +554,7 @@ public:
 
     // move to observation pose
     error_code = group_ptr->execute(*plan_ptr);
-    if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO("Moving to observation pose SUCCESSFUL");
     }
@@ -577,7 +577,7 @@ public:
     std_srvs::Empty srv;
     group_ptr->clearPathConstraints();
     // pick
-    moveit::planning_interface::MoveItErrorCode error_code;
+    moveit::core::MoveItErrorCode error_code;
     uint pickPlanAttempts = 0;
     bool success = true;
     do
@@ -588,12 +588,12 @@ public:
       error_code = pick(*group_ptr);
       ++pickPlanAttempts;
 
-      if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+      if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
       {
         ROS_INFO("Picking SUCCESSFUL");
       }
-      else if ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
-                error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) &&
+      else if ((error_code == moveit::core::MoveItErrorCode::PLANNING_FAILED ||
+                error_code == moveit::core::MoveItErrorCode::INVALID_MOTION_PLAN) &&
                pickPlanAttempts < 10)
       {
         ROS_INFO("Planning for Picking FAILED");
@@ -604,8 +604,8 @@ public:
         success = false;
       }
 
-    } while ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
-              error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN) &&
+    } while ((error_code == moveit::core::MoveItErrorCode::PLANNING_FAILED ||
+              error_code == moveit::core::MoveItErrorCode::INVALID_MOTION_PLAN) &&
              pickPlanAttempts < 10);
     return success;
   }
@@ -620,7 +620,7 @@ public:
     hand_over_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
     hand_over_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 0.0, 1.0)));
 
-    if (moveToCartPose(*group_ptr, hand_over_pose) == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+    if (moveToCartPose(*group_ptr, hand_over_pose) == moveit::core::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO("Move arm to HANDOVER succeeded");
     }
@@ -677,7 +677,7 @@ public:
     ROS_INFO("Start Placing");
     // place
     uint placePlanAttempts = 0;
-    moveit::planning_interface::MoveItErrorCode error_code;
+    moveit::core::MoveItErrorCode error_code;
     bool success = true;
     do
     {
@@ -685,13 +685,13 @@ public:
       setOrientationContraints(*group_ptr, 0.3);
       error_code = place(*group_ptr);
       ++placePlanAttempts;
-      if (error_code == moveit::planning_interface::MoveItErrorCode::SUCCESS)
+      if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
       {
         ROS_INFO("Placing SUCCESSFUL");
       }
-      else if ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
-                error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ||
-                error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT) &&
+      else if ((error_code == moveit::core::MoveItErrorCode::PLANNING_FAILED ||
+                error_code == moveit::core::MoveItErrorCode::INVALID_MOTION_PLAN ||
+                error_code == moveit::core::MoveItErrorCode::TIMED_OUT) &&
                placePlanAttempts < 10)
       {
         ROS_INFO("Planning for Placing FAILED");
@@ -703,9 +703,9 @@ public:
         ROS_ERROR("Placing FAILED");
         success = false;
       }
-    } while ((error_code == moveit::planning_interface::MoveItErrorCode::PLANNING_FAILED ||
-              error_code == moveit::planning_interface::MoveItErrorCode::INVALID_MOTION_PLAN ||
-              error_code == moveit::planning_interface::MoveItErrorCode::TIMED_OUT) &&
+    } while ((error_code == moveit::core::MoveItErrorCode::PLANNING_FAILED ||
+              error_code == moveit::core::MoveItErrorCode::INVALID_MOTION_PLAN ||
+              error_code == moveit::core::MoveItErrorCode::TIMED_OUT) &&
              placePlanAttempts < 10);
     return success;
   }
