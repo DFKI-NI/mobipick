@@ -89,7 +89,7 @@ enum state
 struct GrapsPoseDefine
 {
   Eigen::Isometry3d grasp_pose;
-  std::float_t gripper_width;
+  std::float_t gripper_width = 0.0;
 };
 
 bool paused = true;
@@ -137,9 +137,9 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // GRASP 1: pitch = pi/8  (grasp handle from upper back)
     GrapsPoseDefine grasp_pose_define;
 
-    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0, 1.0, 0.0));
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05, 0.0, 0.01));
     grasp_pose_define.grasp_pose.rotate(rotation);
     grasp_pose_define.gripper_width=0.03;
     grasp_poses.push_back(grasp_pose_define);
@@ -149,8 +149,8 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // GRASP 2: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03, 0.0, 0.085));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
     grasp_pose_define.gripper_width = 0.03;
     grasp_poses.push_back(grasp_pose_define);
   }
@@ -160,9 +160,9 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
     GrapsPoseDefine grasp_pose_define;
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03, 0.0, 0.085));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0, 0.0, 0.0)));
     grasp_pose_define.gripper_width = 0.03;
     grasp_poses.push_back(grasp_pose_define);
   }
@@ -173,9 +173,9 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
     // Eigen quaternion = wxyz, not xyzw
     Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
-    bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0d, 0.0d, 1.0d)));
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0, 0.0, 1.0)));
 
-    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
 
     // --- calculate desired pose of gripper_tcp (in power drill frame) when grasping
     geometry_msgs::PoseStamped p;
@@ -218,7 +218,7 @@ moveit::core::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterfa
 
   // get table height
   std::vector<std::string> object_ids;
-  object_ids.push_back("table");
+  object_ids.emplace_back("table");
   auto table = planning_scene_interface.getObjects(object_ids).at("table");
   double table_height = table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z];
   ROS_INFO("Table height: %f", table_height);
@@ -227,15 +227,15 @@ moveit::core::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterfa
   geometry_msgs::PoseStamped p;
 
   Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
-  place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.11d));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+  place_pose.translate(Eigen::Vector3d(-0.0, -0.9, table_height + 0.11));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
   p.header.frame_id = tf_prefix_ + "base_link";
   tf::poseEigenToMsg(place_pose, p.pose);
 
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
-  g.allowed_touch_objects.push_back("table");
+  g.allowed_touch_objects.emplace_back("table");
 
   g.pre_place_approach.direction.header.frame_id = tf_prefix_ + "base_link";
   g.pre_place_approach.desired_distance = 0.2;
@@ -272,7 +272,7 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface& gr
     tf_listener.waitForTransform(tf_prefix_ + "gripper_tcp", tf_prefix_ + "base_link", ros::Time(0), ros::Duration(1.0));
     tf_listener.lookupTransform(tf_prefix_ + "gripper_tcp", tf_prefix_ + "base_link", ros::Time(0), transform);
   }
-  catch (tf::TransformException ex)
+  catch (tf::TransformException& ex)
   {
     ROS_ERROR("%s", ex.what());
     ROS_INFO("Transformation not found!");
@@ -442,9 +442,9 @@ moveit::core::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterfac
 }
 
 moveit::core::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface& group,
-                                             Eigen::Isometry3d cartesian_pose,
-                                             std::string base_frame = tf_prefix_ + "ur5_base_link",
-                                             std::string target_frame = tf_prefix_ + "gripper_tcp")
+                                             const Eigen::Isometry3d& cartesian_pose,
+                                             const std::string& base_frame = tf_prefix_ + "ur5_base_link",
+                                             const std::string& target_frame = tf_prefix_ + "gripper_tcp")
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
@@ -581,7 +581,7 @@ int main(int argc, char** argv)
 
   while (ros::ok())
   {
-    if ((paused || failed) && !(task_state == ST_PAUSED))
+    if ((paused || failed) && task_state != ST_PAUSED)
     {
       ROS_INFO_STREAM("PAUSED in state " << task_state);
       ROS_INFO_STREAM("Call service continue_statemachine to resume");

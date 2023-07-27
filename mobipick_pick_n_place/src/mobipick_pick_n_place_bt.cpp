@@ -39,7 +39,6 @@
 #include <behaviortree_cpp_v3/loggers/bt_zmq_publisher.h>
 
 #include <ros/ros.h>
-#include <XmlRpcValue.h>
 
 // Boost
 #include <boost/algorithm/string.hpp>
@@ -55,7 +54,6 @@
 #include <mobipick_pick_n_place/MoveItMacroAction.h>
 
 #include <std_msgs/String.h>
-#include <std_srvs/Empty.h>
 #include <vision_msgs/Detection3DArray.h>
 
 #include <rosparam_shortcuts/rosparam_shortcuts.h>
@@ -71,7 +69,7 @@ std::unique_ptr<actionlib::SimpleActionClient<mobipick_pick_n_place::MoveItMacro
 class InitNode : public BT::SyncActionNode
 {
 public:
-  InitNode(const std::string& name) : BT::SyncActionNode(name, {})
+  explicit InitNode(const std::string& name) : BT::SyncActionNode(name, {})
   {
   }
   BT::NodeStatus tick() override
@@ -201,7 +199,7 @@ public:
 class UserInteractionNode : public BT::SyncActionNode
 {
 public:
-  UserInteractionNode(const std::string& name) : BT::SyncActionNode(name, {})
+  explicit UserInteractionNode(const std::string& name) : BT::SyncActionNode(name, {})
   {
   }
   BT::NodeStatus tick() override
@@ -238,7 +236,7 @@ public:
 class DoneNode : public BT::SyncActionNode
 {
 public:
-  DoneNode(const std::string& name) : BT::SyncActionNode(name, {})
+  explicit DoneNode(const std::string& name) : BT::SyncActionNode(name, {})
   {
   }
   BT::NodeStatus tick() override

@@ -14,7 +14,7 @@ enum ObjectID
 
 #endif  // MOBIPICK_PICK_N_PLACE_FAKE_OBJECT_RECOGNITION_H
 
-std::string id_to_string(int id)
+std::string id_to_string(long id)
 {
   switch (id)
   {

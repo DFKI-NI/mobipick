@@ -67,7 +67,7 @@ std::string tf_prefix_ = "mobipick";
 struct GrapsPoseDefine
 {
   Eigen::Isometry3d grasp_pose;
-  std::float_t gripper_width;
+  std::float_t gripper_width = 0.0;
 };
 
 void openGripper(trajectory_msgs::JointTrajectory& posture)
@@ -112,9 +112,9 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // GRASP 1: pitch = pi/8  (grasp handle from upper back)
     GrapsPoseDefine grasp_pose_define;
 
-    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0d, 1.0d, 0.0d));
+    Eigen::AngleAxisd rotation = Eigen::AngleAxisd(M_PI/8, Eigen::Vector3d(0.0, 1.0, 0.0));
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05d, 0.0d, 0.01d));
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.05, 0.0, 0.01));
     grasp_pose_define.grasp_pose.rotate(rotation);
     grasp_pose_define.gripper_width=0.03;
     grasp_poses.push_back(grasp_pose_define);
@@ -125,8 +125,8 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // GRASP 2: pitch = pi/2 (grasp top part from above)
     GrapsPoseDefine grasp_pose_define;
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03, 0.0, 0.085));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
     grasp_pose_define.gripper_width = 0.03;
     grasp_poses.push_back(grasp_pose_define);
   }
@@ -136,9 +136,9 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // GRASP 3: pitch = pi/2 (grasp top part from above mirrored)
     GrapsPoseDefine grasp_pose_define;
     grasp_pose_define.grasp_pose = Eigen::Isometry3d::Identity();
-    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03d, 0.0d, 0.085d));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
-    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    grasp_pose_define.grasp_pose.translate(Eigen::Vector3d(-0.03, 0.0, 0.085));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
+    grasp_pose_define.grasp_pose.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(1.0, 0.0, 0.0)));
     grasp_pose_define.gripper_width = 0.03;
     grasp_poses.push_back(grasp_pose_define);
   }
@@ -149,9 +149,9 @@ moveit::core::MoveItErrorCode pick(moveit::planning_interface::MoveGroupInterfac
     // rotate grasp pose from CAD model orientation to standard orientation (x forward, y left, z up)
     // Eigen quaternion = wxyz, not xyzw
     Eigen::Isometry3d bbox_center_rotated = Eigen::Isometry3d::Identity();
-    bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0d, 0.0d, 1.0d)));
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0.0, 0.0, 1.0)));
 
-    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
+    bbox_center_rotated.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
 
     // --- calculate desired pose of gripper_tcp (in power drill frame) when grasping
     geometry_msgs::PoseStamped p;
@@ -194,7 +194,7 @@ moveit::core::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterfa
 
   // get table height
   std::vector<std::string> object_ids;
-  object_ids.push_back("table");
+  object_ids.emplace_back("table");
   auto table = planning_scene_interface.getObjects(object_ids).at("table");
   double table_height = table.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z];
   ROS_INFO("Table height: %f", table_height);
@@ -203,15 +203,15 @@ moveit::core::MoveItErrorCode place(moveit::planning_interface::MoveGroupInterfa
   geometry_msgs::PoseStamped p;
 
   Eigen::Isometry3d place_pose = Eigen::Isometry3d::Identity();
-  place_pose.translate(Eigen::Vector3d(-0.0d, -0.9d, table_height + 0.11d));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0d, 0.0d, 0.0d)));
-  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(0.0d, 1.0d, 0.0d)));
+  place_pose.translate(Eigen::Vector3d(-0.0, -0.9, table_height + 0.11));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
+  place_pose.rotate(Eigen::AngleAxisd(-M_PI_2, Eigen::Vector3d(0.0, 1.0, 0.0)));
   p.header.frame_id = tf_prefix_ + "base_link";
   tf::poseEigenToMsg(place_pose, p.pose);
 
   moveit_msgs::PlaceLocation g;
   g.place_pose = p;
-  g.allowed_touch_objects.push_back("table");
+  g.allowed_touch_objects.emplace_back("table");
 
   g.pre_place_approach.direction.header.frame_id = tf_prefix_ + "base_link";
   g.pre_place_approach.desired_distance = 0.2;
@@ -248,7 +248,7 @@ void setOrientationContraints(moveit::planning_interface::MoveGroupInterface& gr
     tf_listener.waitForTransform(tf_prefix_ + "gripper_tcp", tf_prefix_ + "base_link", ros::Time(0), ros::Duration(1.0));
     tf_listener.lookupTransform(tf_prefix_ + "gripper_tcp", tf_prefix_ + "base_link", ros::Time(0), transform);
   }
-  catch (tf::TransformException ex)
+  catch (tf::TransformException& ex)
   {
     ROS_ERROR("%s", ex.what());
     ROS_INFO("Transformation not found!");
@@ -276,7 +276,6 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
 {
   // get objects from object detection
   bool found_power_drill = false;
-  uint visionCounter = 0;
   while (!found_power_drill)
   {
     if (!ros::ok())
@@ -315,8 +314,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(
-          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(geometric_shapes::solidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>());
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = det3d.bbox.size.x + 0.04;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = det3d.bbox.size.y + 0.04;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = det3d.bbox.size.z + 0.04;
@@ -336,8 +334,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(
-          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(geometric_shapes::solidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>());
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 0.80;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 0.80;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.73;
@@ -360,8 +357,7 @@ int updatePlanningScene(moveit::planning_interface::PlanningSceneInterface& plan
       co.operation = moveit_msgs::CollisionObject::ADD;
       co.primitives.resize(1);
       co.primitives[0].type = shape_msgs::SolidPrimitive::BOX;
-      co.primitives[0].dimensions.resize(
-          geometric_shapes::SolidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>::value);
+      co.primitives[0].dimensions.resize(geometric_shapes::solidPrimitiveDimCount<shape_msgs::SolidPrimitive::BOX>());
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_X] = 5.0;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Y] = 5.0;
       co.primitives[0].dimensions[shape_msgs::SolidPrimitive::BOX_Z] = 0.2;
@@ -422,9 +418,9 @@ moveit::core::MoveItErrorCode move(moveit::planning_interface::MoveGroupInterfac
 }
 
 moveit::core::MoveItErrorCode moveToCartPose(moveit::planning_interface::MoveGroupInterface& group,
-                                             Eigen::Isometry3d cartesian_pose,
-                                             std::string base_frame = tf_prefix_ + "ur5_base_link",
-                                             std::string target_frame = tf_prefix_ + "gripper_tcp")
+                                             const Eigen::Isometry3d& cartesian_pose,
+                                             const std::string& base_frame = tf_prefix_ + "ur5_base_link",
+                                             const std::string& target_frame = tf_prefix_ + "gripper_tcp")
 {
   robot_state::RobotState start_state(*group.getCurrentState());
   group.setStartState(start_state);
@@ -467,7 +463,7 @@ protected:
   mobipick_pick_n_place::MoveItMacroResult result_;
 
 public:
-  MoveItMacroAction(std::string name)
+  explicit MoveItMacroAction(const std::string& name)
     : as_(nh_, name, boost::bind(&MoveItMacroAction::executeCallback, this, _1), false), action_name_(name)
   {
     // GRIPPER
@@ -493,9 +489,7 @@ public:
     as_.start();
   }
 
-  ~MoveItMacroAction(void)
-  {
-  }
+  ~MoveItMacroAction() = default;
 
   bool hasAttachedObjects()
   {
@@ -728,7 +722,7 @@ public:
     }
     else if (goal_ptr->type == "function")
     {
-      std::map<std::string, moveit_function_t>::iterator it = moveit_functions.find(goal_ptr->name);
+      auto it = moveit_functions.find(goal_ptr->name);
       if (it != moveit_functions.end())
       {
         moveit_function_t function = it->second;
