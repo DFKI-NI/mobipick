@@ -548,10 +548,12 @@ int main(int argc, char** argv)
   ros::NodeHandle rpnh(nh, "poses");
   std::size_t error = 0;
   error += !nh.getParam("poses", poses);
-  error += !get_pose(poses, "base_pick_pose", base_pick_pose);          // geometry_msgs::Pose base_pick_pose
+  std::string base_pick_pose_name = nh.param<std::string>("base_pick_pose_name", "base_pick_pose");
+  error += !get_pose(poses, base_pick_pose_name, base_pick_pose);       // geometry_msgs::Pose base_pick_pose
   error += !get_pose(poses, "base_handover_pose", base_handover_pose);  // geometry_msgs::Pose base_handover_pose
-  error += !get_pose(poses, "base_place_pose", base_place_pose);        // geometry_msgs::Pose base_place_pose
-  error += !get_pose(poses, "base_home_pose", base_home_pose);          // geometry_msgs::Pose base_home_pose
+  std::string base_place_pose_name = nh.param<std::string>("base_place_pose_name", "base_place_pose");
+  error += !get_pose(poses, base_place_pose_name, base_place_pose);  // geometry_msgs::Pose base_place_pose
+  error += !get_pose(poses, "base_home_pose", base_home_pose);       // geometry_msgs::Pose base_home_pose
   error += !rosparam_shortcuts::get("poses", rpnh, "handover_planned", handover_planned);  // bool
   error += !rosparam_shortcuts::get("poses", rpnh, "world_name", world_name);              // string
   // add more parameters here to load if desired
