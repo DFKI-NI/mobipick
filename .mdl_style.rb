@@ -19,3 +19,6 @@ rule 'MD007', :indent => 2
 
 # Ordered list item prefix
 rule 'MD029', :style => 'ordered'
+
+# Multiple headers with the same content
+rule 'no-duplicate-header', :allow_different_nesting => true
