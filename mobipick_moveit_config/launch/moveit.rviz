@@ -184,24 +184,24 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_astra_depth_frame:
+          mobipick/eef_main_cam_depth_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_depth_optical_frame:
+          mobipick/eef_main_cam_depth_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_link:
+          mobipick/eef_main_cam_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_astra_rgb_frame:
+          mobipick/eef_main_cam_rgb_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_rgb_optical_frame:
+          mobipick/eef_main_cam_rgb_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -235,16 +235,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_pico_flexx_frame:
+          mobipick/eef_forward_cam_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_pico_flexx_link:
+          mobipick/eef_forward_cam_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_pico_flexx_optical_frame:
+          mobipick/eef_forward_cam_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -591,24 +591,24 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_astra_depth_frame:
+          mobipick/eef_main_cam_depth_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_depth_optical_frame:
+          mobipick/eef_main_cam_depth_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_link:
+          mobipick/eef_main_cam_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_astra_rgb_frame:
+          mobipick/eef_main_cam_rgb_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_rgb_optical_frame:
+          mobipick/eef_main_cam_rgb_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -642,16 +642,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_pico_flexx_frame:
+          mobipick/eef_forward_cam_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_pico_flexx_link:
+          mobipick/eef_forward_cam_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_pico_flexx_optical_frame:
+          mobipick/eef_forward_cam_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -882,7 +882,7 @@ Visualization Manager:
       Size (Pixels): 3
       Size (m): 0.009999999776482582
       Style: Flat Squares
-      Topic: /mobipick/gripper_astra/depth_registered/points
+      Topic: /mobipick/eef_main_cam/depth_registered/points
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
@@ -962,15 +962,15 @@ Visualization Manager:
           Value: true
         mobipick/ft300_sensor:
           Value: true
-        mobipick/gripper_astra_depth_frame:
+        mobipick/eef_main_cam_depth_frame:
           Value: false
-        mobipick/gripper_astra_depth_optical_frame:
+        mobipick/eef_main_cam_depth_optical_frame:
           Value: false
-        mobipick/gripper_astra_link:
+        mobipick/eef_main_cam_link:
           Value: false
-        mobipick/gripper_astra_rgb_frame:
+        mobipick/eef_main_cam_rgb_frame:
           Value: false
-        mobipick/gripper_astra_rgb_optical_frame:
+        mobipick/eef_main_cam_rgb_optical_frame:
           Value: false
         mobipick/gripper_coupling_link:
           Value: false
@@ -984,11 +984,11 @@ Visualization Manager:
           Value: false
         mobipick/gripper_left_robotiq_fingertip_65mm:
           Value: false
-        mobipick/gripper_pico_flexx_frame:
+        mobipick/eef_forward_cam_frame:
           Value: false
-        mobipick/gripper_pico_flexx_link:
+        mobipick/eef_forward_cam_link:
           Value: false
-        mobipick/gripper_pico_flexx_optical_frame:
+        mobipick/eef_forward_cam_optical_frame:
           Value: false
         mobipick/gripper_right_inner_finger:
           Value: false
@@ -1168,19 +1168,19 @@ Visualization Manager:
                                                       mobipick/gripper_tcp:
                                                         {}
                                                   mobipick/sensor_mount_link:
-                                                    mobipick/gripper_astra_link:
-                                                      mobipick/gripper_astra_depth_frame:
+                                                    mobipick/eef_main_cam_link:
+                                                      mobipick/eef_main_cam_depth_frame:
                                                         {}
-                                                      mobipick/gripper_astra_rgb_frame:
-                                                        mobipick/gripper_astra_rgb_optical_frame:
-                                                          mobipick/gripper_astra_depth_optical_frame:
+                                                      mobipick/eef_main_cam_rgb_frame:
+                                                        mobipick/eef_main_cam_rgb_optical_frame:
+                                                          mobipick/eef_main_cam_depth_optical_frame:
                                                             {}
                                                     mobipick/sensor_mount_bracket_link:
                                                       {}
                                                     mobipick/sensor_mount_pico_holder_link:
-                                                      mobipick/gripper_pico_flexx_link:
-                                                        mobipick/gripper_pico_flexx_frame:
-                                                          mobipick/gripper_pico_flexx_optical_frame:
+                                                      mobipick/eef_forward_cam_link:
+                                                        mobipick/eef_forward_cam_frame:
+                                                          mobipick/eef_forward_cam_optical_frame:
                                                             {}
               mobipick/us_1_frame:
                 {}
@@ -1323,24 +1323,24 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_astra_depth_frame:
+          mobipick/eef_main_cam_depth_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_depth_optical_frame:
+          mobipick/eef_main_cam_depth_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_link:
+          mobipick/eef_main_cam_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_astra_rgb_frame:
+          mobipick/eef_main_cam_rgb_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_astra_rgb_optical_frame:
+          mobipick/eef_main_cam_rgb_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -1374,16 +1374,16 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_pico_flexx_frame:
+          mobipick/eef_forward_cam_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false
-          mobipick/gripper_pico_flexx_link:
+          mobipick/eef_forward_cam_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/gripper_pico_flexx_optical_frame:
+          mobipick/eef_forward_cam_optical_frame:
             Alpha: 1
             Show Axes: false
             Show Trail: false

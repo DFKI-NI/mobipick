@@ -91,7 +91,7 @@
 
     <!-- Pico Flexx gripper camera -->
     <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
-      <arg name="base_name" value="gripper_pico_flexx" />
+      <arg name="base_name" value="eef_forward_cam" />
       <arg name="max_noise" value="0.015" />
     </include>
 

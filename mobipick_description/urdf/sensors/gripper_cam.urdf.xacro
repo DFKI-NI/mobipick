@@ -12,21 +12,21 @@
 
   <xacro:macro name="gripper_cam" params="prefix">
     <xacro:sensor_mount prefix="${prefix}" />
-    <joint name="${prefix}gripper_astra_joint" type="fixed">
+    <joint name="${prefix}eef_main_cam_joint" type="fixed">
       <origin xyz="-0.032 0.033 -0.065" rpy="${pi/2} ${pi/2} ${-pi/2}" />
       <parent link="${prefix}sensor_mount_link"/>
-      <child link="${prefix}gripper_astra_link"/>
+      <child link="${prefix}eef_main_cam_link"/>
     </joint>
 
-    <xacro:sensor_astra_mini_s camera_name="gripper_astra" prefix="${prefix}" />
+    <xacro:sensor_astra_mini_s camera_name="eef_main_cam" prefix="${prefix}" />
 
-    <joint name="${prefix}gripper_pico_flexx_joint" type="fixed">
+    <joint name="${prefix}eef_forward_cam_joint" type="fixed">
       <origin xyz="0.01545 0.0001 0.008" rpy="${-pi/2} 0.0 -0.03650298564336946" />
       <parent link="${prefix}sensor_mount_pico_holder_link"/>
-      <child link="${prefix}gripper_pico_flexx_link"/>
+      <child link="${prefix}eef_forward_cam_link"/>
     </joint>
 
-    <xacro:sensor_pico_flexx camera_name="gripper_pico_flexx" prefix="${prefix}" />
+    <xacro:sensor_pico_flexx camera_name="eef_forward_cam" prefix="${prefix}" />
   </xacro:macro>
 
   <xacro:macro name="sensor_mount" params="prefix">

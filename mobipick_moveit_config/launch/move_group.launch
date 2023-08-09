@@ -132,9 +132,9 @@
          private namespace. you can work around that by specifying an absolute
          sensor topic (starting with '/'), but then pushing down into a
          namespace doesn't work any more. -->
-    <remap from="~gripper_astra/depth_registered/image_raw" to="gripper_astra/depth_registered/image_raw" />
-    <remap from="~gripper_astra/depth_registered/camera_info" to="gripper_astra/depth_registered/camera_info" />
-    <remap from="~gripper_astra/depth_registered/points" to="gripper_astra/depth_registered/points" />
+    <remap from="~eef_main_cam/depth_registered/image_raw" to="eef_main_cam/depth_registered/image_raw" />
+    <remap from="~eef_main_cam/depth_registered/camera_info" to="eef_main_cam/depth_registered/camera_info" />
+    <remap from="~eef_main_cam/depth_registered/points" to="eef_main_cam/depth_registered/points" />
   </node>
 
 </launch>

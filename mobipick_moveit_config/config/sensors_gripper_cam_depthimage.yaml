@@ -2,7 +2,7 @@
 
 sensors:
   - sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater
-    image_topic: gripper_astra/depth_registered/image_raw
+    image_topic: eef_main_cam/depth_registered/image_raw
     # defaults: see depth_image_octomap_updater.cpp
     far_clipping_plane_distance: 0.98    # default:  5.0     # the Astra S produces depth artifacts at exactly 0.99 m, so this is a cheap way of filtering them out
     near_clipping_plane_distance: 0.25   # default:  0.3

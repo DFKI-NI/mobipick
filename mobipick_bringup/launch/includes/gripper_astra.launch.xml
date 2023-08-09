@@ -12,24 +12,24 @@
 
   <!-- Astra gripper camera -->
   <include file="$(find mobipick_bringup)/launch/includes/astra.launch.xml">
-    <arg name="camera"                value="gripper_astra" />
+    <arg name="camera"                value="eef_main_cam" />
     <arg name="depth_registration"    value="false" />
     <arg name="publish_tf"            value="false" />
-    <arg name="depth_frame_id"        value="$(arg tf_prefix)/gripper_astra_depth_optical_frame" if="$(eval tf_prefix != '')" />
-    <arg name="rgb_frame_id"          value="$(arg tf_prefix)/gripper_astra_rgb_optical_frame"   if="$(eval tf_prefix != '')" />
+    <arg name="depth_frame_id"        value="$(arg tf_prefix)/eef_main_cam_depth_optical_frame" if="$(eval tf_prefix != '')" />
+    <arg name="rgb_frame_id"          value="$(arg tf_prefix)/eef_main_cam_rgb_optical_frame"   if="$(eval tf_prefix != '')" />
     <arg name="device_id"             value="$(arg astra_serial)" />
     <arg name="rgb_camera_info_url"   value="package://mobipick_bringup/camera_info/rgb_$(arg astra_serial).yaml" />
     <arg name="depth_camera_info_url" value="package://mobipick_bringup/camera_info/depth_$(arg astra_serial).yaml" />
     <arg name="ir_processing"         value="$(arg ir_processing)" />
     <arg name="load_driver"           value="$(arg load_driver)" />
   </include>
-  <param name="gripper_astra/driver/data_skip" value="9" />
+  <param name="eef_main_cam/driver/data_skip" value="9" />
 
 
   <!-- reduced pointcloud to save same wifi bandwidth. -->
   <node pkg="nodelet" type="nodelet" name="reduce_astra_scans" args="standalone pcl/VoxelGrid">
-    <remap from="~input" to="gripper_astra/depth/points" />
-    <remap from="~output" to="gripper_astra/depth/points_reduced" />
+    <remap from="~input" to="eef_main_cam/depth/points" />
+    <remap from="~output" to="eef_main_cam/depth/points_reduced" />
     <rosparam>
       leaf_size: 0.05
       keep_organized: true
@@ -47,8 +47,8 @@
             image). Therefore we normalize it first.
     -->
     <node if="$(arg ir_processing)" name="normalize_image" pkg="mobipick_bringup" type="normalize_image" output="screen">
-      <remap from="image_in" to="gripper_astra/ir/image" />
-      <remap from="image_out" to="gripper_astra/ir/image_raw" />
+      <remap from="image_in" to="eef_main_cam/ir/image" />
+      <remap from="image_out" to="eef_main_cam/ir/image_raw" />
     </node>
 
   </launch>
