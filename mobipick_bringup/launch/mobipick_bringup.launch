@@ -85,12 +85,19 @@
       <param name="rate" value="200." />
     </node>
 
-    <!-- Astra gripper camera -->
-    <include file="$(find mobipick_bringup)/launch/includes/gripper_astra.launch.xml">
-      <arg name="tf_prefix"     value="$(arg tf_prefix)" />
-      <arg name="robot_version" value="$(arg robot_version)" />
-      <arg name="ir_processing" value="$(arg ir_processing)" />
-    </include>
+    <!-- EEF Main camera -->
+    <group if="$(eval main_camera=='astra')">
+      <include file="$(find mobipick_bringup)/launch/includes/gripper_astra.launch.xml">
+        <arg name="tf_prefix"     value="$(arg tf_prefix)" />
+        <arg name="robot_version" value="$(arg robot_version)" />
+        <arg name="ir_processing" value="$(arg ir_processing)" />
+      </include>
+    </group>
+    <group if="$(eval main_camera=='intel_d455' or main_camera=='intel_d435')">
+      <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+        <arg name="camera" value="eef_main_cam" />
+      </include>
+    </group>
 
     <!-- Pico Flexx gripper camera -->
     <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
