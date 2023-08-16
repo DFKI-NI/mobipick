@@ -1,0 +1,102 @@
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="sensor_mount_mass" value="0.060" />
+  <xacro:property name="sensor_mount_bracket_mass" value="0.040" />
+  <xacro:property name="sensor_mount_pico_holder_mass" value="0.020" />
+
+  <xacro:macro name="sensor_mount" params="prefix">
+    <link name="${prefix}sensor_mount_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/sensor_mount.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <xacro:insert_block name="material_almost_white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/sensor_mount.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="${sensor_mount_mass}" />
+        <origin xyz="-0.006815249 0.054455677 -0.011470736" rpy="0 0 0" />
+        <inertia ixx="${sensor_mount_mass * 0.0018998439}"
+          ixy="${sensor_mount_mass * 0.0000011290362}"
+          ixz="${sensor_mount_mass * -0.000004403006}"
+          iyy="${sensor_mount_mass * 0.0013046557}"
+          iyz="${sensor_mount_mass * 0.00004099457}"
+          izz="${sensor_mount_mass * 0.00062646503}" />
+      </inertial>
+    </link>
+    <gazebo reference="${prefix}sensor_mount_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <joint name="${prefix}sensor_mount_bracket_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}sensor_mount_link"/>
+      <child link="${prefix}sensor_mount_bracket_link" />
+    </joint>
+
+    <link name="${prefix}sensor_mount_bracket_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/sensor_mount_bracket.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <xacro:insert_block name="material_almost_white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/sensor_mount_bracket.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="${sensor_mount_bracket_mass}" />
+        <origin xyz="-0.006750000 -0.030390745 0.000000062" rpy="0 0 0" />
+        <inertia ixx="${sensor_mount_bracket_mass * 0.0010335255}"
+          ixy="${sensor_mount_bracket_mass * 0.00000001092523}"
+          ixz="${sensor_mount_bracket_mass * -0.00000012318317}"
+          iyy="${sensor_mount_bracket_mass * 0.00087473292}"
+          iyz="${sensor_mount_bracket_mass * -0.000000049903018}"
+          izz="${sensor_mount_bracket_mass * 0.00019156915}" />
+      </inertial>
+    </link>
+    <gazebo reference="${prefix}sensor_mount_bracket_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+
+    <joint name="${prefix}sensor_mount_pico_holder_joint" type="fixed">
+      <origin xyz="-0.00325 0.11187 0" rpy="0 0 ${-33.5 / 180.0 * pi}" /> <!-- angle can be adjusted from -15 to -50 degrees (corresponds to downward angle of the pico flexx) -->
+      <parent link="${prefix}sensor_mount_link"/>
+      <child link="${prefix}sensor_mount_pico_holder_link" />
+    </joint>
+
+    <link name="${prefix}sensor_mount_pico_holder_link">
+      <visual>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/sensor_mount_pico_holder.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+        <xacro:insert_block name="material_almost_white" />
+      </visual>
+      <collision>
+        <geometry>
+          <mesh filename="package://mobipick_description/meshes/sensors/sensor_mount_pico_holder.stl" scale="0.001 0.001 0.001" />
+        </geometry>
+      </collision>
+      <inertial>
+        <mass value="${sensor_mount_pico_holder_mass}" />
+        <origin xyz="0.001609901 0.102978844 0.008159077" rpy="0 0 0" />
+        <inertia ixx="${sensor_mount_pico_holder_mass * 0.00024619688}"
+          ixy="${sensor_mount_pico_holder_mass * 0.000027175325}"
+          ixz="${sensor_mount_pico_holder_mass * 0.000000014504396}"
+          iyy="${sensor_mount_pico_holder_mass * 0.00023794332}"
+          iyz="${sensor_mount_pico_holder_mass * -0.0000000015705397}"
+          izz="${sensor_mount_pico_holder_mass * 0.000071808769}" />
+      </inertial>
+    </link>
+    <gazebo reference="${prefix}sensor_mount_pico_holder_link">
+      <material>Gazebo/Grey</material>
+    </gazebo>
+  </xacro:macro>
+</robot>

@@ -10,6 +10,8 @@
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
   <arg name="robot"      default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
 
+  <arg name="main_camera" default="astra"
+    doc="Can be 'astra' for Orbbec Astra Mini S, 'intel_d455' for Intel RealSense D455 or 'intel_d435' for Intel RealSense D435, changes the main 3D camera." />
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" /> <!-- $(arg prefix) is used in all the config files! TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
   <arg name="prefix" value=""                  unless="$(eval tf_prefix != '')" /> <!-- Cannot use '$(arg tf_prefix)/' instead because '/' would be included if tf_prefix = '', and tf frames cannot start with '/' in tf2 -->
 
@@ -18,6 +20,7 @@
   <!-- URDF -->
   <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
     <arg name="robot" value="$(arg robot)" />
+    <arg name="main_camera" value="$(arg main_camera)" />
     <arg name="tf_prefix" value="$(arg tf_prefix)" />
     <arg unless="$(eval arm_controller=='position')" name="transmission_hw_interface" value="hardware_interface/VelocityJointInterface" />
     <arg if="$(eval arm_controller=='position')"     name="transmission_hw_interface" value="hardware_interface/PositionJointInterface" />

@@ -3,6 +3,8 @@
   <arg name="tf_prefix" default="mobipick" doc="TF prefix to use for all of Mobipick's TF frames"/>
 
   <arg name="robot_version" default="os" doc="Can be hb or os, changes some parts in the urdf, hardware serials etc." />
+  <arg name="main_camera" default="astra"
+    doc="Can be 'astra' for Orbbec Astra Mini S, 'intel_d455' for Intel RealSense D455 or 'intel_d435' for Intel RealSense D435, changes the main 3D camera." />
 
   <!-- $(arg prefix) is used in most of the config files, whenever subst_value=true -->
   <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />
@@ -22,6 +24,7 @@
     <!-- URDF -->
     <include file="$(find mobipick_description)/launch/mobipick/upload_mobipick_description.launch">
       <arg name="robot" value="mobipick-$(arg robot_version)" />
+      <arg name="main_camera" value="$(arg main_camera)" />
       <arg name="tf_prefix" value="$(arg tf_prefix)" />
       <arg name="ur5_kinematics_file" value="$(arg ur5_kinematics_file)" />
       <arg name="transmission_hw_interface" value="hardware_interface/PositionJointInterface" />

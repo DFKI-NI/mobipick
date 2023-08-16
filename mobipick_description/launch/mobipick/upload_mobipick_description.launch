@@ -2,6 +2,8 @@
 <launch>
 
   <arg name="robot" default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="main_camera" default="astra"
+    doc="Can be 'astra' for Orbbec Astra Mini S, 'intel_d455' for Intel RealSense D455 or 'intel_d435' for Intel RealSense D435, changes the main 3D camera." />
   <arg name="tf_prefix" default="" doc="TF prefix to use for all of Mobipick's TF frames"/>
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml"/>
   <arg name="ur5_kinematics_file" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>
@@ -9,6 +11,7 @@
 
   <param name="robot_description" command="$(find xacro)/xacro $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro
     robot:=$(arg robot)
+    main_camera:=$(arg main_camera)
     tf_prefix:=$(arg tf_prefix)
     joint_limits_parameters_file:=$(arg joint_limits_parameters_file)
     kinematics_config:=$(arg ur5_kinematics_file)

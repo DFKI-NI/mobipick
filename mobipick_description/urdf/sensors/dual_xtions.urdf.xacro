@@ -128,6 +128,6 @@
     </joint>
     <link name="${prefix}${camera_name}_depth_optical_frame"/>
 
-    <xacro:sim_3dsensor prefix="${prefix}" />  <!-- NOTE: sim_3dsensor macro from gripper_cam is used here -->
+    <xacro:sim_3dsensor prefix="${prefix}" />  <!-- NOTE: sim_3dsensor macro from astra/intel_xxx is used here -->
   </xacro:macro>
 </robot>
