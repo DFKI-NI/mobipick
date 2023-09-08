@@ -5,6 +5,14 @@
   <xacro:arg name="robot" default="mobipick-os" />      <!-- can be "mobipick-hb" or "mobipick-os" -->
   <xacro:property name="robot" value="$(arg robot)" />  <!-- necessary because args cannot be accessed inside ${} expressions -->
 
+  <!--
+    Main camera type, Can be "astra" for Orbbec Astra Mini S,
+    'intel_d455' for Intel RealSense D455 or 'intel_d435' for Intel RealSense D435,
+    changes the main 3D camera that is mounted on the endeffector." />
+  -->
+  <xacro:arg name="main_camera" default="astra" />
+  <xacro:property name="main_camera" value="$(arg main_camera)" />
+
   <xacro:arg name="tf_prefix" default="" />
   <xacro:property name="tf_prefix_" value="$(arg tf_prefix)" />
   <xacro:if value="${tf_prefix_ == ''}">
@@ -17,6 +25,9 @@
   <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
   <xacro:arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml"/>  <!-- path the to the yaml with the ur5 joint limits. -->
   <xacro:arg name="kinematics_config" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>  <!-- path the to the yaml with the arms calibration parameters. -->
+
+  <!-- mobipick-hb does not have a cable guide at the wrist, allowing it to take pictures facing up -->
+  <xacro:arg name="cable_guide_wrist_3" default="${str(robot == 'mobipick-os')}" />
 
   <!-- ############# MIR100 BASE ############## -->
   <xacro:include filename="$(find mir_description)/urdf/include/mir_100_v1.urdf.xacro" />
@@ -118,8 +129,18 @@
 
   <xacro:robotiq_arg2f_140 prefix="${prefix}gripper_"/>
 
-  <!-- ############### SENSOR MOUNT + 3D CAM  ################ -->
-  <xacro:include filename="$(find mobipick_description)/urdf/sensors/gripper_cam.urdf.xacro" />
+  <!-- ############### SENSOR MOUNT + 3D CAMS  ################ -->
+  <xacro:include filename="$(find mobipick_description)/urdf/sensors/sensor_mount.urdf.xacro" />
+  <xacro:if value="${main_camera == 'astra'}">
+    <xacro:include filename="$(find mobipick_description)/urdf/sensors/astra_cam.urdf.xacro" />
+  </xacro:if>
+  <xacro:if value="${main_camera == 'intel_d455'}">
+    <xacro:include filename="$(find mobipick_description)/urdf/sensors/d455_cam.urdf.xacro" />
+  </xacro:if>
+  <xacro:if value="${main_camera == 'intel_d435'}">
+    <xacro:include filename="$(find mobipick_description)/urdf/sensors/d435_cam.urdf.xacro" />
+  </xacro:if>
+  <xacro:include filename="$(find mobipick_description)/urdf/sensors/pico_cam.urdf.xacro" />
 
   <joint name="${prefix}sensor_mount_joint" type="fixed">
     <origin xyz="0.0 0.0 -0.005" rpy="0.0 ${-pi/2} 0.0" />
@@ -127,7 +148,19 @@
     <child link="${prefix}sensor_mount_link" />
   </joint>
 
-  <xacro:gripper_cam prefix="${prefix}" />
+  <xacro:sensor_mount prefix="${prefix}" />
+
+  <xacro:if value="${main_camera == 'astra'}">
+    <xacro:astra_cam prefix="${prefix}" />
+  </xacro:if>
+  <xacro:if value="${main_camera == 'intel_d455'}">
+    <xacro:intel_d455_cam prefix="${prefix}" />
+  </xacro:if>
+  <xacro:if value="${main_camera == 'intel_d435'}">
+    <xacro:intel_d435_cam prefix="${prefix}" />
+  </xacro:if>
+
+  <xacro:pico_cam prefix="${prefix}" />
 
   <!-- ############### DUAL XTION MOUNT + XTIONS ################ -->
   <xacro:if value="${robot == 'mobipick-hb'}">

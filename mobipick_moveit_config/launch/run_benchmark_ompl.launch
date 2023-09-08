@@ -2,6 +2,7 @@
 
   <!-- This argument must specify the list of .cfg files to process for benchmarking -->
   <arg name="cfg" />
+  <arg name="robot_version" default="os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
 
   <!-- prefix for joints, links, frames in the config -->
   <arg name="prefix" default="" />
@@ -9,6 +10,7 @@
   <!-- Load URDF -->
   <include file="$(dirname)/planning_context.launch">
     <arg name="load_robot_description" value="true"/>
+    <arg name="robot_version" value="$(arg robot_version)" />
   </include>
 
   <!-- Start the database -->

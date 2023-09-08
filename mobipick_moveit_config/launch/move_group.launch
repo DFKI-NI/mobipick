@@ -7,8 +7,11 @@
   <arg name="prefix_" default=""               if="$(eval prefix == '')" />
   <arg name="prefix_" default="$(arg prefix)/" unless="$(eval prefix == '')" />
 
+  <arg name="robot_version" default="os" doc="Which variant of the mobipick? Can be 'hb' or 'os'" />
+
   <include file="$(dirname)/planning_context.launch">
     <arg name="tf_prefix" value="$(arg prefix)" />
+    <arg name="robot_version" value="$(arg robot_version)" />
   </include>
 
   <!-- GDB Debug Option -->
@@ -57,6 +60,7 @@
   <!-- load URDF, SRDF and joint_limits configuration -->
   <include file="$(dirname)/planning_context.launch">
     <arg name="load_robot_description" value="$(arg load_robot_description)" />
+    <arg name="robot_version" value="$(arg robot_version)" />
     <arg name="tf_prefix" value="$(arg prefix)" />
   </include>
 

@@ -11,6 +11,9 @@
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="tf_prefix" default="mobipick" doc="tf_prefix to be used" />
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
+  <arg name="robot"      default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="main_camera" default="astra"
+    doc="Can be 'astra' for Orbbec Astra Mini S, 'intel_d455' for Intel RealSense D455 or 'intel_d435' for Intel RealSense D435, changes the main 3D camera." />
 
   <arg name="start_paused" default="true" />
 
@@ -37,6 +40,8 @@
   <group ns="$(arg namespace)">
     <!-- spawn robot and bring up controllers etc. -->
     <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_gazebo_common.launch">
+      <arg name="robot" value="$(arg robot)" />
+      <arg name="main_camera" value="$(arg main_camera)" />
       <arg name="arm_controller" value="$(arg arm_controller)" />
       <arg name="robot_x"   value="$(arg robot_x)" />
       <arg name="robot_y"   value="$(arg robot_y)" />

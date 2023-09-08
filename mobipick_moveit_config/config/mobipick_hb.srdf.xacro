@@ -4,6 +4,7 @@
     A URDF file must exist for this robot as well, where the joints and the links that are referenced are defined
 -->
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="mobipick">
+    <!-- This version of Mobipick does not have a cable guide at the wrist, allowing it to take pictures facing up -->
 
     <!-- Use the arg tf_prefix to set the tf_prefix property. Use a dummy tf_prefix_ property to avoid a leading / if
          the prefix is not set, without using eval (which is not supported on indigo). -->
@@ -15,7 +16,6 @@
     <xacro:unless value="${tf_prefix_ == ''}">
         <xacro:property name="tf_prefix" value="${tf_prefix_}/"/>
     </xacro:unless>
-
 
     <!--GROUPS: Representation of a set of joints and links. This can be useful for specifying DOF to plan for, defining arms, end effectors, etc-->
     <!--LINKS: When a link is specified, the parent joint of that link (if it exists) is automatically included-->
@@ -178,10 +178,7 @@
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_clamp3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}back_laser_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
@@ -233,10 +230,7 @@
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_clamp3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="User"/>
-    <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}eef_forward_cam_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}eef_main_cam_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}base_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Adjacent"/>
@@ -287,10 +281,7 @@
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_clamp3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_rotation_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
@@ -340,10 +331,7 @@
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_clamp3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}bl_caster_wheel_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
@@ -392,10 +380,7 @@
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_clamp3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_rotation_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
@@ -443,10 +428,7 @@
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_clamp3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}br_caster_wheel_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
@@ -523,10 +505,7 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_clamp3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Default"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
@@ -565,10 +544,7 @@
     <disable_collisions link1="${tf_prefix}cable_guide_clamp2_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_clamp4_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_forearm_tube_link" reason="Adjacent"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_terminal_element_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_upper_arm_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_clamp3_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
@@ -639,38 +615,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_upper_arm_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_forearm_tube_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}cable_guide_wrist_3_tube_link" reason="Adjacent"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Adjacent"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}front_laser_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}ft300_mounting_plate" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}ft300_sensor" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_coupling_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_left_inner_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_left_inner_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_left_outer_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_left_outer_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_left_robotiq_fingertip_65mm" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_right_inner_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_right_inner_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_right_outer_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_right_outer_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_right_robotiq_fingertip_65mm" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}gripper_robotiq_arg2f_base_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}left_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}right_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}sensor_mount_bracket_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}sensor_mount_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}structure_part_down" reason="User"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}structure_part_up" reason="User"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_terminal_element_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}eef_forward_cam_link" reason="User"/>
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never"/>
@@ -696,67 +640,6 @@
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_wrist_1_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
     <disable_collisions link1="${tf_prefix}cable_guide_upper_arm_tube_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}cable_guide_wrist_clamp_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}eef_main_cam_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}front_laser_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ft300_mounting_plate" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ft300_sensor" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_coupling_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_left_inner_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_left_inner_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_left_outer_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_left_outer_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_left_robotiq_fingertip_65mm" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_right_inner_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_right_inner_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_right_outer_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_right_outer_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_right_robotiq_fingertip_65mm" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}gripper_robotiq_arg2f_base_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}left_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}right_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}sensor_mount_bracket_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}sensor_mount_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}structure_part_down" reason="User"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}structure_part_up" reason="User"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_3_tube_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}eef_forward_cam_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}eef_main_cam_link" reason="Default"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}fl_caster_rotation_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}fl_caster_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}fr_caster_rotation_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}fr_caster_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}front_laser_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}ft300_mounting_plate" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}ft300_sensor" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_coupling_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_left_inner_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_left_inner_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_left_outer_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_left_outer_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_left_robotiq_fingertip_65mm" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_right_inner_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_right_inner_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_right_outer_finger" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_right_outer_knuckle" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_right_robotiq_fingertip_65mm" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}gripper_robotiq_arg2f_base_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}left_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}right_wheel_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}sensor_mount_bracket_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}sensor_mount_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}sensor_mount_pico_holder_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}structure_part_down" reason="User"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}structure_part_up" reason="User"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}ur5_wrist_2_link" reason="Never"/>
-    <disable_collisions link1="${tf_prefix}cable_guide_wrist_clamp_link" link2="${tf_prefix}ur5_wrist_3_link" reason="Adjacent"/>
     <disable_collisions link1="${tf_prefix}eef_forward_cam_link" link2="${tf_prefix}gripper_right_inner_finger" reason="Never"/>
     <disable_collisions link1="${tf_prefix}eef_forward_cam_link" link2="${tf_prefix}gripper_right_inner_knuckle" reason="Never"/>
     <disable_collisions link1="${tf_prefix}eef_forward_cam_link" link2="${tf_prefix}gripper_right_outer_finger" reason="Never"/>
