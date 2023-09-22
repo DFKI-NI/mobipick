@@ -146,7 +146,7 @@
         <joint name="${tf_prefix}ur5_wrist_3_joint" value="3.10"/>
     </group_state>
     <group_state name="handover" group="arm">
-        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="-0.88"/>
+        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="-1.465"/>
         <joint name="${tf_prefix}ur5_shoulder_lift_joint" value="-0.95"/>
         <joint name="${tf_prefix}ur5_elbow_joint" value="1.327"/>
         <joint name="${tf_prefix}ur5_wrist_1_joint" value="-0.357"/>
