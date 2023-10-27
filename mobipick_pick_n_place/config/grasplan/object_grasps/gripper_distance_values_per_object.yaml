@@ -3,6 +3,7 @@
 # specified in grasp_planning_core_params -> "gripper_close"
 distance_gripper_close_per_obj:
     klt: 0.0005
+    materialbox: 0.0005
     multimeter: 0.052
     relay: 0.04
     power_drill_with_grip: 0.03
@@ -13,3 +14,4 @@ distance_gripper_close_per_obj:
 # specified in grasp_planning_core_params -> "gripper_open"
 distance_gripper_open_per_obj:
     klt: 0.06
+    materialbox: 0.06
