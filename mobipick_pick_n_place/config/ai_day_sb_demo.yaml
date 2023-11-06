@@ -1,0 +1,18 @@
+base_pick_pose_name:     "base_table_2_pose"
+base_place_pose_name:    "base_table_3_pose"
+
+poses:
+  # geometry_msgs/Pose - [x, y, z], [qx, qy, qz, qw]
+  #
+  # All poses have to be unique, otherwise you will get the following warning:
+  #
+  #     Duplicate poses in 'cic_tables_demo.yaml' might let checks fail whether something is at a specific symbolic pose.
+  #
+  base_handover_pose: [[ 5.09, 11.36, 0.0], [0.0, 0.0, -0.3848716574678634, 0.9229701009664071]]
+  base_home_pose:     [[ 3.25, 11.47, 0.0], [0.0, 0.0,  0.0  , 1.0  ]]
+  base_table_1_pose:  [[ 3.60, 11.17, 0.0], [0.0, 0.0,  0.0  , 1.0  ]]
+  base_table_2_pose:  [[ 4.65, 11.17, 0.0], [0.0, 0.0,  0.0  , 1.0  ]]
+  base_table_3_pose:  [[ 5.26, 11.35, 0.0], [0.0, 0.0,  0.707, 0.707]]
+  base_table_4_pose:  [[ 3.15, 11.44, 0.0], [0.0, 0.0, -0.707, 0.707]]   # unused
+  handover_planned: true # bool
+  world_name: "ai_day_sb"   # TODO: create gazebo launch file with this name
