@@ -49,9 +49,12 @@ if resp.safety_mode.mode == SafetyMode.PROTECTIVE_STOP:
         rospy.sleep(1.0)
         rospy.loginfo('trying again')
 
-if resp.safety_mode.mode != SafetyMode.NORMAL:
-    rospy.logfatal(f'Unhandled safety mode: {resp.safety_mode.mode}!')
-    sys.exit(-1)
+# wait until safety mode NORMAL
+while resp.safety_mode.mode != SafetyMode.NORMAL:
+    rospy.loginfo('still waiting for SafetyMode NORMAL...')
+    rospy.sleep(1.0)
+    resp = call_service('get_safety_mode', GetSafetyMode, timeout=30.0)
+    rospy.loginfo(resp.answer)
 
 ################################################################################
 
