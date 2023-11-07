@@ -43,6 +43,8 @@ if resp.safety_mode.mode == SafetyMode.PROTECTIVE_STOP:
         # This can fail
         rospy.loginfo(resp.message)
         if resp.success:
+            resp = call_service('get_safety_mode', GetSafetyMode, timeout=30.0)
+            rospy.loginfo(resp.answer)
             break
         rospy.sleep(1.0)
         rospy.loginfo('trying again')
