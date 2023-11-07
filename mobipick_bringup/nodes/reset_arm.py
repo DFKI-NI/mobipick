@@ -96,6 +96,15 @@ rospy.loginfo(resp.answer)
 if resp.state.state != ProgramState.STOPPED:
     resp = call_service('stop', Trigger)
     rospy.loginfo(resp.message)
+    resp = call_service('program_state', GetProgramState)
+    rospy.loginfo(resp.answer)
+
+# wait until STOPPED
+while resp.state.state != ProgramState.STOPPED:
+    resp = call_service('program_state', GetProgramState)
+    rospy.loginfo(resp.answer)
+    rospy.sleep(1.0)
+    rospy.loginfo('still waiting for the program to stop')
 
 resp = call_service('play', Trigger)
 rospy.loginfo(resp.message)
