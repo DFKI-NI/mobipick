@@ -106,5 +106,8 @@ while resp.state.state != ProgramState.STOPPED:
     rospy.sleep(1.0)
     rospy.loginfo('still waiting for the program to stop')
 
+# wait a little bit longer just to make sure we don't "press play twice" and crash the dashboard
+rospy.sleep(2.0)
+
 resp = call_service('play', Trigger)
 rospy.loginfo(resp.message)
