@@ -93,7 +93,7 @@ if resp.robot_mode.mode != RobotMode.RUNNING:
 resp = call_service('program_state', GetProgramState)
 rospy.loginfo(resp.answer)
 
-if resp.state != ProgramState.STOPPED:
+if resp.state.state != ProgramState.STOPPED:
     resp = call_service('stop', Trigger)
     rospy.loginfo(resp.message)
 
