@@ -16,6 +16,7 @@
     doc="Can be 'astra' for Orbbec Astra Mini S, 'intel_d455' for Intel RealSense D455 or 'intel_d435' for Intel RealSense D435, changes the main 3D camera." />
 
   <arg name="start_paused" default="true" />
+  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
 
   <group>
     <remap from="$(arg namespace)/mobile_base_controller/cmd_vel" to="$(arg namespace)/cmd_vel" />
@@ -26,6 +27,7 @@
       <arg name="world_name" value="$(arg world_name)"/>
       <arg name="paused" value="$(arg start_paused)" />
       <arg name="gui" value="$(arg gui)" />
+      <arg name="extra_gazebo_args" value="--profile $(arg physics_profile)" />
     </include>
   </group>
 
