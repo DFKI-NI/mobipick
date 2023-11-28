@@ -3,11 +3,13 @@
   <arg name="gui" default="true" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="robot"      default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="robot" value="$(arg robot)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="arm_controller" value="$(arg arm_controller)" />
+    <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
 
   <include file="$(find mir_gazebo)/launch/includes/spawn_maze.launch.xml" />

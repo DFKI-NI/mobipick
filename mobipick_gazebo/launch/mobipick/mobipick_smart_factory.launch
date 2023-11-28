@@ -3,6 +3,7 @@
   <arg name="namespace" default="mobipick" doc="Namespace to push all topics into"/>
   <arg name="robot"     default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
   <arg name="gui" default="true" />
+  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
@@ -13,6 +14,7 @@
     <arg name="robot_x"   value="5.00" />
     <arg name="robot_y"   value="2.00" />
     <arg name="robot_yaw" value="0.00" />
+    <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
   <param name="world" type="str" value="smart_factory" />
 
