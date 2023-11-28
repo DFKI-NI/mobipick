@@ -10,6 +10,7 @@
 
   <arg name="gui" default="true" />
   <arg name="start_paused" default="true" />
+  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
 
   <!-- the pose where to spawn the robot in simulation -->
@@ -29,6 +30,7 @@
     <arg name="robot_x"   value="$(arg robot_x)" />
     <arg name="robot_y"   value="$(arg robot_y)" />
     <arg name="robot_yaw" value="$(arg robot_yaw)" />
+    <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
 
   <!-- spawn objects in the simulated world -->
