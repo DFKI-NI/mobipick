@@ -22,6 +22,7 @@
   <exec_depend>gazebo_grasp_plugin</exec_depend> <!-- from https://github.com/JenniferBuehler/gazebo-pkgs -->
   <exec_depend>gazebo_logical_camera_plugin_ros</exec_depend>
   <exec_depend>gazebo_ros_control</exec_depend>
+  <exec_depend>gazebo_ros_vel</exec_depend>
   <exec_depend>joint_state_controller</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>

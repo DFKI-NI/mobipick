@@ -3,6 +3,10 @@
     uri: https://github.com/BehaviorTree/Groot.git
     version: master
 - git:
+    local-name: april_gazebo_plugins
+    uri: https://github.com/aprilprojecteu/april_gazebo_plugins
+    version: noetic
+- git:
     local-name: astra_camera
     uri: https://github.com/orbbec/ros_astra_camera.git
     version: aff227d6
