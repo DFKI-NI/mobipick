@@ -5,7 +5,7 @@
 
   <arg name="gui" default="true" />
   <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable, but can also be an absolute path -->
-  <arg name="world_name" default="worlds/zero_gravity_empty_world.sdf"/>
+  <arg name="world_name" default="$(find mobipick_gazebo)/worlds/zero_gravity_empty_world.sdf"/>
 
   <arg name="gripper_x"   default="0.0" />
   <arg name="gripper_y"   default="0.0" />
