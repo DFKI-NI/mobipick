@@ -29,7 +29,7 @@
   <include file="$(find mobipick_gazebo)/launch/objects/power_drill_with_grip.launch">
     <arg name="x"     default="12.3" />
     <arg name="y"     default="3.8" />
-    <arg name="z"     default="0.81" />
+    <arg name="z"     default="0.83" />
     <arg name="roll"  default="$(eval -pi / 2)" />
     <arg name="pitch" default="0.0" />
     <arg name="yaw"   default="$(eval -pi  *2  / 3)" />
