@@ -1,0 +1,88 @@
+<?xml version="1.0" ?>
+<launch>
+
+  <!-- This launch file is used to bringup the robotiq_2f_140 gripper in a zero gravity environment to easily record grasp poses -->
+
+  <arg name="gui" default="true" />
+  <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable, but can also be an absolute path -->
+  <arg name="world_name" default="$(find mobipick_gazebo)/worlds/zero_gravity_empty_world.sdf"/>
+
+  <arg name="gripper_x"   default="0.0" />
+  <arg name="gripper_y"   default="0.0" />
+  <arg name="gripper_z"   default="0.0" />
+  <arg name="gripper_roll" default="0.0" />
+  <arg name="gripper_pitch" default="0.0" />
+  <arg name="gripper_yaw" default="0.0" />
+
+  <arg name="namespace" default="robotiq_arg2f" doc="Namespace to push all topics into"/>
+  <arg name="tf_prefix" default="robotiq_arg2f" doc="tf_prefix to be used" />
+  <arg name="robot_name" default="robotiq_arg2f" doc="Sets the name of the robot in gazebo" />
+
+  <arg name="start_paused" default="true" />
+
+  <remap from="$(arg namespace)/joint_states" to="$(arg namespace)/gazebo_joint_states" />
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(arg world_name)"/>
+    <arg name="paused" value="$(arg start_paused)" />
+    <arg name="gui" value="$(arg gui)" />
+  </include>
+
+  <group ns="$(arg namespace)">
+
+    <!-- Add passive + mimic joints to joint_states topic -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <rosparam param="source_list">[gazebo_joint_states]</rosparam>
+      <param name="rate" value="60.0" />
+    </node>
+
+    <!-- $(arg prefix) is used in all the config files!
+         TODO: For multiple robots, create groups when loading the parameters to overwrite the arg? -->
+    <arg name="prefix" value="$(arg tf_prefix)/" if="$(eval tf_prefix != '')" />
+    <!-- Cannot use '$(arg tf_prefix)/' instead because '/' would be included if tf_prefix = '', and tf frames cannot start with '/' in tf2 -->
+    <arg name="prefix" value="" unless="$(eval tf_prefix != '')" />
+
+    <!-- Load URDF -->
+    <param name="robot_description"
+           command="$(find xacro)/xacro $(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_sim_floating.urdf.xacro
+                    tf_prefix:=$(arg tf_prefix)" />
+
+    <!-- Load gazebo controller configurations -->
+    <!-- Note: You MUST load these PID parameters for all joints that are using
+        the PositionJointInterface, otherwise the arm + gripper will act like a
+        giant parachute, counteracting gravity, and causing some of the wheels
+        to lose contact with the ground, so the robot won't be able to properly
+        navigate. See
+        https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
+    <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_controller.yaml" command="load" subst_value="true" />
+    <rosparam file="$(find mobipick_gazebo)/config/robotiq_2f_140/gazebo_mimic_joint.yaml" command="load" subst_value="true" />
+
+    <!-- Spawn the robot into Gazebo -->
+    <!-- Don't set ur5_shoulder_lift_joint to values smaller than -2.16 (for example, -2.60), otherwise Gazebo adds 2 pi to the reported joint_states -->
+    <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-param robot_description -urdf -model $(arg robot_name)
+               -x $(arg gripper_x) -y $(arg gripper_y) -z $(arg gripper_z)
+               -R $(arg gripper_roll) -P $(arg gripper_pitch) -Y $(arg gripper_yaw) " />
+
+    <!-- Load ros_control controller configurations -->
+    <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" subst_value="true" />
+    <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" subst_value="true" />
+
+    <!-- Start the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="controller_manager" output="screen"
+          args="spawn joint_state_controller gripper_controller" />
+
+    <!-- Robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
+
+    <!-- rqt joint trajectory -->
+    <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" />
+
+  </group>
+
+  <!-- Robotiq command bridge -->
+  <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/robotiq_2f_140_bridge.launch">
+    <arg name="namespace" value="$(arg namespace)" />
+    <arg name="tf_prefix" value="$(arg tf_prefix)" />
+  </include>
+
+</launch>

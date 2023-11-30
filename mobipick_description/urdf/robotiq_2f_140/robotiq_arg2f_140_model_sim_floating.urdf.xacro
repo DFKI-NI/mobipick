@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<robot name="robotiq_arg2f_140_model" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:arg name="tf_prefix" default="" />
+  <xacro:property name="tf_prefix_" value="$(arg tf_prefix)" />
+  <xacro:if value="${tf_prefix_ == ''}">
+    <xacro:property name="prefix" value="" />
+  </xacro:if>
+  <xacro:unless value="${tf_prefix_ == ''}">
+    <xacro:property name="prefix" value="${tf_prefix_}/" />
+  </xacro:unless>
+
+  <xacro:property name="grasp_fix_required" value="false" /> <!-- do not use grasp fix plugin -->
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_arg2f_140_model_macro.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/common.gazebo.xacro" />
+  <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/robotiq_2f_140.gazebo.xacro" />
+
+  <xacro:robotiq_arg2f_140 prefix="${prefix}gripper_"/>
+  <xacro:controller_plugin_gazebo robot_namespace=""/>
+  <xacro:mimic_joint_plugins_gazebo prefix="${prefix}gripper_" robot_namespace=""/>
+
+  <!-- plugin to exert a velocity on a link, see:
+       https://github.com/aprilprojecteu/april_gazebo_plugins -->
+  <gazebo>
+    <plugin name="gazebo_ros_vel" filename="libgazebo_ros_vel.so">
+      <bodyName>${prefix}gripper_robotiq_arg2f_base_link</bodyName>
+      <topicName>cmd_vel</topicName>
+    </plugin>
+  </gazebo>
+
+</robot>
