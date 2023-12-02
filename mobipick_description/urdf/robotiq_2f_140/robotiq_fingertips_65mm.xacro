@@ -23,9 +23,11 @@
         <xacro:insert_block name="material_grey" />
       </visual>
       <collision>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0.00005 0.0325 -0.0035" rpy="0 0 0"/>
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_fingertip_65mm.stl" />
+          <!-- <mesh filename="package://mobipick_description/meshes/robotiq_2f_140/robotiq_arg2f_${stroke}_fingertip_65mm.stl" /> -->
+          <!-- using box instead of mesh for collision produces less vibration of the fingers when grasping objects -->
+          <box size="0.0271 0.065 0.007"/> <!-- values ok for stroke of 140, only? -->
         </geometry>
       </collision>
     </link>
