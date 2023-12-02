@@ -32,4 +32,12 @@
       </geometry>
     </collision>
   </link>
+
+  <gazebo reference="screwdriver">
+    <mu1>5.0</mu1> <!-- high friction -->
+    <mu2>5.0</mu2>
+    <kp>1e+06</kp> <!-- high stiffness -->
+    <kd>1.0</kd> <!-- normal damping -->
+  </gazebo>
+
 </robot>
