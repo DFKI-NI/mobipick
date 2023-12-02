@@ -33,6 +33,9 @@
     </link>
     <gazebo reference="${prefix}${fingerprefix}_robotiq_fingertip_65mm">
       <material>Gazebo/Grey</material>
+      <!-- high friction value to prevent objects from slipping the gripper fingers -->
+      <mu1>5.0</mu1>
+      <mu2>5.0</mu2>
     </gazebo>
   </xacro:macro>
 
