@@ -36,6 +36,12 @@
       <!-- high friction value to prevent objects from slipping the gripper fingers -->
       <mu1>5.0</mu1>
       <mu2>5.0</mu2>
+      <!-- a low kp (stiffness value) allows some penetration of the material making the gripper "soft".
+           The reason to prefer a soft gripper is to increase friction by increasing the contact area,
+           specially when the surface of the object to grasp is irregular, e.g. a mesh
+           see: https://classic.gazebosim.org/tutorials?tut=physics_params&cat=physics -->
+      <kp>5000.0</kp> <!-- 5000.0 - medium gripper finger "softness", 1000000.0 - hard/rigid gripper finger -->
+      <kd>1.0</kd>
     </gazebo>
   </xacro:macro>
 
