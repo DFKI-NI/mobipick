@@ -30,7 +30,7 @@
              Note that in-between such updates, existing contact points may be collected at a higher rate
              (the Gazebo world update rate). The update_rate is only the rate at which they are processed,
               which takes a bit of computation time, and therefore should be lower than the gazebo world update rate. -->
-        <update_rate>50</update_rate>
+        <update_rate>100</update_rate> <!-- 50 is fine for slow physics, but 100 is required for fast physics -->
 
         <!-- Is the number of times in the update loop (running at update_rate) that an object has to be detected as "gripped"
              in order to attach the object. Adjust this with the update rate.-->
