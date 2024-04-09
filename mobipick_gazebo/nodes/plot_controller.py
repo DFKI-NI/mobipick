@@ -26,7 +26,7 @@ def update(foo):
     planned_times = []
     planned_positions = []
     with goals_lock:
-        for (trajectory_start_time, goal) in goals:
+        for trajectory_start_time, goal in goals:
             trajectory = goal.trajectory
             joint_index = trajectory.joint_names.index(g_joint_name)
             planned_times.extend(

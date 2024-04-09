@@ -15,7 +15,7 @@
 repos:
   # Standard hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.6.0
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
@@ -47,12 +47,12 @@ repos:
         exclude: *excludes
 
   - repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 24.3.0
     hooks:
       - id: black
 
   - repo: https://github.com/PyCQA/flake8.git
-    rev: 5.0.4
+    rev: 7.0.0
     hooks:
     - id: flake8
 
@@ -63,7 +63,7 @@ repos:
       args: [--external-sources]
 
   - repo: https://github.com/markdownlint/markdownlint
-    rev: v0.11.0
+    rev: v0.13.0
     hooks:
     - id: markdownlint
 
