@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-This node provides a joint trajectory action server that forwards the trajectory to Rock for execution.
-"""
+"""This node provides a joint trajectory action server that forwards the trajectory to Rock for execution."""
 
 import sys
 import rospy
@@ -80,7 +78,6 @@ class JointTrajectoryForwarder(object):
 
         :param goal: The goal to be executed.
         """
-
         rospy.loginfo('%s: Received new goal with %d points', rospy.get_name(), len(goal.trajectory.points))
 
         # start executing the action

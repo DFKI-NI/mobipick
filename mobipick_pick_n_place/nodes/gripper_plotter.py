@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-This node plots the gripper joint angle vs. the opening gap.
-"""
+"""This node plots the gripper joint angle vs. the opening gap."""
 
 from collections import defaultdict
 from math import sin, asin
@@ -34,6 +32,8 @@ def calc_angle(opening_gap):
 
 def cb(msg):
     """
+    Sort incoming gripper joint state into buckets.
+
     @type msg: JointState
     """
     try:
