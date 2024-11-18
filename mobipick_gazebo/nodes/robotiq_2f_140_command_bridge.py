@@ -56,7 +56,7 @@ class GripperBridgeAction(object):
     def execute_cb(self, goal):
         # helper variables
         rospy.loginfo(
-            "Recieved gripper command with position=%.3f and effort=%.3f"
+            "Received gripper command with position=%.3f and effort=%.3f"
             % (goal.command.position, goal.command.max_effort)
         )
         r = rospy.Rate(10)
@@ -64,39 +64,65 @@ class GripperBridgeAction(object):
         self.set_jt_goal(-0.76 / 0.14 * goal.command.position + 0.76, goal.command.max_effort)
         self._jt_client.send_goal(self._actual_goal)
 
-        # start executing the action
-        while not self._jt_client.get_state() == actionlib.SimpleGoalState.ACTIVE:
-            # check that preempt has not been requested by the client
+        # Start executing the action
+        while not rospy.is_shutdown():
+            # Check if the action client has finished
+            state = self._jt_client.get_state()
+            if state in [
+                actionlib.GoalStatus.SUCCEEDED,
+                actionlib.GoalStatus.ABORTED,
+                actionlib.GoalStatus.PREEMPTED,
+                actionlib.GoalStatus.REJECTED,
+            ]:
+                break  # Stop if client reports the goal is already done
+
             if self._as.is_preempt_requested():
                 rospy.loginfo('%s: Preempted' % self._action_name)
-                self._as.set_preempted()
-                success = False
+                self._jt_client.cancel_goal()  # Cancel the goal on the action client
+                self._as.set_preempted()  # Set the action server to preempted
                 self._feedback.stalled = True
+                return  # Exit the execute_cb method
+
+            # Update feedback
             self._feedback.reached_goal = False
-            self._feedback.position = 0.14 - 0.14 / 0.76 * self._joint_state.actual.positions[0]
-            # publish the feedback
+            if hasattr(self, '_joint_state') and self._joint_state.actual.positions:
+                self._feedback.position = 0.14 - 0.14 / 0.76 * self._joint_state.actual.positions[0]
+            else:
+                self._feedback.position = 0.0  # Default value if joint state is unavailable
+
+            # Publish the feedback
             self._as.publish_feedback(self._feedback)
-            # this step is not necessary, the sequence is computed at 1 Hz for demonstration purposes
             r.sleep()
 
-        self._jt_client.wait_for_result()
+        # result handling
         result = self._jt_client.get_result()
-        if not result.error_code == 0:
+
+        if result is None:
+            rospy.logerr('%s: No result returned from action client', self._action_name)
+            self._result.reached_goal = False
+            self._as.set_aborted(self._result)
+            return
+
+        if result.error_code != 0:
             success = False
-        self._result.position = 0.14 - 0.14 / 0.76 * self._joint_state.actual.positions[0]
+
+        if hasattr(self, '_joint_state') and self._joint_state.actual.positions:
+            self._result.position = 0.14 - 0.14 / 0.76 * self._joint_state.actual.positions[0]
+        else:
+            self._result.position = 0.0  # Default value if joint state is unavailable
+
         if success:
             self._result.reached_goal = True
             rospy.loginfo('%s: Succeeded', self._action_name)
+            self._as.set_succeeded(self._result)
         elif result.error_code == control_msgs.msg.FollowJointTrajectoryResult.GOAL_TOLERANCE_VIOLATED:
             self._result.reached_goal = False
-            success = True
             rospy.loginfo('%s: Gripper stalled (this is okay when grasping an object)', self._action_name)
-        else:
-            self._result.reached_goal = False
-            rospy.logerr('%s: Failed with error code %s', self._action_name, error_code_to_string(result.error_code))
-        if success:
             self._as.set_succeeded(self._result)
         else:
+            self._result.reached_goal = False
+            error_msg = error_code_to_string(result.error_code)
+            rospy.logerr('%s: Failed with error code %s', self._action_name, error_msg)
             self._as.set_aborted(self._result)
 
 
