@@ -73,6 +73,7 @@ class GripperBridgeAction(object):
                 actionlib.GoalStatus.ABORTED,
                 actionlib.GoalStatus.PREEMPTED,
                 actionlib.GoalStatus.REJECTED,
+                actionlib.GoalStatus.RECALLED,
             ]:
                 break  # Stop if client reports the goal is already done
 
