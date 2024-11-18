@@ -95,6 +95,8 @@ class GripperBridgeAction(object):
             self._as.publish_feedback(self._feedback)
             r.sleep()
 
+        self._jt_client.wait_for_result()
+
         # result handling
         result = self._jt_client.get_result()
 
