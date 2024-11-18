@@ -4,7 +4,7 @@
 arm_group_name: arm
 
 # the name of the moveit gripper group
-hand_group_name: gripper
+gripper_group_name: gripper
 
 # how accurate you want a cartesian pose to be achieved
 # if set too low IK is likely to fail, if set too high arm will not reach accurately
