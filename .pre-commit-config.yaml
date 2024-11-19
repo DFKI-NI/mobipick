@@ -15,12 +15,14 @@
 repos:
   # Standard hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-added-large-files
+      - id: check-ast
+      - id: check-builtin-literals
       - id: check-case-conflict
-      - id: check-executables-have-shebangs
       - id: check-docstring-first
+      - id: check-executables-have-shebangs
       - id: check-merge-conflict
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
@@ -41,6 +43,7 @@ repos:
               .*\.stl
           )$
       - id: fix-byte-order-marker
+      - id: forbid-submodules
       - id: mixed-line-ending
         exclude: *excludes
       - id: trailing-whitespace
