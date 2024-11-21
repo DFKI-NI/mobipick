@@ -8,4 +8,4 @@ moveit_setup_assistant_config:
   CONFIG:
     author_name: Martin Günther
     author_email: martin.guenther@dfki.de
-    generated_timestamp: 1670507055
+    generated_timestamp: 1732202003
