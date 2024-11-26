@@ -1,0 +1,7 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="mustard_bottle_model">
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/mustard_bottle.urdf.xacro" />
+
+  <gazebo>
+    <static>true</static>
+  </gazebo>
+</robot>

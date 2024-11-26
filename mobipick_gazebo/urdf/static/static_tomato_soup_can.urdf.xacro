@@ -1,0 +1,7 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="tomato_soup_can_model">
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/tomato_soup_can.urdf.xacro" />
+
+  <gazebo>
+    <static>true</static>
+  </gazebo>
+</robot>

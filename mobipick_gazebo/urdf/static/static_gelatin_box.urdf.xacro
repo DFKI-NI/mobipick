@@ -1,0 +1,7 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="gelatin_box_model">
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/gelatin_box.urdf.xacro" />
+
+  <gazebo>
+    <static>true</static>
+  </gazebo>
+</robot>
