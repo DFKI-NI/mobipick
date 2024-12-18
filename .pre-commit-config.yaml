@@ -32,22 +32,10 @@ repos:
         exclude: mobipick_description/config/joint_limits.yaml
       - id: debug-statements
       - id: end-of-file-fixer
-        exclude: &excludes |
-          (?x)^(
-              .*\.blend|
-              .*\.dae|
-              .*\.mtl|
-              .*\.obj|
-              .*\.pgm|
-              .*\.step|
-              .*\.stl
-          )$
       - id: fix-byte-order-marker
       - id: forbid-submodules
       - id: mixed-line-ending
-        exclude: *excludes
       - id: trailing-whitespace
-        exclude: *excludes
 
   - repo: https://github.com/psf/black
     rev: 24.3.0
