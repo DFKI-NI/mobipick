@@ -35,9 +35,13 @@
   <node name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param small_table_description -model table_3 -x 21.165 -y 13.84 -Y 0.0"
         respawn="false" output="screen" />
-  <node name="spawn_model_storage_table_4" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param small_table_description -model table_4 -x 18.30 -y 13.84 -Y 0.0"
+  <node name="spawn_model_table_4" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param small_table_description -model table_4 -x 22.70 -y 15.04 -Y 0.0"
         respawn="false" output="screen" />
+  <node name="spawn_model_storage_table" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param small_table_description -model storage_table -x 18.30 -y 13.84 -Y 0.0"
+        respawn="false" output="screen" />
+
 
   <!-- table 2 objects -->
   <node name="klt_1" pkg="gazebo_ros" type="spawn_model"
@@ -67,6 +71,20 @@
         args="-urdf -param dark_green_part_description -model dark_green_part_1 -x 21.365 -y 13.96 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
 
+  <!-- table 4 objects -->
+  <node name="klt_5" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param klt_description -model klt_5 -x 22.57 -y 15.24 -z 0.8 -Y 0.0"
+        respawn="false" output="screen" />
+  <node name="klt_6" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param klt_description -model klt_6 -x 22.57 -y 14.84 -z 0.8 -Y 0.0"
+        respawn="false" output="screen" />
+  <node name="purple_part_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param purple_part_description -model purple_part_1 -x 22.57 -y 15.24 -z 0.75 -Y 0.0"
+        respawn="false" output="screen" />
+  <node name="magenta_part_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param magenta_part_description -model magenta_part_1 -x 22.57 -y 14.84 -z 0.75 -Y 0.0"
+        respawn="false" output="screen" />
+
   <!-- insect parts on storage table -->
   <node name="bright_green_part_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param bright_green_part_description -model bright_green_part_2 -x 18.45 -y 14.0 -z 0.75 -Y 1.5708"
@@ -77,11 +95,11 @@
   <!--<node name="yellow_part_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param yellow_part_description -model yellow_part_2 -x 18.30 -y 13.7 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" /> -->
-  <node name="purple_part_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param purple_part_description -model purple_part_1 -x 18.30 -y 14.0 -z 0.75 -Y 1.5708"
+  <node name="purple_part_2" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param purple_part_description -model purple_part_2 -x 18.30 -y 14.0 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
-  <node name="magenta_part_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param magenta_part_description -model magenta_part_1 -x 18.15 -y 14.0 -z 0.75 -Y 1.5708"
+  <node name="magenta_part_2" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param magenta_part_description -model magenta_part_2 -x 18.15 -y 14.0 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
 
 </launch>
