@@ -86,20 +86,20 @@
         respawn="false" output="screen" />
 
   <!-- insect parts on storage table -->
-  <node name="bright_green_part_2" pkg="gazebo_ros" type="spawn_model"
+  <!-- <node name="bright_green_part_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param bright_green_part_description -model bright_green_part_2 -x 18.45 -y 14.0 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
   <node name="red_part_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param red_part_description -model red_part_2 -x 18.45 -y 13.7 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
-  <!--<node name="yellow_part_2" pkg="gazebo_ros" type="spawn_model"
+  <node name="yellow_part_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param yellow_part_description -model yellow_part_2 -x 18.30 -y 13.7 -z 0.75 -Y 1.5708"
-        respawn="false" output="screen" /> -->
+        respawn="false" output="screen" />
   <node name="purple_part_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param purple_part_description -model purple_part_2 -x 18.30 -y 14.0 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
   <node name="magenta_part_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param magenta_part_description -model magenta_part_2 -x 18.15 -y 14.0 -z 0.75 -Y 1.5708"
-        respawn="false" output="screen" />
+        respawn="false" output="screen" /> -->
 
 </launch>
