@@ -24,6 +24,10 @@
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/insect_hotel/bright_green_part.urdf.xacro'" />
   <param name="dark_green_part_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/insect_hotel/dark_green_part.urdf.xacro'" />
+  <param name="black_part_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/insect_hotel/black_part.urdf.xacro'" />
+  <param name="orange_part_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/insect_hotel/orange_part.urdf.xacro'" />
 
   <!-- spawn 1 table, 3 small tables -->
   <node name="spawn_model_worker_table_1" pkg="gazebo_ros" type="spawn_model"
@@ -56,6 +60,9 @@
   <node name="red_part_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param red_part_description -model red_part_1 -x 19.96 -y 13.17 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
+  <node name="black_part_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param black_part_description -model black_part_1 -x 20.215 -y 13.17 -z 0.75 -Y 1.5708"
+        respawn="false" output="screen" />
   <node name="yellow_part_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param yellow_part_description -model yellow_part_1 -x 20.455 -y 13.17 -z 0.75 -Y 1.5708"
         respawn="false" output="screen" />
@@ -86,6 +93,9 @@
         respawn="false" output="screen" />
   <node name="purple_part_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param purple_part_description -model purple_part_1 -x 23.6 -y 14.80 -z 0.75 -Y 0.0"
+        respawn="false" output="screen" />
+  <node name="orange_part_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param orange_part_description -model orange_part_1 -x 23.6 -y 15.06 -z 0.75 -Y 0.0"
         respawn="false" output="screen" />
   <node name="magenta_part_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param magenta_part_description -model magenta_part_1 -x 23.6 -y 15.28 -z 0.75 -Y 0.0"
