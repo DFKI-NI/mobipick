@@ -59,3 +59,5 @@ list_of_disentangle_objects:
     - 'power_drill_with_grip'
     - 'hot_glue_gun'
     - 'screwdriver'
+    - 'bleach'
+    - 'mustard'

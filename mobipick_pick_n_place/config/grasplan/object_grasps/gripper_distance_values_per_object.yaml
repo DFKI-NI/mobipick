@@ -8,8 +8,8 @@ distance_gripper_close_per_obj:
     relay: 0.04
     power_drill_with_grip: 0.03
     hot_glue_gun: 0.025
-    mustard: 0.05
-    bleach: 0.05
+    mustard: 0.048
+    bleach: 0.045
     soup: 0.055
     meat: 0.04
 
