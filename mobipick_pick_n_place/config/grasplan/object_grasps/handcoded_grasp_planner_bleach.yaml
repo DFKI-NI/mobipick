@@ -1,0 +1,31 @@
+# this file was generated automatically by grasplan grasp editor
+bleach:
+  grasp_poses:
+    # grasp poses from top
+    -
+      translation: [-0.008685, -0.083773, 0.000157]
+      rotation: [0.500000, 0.500000, -0.500000, -0.500000]
+    -
+      translation: [-0.008685, -0.083773, 0.000157]
+      rotation: [0.500000, 0.500000, 0.500000, 0.500000]
+    # grasp poses from top angled
+    -
+      translation: [-0.023979, -0.059556, 0.000157]
+      rotation: [0.653183, 0.270557, 0.270557, 0.653183]
+    -
+      translation: [0.010444, -0.046021, 0.000157]
+      rotation: [0.270557, 0.653183, -0.653183, -0.270557]
+
+    # grasp poses around the object from side
+    # -
+    #   translation: [-0.002500, -0.000157, 0.000157]
+    #   rotation: [0.707000, 0.000000, 0.000000, 0.707000]
+    # -
+    #   translation: [-0.002500, -0.000157, 0.000157]
+    #   rotation: [0.000000, 0.707000, -0.707000, 0.000000]
+    # -
+    #   translation: [-0.002500, -0.025157, 0.000157]
+    #   rotation: [0.707000, 0.000000, 0.000000, 0.707000]
+    # -
+    #   translation: [-0.002500, -0.025157, 0.000157]
+    #   rotation: [0.000000, 0.707000, -0.707000, 0.000000]

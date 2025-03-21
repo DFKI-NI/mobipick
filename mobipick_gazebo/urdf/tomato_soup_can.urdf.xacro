@@ -1,0 +1,43 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="tomato_soup_can_model">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="mass" value="0.01" /><!-- TODO Measure mass -->
+  <xacro:property name="radius" value="0.034" />
+  <xacro:property name="height" value="0.10186" />
+
+  <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertia  ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0"
+              iyy="${m*(3*r*r+h*h)/12}" iyz = "0"
+              izz="${m*r*r/2}"
+     />
+  </xacro:macro>
+
+  <link name="tomato_soup_can">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="${mass}" />
+      <xacro:cylinder_inertia m="${mass}" r="${radius}" h="${height}" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://pbr_objects/meshes/005_tomato_soup_can/005_tomato_soup_can.obj" scale="1 1 1" />
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <geometry>
+         <cylinder radius="${radius}" length="${height}" />
+        <!--<mesh filename="package://pbr_objects/meshes/005_tomato_soup_can/005_tomato_soup_can.stl" />-->
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="tomato_soup_can">
+    <mu1>5.0</mu1> <!-- high friction -->
+    <mu2>5.0</mu2>
+    <kp>1e+06</kp> <!-- high stiffness -->
+    <kd>1.0</kd> <!-- normal damping -->
+  </gazebo>
+
+</robot>
