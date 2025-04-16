@@ -34,6 +34,7 @@ install(PROGRAMS
   nodes/initialize_gripper.sh
   nodes/normalize_image
   nodes/reset_arm.py
+  nodes/reset_moveit.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
