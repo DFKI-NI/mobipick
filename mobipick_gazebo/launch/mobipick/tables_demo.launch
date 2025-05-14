@@ -7,6 +7,7 @@
 
   <arg name="world" default="pbr_moelk" doc="options: pbr_moelk, pbr_cic" />
   <arg name="world_config" default="moelk_tables" doc="objects arrangement, options: moelk_tables, cic_tables, truck_assembly" />
+  <arg name="spawn_objects_launch_file" default="$(find mobipick_gazebo)/launch/worlds/$(arg world_config)_spawn_sim_objects.launch" />
 
   <arg name="gui" default="true" />
   <arg name="start_paused" default="true" />
@@ -34,6 +35,5 @@
   </include>
 
   <!-- spawn objects in the simulated world -->
-  <include file="$(find mobipick_gazebo)/launch/worlds/$(arg world_config)_spawn_sim_objects.launch"/>
-
+  <include file="$(arg spawn_objects_launch_file)"/>
 </launch>
