@@ -3,14 +3,16 @@
 
   <!-- upload urdf models to param server -->
   <param name="long_table_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'" />
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'
+         with_barrier:=false" />
   <param name="small_table_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'
          width:=0.8
          depth:=0.8
          height:=0.72
          leg_radius:=0.02
-         leg_offset:=0.0" />
+         leg_offset:=0.0
+         with_barrier:=false" />
   <param name="power_drill_with_grip_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/power_drill_with_grip.urdf.xacro'" />
   <param name="klt_description"

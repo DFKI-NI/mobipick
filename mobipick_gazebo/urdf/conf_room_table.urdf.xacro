@@ -10,6 +10,7 @@
   <xacro:arg name="x"                   default="0.0" />
   <xacro:arg name="y"                   default="0.0" />
   <xacro:arg name="z"                   default="0.0" />
+  <xacro:arg name="with_barrier"        default="true" />
   <xacro:property name="width"               value="$(arg width)" />
   <xacro:property name="depth"               value="$(arg depth)" />
   <xacro:property name="height"              value="$(arg height)" />
@@ -19,6 +20,7 @@
   <xacro:property name="x"                   value="$(arg x)" />
   <xacro:property name="y"                   value="$(arg y)" />
   <xacro:property name="z"                   value="$(arg z)" />
+  <xacro:property name="with_barrier"        value="$(arg with_barrier)" />
 
   <xacro:property name="barrier_width"       value="${width}" />
   <xacro:property name="barrier_depth"       value="0.01" />
@@ -30,30 +32,31 @@
   <xacro:include filename="$(find mobipick_gazebo)/urdf/include/table.urdf.xacro" />
   <xacro:table height="${height}" width="${width}" depth="${depth}" leg_radius="${leg_radius}" leg_offset="${leg_offset}" table_top_thickness="${table_top_thickness}" x="${x}" y="${y}" z="${z}" />
 
-
-  <joint name="barrier_joint" type="fixed" >
-    <parent link="table_top_link" />
-    <origin xyz="${barrier_x} ${barrier_y} ${barrier_z}" rpy="0 0 0" />
-    <child link="barrier_link" />
-  </joint>
-  <link name="barrier_link">
-    <xacro:box_inertial x="${barrier_width}" y="${barrier_depth}" z="${barrier_height}" mass="0.2">
-      <origin xyz="0 0 0" />
-    </xacro:box_inertial>
-    <visual>
-      <origin xyz="0 0 0" />
-      <geometry>
-        <box size="${barrier_width} ${barrier_depth} ${barrier_height}" />
-      </geometry>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" />
-      <geometry>
-        <box size="${barrier_width} ${barrier_depth} ${barrier_height}" />
-      </geometry>
-    </collision>
-  </link>
-  <gazebo reference="barrier_link">
-    <material>Gazebo/Black</material>
-  </gazebo>
+  <xacro:if value="${with_barrier}">
+    <joint name="barrier_joint" type="fixed" >
+      <parent link="table_top_link" />
+      <origin xyz="${barrier_x} ${barrier_y} ${barrier_z}" rpy="0 0 0" />
+      <child link="barrier_link" />
+    </joint>
+    <link name="barrier_link">
+      <xacro:box_inertial x="${barrier_width}" y="${barrier_depth}" z="${barrier_height}" mass="0.2">
+        <origin xyz="0 0 0" />
+      </xacro:box_inertial>
+      <visual>
+        <origin xyz="0 0 0" />
+        <geometry>
+          <box size="${barrier_width} ${barrier_depth} ${barrier_height}" />
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" />
+        <geometry>
+          <box size="${barrier_width} ${barrier_depth} ${barrier_height}" />
+        </geometry>
+      </collision>
+    </link>
+    <gazebo reference="barrier_link">
+      <material>Gazebo/Black</material>
+    </gazebo>
+  </xacro:if>
 </robot>
