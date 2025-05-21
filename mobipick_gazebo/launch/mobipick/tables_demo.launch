@@ -6,8 +6,6 @@
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
   <arg name="world" default="pbr_moelk" doc="options: pbr_moelk, pbr_cic" />
-  <arg name="world_config" default="moelk_tables" doc="objects arrangement, options: moelk_tables, cic_tables, truck_assembly" />
-  <arg name="spawn_objects_launch_file" default="$(find mobipick_gazebo)/launch/worlds/$(arg world_config)_spawn_sim_objects.launch" />
 
   <arg name="gui" default="true" />
   <arg name="start_paused" default="true" />
@@ -15,10 +13,11 @@
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
 
   <!-- the pose where to spawn the robot in simulation -->
-  <arg name="robot_x"   default="10.50" />
-  <arg name="robot_y"   default="2.30" />
+  <arg name="robot_x"   default="10.30" />
+  <arg name="robot_y"   default="2.40" />
   <arg name="robot_yaw" default="3.1415" />
 
+  <!-- start Gazebo with specified world and spawn Mobipick -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="robot" value="$(arg robot)" />
     <arg name="namespace" value="$(arg namespace)" />
@@ -33,7 +32,4 @@
     <arg name="robot_yaw" value="$(arg robot_yaw)" />
     <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
-
-  <!-- spawn objects in the simulated world -->
-  <include file="$(arg spawn_objects_launch_file)"/>
 </launch>

@@ -1,5 +1,28 @@
 <?xml version="1.0"?>
 <launch>
+  <!-- There is no need to ever override the args "world", "robot_x", "robot_y", "robot_yaw", because they have to match the positions of the tables and objects. -->
+  <arg name="world" default="pbr_moelk" doc="options: pbr_moelk, pbr_cic" />
+
+  <!-- the pose where to spawn the robot in simulation -->
+  <arg name="robot_x"   default="10.30" />
+  <arg name="robot_y"   default="2.40" />
+  <arg name="robot_yaw" default="3.1415" />
+
+  <!-- controls the simulation speed -->
+  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
+
+  <!-- if true, gzclient is started -->
+  <arg name="gui" default="true" />
+
+  <!-- start Gazebo with specified world and spawn Mobipick -->
+  <include file="$(find mobipick_gazebo)/launch/mobipick/tables_demo.launch" >
+    <arg name="robot_x"      value="$(arg robot_x)" />
+    <arg name="robot_y"      value="$(arg robot_y)" />
+    <arg name="robot_yaw"    value="$(arg robot_yaw)" />
+    <arg name="world"        value="$(arg world)" />
+    <arg name="physics_profile" value="$(arg physics_profile)" />
+    <arg name="gui" value="$(arg gui)" />
+  </include>
 
   <!-- upload urdf models to param server -->
   <param name="table_description"
