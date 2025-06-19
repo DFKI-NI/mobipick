@@ -140,7 +140,6 @@
   <xacro:if value="${main_camera == 'intel_d435'}">
     <xacro:include filename="$(find mobipick_description)/urdf/sensors/d435_cam.urdf.xacro" />
   </xacro:if>
-  <xacro:include filename="$(find mobipick_description)/urdf/sensors/pico_cam.urdf.xacro" />
 
   <joint name="${prefix}sensor_mount_joint" type="fixed">
     <origin xyz="0.0 0.0 -0.005" rpy="0.0 ${-pi/2} 0.0" />
@@ -159,8 +158,6 @@
   <xacro:if value="${main_camera == 'intel_d435'}">
     <xacro:intel_d435_cam prefix="${prefix}" />
   </xacro:if>
-
-  <xacro:pico_cam prefix="${prefix}" />
 
   <!-- ############### DUAL XTION MOUNT + XTIONS ################ -->
   <xacro:if value="${robot == 'mobipick-hb'}">

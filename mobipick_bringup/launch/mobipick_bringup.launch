@@ -99,13 +99,6 @@
       </include>
     </group>
 
-    <!-- Pico Flexx gripper camera -->
-    <include file="$(find pico_flexx_driver)/launch/pico_flexx_driver.launch">
-      <arg name="base_name" value="eef_forward_cam" />
-      <arg name="max_noise" value="0.015" />
-    </include>
-
-
     <!-- start moveit -->
     <include file="$(find mobipick_moveit_config)/launch/move_group.launch">
       <arg name="robot_version" value="$(arg robot_version)" />

@@ -235,19 +235,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/eef_forward_cam_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          mobipick/eef_forward_cam_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mobipick/eef_forward_cam_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           mobipick/gripper_right_inner_finger:
             Alpha: 1
             Show Axes: false
@@ -310,11 +297,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           mobipick/sensor_mount_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mobipick/sensor_mount_pico_holder_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -642,19 +624,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/eef_forward_cam_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          mobipick/eef_forward_cam_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mobipick/eef_forward_cam_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           mobipick/gripper_right_inner_finger:
             Alpha: 1
             Show Axes: false
@@ -717,11 +686,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           mobipick/sensor_mount_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mobipick/sensor_mount_pico_holder_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false
@@ -984,12 +948,6 @@ Visualization Manager:
           Value: false
         mobipick/gripper_left_robotiq_fingertip_65mm:
           Value: false
-        mobipick/eef_forward_cam_frame:
-          Value: false
-        mobipick/eef_forward_cam_link:
-          Value: false
-        mobipick/eef_forward_cam_optical_frame:
-          Value: false
         mobipick/gripper_right_inner_finger:
           Value: false
         mobipick/gripper_right_inner_knuckle:
@@ -1019,8 +977,6 @@ Visualization Manager:
         mobipick/sensor_mount_bracket_link:
           Value: false
         mobipick/sensor_mount_link:
-          Value: false
-        mobipick/sensor_mount_pico_holder_link:
           Value: false
         mobipick/structure_cover_back_link:
           Value: false
@@ -1177,11 +1133,6 @@ Visualization Manager:
                                                             {}
                                                     mobipick/sensor_mount_bracket_link:
                                                       {}
-                                                    mobipick/sensor_mount_pico_holder_link:
-                                                      mobipick/eef_forward_cam_link:
-                                                        mobipick/eef_forward_cam_frame:
-                                                          mobipick/eef_forward_cam_optical_frame:
-                                                            {}
               mobipick/us_1_frame:
                 {}
               mobipick/us_2_frame:
@@ -1374,19 +1325,6 @@ Visualization Manager:
             Show Axes: false
             Show Trail: false
             Value: true
-          mobipick/eef_forward_cam_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-          mobipick/eef_forward_cam_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mobipick/eef_forward_cam_optical_frame:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
           mobipick/gripper_right_inner_finger:
             Alpha: 1
             Show Axes: false
@@ -1449,11 +1387,6 @@ Visualization Manager:
             Show Trail: false
             Value: true
           mobipick/sensor_mount_link:
-            Alpha: 1
-            Show Axes: false
-            Show Trail: false
-            Value: true
-          mobipick/sensor_mount_pico_holder_link:
             Alpha: 1
             Show Axes: false
             Show Trail: false

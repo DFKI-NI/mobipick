@@ -42,4 +42,4 @@ install(PROGRAMS
 ## Testing ##
 #############
 
-#roslaunch_add_file_check(launch)   # disabled because of dependency on pico_flexx_driver
+#roslaunch_add_file_check(launch)   # disabled because it fails in CI: cannot resolve host address for machine [mobipick-os-control]

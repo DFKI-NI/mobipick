@@ -6,8 +6,8 @@ repository as described below, you should have the following capabilities set
 up:
 
 - Connection to the MIR base, allowing you to drive around using `move_base`
-- Drivers for the UR5, the gripper, the force torque sensor, the Astra camera
-  and the pico flexx camera on the gripper are running
+- Drivers for the UR5, the gripper, the force torque sensor and the Astra
+  camera are running
 - A `move_group` is running and configured correctly. You should be able to
   plan and execute trajectories through rviz motion planning plugin.
 

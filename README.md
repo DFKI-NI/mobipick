@@ -36,12 +36,6 @@ mobipick/install-deps.sh
 mobipick/build.sh
 ```
 
-If you have a physical pico flexx camera attached to this PC, also follow the
-installation instructions of the
-[pico_flexx_driver](https://github.com/code-iai/pico_flexx_driver). These
-cannot be integrated into the instructions above because they require a manual
-download step.
-
 You can also optionally install the dependencies in
 dependencies-optional.rosinstall; simply uncomment the relevant line in
 `install-deps.sh` before running it.
