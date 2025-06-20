@@ -8,10 +8,10 @@
 
   <arg name="object_source" default="gazebo" doc="Where to get objects from. Possible values: 'gazebo' (for gazebo) or 'static' (for moveit demo mode)." />
   <arg name="simulation" default="false" />
-  <arg name="world_config" default="moelk" />
+  <arg name="world_config" default="moelk_single_table" doc="objects arrangement, options: moelk_single_table, moelk_tables, cic_tables, smart_factory" />
 
   <group ns="$(arg namespace)">
-    <rosparam file="$(find mobipick_pick_n_place)/config/$(arg world_config).yaml" command="load"/>
+    <rosparam file="$(find mobipick_pick_n_place)/config/$(arg world_config)_demo.yaml" command="load"/>
     <node name="mobipick_pick_n_place" pkg="mobipick_pick_n_place" type="mobipick_pick_n_place" output="screen">
       <param name="tf_prefix"  value="$(arg prefix)" />
       <rosparam command="load" file="$(find mobipick_moveit_config)/config/kinematics.yaml" subst_value="true"/>

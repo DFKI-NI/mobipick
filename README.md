@@ -162,7 +162,7 @@ rosservice call /gazebo/unpause_physics
 roslaunch mir_gazebo fake_localization.launch __ns:="mobipick" odom_frame_id:="mobipick/odom" base_frame_id:="mobipick/base_footprint" delta_yaw:=1.57 delta_x:=-11.77 delta_y:=-19.74
 roslaunch mir_navigation start_planner.launch map_file:=$(rospack find mobipick_gazebo)/maps/smart_factory.yaml prefix:="mobipick/" with_virtual_walls:=true virtual_walls_map_file:=$(rospack find mobipick_gazebo)/maps/smart_factory_objects.yaml
 roslaunch mobipick_moveit_config moveit_planning_execution.launch
-rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick" world:="smart_factory"
+rviz -d $(rospack find mir_navigation)/rviz/navigation.rviz __ns:="mobipick"
 roslaunch mobipick_pick_n_place mobipick_pick_n_place.launch simulation:=true world_config:="smart_factory"
 rosservice call /mobipick/continue_statemachine
 ```
