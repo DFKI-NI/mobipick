@@ -20,7 +20,7 @@ wstool update
 sudo apt-get install -qq -y libuvc-dev                                    # for astra_camera
 sudo apt-get install -qq -y python3-rosdep
 sudo rosdep init > /dev/null 2>&1 || true
-rosdep update
+rosdep update --include-eol-distros
 rosdep install --from-paths ./ -i -y --rosdistro ${ROS_DISTRO} --skip-keys=libuvc
 sudo apt-get install -qq -y python3-catkin-tools build-essential
 sudo apt-get install -qq -y ccache
