@@ -8,7 +8,7 @@ files, MoveIt config, bringup launch files) for the Mobipick
 robot (MiR 100 base, UR5 arm, Robotiq 2 Finger Gripper + Force-Torque Sensor,
 Orbbec Astra Mini S 3D camera).
 
-![](doc/img/mobipick_v0.jpg)
+![The Mobipick robot at the Hannover Messe](doc/img/mobipick_v0.jpg)
 
 
 Package overview
