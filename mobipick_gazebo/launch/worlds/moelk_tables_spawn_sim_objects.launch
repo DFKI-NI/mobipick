@@ -5,20 +5,8 @@
   <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
 
-  <!-- There is no need to ever override the args "world", "robot_x", "robot_y", "robot_yaw", because they have to match the positions of the tables and objects. -->
-  <arg name="world" default="pbr_moelk" doc="options: pbr_moelk, pbr_cic" />
-
-  <!-- the pose where to spawn the robot in simulation -->
-  <arg name="robot_x"   default="10.30" />
-  <arg name="robot_y"   default="2.40" />
-  <arg name="robot_yaw" default="3.1415" />
-
-  <!-- controls the simulation speed -->
   <arg name="physics_profile" default="fast" doc="options: slow, fast" />
-
-  <!-- if true, gzclient is started -->
   <arg name="gui" default="true" />
-
   <arg name="start_paused" default="true" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
 
@@ -31,10 +19,10 @@
     <arg name="start_paused"    value="$(arg start_paused)" />
     <arg name="gui"             value="$(arg gui)" />
     <arg name="arm_controller"  value="$(arg arm_controller)" />
-    <arg name="world_name"      value="$(find pbr_gazebo)/worlds/$(arg world).sdf"/>
-    <arg name="robot_x"         value="$(arg robot_x)" />
-    <arg name="robot_y"         value="$(arg robot_y)" />
-    <arg name="robot_yaw"       value="$(arg robot_yaw)" />
+    <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk.sdf"/>
+    <arg name="robot_x"         value="10.30" />
+    <arg name="robot_y"         value="2.40" />
+    <arg name="robot_yaw"       value="3.1415" />
     <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
 
