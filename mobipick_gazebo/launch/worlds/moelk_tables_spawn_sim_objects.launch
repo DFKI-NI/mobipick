@@ -1,5 +1,10 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="namespace" default="mobipick"    doc="Namespace to push all topics into"/>
+  <arg name="robot"     default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
+  <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
+
   <!-- There is no need to ever override the args "world", "robot_x", "robot_y", "robot_yaw", because they have to match the positions of the tables and objects. -->
   <arg name="world" default="pbr_moelk" doc="options: pbr_moelk, pbr_cic" />
 
@@ -14,14 +19,23 @@
   <!-- if true, gzclient is started -->
   <arg name="gui" default="true" />
 
+  <arg name="start_paused" default="true" />
+  <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
+
   <!-- start Gazebo with specified world and spawn Mobipick -->
-  <include file="$(find mobipick_gazebo)/launch/mobipick/tables_demo.launch" >
-    <arg name="robot_x"      value="$(arg robot_x)" />
-    <arg name="robot_y"      value="$(arg robot_y)" />
-    <arg name="robot_yaw"    value="$(arg robot_yaw)" />
-    <arg name="world"        value="$(arg world)" />
+  <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
+    <arg name="robot"           value="$(arg robot)" />
+    <arg name="namespace"       value="$(arg namespace)" />
+    <arg name="tf_prefix"       value="$(arg tf_prefix)" />
+    <arg name="robot_name"      value="$(arg robot_name)" />
+    <arg name="start_paused"    value="$(arg start_paused)" />
+    <arg name="gui"             value="$(arg gui)" />
+    <arg name="arm_controller"  value="$(arg arm_controller)" />
+    <arg name="world_name"      value="$(find pbr_gazebo)/worlds/$(arg world).sdf"/>
+    <arg name="robot_x"         value="$(arg robot_x)" />
+    <arg name="robot_y"         value="$(arg robot_y)" />
+    <arg name="robot_yaw"       value="$(arg robot_yaw)" />
     <arg name="physics_profile" value="$(arg physics_profile)" />
-    <arg name="gui" value="$(arg gui)" />
   </include>
 
   <!-- upload urdf models to param server -->
