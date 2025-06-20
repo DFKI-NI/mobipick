@@ -8,6 +8,12 @@
   <arg name="robot_y"   default="15.20" />
   <arg name="robot_yaw" default="0.0" />
 
+  <!-- controls the simulation speed -->
+  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
+
+  <!-- if true, gzclient is started -->
+  <arg name="gui" default="true" />
+
   <!-- start Gazebo with specified world and spawn Mobipick -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/tables_demo.launch" >
     <arg name="robot_x"      value="$(arg robot_x)" />
@@ -17,12 +23,6 @@
     <arg name="physics_profile" value="$(arg physics_profile)" />
     <arg name="gui" value="$(arg gui)" />
   </include>
-
-  <!-- controls the simulation speed -->
-  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
-
-  <!-- if true, gzclient is started -->
-  <arg name="gui" default="true" />
 
   <!-- upload urdf models to param server -->
   <param name="table_description"
