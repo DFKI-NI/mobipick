@@ -17,12 +17,13 @@
 
   <exec_depend>astra_camera</exec_depend>
   <exec_depend>astra_depth_filters</exec_depend>
-  <exec_depend>cv_bridge</exec_depend>  <!-- for normalize_image node -->
+  <exec_depend>cv_bridge</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>mir_driver</exec_depend>
   <exec_depend>mobipick_description</exec_depend>
   <exec_depend>mobipick_moveit_config</exec_depend>
   <exec_depend>mobipick_pick_n_place</exec_depend>
+  <exec_depend>moveit_commander</exec_depend>
   <exec_depend>nodelet</exec_depend>
   <exec_depend>pcl_ros</exec_depend>
   <exec_depend>pose_teacher</exec_depend>
@@ -31,10 +32,11 @@
   <exec_depend>robotiq_2f_gripper_action_server</exec_depend>
   <exec_depend>robotiq_2f_gripper_control</exec_depend>
   <exec_depend>robotiq_ft_sensor</exec_depend>
-  <exec_depend>rospy</exec_depend>  <!-- for normalize_image node -->
-  <exec_depend>sensor_msgs</exec_depend>  <!-- for normalize_image node -->
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>std_srvs</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>ur_dashboard_msgs</exec_depend>
   <exec_depend>ur_robot_driver</exec_depend>
   <exec_depend>xacro</exec_depend>
 </package>
