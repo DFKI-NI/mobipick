@@ -55,7 +55,7 @@ class ForceTorqueObserver(object):
             if self._actual_force > goal.threshold:
                 success = True
                 wait_for_detection = False
-                self._feedback.actualForce = self._actual_force
+                self._feedback.actual_force = self._actual_force
             rospy.loginfo("actual force: %f" % self._actual_force)
 
             # check that preempt has not been requested by the client

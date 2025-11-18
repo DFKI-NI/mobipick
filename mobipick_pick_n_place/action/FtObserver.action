@@ -7,4 +7,4 @@ geometry_msgs/Quaternion direction
 bool catched
 ---
 #feedback
-float32 actualForce
+float32 actual_force
