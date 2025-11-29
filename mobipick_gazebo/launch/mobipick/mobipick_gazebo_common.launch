@@ -91,6 +91,9 @@
 
   <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" />
 
+  <!-- e-stop simulation gui -->
+  <node name="simulated_ur_dashboard" pkg="mobipick_gazebo" type="simulated_ur_dashboard.py"/>
+
   <!-- create combined scan topic -->
   <node pkg="topic_tools" type="relay" name="b_scan_relay" args="b_scan scan"/>
   <node pkg="topic_tools" type="relay" name="f_scan_relay" args="f_scan scan"/>
