@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="image_input_topic" default="/mobipick/eef_main_cam/rgb/image_raw" />
+  <arg name="perception_active_topic" default="/pick_pose_selector_node/perception_active" />
+  <arg name="image_output_topic" default="/mobipick/dope/rgb_points" />
+
+  <node pkg="mobipick_gazebo" type="simulated_dope_image_relay.py"
+        name="simulated_dope_image_relay" output="screen">
+    <param name="image_input_topic" value="$(arg image_input_topic)" />
+    <param name="perception_active_topic" value="$(arg perception_active_topic)" />
+    <param name="image_output_topic" value="$(arg image_output_topic)" />
+  </node>
+</launch>
