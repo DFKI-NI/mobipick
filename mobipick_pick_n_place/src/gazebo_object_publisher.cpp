@@ -76,7 +76,7 @@ void gazebo_cb(const gazebo_msgs::LinkStatesConstPtr& msg)
       pose_msg.pose = det3d.bbox.center;
       pose_table_pub->publish(pose_msg);
     }
-    else if (msg->name[i] == "cokecan_1::coke_can")
+    else if (msg->name[i] == "coke_can_1::coke_can")
     {
       // add coke_can
       vision_msgs::Detection3D det3d;
