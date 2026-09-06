@@ -31,6 +31,12 @@
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'" />
   <param name="power_drill_with_grip_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/power_drill_with_grip.urdf.xacro'" />
+  <param name="cracker_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/cracker_box.urdf.xacro'" />
+  <param name="sugar_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/sugar_box.urdf.xacro'" />
+  <param name="gelatin_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/gelatin_box.urdf.xacro'" />
   <param name="klt_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/klt.urdf.xacro'" />
   <param name="screwdriver_description"
@@ -39,6 +45,8 @@
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
   <param name="multimeter_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
+  <param name="coke_can_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/coke_can.urdf.xacro'" />
   <!--<param name="hot_glue_gun_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/hot_glue_gun.urdf.xacro'" />-->
 
@@ -53,8 +61,23 @@
   <!-- ::::::::: table 1 objects ::::::::: -->
 
   <!-- spawn power_drill_with_grip_2 on table 1 -->
-  <node name="spawn_power_drill_with_grip_2" pkg="gazebo_ros" type="spawn_model"
+  <!--<node name="spawn_power_drill_with_grip_2" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param power_drill_with_grip_description -model power_drill_with_grip_2 -x 13.00 -y 2.05 -z 0.84 -R -1.5708 -P 0.0 -Y 2.88"
+        respawn="false" output="screen" />-->
+
+  <!-- spawn cracker_1 on table 1 -->
+  <node name="spawn_cracker_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param cracker_description -model cracker_1 -x 12.99625343 -y 1.88448135 -z 0.82669094 -R -1.57079710 -P 0.00035380 -Y 0.77921588"
+        respawn="false" output="screen" />
+
+  <!-- spawn sugar_1 on table 1 -->
+  <node name="spawn_sugar_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param sugar_description -model sugar_1 -x 13.09215931 -y 2.05349123 -z 0.80812681 -R -1.57088180 -P -0.00000011 -Y 1.63250165"
+        respawn="false" output="screen" />
+
+  <!-- spawn gelatin_1 on table 1 -->
+  <node name="spawn_gelatin_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param gelatin_description -model gelatin_1 -x 13.00311756 -y 2.18988299 -z 0.73498996 -R -0.00000064 -P 0.0 -Y 0.84905422"
         respawn="false" output="screen" />
 
   <!-- spawn klt_2 on table 1 -->
@@ -94,6 +117,11 @@
   <!-- spawn multimeter_1 on table 3 -->
   <node name="spawn_multimeter_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param multimeter_description -model multimeter_1 -x 10.03 -y 3.03 -z 0.75 -Y -1.57"
+        respawn="false" output="screen" />
+
+  <!-- spawn coke_can_1 on table 3 -->
+  <node name="spawn_coke_can_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param coke_can_description -model coke_can_1 -x 10.51099763 -y 3.15293978 -z 0.71994095 -R -0.01132637 -P 0.00395607 -Y 0.00025381"
         respawn="false" output="screen" />
 
 </launch>
