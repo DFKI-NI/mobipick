@@ -47,6 +47,14 @@
         <joint name="${tf_prefix}ur5_wrist_2_joint" value="-1.57"/>
         <joint name="${tf_prefix}ur5_wrist_3_joint" value="3.14"/>
     </group_state>
+    <group_state name="anygrasp" group="arm">
+        <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="-1.57"/>
+        <joint name="${tf_prefix}ur5_shoulder_lift_joint" value="-1.57"/>
+        <joint name="${tf_prefix}ur5_elbow_joint" value="2.0"/>
+        <joint name="${tf_prefix}ur5_wrist_1_joint" value="-0.75"/>
+        <joint name="${tf_prefix}ur5_wrist_2_joint" value="1.57"/>
+        <joint name="${tf_prefix}ur5_wrist_3_joint" value="4.7124"/>
+    </group_state>
     <!-- observation poses for a 100 cm high table directly adjacent to the robot -->
     <group_state name="observe100cm_front" group="arm">
         <joint name="${tf_prefix}ur5_shoulder_pan_joint" value="0.00"/>
