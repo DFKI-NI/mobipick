@@ -72,12 +72,12 @@
 
   <!-- spawn sugar_1 on table 1 -->
   <node name="spawn_sugar_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param sugar_description -model sugar_1 -x 13.09215931 -y 2.05349123 -z 0.80812681 -R -1.57088180 -P -0.00000011 -Y 1.63250165"
+        args="-urdf -param sugar_description -model sugar_1 -x 13.00900616 -y 2.25489109 -z 0.80812681 -R -1.57071100 -P -0.00000004 -Y 0.66298518"
         respawn="false" output="screen" />
 
   <!-- spawn gelatin_1 on table 1 -->
   <node name="spawn_gelatin_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param gelatin_description -model gelatin_1 -x 13.00311756 -y 2.18988299 -z 0.73498996 -R -0.00000064 -P 0.0 -Y 0.84905422"
+        args="-urdf -param gelatin_description -model gelatin_1 -x 13.00311756 -y 2.08 -z 0.73498996 -R -0.00000064 -P 0.0 -Y 0.84905422"
         respawn="false" output="screen" />
 
   <!-- spawn klt_2 on table 1 -->
