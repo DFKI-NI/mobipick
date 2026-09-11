@@ -53,9 +53,6 @@
     </include>
   </group>
 
-  <!-- Robotiq command bridge-->
-  <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/robotiq_2f_140_bridge.launch">
-    <arg name="namespace" value="$(arg namespace)" />
-    <arg name="tf_prefix" value="$(arg tf_prefix)" />
-  </include>
+  <!-- The gripper_hw GripperCommand action is provided directly by the gripper_controller
+       (mobipick_gripper_effort_controller) spawned in mobipick_gazebo_common.launch. -->
 </launch>

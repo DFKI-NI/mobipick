@@ -18,7 +18,6 @@ catkin_package()
 install(PROGRAMS
   nodes/move_arm_to_home
   nodes/plot_controller.py
-  nodes/robotiq_2f_140_command_bridge.py
   nodes/simulated_dope_image_relay.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

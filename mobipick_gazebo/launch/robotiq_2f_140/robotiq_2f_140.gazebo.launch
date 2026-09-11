@@ -20,7 +20,8 @@
 
   <!-- Load joint controller configurations from YAML file to parameter server -->
   <rosparam file="$(find mobipick_description)/config/joint_state_controller.yaml" command="load" />
-  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/position_controller.yaml" command="load" subst_value="true" />
+  <!-- GripperCommand action at $(arg gripper_ns)/gripper_hw with a real torque limit -->
+  <rosparam file="$(find mobipick_gripper_effort_controller)/config/robotiq_2f_140_gripper_effort_controller.yaml" command="load" subst_value="true" />
 
   <include file="$(find mobipick_gazebo)/launch/robotiq_2f_140/spawn_robotiq_2f_140.launch">
         <arg name="namespace" value="$(arg gripper_ns)" />

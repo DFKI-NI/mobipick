@@ -263,41 +263,33 @@ Known Issues
 
 ### Using MoveIt to plan for the "gripper" group does not work
 
-In Gazebo, trying to use MoveIt to plan a gripper movement to the "open" state
-closes the gripper and vice versa. This is caused by the following sequence of
-events:
+Trying to use MoveIt to plan a gripper movement to the "open" or "closed" state
+does not move the gripper, neither on the real robot nor in Gazebo. This is
+caused by the following sequence of events:
 
 * MoveIt plans a joint trajectory for the gripper (e.g., it plans to the group
   state **"closed"** with a `gripper_finger_joint` angle of 0.755 radians).
 * It then sends this trajectory to the controller.
 * However, in the `simple_moveit_controllers.yaml` file, we only specify a
   controller of type [`GripperCommand`](http://docs.ros.org/en/api/control_msgs/html/action/GripperCommand.html).
-  In that action, the `position` fields encodes the gripper gap size (in
+  In that action, the `position` field encodes the gripper gap size (in
   meters). MoveIt incorrectly fills in 0.755 regardless.
-* The controller interprets this as 0.755 meters instead of radians (which is
-  the correct interpretation of the action definition) and **opens** the
-  gripper to the maximum gap size, even though we planned to the **closed**
-  state. The inverse case happens when planning to the open state.
+* The `gripper_hw` action server interprets this as 0.755 meters. That is
+  outside the accepted gap range of -0.015 to 0.14 m, so the goal is refused
+  with `Goal gripper gap size is out of range`. On the real robot
+  (`robotiq_2f_gripper_action_server`) the goal then never finishes; in Gazebo
+  (`mobipick_gripper_effort_controller`) it is rejected immediately.
 
-One solution to this problem would be to replace the gripper controller with a
+One solution to this problem would be to add a
 [`FollowJointTrajectory`](http://docs.ros.org/en/api/control_msgs/html/action/FollowJointTrajectory.html)
-controller in the `simple_moveit_controllers.yaml` file, like this:
-
-```yaml
-  - name: "gripper_controller"
-    action_ns: "follow_joint_trajectory"
-    type: FollowJointTrajectory
-    default: false
-    joints:
-      - $(arg prefix)gripper_finger_joint
-```
-
-However, this would mean that the Gazebo simulation no longer mirrors the real
-robot (which does not have a `FollowJointTrajectory` controller), and also the
-pick and place demo would stop working in Gazebo. Therefore, we leave the controller
-configuration unchanged. Users should not use MoveIt to plan and execute
-gripper trajectories, but instead call the `/mobipick/gripper_hw` action (type:
-`GripperCommand`) directly.
+controller for the gripper to the `simple_moveit_controllers.yaml` file.
+However, the real robot does not have such a controller, and the Gazebo
+simulation deliberately exposes the same `gripper_hw` `GripperCommand` action
+as the real robot (same name, same units, same accepted ranges) so that code
+behaves identically in both. Therefore, we leave the controller configuration
+unchanged. Users should not use MoveIt to plan and execute gripper trajectories,
+but instead call the `/mobipick/gripper_hw` action (type: `GripperCommand`)
+directly, with `position` as gap in meters and `max_effort` between 30 and 100.
 
 
 ### Gazebo prints errors: "No p gain specified for pid."
@@ -314,6 +306,9 @@ following behavior of Gazebo:
    just perfectly follows the commanded velocities. If you specify PID values,
    Gazebo will use a PID controller to approximate following the commanded
    velocities, so you have to tune the PID controllers.
+3. When using the `EffortJointInterface` (the gripper finger joint, driven by
+   `mobipick_gripper_effort_controller`), Gazebo applies the commanded torque
+   directly and does not use PID gains at all, so no error is printed for it.
 
 Since we just want Gazebo to follow our commanded velocities, we cannot set the
 PID values for joints using the VelocityJointInterface, so the errors get

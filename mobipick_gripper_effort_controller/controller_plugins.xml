@@ -1,0 +1,11 @@
+<library path="lib/libmobipick_gripper_effort_controller">
+  <class name="mobipick_gripper_effort_controller/GripperEffortController"
+         type="mobipick_gripper_effort_controller::GripperEffortController"
+         base_class_type="controller_interface::ControllerBase">
+    <description>
+      GripperCommand action controller for a single-joint gripper on the EffortJointInterface.
+      Position goals are given in metres of jaw gap, max_effort on the Robotiq 30..100 scale;
+      the PID output is clamped to the mapped joint torque.
+    </description>
+  </class>
+</library>

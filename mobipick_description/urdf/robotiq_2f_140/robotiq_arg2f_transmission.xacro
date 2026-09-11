@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-  <!-- Note: You MUST load PID parameters (see gazebo_controller.yaml) for all
-       joints that are using the PositionJointInterface, otherwise the arm +
-       gripper will act like a giant parachute, counteracting gravity, and
-       causing some of the wheels to lose contact with the ground, so the robot
-       won't be able to properly navigate. See
-       https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612 -->
-  <xacro:macro name="robotiq_arg2f_transmission" params="prefix">
+  <!-- The finger joint is driven through the EffortJointInterface so that the
+       mobipick_gripper_effort_controller can enforce the torque limit requested
+       via GripperCommand.max_effort. Joints on the EffortJointInterface do not
+       need gazebo_ros_control PID gains (those are only used for the
+       Position/VelocityJointInterface, see
+       https://github.com/ros-simulation/gazebo_ros_pkgs/issues/612). -->
+  <xacro:macro name="robotiq_arg2f_transmission" params="prefix hw_interface:=hardware_interface/EffortJointInterface">
     <transmission name="${prefix}finger_joint_trans">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="${prefix}finger_joint">
-        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <hardwareInterface>${hw_interface}</hardwareInterface>
       </joint>
       <actuator name="${prefix}finger_joint_motor">
         <mechanicalReduction>1</mechanicalReduction>
