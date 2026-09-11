@@ -1,0 +1,48 @@
+# GripperCommand controller for the simulated Robotiq 2F-140 that really limits the joint torque.
+# Load with subst_value="true" so that $(arg prefix) is resolved.
+gripper_controller:
+  type: mobipick_gripper_effort_controller/GripperEffortController
+  joint: $(arg prefix)gripper_finger_joint
+  # Expose the action as <robot namespace>/gripper_hw, the name MoveIt (simple_moveit_controllers.yaml),
+  # grasplan, pose_teacher and mobipick_pick_n_place already use for the real Robotiq action server.
+  action_name: gripper_hw
+
+  # jaw gap [m] <-> finger joint [rad] (same linear mapping the old command bridge used)
+  gap_open: 0.14
+  gap_closed: 0.0
+  joint_open: 0.0
+  joint_closed: 0.755
+
+  # Accepted goal range. Same values (and parameter names) as the robotiq_2f_gripper_action_server
+  # started by mobipick_bringup_control.launch on the real robot; a goal outside is refused with the
+  # real server's warning and the gripper does not move. Keep them in sync with that launch file.
+  min_gap: -0.015
+  max_gap: 0.140
+  min_effort: 30.0
+  max_effort: 100.0
+
+  # GripperCommand.max_effort (30..100, Robotiq scale) is mapped linearly onto the joint torque limit
+  # [Nm] applied in Gazebo. The simulated finger links weigh 10..30 g, so the torques are tiny compared
+  # to the real gripper: 1 Nm at the ~0.1 m finger lever is already ~10 N at the fingertip. The old
+  # position-controlled setup effectively drove the joint with < 0.2 Nm.
+  joint_effort_min: 0.1
+  joint_effort_max: 0.6
+  hold_max_effort: 100.0      # effort used to hold the fingers while no goal is active (start-up, cancel)
+
+  # The position setpoint is ramped towards the goal at this joint speed [rad/s] (URDF limit: 0.7).
+  # Keep it below the URDF limit, otherwise gazebo_ros_control's effort saturation chatters.
+  max_joint_velocity: 0.5
+
+  # PID on the finger joint tracking error; its output (Nm) is clamped to the torque limit above.
+  # Effective inertia around the finger joint is ~1e-4 kg m^2 and the URDF joint damping 0.02 Nms/rad,
+  # so p=3 gives a ~170 rad/s loop that the 1 kHz physics step still resolves.
+  pid: {p: 3.0, i: 0.0, d: 0.02, i_clamp: 0.0, antiwindup: false}
+
+  goal_tolerance: 0.02             # [m] of jaw gap (~0.11 rad; the old trajectory controller used 0.2 rad)
+  stall_velocity_threshold: 0.05   # [rad/s] (the old controller's stopped_velocity_tolerance)
+  stall_timeout: 0.5               # [s]
+  settle_time: 0.3                 # [s] after the setpoint ramp ends the goal is finished even if the fingers still creep
+  stall_is_success: true           # a stalled gripper is a grasped object; report success with stalled=true
+  goal_timeout: 10.0               # [s] finish an unfinished goal as stalled instead of hanging (0 = never)
+  action_monitor_rate: 20
+  state_publish_rate: 50

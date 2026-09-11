@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mobipick_gripper_effort_controller</name>
+  <version>0.1.0</version>
+  <description>
+    ros_control controller plugin for the simulated Robotiq 2F-140 gripper on Mobipick.
+    It exposes a control_msgs/GripperCommand action (position goal in metres of jaw gap plus
+    max_effort on the Robotiq 30..100 scale) and drives the finger joint through the
+    EffortJointInterface with a PID whose output is clamped to the requested effort, so the
+    torque limit is actually enforced in Gazebo instead of being ignored.
+  </description>
+  <maintainer email="oscar.lima@dfki.de">Oscar Lima</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>actionlib</depend>
+  <depend>control_msgs</depend>
+  <depend>control_toolbox</depend>
+  <depend>controller_interface</depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>realtime_tools</depend>
+  <depend>roscpp</depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>actionlib_msgs</exec_depend>
+
+  <test_depend>rosunit</test_depend>
+
+  <export>
+    <controller_interface plugin="${prefix}/controller_plugins.xml" />
+  </export>
+</package>

@@ -53,7 +53,8 @@
   <rosparam file="$(find mobipick_description)/config/ur5/arm_controller_ur5.yaml" command="load" subst_value="true" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_velocity_controller.yaml" command="load" subst_value="true" />
   <rosparam file="$(find mobipick_description)/config/ur5/arm_position_controller.yaml" command="load" subst_value="true" />
-  <rosparam file="$(find mobipick_description)/config/robotiq_2f_140/joint_trajectory_controller.yaml" command="load" subst_value="true" />
+  <!-- gripper: GripperCommand action at gripper_hw with a real torque limit (EffortJointInterface) -->
+  <rosparam file="$(find mobipick_gripper_effort_controller)/config/robotiq_2f_140_gripper_effort_controller.yaml" command="load" subst_value="true" />
   <rosparam file="$(find mir_description)/config/diffdrive_controller.yaml" command="load" subst_value="true" />
 
   <!-- Start the controllers -->
