@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
+  <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
 
   <arg name="robot_x"   default="0.0" />
   <arg name="robot_y"   default="0.0" />
@@ -22,6 +23,7 @@
     <arg name="robot" value="$(arg robot)" />
     <arg name="main_camera" value="$(arg main_camera)" />
     <arg name="tf_prefix" value="$(arg tf_prefix)" />
+    <arg name="grasp_fix" value="$(arg grasp_fix)" />
     <arg unless="$(eval arm_controller=='position')" name="transmission_hw_interface" value="hardware_interface/VelocityJointInterface" />
     <arg if="$(eval arm_controller=='position')"     name="transmission_hw_interface" value="hardware_interface/PositionJointInterface" />
   </include>

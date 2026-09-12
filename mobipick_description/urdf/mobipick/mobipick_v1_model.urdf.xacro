@@ -23,6 +23,8 @@
   </xacro:unless>
 
   <xacro:arg name="transmission_hw_interface" default="hardware_interface/PositionJointInterface"/>
+  <xacro:arg name="grasp_fix" default="false" />  <!-- legacy gazebo_grasp_fix plugin on the gripper, see robotiq_arg2f_140_model_macro.xacro -->
+  <xacro:property name="grasp_fix_required" value="$(arg grasp_fix)" />
   <xacro:arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml"/>  <!-- path the to the yaml with the ur5 joint limits. -->
   <xacro:arg name="kinematics_config" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>  <!-- path the to the yaml with the arms calibration parameters. -->
 

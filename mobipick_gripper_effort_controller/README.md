@@ -18,6 +18,12 @@ torque mapped from `max_effort`, so the limit is enforced by Gazebo.
   server accepts such a goal and then silently never finishes it; the simulation rejects it instead so
   clients get a terminal state. Code that works against this controller therefore also works on the
   real robot, but not necessarily the other way round.
+* A finger that is blocked before the goal presses with the full torque limit, not only with the
+  PID's `p * error`: a "stall boost" ramps up while the joint does not move (`stall_boost/*` parameters).
+  This mirrors the current-limited motor of the real gripper and makes the grasp force independent of
+  how close the commanded gap is to the object width.
+* The gap <-> joint mapping is calibrated on the Gazebo model (`test/grasp_rig/calib.py`): the
+  simulated pads touch at `gap = 0.149 - 0.186 * joint`, so `gap_open`/`gap_closed` are 0.149/0.009 m.
 * A stalled gripper (blocked by an object) finishes the goal as succeeded with `stalled: true`,
   like the real server does when the Robotiq reports an object (`gOBJ`); this is what MoveIt's pick
   pipeline and grasplan expect. Set `stall_is_success: false` to abort instead.

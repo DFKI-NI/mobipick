@@ -8,6 +8,7 @@
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml"/>
   <arg name="ur5_kinematics_file" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>
   <arg name="transmission_hw_interface" default="hardware_interface/VelocityJointInterface" />
+  <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
 
   <param name="robot_description" command="$(find xacro)/xacro $(find mobipick_description)/urdf/mobipick/mobipick_v1_model.urdf.xacro
     robot:=$(arg robot)
@@ -15,5 +16,6 @@
     tf_prefix:=$(arg tf_prefix)
     joint_limits_parameters_file:=$(arg joint_limits_parameters_file)
     kinematics_config:=$(arg ur5_kinematics_file)
-    transmission_hw_interface:=$(arg transmission_hw_interface)" />
+    transmission_hw_interface:=$(arg transmission_hw_interface)
+    grasp_fix:=$(arg grasp_fix)" />
 </launch>

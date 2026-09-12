@@ -7,7 +7,9 @@
 using mobipick_gripper_effort_controller::clampTorque;
 using mobipick_gripper_effort_controller::EffortMapping;
 using mobipick_gripper_effort_controller::GapJointMapping;
+using mobipick_gripper_effort_controller::StallBoost;
 using mobipick_gripper_effort_controller::stepTowards;
+using mobipick_gripper_effort_controller::updateStallBoost;
 
 TEST(GapJointMapping, endpointsAndMidpoint)
 {
@@ -146,4 +148,44 @@ int main(int argc, char** argv)
 {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
+}
+
+TEST(StallBoost, rampsUpWhileBlockedAndSaturatesAtLimit)
+{
+  StallBoost cfg;  // rate 5 Nm/s, release 20 Nm/s, velocity threshold 0.05 rad/s, deadband 0.002 rad
+  EXPECT_TRUE(cfg.valid());
+  double boost = 0.0;
+  // blocked 0.02 rad before the goal, not moving: +5 Nm/s
+  boost = updateStallBoost(boost, 0.02, 0.0, 2.5, cfg, 0.1);
+  EXPECT_NEAR(0.5, boost, 1e-12);
+  for (int i = 0; i < 100; ++i)
+  {
+    boost = updateStallBoost(boost, 0.02, 0.0, 2.5, cfg, 0.1);
+  }
+  EXPECT_DOUBLE_EQ(2.5, boost);  // never above the torque limit
+  // a lower limit on the next goal caps it immediately
+  EXPECT_DOUBLE_EQ(1.0, updateStallBoost(boost, 0.02, 0.0, 1.0, cfg, 0.001));
+}
+
+TEST(StallBoost, decaysWhenMovingOrAtGoal)
+{
+  StallBoost cfg;
+  // moving faster than the threshold: -20 Nm/s
+  EXPECT_NEAR(1.8, updateStallBoost(2.0, 0.02, 0.2, 2.5, cfg, 0.01), 1e-12);
+  // within the deadband of the goal, even if stopped
+  EXPECT_NEAR(1.8, updateStallBoost(2.0, 0.001, 0.0, 2.5, cfg, 0.01), 1e-12);
+  // never negative
+  EXPECT_DOUBLE_EQ(0.0, updateStallBoost(0.05, 0.0, 0.0, 2.5, cfg, 0.01));
+}
+
+TEST(StallBoost, directionIndependentAndDisableable)
+{
+  StallBoost cfg;
+  // blocked while opening (negative goal error) ramps the same magnitude; the caller applies the sign
+  EXPECT_NEAR(0.5, updateStallBoost(0.0, -0.02, 0.0, 2.5, cfg, 0.1), 1e-12);
+  cfg.rate = 0.0;
+  EXPECT_DOUBLE_EQ(0.0, updateStallBoost(0.0, 0.02, 0.0, 2.5, cfg, 0.1));
+  EXPECT_TRUE(cfg.valid());
+  cfg.release_rate = -1.0;
+  EXPECT_FALSE(cfg.valid());
 }

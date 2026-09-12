@@ -79,6 +79,7 @@
     <mu2>5.0</mu2>
     <kp>1e+06</kp> <!-- high stiffness -->
     <kd>1.0</kd> <!-- normal damping -->
+    <minDepth>0.002</minDepth> <!-- persistent contact with the gripper pads, see robotiq_fingertips_65mm.xacro -->
   </gazebo>
 
 </robot>
