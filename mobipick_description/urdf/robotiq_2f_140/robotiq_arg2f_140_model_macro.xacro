@@ -239,8 +239,10 @@
     <link name="${prefix}tcp" />
   </xacro:macro>
 
-  <!-- GRASP HACK -->
-  <xacro:property name="grasp_fix_required" default="true" />
+  <!-- Optional gazebo_grasp_fix plugin (legacy "grasp hack" that welds a grasped object to the gripper).
+       Off by default: objects are held by friction (see robotiq_fingertips_65mm.xacro). Enable with the
+       grasp_fix launch/xacro argument, or define grasp_fix_required before including this file. -->
+  <xacro:property name="grasp_fix_required" default="false" />
   <xacro:if value="${grasp_fix_required}">
     <xacro:include filename="$(find mobipick_description)/urdf/robotiq_2f_140/gzplugin_grasp_fix.urdf.xacro"/>
     <xacro:gzplugin_grasp_fix prefix="${prefix}"/>

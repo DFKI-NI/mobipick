@@ -9,6 +9,7 @@
   <arg name="start_paused" default="true" />
   <arg name="physics_profile" default="fast" doc="options: slow, fast" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
+  <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
 
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="robot" value="$(arg robot)" />
@@ -18,6 +19,7 @@
     <arg name="start_paused" value="$(arg start_paused)" />
     <arg name="gui" value="$(arg gui)" />
     <arg name="arm_controller" value="$(arg arm_controller)" />
+    <arg name="grasp_fix"      value="$(arg grasp_fix)" />
     <arg name="world_name" value="$(find pbr_gazebo)/worlds/pbr_moelk.sdf"/>
     <arg name="robot_x"   value="11.00" />
     <arg name="robot_y"   value="3.00" />

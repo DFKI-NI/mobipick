@@ -92,6 +92,20 @@ bool GripperEffortController::init(hardware_interface::EffortJointInterface* hw,
     return false;
   }
 
+  // Stall boost ("force mode" of a blocked finger)
+  controller_nh.param("stall_boost/rate", stall_boost_.rate, stall_boost_.rate);
+  controller_nh.param("stall_boost/release_rate", stall_boost_.release_rate, stall_boost_.release_rate);
+  controller_nh.param("stall_boost/velocity_threshold", stall_boost_.velocity_threshold,
+                      stall_boost_.velocity_threshold);
+  controller_nh.param("stall_boost/deadband", stall_boost_.deadband, stall_boost_.deadband);
+  if (!stall_boost_.valid())
+  {
+    ROS_ERROR_NAMED(name_, "Invalid stall_boost parameters: rate=%f release_rate=%f velocity_threshold=%f deadband=%f",
+                    stall_boost_.rate, stall_boost_.release_rate, stall_boost_.velocity_threshold,
+                    stall_boost_.deadband);
+    return false;
+  }
+
   double goal_tolerance_gap = 0.005;
   controller_nh.param("goal_tolerance", goal_tolerance_gap, goal_tolerance_gap);
   goal_tolerance_joint_ = gap_mapping_.gapToleranceToJoint(goal_tolerance_gap);
@@ -176,6 +190,7 @@ void GripperEffortController::update(const ros::Time& time, const ros::Duration&
     setpoint_ = position;
     result_requested_ = false;
     ramp_done_ = false;
+    boost_ = 0.0;
     pid_.reset();
   }
   setpoint_ = stepTowards(setpoint_, cmd.joint_position, max_joint_velocity_ * period.toSec());
@@ -187,7 +202,11 @@ void GripperEffortController::update(const ros::Time& time, const ros::Duration&
 
   const double tracking_error = setpoint_ - position;
   const double raw = pid_.computeCommand(tracking_error, -velocity, period);
-  const double effort = clampTorque(raw, cmd.torque_limit);
+  // A finger blocked by an object presses with the full torque limit (like the current-limited motor of
+  // the real gripper), not just with p * error: the boost ramps up while the joint does not move.
+  const double goal_error = cmd.joint_position - position;
+  boost_ = updateStallBoost(boost_, goal_error, velocity, cmd.torque_limit, stall_boost_, period.toSec());
+  const double effort = clampTorque(raw + (goal_error < 0.0 ? -boost_ : boost_), cmd.torque_limit);
   joint_.setCommand(effort);
 
   const double gap = gap_mapping_.jointToGap(position);

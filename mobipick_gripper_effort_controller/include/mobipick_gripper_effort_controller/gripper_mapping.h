@@ -107,6 +107,46 @@ struct EffortMapping
   }
 };
 
+/// Extra torque that builds up while the fingers are blocked before the goal ("force mode").
+/// The real Robotiq drives its motor with a current (= force) limit, so a finger that is stopped by an
+/// object presses with the full requested force no matter how far it is from the requested position.
+/// A pure P controller only gives p * error, next to nothing when an object stops the fingers a few
+/// millimetres before the commanded gap. The boost ramps up at `rate` while the joint is blocked
+/// (|velocity| below `velocity_threshold` and |goal error| above `deadband`), decays at `release_rate`
+/// otherwise, and is always kept within [0, limit]; the caller adds it in the direction of the goal
+/// and clamps the sum to the torque limit. rate <= 0 disables the boost.
+struct StallBoost
+{
+  double rate = 5.0;                 ///< [Nm/s] ramp while blocked
+  double release_rate = 20.0;        ///< [Nm/s] decay while moving or at the goal
+  double velocity_threshold = 0.05;  ///< [rad/s]
+  double deadband = 0.002;           ///< [rad] goal error below which the joint counts as "at the goal"
+
+  bool valid() const
+  {
+    return std::isfinite(rate) && std::isfinite(release_rate) && std::isfinite(velocity_threshold) &&
+           std::isfinite(deadband) && release_rate >= 0.0 && velocity_threshold >= 0.0 && deadband >= 0.0;
+  }
+};
+
+/// One step of the stall boost, see StallBoost. `goal_error` is goal position minus current position.
+inline double updateStallBoost(double boost, double goal_error, double velocity, double limit, const StallBoost& cfg,
+                               double dt)
+{
+  limit = std::fabs(limit);
+  const bool blocked = cfg.rate > 0.0 && std::fabs(velocity) < cfg.velocity_threshold &&
+                       std::fabs(goal_error) > cfg.deadband;
+  if (blocked)
+  {
+    boost += cfg.rate * dt;
+  }
+  else
+  {
+    boost -= cfg.release_rate * dt;
+  }
+  return std::min(limit, std::max(0.0, boost));
+}
+
 /// Move `current` towards `target` by at most `max_step` (used to ramp the position setpoint so
 /// the PID tracks a velocity-limited profile instead of slamming towards a far goal).
 inline double stepTowards(double current, double target, double max_step)

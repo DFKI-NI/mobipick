@@ -47,6 +47,10 @@ namespace mobipick_gripper_effort_controller
  *   max_joint_velocity    (double, 0.5)       the position setpoint is ramped towards the goal at this
  *                                             speed [rad/s]; keep it below the URDF velocity limit
  *   pid/{p,i,d,i_clamp,antiwindup}            PID on the joint position error, output in Nm
+ *   stall_boost/{rate,release_rate,velocity_threshold,deadband}
+ *                                             extra torque (up to the torque limit) that builds up while the
+ *                                             fingers are blocked before the goal, so a stalled gripper presses
+ *                                             with the full requested effort like the real one; see StallBoost
  *   goal_tolerance        (double, 0.005)     gap tolerance [m] to report reached_goal
  *   stall_velocity_threshold (double, 0.01)   joint speed [rad/s] below which the joint counts as stalled
  *   stall_timeout         (double, 1.0)       seconds of stall before the goal is finished
@@ -121,6 +125,8 @@ private:
   // RT-side state of the setpoint ramp
   double setpoint_ = 0.0;
   unsigned long setpoint_seq_ = 0;
+  StallBoost stall_boost_;
+  double boost_ = 0.0;             ///< current stall boost torque [Nm], see StallBoost
   bool result_requested_ = false;  ///< a terminal result was handed to the monitor timer for the active goal
   bool ramp_done_ = false;         ///< the setpoint ramp reached the goal position
   ros::Time ramp_done_time_;

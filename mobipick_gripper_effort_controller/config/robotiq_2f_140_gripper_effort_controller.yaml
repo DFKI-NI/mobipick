@@ -7,9 +7,12 @@ gripper_controller:
   # grasplan, pose_teacher and mobipick_pick_n_place already use for the real Robotiq action server.
   action_name: gripper_hw
 
-  # jaw gap [m] <-> finger joint [rad] (same linear mapping the old command bridge used)
-  gap_open: 0.14
-  gap_closed: 0.0
+  # jaw gap [m] <-> finger joint [rad], linear. Measured in Gazebo with test/grasp_rig/calib.py (boxes of
+  # 30..120 mm width, stall angle of the fingers): the simulated pads touch at gap = 0.149 - 0.186 * joint,
+  # i.e. the model opens to 149 mm and cannot close below 9 mm. The old 0.14 -> 0.0 mapping made the
+  # fingers stop 1 cm short of the requested gap, so a 40 mm command never touched the 45 mm relay.
+  gap_open: 0.149
+  gap_closed: 0.009
   joint_open: 0.0
   joint_closed: 0.755
 
@@ -23,10 +26,14 @@ gripper_controller:
 
   # GripperCommand.max_effort (30..100, Robotiq scale) is mapped linearly onto the joint torque limit
   # [Nm] applied in Gazebo. The simulated finger links weigh 10..30 g, so the torques are tiny compared
-  # to the real gripper: 1 Nm at the ~0.1 m finger lever is already ~10 N at the fingertip. The old
-  # position-controlled setup effectively drove the joint with < 0.2 Nm.
-  joint_effort_min: 0.1
-  joint_effort_max: 0.6
+  # to the real gripper: 1 Nm at the ~0.19 m pad lever is ~5 N at each pad. Objects are held by friction
+  # alone (no grasp plugin): the multimeter (0.35 kg) needs >= 1 Nm at the finger joint to survive
+  # being carried and shaken, with 0.6 Nm it fell out and with 0.8..1.0 Nm it sometimes tilted by
+  # 70..90 deg (see test/grasp_rig and robotiq_fingertips_65mm.xacro). The real gripper holds such
+  # objects even at min_effort, so the whole range stays above that: 1.5 Nm at min_effort, 2.5 Nm at
+  # max_effort.
+  joint_effort_min: 1.5
+  joint_effort_max: 2.5
   hold_max_effort: 100.0      # effort used to hold the fingers while no goal is active (start-up, cancel)
 
   # The position setpoint is ramped towards the goal at this joint speed [rad/s] (URDF limit: 0.7).
@@ -34,9 +41,19 @@ gripper_controller:
   max_joint_velocity: 0.5
 
   # PID on the finger joint tracking error; its output (Nm) is clamped to the torque limit above.
-  # Effective inertia around the finger joint is ~1e-4 kg m^2 and the URDF joint damping 0.02 Nms/rad,
-  # so p=3 gives a ~170 rad/s loop that the 1 kHz physics step still resolves.
-  pid: {p: 3.0, i: 0.0, d: 0.02, i_clamp: 0.0, antiwindup: false}
+  # Effective inertia around the finger joint is ~1e-4 kg m^2 and the URDF joint damping 0.02 Nms/rad.
+  # p must be high enough that the fingers, stalled ~0.1..0.15 rad before the commanded closing
+  # position, actually reach the torque limit: with p=3 the squeeze stayed at ~0.4 Nm whatever the
+  # limit and objects fell out; p=10 saturates at the limit and showed no chatter at the 3 ms step of
+  # the fast physics profile.
+  pid: {p: 10.0, i: 0.0, d: 0.02, i_clamp: 0.0, antiwindup: false}
+
+  # A finger blocked by an object before the goal gets an extra torque that ramps up at `rate` [Nm/s] until
+  # the torque limit is reached, and decays at `release_rate` once it moves again or is within `deadband`
+  # [rad] of the goal. This is how the real gripper behaves (current-limited motor): the grasp force is the
+  # requested max_effort, not p * (remaining position error). Without it a 40 mm command on the 45 mm relay
+  # pressed with only ~0.2 Nm. rate: 0 disables it.
+  stall_boost: {rate: 5.0, release_rate: 20.0, velocity_threshold: 0.05, deadband: 0.002}
 
   goal_tolerance: 0.02             # [m] of jaw gap (~0.11 rad; the old trajectory controller used 0.2 rad)
   stall_velocity_threshold: 0.05   # [rad/s] (the old controller's stopped_velocity_tolerance)
