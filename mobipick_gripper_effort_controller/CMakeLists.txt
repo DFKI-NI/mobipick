@@ -20,7 +20,8 @@ catkin_package(
   CATKIN_DEPENDS actionlib control_msgs control_toolbox controller_interface hardware_interface pluginlib realtime_tools roscpp
 )
 
-include_directories(include ${catkin_INCLUDE_DIRS})
+include_directories(include)
+include_directories(SYSTEM ${catkin_INCLUDE_DIRS})
 
 add_library(${PROJECT_NAME}
   src/gripper_effort_controller.cpp
