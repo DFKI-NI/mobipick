@@ -83,19 +83,21 @@
   <!-- Robot state publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
 
-  <!-- Load teleop -->
-  <node name="rqt_robot_steering" pkg="rqt_robot_steering" type="rqt_robot_steering">
+  <!-- Simulation GUI: teleop (rqt_robot_steering), rqt_joint_trajectory_controller and the simulated
+       e-stop (UR dashboard) in a single rqt window. The plugins read their defaults from the private
+       params of the rqt_gui node. -->
+  <node name="rqt_sim_gui" pkg="rqt_gui" type="rqt_gui"
+        args="--perspective-file $(find mobipick_gazebo)/config/sim_gui.perspective">
     <param name="default_topic" value="cmd_vel"/>
     <param name="default_vx_max" value="1.0" />
     <param name="default_vx_min" value="-1.0" />
     <param name="default_vw_max" value="1.5" />
     <param name="default_vw_min" value="-1.5" />
+    <!-- simulated e-stop: controllers stopped while pressed (only running ones), restarted on release;
+         the hold controller runs meanwhile with zero commands so the arm keeps its pose like the UR brakes -->
+    <rosparam param="estop_controllers">[mobile_base_controller, arm_controller, arm_velocity_controller, arm_position_controller]</rosparam>
+    <rosparam param="estop_hold_controllers">[arm_velocity_controller]</rosparam>
   </node>
-
-  <node name="rqt_joint_trajectory_controller" pkg="rqt_joint_trajectory_controller" type="rqt_joint_trajectory_controller" />
-
-  <!-- e-stop simulation gui -->
-  <node name="simulated_ur_dashboard" pkg="mobipick_gazebo" type="simulated_ur_dashboard.py"/>
 
   <!-- create combined scan topic -->
   <node pkg="topic_tools" type="relay" name="b_scan_relay" args="b_scan scan"/>

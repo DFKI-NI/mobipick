@@ -1,0 +1,14 @@
+<library path="src">
+  <class name="SimulatedUrDashboard" type="mobipick_gazebo.simulated_ur_dashboard.SimulatedUrDashboardPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Simulated UR dashboard for Gazebo: e-stop toggle serving get_safety_mode/get_robot_mode.
+    </description>
+    <qtgui>
+      <group>
+        <label>Mobipick</label>
+      </group>
+      <label>Simulated E-Stop</label>
+      <statustip>Toggle the simulated UR e-stop.</statustip>
+    </qtgui>
+  </class>
+</library>

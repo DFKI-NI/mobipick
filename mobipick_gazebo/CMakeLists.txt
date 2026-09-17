@@ -8,6 +8,8 @@ find_package(catkin REQUIRED COMPONENTS
 ###################################
 ## catkin specific configuration ##
 ###################################
+catkin_python_setup()
+
 catkin_package()
 
 #############
@@ -19,6 +21,7 @@ install(PROGRAMS
   nodes/move_arm_to_home
   nodes/plot_controller.py
   nodes/simulated_dope_image_relay.py
+  nodes/simulated_ur_dashboard.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -31,6 +34,11 @@ install(DIRECTORY
   meshes
   urdf
   worlds
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+install(FILES
+  plugin.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

@@ -1,0 +1,116 @@
+{
+  "keys": {},
+  "groups": {
+    "pluginmanager": {
+      "keys": {
+        "running-plugins": {
+          "type": "repr",
+          "repr": "{'mobipick_gazebo/SimulatedUrDashboard': [1], 'rqt_robot_steering/RobotSteering': [1], 'rqt_joint_trajectory_controller/JointTrajectoryController': [1]}"
+        }
+      },
+      "groups": {
+        "plugin__rqt_robot_steering__RobotSteering__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__RobotSteeringUi": {
+              "keys": {
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "'Robot Steering'"
+                },
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {},
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_joint_trajectory_controller__JointTrajectoryController__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__JointTrajectoryControllerUi": {
+              "keys": {
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "'Joint trajectory controller'"
+                },
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {},
+              "groups": {}
+            }
+          }
+        },
+        "plugin__mobipick_gazebo__SimulatedUrDashboard__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__SimulatedUrDashboardUi": {
+              "keys": {
+                "dock_widget_title": {
+                  "type": "repr",
+                  "repr": "'Simulated E-Stop'"
+                },
+                "dockable": {
+                  "type": "repr",
+                  "repr": "True"
+                },
+                "parent": {
+                  "type": "repr",
+                  "repr": "None"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {},
+              "groups": {}
+            }
+          }
+        }
+      }
+    },
+    "mainwindow": {
+      "keys": {
+        "geometry": {
+          "type": "repr(QByteArray.hex)",
+          "repr(QByteArray.hex)": "QByteArray(b'01d9d0cb0003000000000000000000000000044f000002d300000002000000020000044d000002d10000000000000000032000000002000000020000044d000002d1')"
+        },
+        "state": {
+          "type": "repr(QByteArray.hex)",
+          "repr(QByteArray.hex)": "QByteArray(b'000000ff00000000fd000000020000000000000258000002d0fc0200000001fb000000b4007200710074005f006a006f0069006e0074005f007400720061006a006500630074006f00720079005f0063006f006e00740072006f006c006c00650072005f005f004a006f0069006e0074005400720061006a006500630074006f007200790043006f006e00740072006f006c006c00650072005f005f0031005f005f004a006f0069006e0074005400720061006a006500630074006f007200790043006f006e00740072006f006c006c00650072005500690100000000000002d00000002c00ffffff00000001000001ee000002d0fc0200000002fb00000080006d006f00620069007000690063006b005f00670061007a00650062006f005f005f00530069006d0075006c00610074006500640055007200440061007300680062006f006100720064005f005f0031005f005f00530069006d0075006c00610074006500640055007200440061007300680062006f006100720064005500690100000000000000b80000002c00fffffffb0000006a007200710074005f0072006f0062006f0074005f007300740065006500720069006e0067005f005f0052006f0062006f0074005300740065006500720069006e0067005f005f0031005f005f0052006f0062006f0074005300740065006500720069006e00670055006901000000be000002120000002c00ffffff00000000000002d000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')"
+        }
+      },
+      "groups": {
+        "toolbar_areas": {
+          "keys": {
+            "MinimizedDockWidgetsToolbar": {
+              "type": "repr",
+              "repr": "8"
+            }
+          },
+          "groups": {}
+        }
+      }
+    }
+  }
+}
