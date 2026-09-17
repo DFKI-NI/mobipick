@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
   <arg name="gui" default="true" />
+  <arg name="gui_delay" default="5" doc="Seconds to wait before starting gzclient. gzclient segfaults intermittently when it connects while gzserver is still spawning models; a short delay lets the spawn burst finish first. 0 disables the delay." />
   <arg name="world_name" default="worlds/empty.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable, but can also be an absolute path -->
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
@@ -27,9 +28,15 @@
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="$(arg world_name)"/>
       <arg name="paused" value="$(arg start_paused)" />
-      <arg name="gui" value="$(arg gui)" />
+      <arg name="gui" value="false" />
       <arg name="extra_gazebo_args" value="--profile $(arg physics_profile)" />
     </include>
+
+    <!-- Start gzclient ourselves (same node name/args as gazebo_ros/empty_world.launch) so it can be
+         delayed until the initial model spawns are done; starting it together with gzserver races the
+         scene loading in gzclient and intermittently crashes it with a segfault. -->
+    <node if="$(arg gui)" name="gazebo_gui" pkg="gazebo_ros" type="gzclient" respawn="false" output="screen"
+          launch-prefix="bash -c 'sleep $(arg gui_delay); exec &quot;$0&quot; &quot;$@&quot;'" />
   </group>
 
   <!-- Add passive + mimic joints to joint_states topic -->
