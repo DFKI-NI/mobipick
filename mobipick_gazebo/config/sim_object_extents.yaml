@@ -1,0 +1,30 @@
+# Cuboid extents (metres) of the Mobipick Labs Gazebo objects, keyed by label
+# (= Gazebo model name without the trailing _<n>). Used by
+# shuffle_sim_objects.py to keep objects apart when re-arranging them.
+# Keep in sync with clip-simple-map/config/sim_object_extents.yaml.
+#
+#   size:          [x, y, z] extents in the model frame
+#   center_offset: box centre relative to the Gazebo model origin (model frame)
+#
+# pbr objects: taken from pbr_objects/config/dimensions.yaml (cm -> m, centred
+# on the model origin). Tables / cans: from the mobipick_gazebo xacros, whose
+# origin is on the floor / bottom face.
+objects:
+  cracker:                {size: [0.16404, 0.21344, 0.07180]}
+  sugar:                  {size: [0.09268, 0.17625, 0.04513]}
+  soup:                   {size: [0.06766, 0.10186, 0.06771]}
+  mustard:                {size: [0.09602, 0.19130, 0.05825]}
+  gelatin:                {size: [0.08918, 0.07312, 0.02998]}
+  meat:                   {size: [0.10165, 0.08354, 0.05760]}
+  bleach:                 {size: [0.10243, 0.25058, 0.06770]}
+  power_drill:            {size: [0.18436, 0.18684, 0.05719]}
+  power_drill_with_grip:  {size: [0.17997, 0.22054, 0.08122]}
+  klt:                    {size: [0.14700, 0.19700, 0.29700]}
+  multimeter:             {size: [0.17950, 0.08749, 0.04206]}
+  relay:                  {size: [0.05750, 0.04510, 0.10436]}
+  screwdriver:            {size: [0.24500, 0.03441, 0.03441]}
+  materialbox:            {size: [0.17499, 0.12600, 0.08808]}
+  hot_glue_gun:           {size: [0.16436, 0.17788, 0.05239]}
+  coke_can:               {size: [0.06700, 0.06700, 0.12390], center_offset: [0.0, 0.0, 0.06195]}
+  # conf_room_table.urdf.xacro defaults: 1.40 x 0.70 x 0.72, origin on the floor
+  table:                  {size: [1.40, 0.70, 0.72], center_offset: [0.0, 0.0, 0.36]}

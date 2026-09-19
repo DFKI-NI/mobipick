@@ -21,7 +21,9 @@
 
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>controller_manager_msgs</exec_depend>
+  <exec_depend>gazebo_msgs</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>mir_description</exec_depend>
   <exec_depend>mir_driver</exec_depend>
@@ -31,8 +33,10 @@
   <exec_depend>pbr_gazebo</exec_depend>
   <exec_depend>pbr_objects</exec_depend>
   <exec_depend>pose_teacher</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
   <exec_depend>python_qt_binding</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rospkg</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>rostopic</exec_depend>
   <exec_depend>rqt_gui</exec_depend>

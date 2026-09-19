@@ -1,0 +1,18 @@
+# Table top sizes [width, depth] in metres (table frame x, y) used by
+# shuffle_sim_objects.py to keep objects on their table. Tables not listed
+# under their world use `default` (conf_room_table.urdf.xacro defaults).
+# Sizes come from launch/worlds/<world>_spawn_sim_objects.launch.
+default: [1.40, 0.70]
+worlds:
+  moelk_tables:
+    # 1.40 x 0.70 with a barrier across the top at y = +0.095; the objects
+    # sit on the robot side of it (y > 0.1), which the region sampling keeps
+    table_1: [1.40, 0.70]
+    table_2: [1.40, 0.70]
+    table_3: [1.40, 0.70]
+  cic_tables:
+    table_1: [1.40, 0.70]
+    table_2: [0.80, 0.80]
+    table_3: [0.80, 0.80]
+    table_4: [0.80, 0.80]
+    storage_table: [0.80, 0.80]
