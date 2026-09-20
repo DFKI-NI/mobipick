@@ -25,6 +25,11 @@ class PoseTeacher(object):
         self.gripperClient.wait_for_server()
         rospy.loginfo("connected to gripper server...")
 
+        # Keep the established real-robot commands as defaults. Simulation can
+        # override the open gap when its contact geometry needs the full stroke.
+        self.gripperOpenPosition = rospy.get_param("~gripper_open_position", 0.1)
+        self.gripperClosePosition = rospy.get_param("~gripper_close_position", 0.0)
+
         # create services to open and close the gripper
         self.openGripperServer = rospy.Service("~open_gripper", Empty, self.openGripper)
         self.closeGripperServer = rospy.Service("~close_gripper", Empty, self.closeGripper)
@@ -63,14 +68,14 @@ class PoseTeacher(object):
     def openGripper(self, request):
         goal = control_msgs.msg.GripperCommandGoal()
         goal.command.max_effort = 100.0
-        goal.command.position = 0.1
+        goal.command.position = self.gripperOpenPosition
         self.gripperClient.send_goal_and_wait(goal)
         return EmptyResponse()
 
     def closeGripper(self, request):
         goal = control_msgs.msg.GripperCommandGoal()
         goal.command.max_effort = 50.0
-        goal.command.position = 0.0
+        goal.command.position = self.gripperClosePosition
         self.gripperClient.send_goal_and_wait(goal)
         return EmptyResponse()
 
