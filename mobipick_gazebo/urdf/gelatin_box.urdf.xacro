@@ -1,7 +1,9 @@
 <robot  xmlns:xacro="http://ros.org/wiki/xacro" name="gelatin_box_model">
   <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
 
-  <xacro:property name="mass" value="0.01" /><!-- TODO Measure mass -->
+  <!-- YCB object 009 weighs 97 g. The old 10 g placeholder made small
+       persistent-contact forces large enough to overcome gravity on release. -->
+  <xacro:property name="mass" value="0.097" />
   <xacro:property name="bb_size_x" value="0.08918" />
   <xacro:property name="bb_size_y" value="0.07312" />
   <xacro:property name="bb_size_z" value="0.02998" />

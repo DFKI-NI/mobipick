@@ -55,7 +55,9 @@ gripper_controller:
   # pressed with only ~0.2 Nm. rate: 0 disables it.
   stall_boost: {rate: 5.0, release_rate: 20.0, velocity_threshold: 0.05, deadband: 0.002}
 
-  goal_tolerance: 0.02             # [m] of jaw gap (~0.11 rad; the old trajectory controller used 0.2 rad)
+  # Do not report an open command complete while an object is still pinched. The previous 20 mm
+  # tolerance accepted a 100 mm goal at about 93 mm in the gelatin-box test.
+  goal_tolerance: 0.002            # [m] of jaw gap (~0.011 rad)
   stall_velocity_threshold: 0.05   # [rad/s] (the old controller's stopped_velocity_tolerance)
   stall_timeout: 0.5               # [s]
   settle_time: 0.3                 # [s] after the setpoint ramp ends the goal is finished even if the fingers still creep
