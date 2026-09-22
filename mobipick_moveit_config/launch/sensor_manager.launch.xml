@@ -1,8 +1,8 @@
 <launch>
   <!-- This file makes it easy to include the settings for sensor managers -->
 
-  <!-- whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater -->
-  <arg name="use_pointcloud" default="false"/>
+  <!-- Select the PointCloud2 updater when true, or the depth-image updater when false. -->
+  <arg name="use_pointcloud" default="true"/>
 
   <!-- Params for the octomap monitor -->
   <!--  <param name="octomap_frame" type="string" value="some frame in which the robot moves" /> -->

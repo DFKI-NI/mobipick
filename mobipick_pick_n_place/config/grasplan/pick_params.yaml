@@ -39,7 +39,7 @@ pregrasp_posture: 'home'
 clear_planning_scene: True   # default: True
 
 # if true the octomap is cleared just before picking
-clear_octomap: True # default: False
+clear_octomap: False # default: False
 
 # if true all objects from the gripper are detach before picking
 # this is useful for when you open the gripper manually (after picking) and want to pick another object

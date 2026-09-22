@@ -11,6 +11,10 @@ gripper_joint_efforts:
 # the distance between the gripper fingers such that the object is released
 gripper_release_distance: 0.12 # 0.1 is not sufficient for multimeter for some reason... however it should
 
+# Keep obstacles outside the current camera view while inserting.
+# Enable only as a diagnostic/workaround for stale octomap data.
+clear_octomap: False
+
 # default: empty list, a list of arm poses to visit before inserting an object to disentangle the cable
 disentangle_required: True
 poses_to_go_before_insert:

@@ -14,6 +14,10 @@ gripper_release_distance: 0.12 # 0.1 is not sufficient for multimeter for some r
 # if possible, place poses will be generated min_dist meters apart
 min_dist: 0.2
 
+# Keep unknown obstacles in MoveIt's occupancy map while placing.
+# Enable only as a diagnostic/workaround for stale octomap data.
+clear_octomap: False
+
 # ignore min_dist param for some objects
 ignore_min_dist_list:
     - 'klt'

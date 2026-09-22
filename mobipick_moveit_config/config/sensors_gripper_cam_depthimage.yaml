@@ -1,4 +1,6 @@
-# This file configures the DepthImageOctomapUpdater. It's faster than the PointCloudOctomapUpdater, but it doesn't work in Gazebo (because the simulated depth image is broken).
+# This file configures MoveIt's DepthImageOctomapUpdater. It is an alternative
+# input path to the same planning-scene octomap; current Gazebo depth images are
+# usable, but MobiPick now selects the PointCloud2 updater by default.
 
 sensors:
   - sensor_plugin: occupancy_map_monitor/DepthImageOctomapUpdater

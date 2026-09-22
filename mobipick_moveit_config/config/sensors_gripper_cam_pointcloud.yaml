@@ -1,4 +1,6 @@
-# This file configures the PointCloudOctomapUpdater. It's slower than the DepthImageOctomapUpdater, but it works in Gazebo.
+# This file configures MoveIt's PointCloudOctomapUpdater. Both supported
+# updaters build the same planning-scene octomap; this one consumes the
+# registered PointCloud2 produced by the camera pipeline.
 
 sensors:
   - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
@@ -9,5 +11,7 @@ sensors:
     point_subsample: 1
     padding_offset: 0.1
     padding_scale: 1.0
-#   filtered_cloud_topic: filtered_cloud
-# this last topic is just to debug, having it adds processing time
+    # Debug output after MoveIt filters robot links, attached bodies and
+    # registered collision objects. Keep it enabled while validating octomap
+    # integration; it adds some processing overhead.
+    filtered_cloud_topic: filtered_cloud

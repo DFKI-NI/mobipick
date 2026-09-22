@@ -35,8 +35,8 @@
   <arg name="use_gui" default="false" />
   <arg name="use_rviz" default="true" />
 
-  <!-- whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater -->
-  <arg name="use_pointcloud" default="false"/>
+  <!-- Select the PointCloud2 updater when true, or the depth-image updater when false. -->
+  <arg name="use_pointcloud" default="true"/>
 
   <!-- If needed, broadcast static tf for robot root -->
   <node pkg="tf2_ros" type="static_transform_publisher" name="virtual_joint_broadcaster_0" args="0 0 0 0 0 0 map $(arg prefix_)odom" />

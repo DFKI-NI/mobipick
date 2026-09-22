@@ -34,8 +34,9 @@
   <arg name="publish_monitored_planning_scene" default="true"/>
 
   <!-- sensor settings -->
-  <!-- whether to use the pointcloud (on Gazebo) or depthimage (on real robot) octomap updater -->
-  <arg name="use_pointcloud" default="false"/>
+  <!-- Select the PointCloud2 updater when true, or the depth-image updater when false.
+       Both feed MoveIt's planning-scene octomap. -->
+  <arg name="use_pointcloud" default="true"/>
 
   <!-- Load  ExecuteTaskSolutionCapability so we can execute found solutions in simulation -->
   <arg name="capabilities" default="move_group/ExecuteTaskSolutionCapability"/>
