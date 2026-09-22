@@ -37,6 +37,9 @@
   <!-- Select the PointCloud2 updater when true, or the depth-image updater when false.
        Both feed MoveIt's planning-scene octomap. -->
   <arg name="use_pointcloud" default="true"/>
+  <!-- Point cloud updater settings; the simulation overrides this with a cheaper variant. -->
+  <arg name="pointcloud_sensor_config"
+       default="$(find mobipick_moveit_config)/config/sensors_gripper_cam_pointcloud.yaml"/>
 
   <!-- Load  ExecuteTaskSolutionCapability so we can execute found solutions in simulation -->
   <arg name="capabilities" default="move_group/ExecuteTaskSolutionCapability"/>
@@ -110,6 +113,7 @@
   <include ns="move_group" file="$(dirname)/sensor_manager.launch.xml" if="$(arg allow_trajectory_execution)">
     <arg name="moveit_sensor_manager" value="mobipick" />
     <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
+    <arg name="pointcloud_sensor_config" value="$(arg pointcloud_sensor_config)" />
   </include>
 
   <!-- Start the actual move_group node/action server -->

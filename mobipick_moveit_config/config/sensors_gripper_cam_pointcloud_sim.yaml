@@ -1,0 +1,30 @@
+# Simulation variant of sensors_gripper_cam_pointcloud.yaml.
+#
+# Gazebo renders the gripper camera at roughly one frame per second on the
+# development laptop, so everything move_group does per frame competes with
+# planning. Two differences to the robot config buy that time back without
+# changing what the octomap represents:
+#
+#   * point_subsample 2 keeps about 4 mm between samples at the 1 m working
+#     distance, still far finer than the 25 mm voxels, at a quarter of the
+#     masking and ray-casting work.
+#   * no filtered_cloud_topic: publishing a second full-size cloud was a
+#     validation aid while the octomap integration was being brought up.
+
+sensors:
+  - sensor_plugin: occupancy_map_monitor/PointCloudOctomapUpdater
+    point_cloud_topic: eef_main_cam/depth_registered/points
+    # A voxel is only freed when a returned point BEHIND it is within max_range: the
+    # updater needs a ray that passes through the voxel and terminates on a surface.
+    # Measured from the observe100cm_right pose, the table points behind the far half
+    # of a table lie 1.05-1.20 m away, so at 1.0 m those voxels could never be cleared
+    # and objects removed there left permanent ghosts. 2.0 m covers a whole table with
+    # margin and stays well inside the camera far clip of 3.5 m.
+    max_range: 2.0
+    # matches the 3 Hz the simulated camera is now asked for; anything lower here
+    # would throw the extra frames away before they reach the octomap
+    max_update_rate: 3.0
+    frame_subsample: 1
+    point_subsample: 2
+    padding_offset: 0.1
+    padding_scale: 1.0

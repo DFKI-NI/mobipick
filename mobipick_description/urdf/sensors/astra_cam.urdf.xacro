@@ -103,7 +103,10 @@
     <gazebo reference="${prefix}${camera_name}_depth_frame">
       <sensor type="depth" name="${camera_name}">
         <always_on>true</always_on>
-        <update_rate>1.0</update_rate>
+        <!-- Trial: 3 Hz instead of 1 Hz so the planning-scene octomap clears stale
+             voxels in about three seconds instead of nine. Gazebo only reaches this
+             if it has the rendering budget; drop back to 1.0 if the sim slows down. -->
+        <update_rate>3.0</update_rate>
         <camera>
           <horizontal_fov>${60.0 * pi/180.0}</horizontal_fov>
           <image>
@@ -119,7 +122,7 @@
         <plugin name="kinect_${camera_name}_controller" filename="libgazebo_ros_openni_kinect.so">
           <cameraName>${camera_name}</cameraName>
           <alwaysOn>true</alwaysOn>
-          <updateRate>1.0</updateRate>
+          <updateRate>3.0</updateRate>
           <imageTopicName>rgb/image_raw</imageTopicName>
           <depthImageTopicName>depth_registered/image_raw</depthImageTopicName>
           <pointCloudTopicName>depth_registered/points</pointCloudTopicName>

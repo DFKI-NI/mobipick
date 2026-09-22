@@ -7,6 +7,9 @@
 
   <!-- Select the PointCloud2 updater when true, or the depth-image updater when false. -->
   <arg name="use_pointcloud" default="true"/>
+  <!-- Point cloud updater settings; the simulation overrides this with a cheaper variant. -->
+  <arg name="pointcloud_sensor_config"
+       default="$(find mobipick_moveit_config)/config/sensors_gripper_cam_pointcloud.yaml"/>
 
   # The planning and execution components of MoveIt! configured to
   # publish the current configuration of the robot (simulated or real)
@@ -17,6 +20,7 @@
       <arg name="publish_monitored_planning_scene" value="true" />
       <arg name="info" value="true" />
       <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
+      <arg name="pointcloud_sensor_config" value="$(arg pointcloud_sensor_config)" />
       <arg name="prefix" value="$(arg tf_prefix)" />
     </include>
   </group>

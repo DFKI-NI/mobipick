@@ -1,6 +1,9 @@
 <launch>
   <!-- Select the PointCloud2 updater when true, or the depth-image updater when false. -->
   <arg name="use_pointcloud" default="true"/>
+  <!-- Point cloud updater settings; the simulation overrides this with a cheaper variant. -->
+  <arg name="pointcloud_sensor_config"
+       default="$(find mobipick_moveit_config)/config/sensors_gripper_cam_pointcloud.yaml"/>
 
   <!-- Params for the octomap monitor -->
   <param name="octomap_frame" type="string" value="/mobipick/odom" />
@@ -8,6 +11,6 @@
   <param name="max_range" type="double" value="1.0" />
 
   <!-- sensors used to update the map -->
-  <rosparam     if="$(arg use_pointcloud)" command="load" file="$(find mobipick_moveit_config)/config/sensors_gripper_cam_pointcloud.yaml" />
+  <rosparam     if="$(arg use_pointcloud)" command="load" file="$(arg pointcloud_sensor_config)" />
   <rosparam unless="$(arg use_pointcloud)" command="load" file="$(find mobipick_moveit_config)/config/sensors_gripper_cam_depthimage.yaml" />
 </launch>
