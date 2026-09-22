@@ -22,9 +22,13 @@
           <!-- <gripper_link>gripper_right_robotiq_fingertip_65mm</gripper_link> -->
         </arm>
 
-        <!-- Is the tolerance angle (in degrees) between two force vectors to be considered "opposing forces".
-             If the angle is smaller than this, they are not opposing. -->
-        <forces_angle_tolerance>90</forces_angle_tolerance> <!-- NOTE: min value: 90 degree-->
+        <!-- Minimum gripper joint effort (Nm) that counts as squeezing an object. -->
+        <grip_effort_threshold>1.0</grip_effort_threshold>
+
+        <!-- Time (s) the grip must hold before the object is attached, and time (s) the grip
+             must be lost before the object is detached. -->
+        <attach_delay>1.0</attach_delay>
+        <detach_delay>0.1</detach_delay>
 
         <!-- Is the rate at which all contact points are checked against the "gripping criterion".
              Note that in-between such updates, existing contact points may be collected at a higher rate
@@ -43,13 +47,6 @@
              So this counter is like a "buffer" which, when it is full, maintains the state, and when it is empty, again, the object is released.
              This should be at least double of grip_count_threshold. -->
         <max_grip_count>16</max_grip_count>
-
-        <!-- Is the distance which the gripper links are allowed to move away from the object during* a grasp without the object being detached,
-             even if there are currently no actual contacts on the object. This condition can happen if the fingers "wobble"
-             or move ever so slightly away from the object, and therefore the "gripping criterion" fails in a few subsequent update iterations.
-             This setting is to make the behaviour more stable. Setting this number too high will also lead to the object not being detached
-             even if the grippers have opened up to release it, so use this with care. -->
-        <release_tolerance>0.01</release_tolerance>
 
         <disable_collisions_on_attach>false</disable_collisions_on_attach>
         <contact_topic>__default_topic__</contact_topic>
