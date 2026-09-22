@@ -6,7 +6,10 @@
   <arg name="robot_description" default="robot_description"/>
   <arg name="robot_version" default="os" />
 
-  <arg name="shape_transform_cache_lookup_wait_time" default="0.1" doc="How long to wait (in seconds) for tf transforms during self filtering (default: 0.05)" />
+  <!-- The wrist camera point cloud can arrive while Gazebo is CPU-bound by
+       grasp planning.  Allow the robot-state TF cache to catch up before
+       self-filtering instead of integrating an unfiltered cloud. -->
+  <arg name="shape_transform_cache_lookup_wait_time" default="2.0" doc="How long to wait (in seconds) for tf transforms during self filtering (MoveIt default: 0.05)" />
 
   <!-- A prefix for all joints and links in the robot, without trailing / -->
   <arg name="tf_prefix" default="" />
