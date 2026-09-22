@@ -20,8 +20,8 @@
     version: master
 - git:
     local-name: gazebo_pkgs
-    uri: https://github.com/JenniferBuehler/gazebo-pkgs.git
-    version: master
+    uri: https://github.com/oscar-lima/gazebo-pkgs.git
+    version: force-based-grasp-fix
 - git:
     local-name: general_message_pkgs
     uri: https://github.com/JenniferBuehler/general-message-pkgs.git
