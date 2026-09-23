@@ -26,5 +26,12 @@ sensors:
     max_update_rate: 3.0
     frame_subsample: 1
     point_subsample: 2
-    padding_offset: 0.1
+    # The mask is applied with this padding to every collision object too, including
+    # the table boxes: 0.1 cut away everything up to 10 cm above a table top, so the
+    # 3 cm gelatin box never reached the octomap and taller objects lost their lower
+    # part. The simulated depth is noise-free and the table boxes match the Gazebo
+    # tables, so 2 cm keeps the table surface and the robot out of the octomap
+    # (verified: no voxels on the free table surface or near the arm) while objects
+    # taller than 2 cm show up.
+    padding_offset: 0.02
     padding_scale: 1.0
