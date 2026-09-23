@@ -1,0 +1,64 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="person_standing_model">
+  <xacro:include filename="$(find mobipick_description)/urdf/common_properties.urdf.xacro" />
+
+  <xacro:property name="mass" value="80.0" />
+  <xacro:property name="mesh_file" value="package://mobipick_gazebo/meshes/person_standing/standing.dae" />
+
+  <link name="person_standing">
+    <inertial>
+      <origin xyz="0 -0.1 0.95" rpy="0 0 0" />
+      <mass value="${mass}" />
+      <inertia ixx="24.88" ixy="0.0" ixz="0.0"
+        iyy="25.73" iyz="0.0"
+        izz="2.48" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.02" rpy="0.04 0 0" />
+      <geometry>
+        <mesh filename="${mesh_file}" />
+      </geometry>
+    </visual>
+    <!-- left shoe -->
+    <visual>
+      <origin xyz="0.127247 -0.108882 0.051576" rpy="0 0 0" />
+      <geometry>
+        <box size="0.107316 0.298547 0.087956" />
+      </geometry>
+      <material name="person_shoe_dark_blue">
+        <color rgba="0.1 0.1 0.2 1" />
+      </material>
+    </visual>
+    <!-- right shoe -->
+    <visual>
+      <origin xyz="-0.122268 -0.108882 0.051576" rpy="0 0 0" />
+      <geometry>
+        <box size="0.107316 0.298547 0.087956" />
+      </geometry>
+      <material name="person_shoe_dark_blue">
+        <color rgba="0.1 0.1 0.2 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.02" rpy="0.04 0 0" />
+      <geometry>
+        <mesh filename="${mesh_file}" />
+      </geometry>
+    </collision>
+    <!-- flat bottom contact patch so the person stands stably -->
+    <collision>
+      <origin xyz="0 -0.1 0.01" rpy="0 0 0" />
+      <geometry>
+        <box size="0.5 0.35 0.02" />
+      </geometry>
+    </collision>
+  </link>
+
+  <gazebo reference="person_standing">
+    <mu1>1.0</mu1>
+    <mu2>1.0</mu2>
+    <kp>1e+06</kp>
+    <kd>1.0</kd>
+    <minDepth>0.002</minDepth>
+  </gazebo>
+
+</robot>
