@@ -1,0 +1,7 @@
+<robot  xmlns:xacro="http://ros.org/wiki/xacro" name="person_standing_model">
+  <xacro:include filename="$(find mobipick_gazebo)/urdf/person_standing.urdf.xacro" />
+
+  <gazebo>
+    <static>true</static>
+  </gazebo>
+</robot>

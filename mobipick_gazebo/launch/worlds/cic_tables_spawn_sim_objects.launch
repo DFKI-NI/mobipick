@@ -52,6 +52,8 @@
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
   <param name="hot_glue_gun_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/hot_glue_gun.urdf.xacro'" />
+  <param name="person_standing_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/static/static_person_standing.urdf.xacro'" />
 
   <!-- spawn tables -->
   <node name="spawn_model_worker_table_1" pkg="gazebo_ros" type="spawn_model"
@@ -73,6 +75,11 @@
   <!-- table 1 objects -->
   <node name="spawn_multimeter_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param multimeter_description -model multimeter_1 -x 18.49 -y 15.52 -z 0.74 -Y -1.7969"
+        respawn="false" output="screen" />
+
+  <!-- spawn worker facing table 1, opposite side of the robot -->
+  <node name="spawn_person_standing_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param person_standing_description -model person_standing_1 -x 17.5 -y 15.17 -z 0.0 -R 0.0 -P 0.0 -Y 1.5708"
         respawn="false" output="screen" />
 
   <!-- table 2 objects -->
