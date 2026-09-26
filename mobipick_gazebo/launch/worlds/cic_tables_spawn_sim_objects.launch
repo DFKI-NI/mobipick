@@ -10,6 +10,7 @@
   <arg name="start_paused" default="true" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
+  <arg name="open_set_objects" default="true" doc="also spawn the open-set demo objects (apple, banana, tennis ball, ...) from mobipick_open_set_objects (amenable_ws)" />
 
   <!-- start Gazebo with specified world and spawn Mobipick -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
@@ -97,4 +98,7 @@
   <node name="klt_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param klt_description -model klt_1 -x 21.25 -y 13.99 -z 0.8 -Y 0.7572"
         respawn="false" output="screen" />
+
+  <!-- open-set demo objects (YCB-like), fixed poses near the robot's side of tables 1-3 -->
+  <include if="$(arg open_set_objects)" file="$(find mobipick_open_set_objects)/launch/cic_tables_objects.launch" />
 </launch>
