@@ -20,3 +20,11 @@ disentangle_required: True
 poses_to_go_before_insert:
     - 'untangle_cable_guide_1_right'
     - 'untangle_cable_guide_2_right'
+
+# true (default): insert objects in the orientation they were grasped in.
+# false: objects whose collision box is at most comfortable_orientation_max_size long (balls, fruit) are
+# released with the gripper pointing straight down and the wrist turned as little as possible from where it is
+# (after the untangle poses), which avoids the large wrist rotations that wind up the arm cable. Both are read
+# on every insert goal, so they can be changed at runtime with rosparam set.
+place_same_orientation_as_picked: True
+comfortable_orientation_max_size: 0.15

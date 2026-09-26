@@ -36,6 +36,9 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self._estop_pressed = False
+        # protective stop (e.g. an entangled cable on the real arm): the arm is locked like with the e-stop, but
+        # the robot stays powered and get_safety_mode reports PROTECTIVE_STOP
+        self._protective_stop = False
         self._ns = _normalize_ns(rospy.get_param("~robot_namespace", "mobipick"))
         # controllers to stop while the e-stop is pressed (only the ones currently running are touched)
         self._estop_controllers: List[str] = rospy.get_param(
@@ -61,6 +64,7 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
             self._handle_get_robot_mode,
         )
         self._set_estop_srv = rospy.Service("~set_estop", SetBool, self._handle_set_estop)
+        self._set_protective_srv = rospy.Service("~set_protective_stop", SetBool, self._handle_set_protective_stop)
 
         self._build_ui()
         self._state_changed.connect(self._update_button)
@@ -68,12 +72,17 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._update_button()
 
     def shutdown(self) -> None:
-        for srv in (self._safety_srv, self._robot_mode_srv, self._set_estop_srv):
+        for srv in (self._safety_srv, self._robot_mode_srv, self._set_estop_srv, self._set_protective_srv):
             srv.shutdown()
 
     def _handle_get_safety_mode(self, _req: GetSafetyModeRequest) -> GetSafetyModeResponse:
         mode = SafetyMode()
-        mode.mode = SafetyMode.ROBOT_EMERGENCY_STOP if self._estop_pressed else SafetyMode.NORMAL
+        if self._estop_pressed:
+            mode.mode = SafetyMode.ROBOT_EMERGENCY_STOP
+        elif self._protective_stop:
+            mode.mode = SafetyMode.PROTECTIVE_STOP
+        else:
+            mode.mode = SafetyMode.NORMAL
         return GetSafetyModeResponse(safety_mode=mode)
 
     def _handle_get_robot_mode(self, _req: GetRobotModeRequest) -> GetRobotModeResponse:
@@ -86,12 +95,29 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         state = "PRESSED" if self._estop_pressed else "RELEASED"
         return SetBoolResponse(success=True, message=f"e-stop {state}")
 
+    def _handle_set_protective_stop(self, req: SetBoolRequest) -> SetBoolResponse:
+        self._set_protective_stop(bool(req.data), "service")
+        state = "ACTIVE" if self._protective_stop else "RELEASED"
+        return SetBoolResponse(success=True, message=f"protective stop {state}")
+
     def _set_estop(self, pressed: bool, source: str) -> None:
+        was_locked = self._estop_pressed or self._protective_stop
         self._estop_pressed = pressed
-        self._state_changed.emit()
         rospy.loginfo("Simulated e-stop %s via %s", "PRESSED" if pressed else "RELEASED", source)
-        # controller switching talks to the controller manager; keep it off the Qt and service threads
-        threading.Thread(target=self._apply_controller_lock, args=(pressed,), daemon=True).start()
+        self._apply_lock_change(was_locked)
+
+    def _set_protective_stop(self, active: bool, source: str) -> None:
+        was_locked = self._estop_pressed or self._protective_stop
+        self._protective_stop = active
+        rospy.loginfo("Simulated protective stop %s via %s", "ACTIVE" if active else "RELEASED", source)
+        self._apply_lock_change(was_locked)
+
+    def _apply_lock_change(self, was_locked: bool) -> None:
+        self._state_changed.emit()
+        locked = self._estop_pressed or self._protective_stop
+        if locked != was_locked:
+            # controller switching talks to the controller manager; keep it off the Qt and service threads
+            threading.Thread(target=self._apply_controller_lock, args=(locked,), daemon=True).start()
 
     def _apply_controller_lock(self, pressed: bool) -> None:
         with self._switch_lock:
@@ -156,8 +182,16 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._status.setAlignment(QtCore.Qt.AlignCenter)
         self._status.setWordWrap(True)
 
+        self._protective_button = QtWidgets.QPushButton()
+        self._protective_button.setCheckable(True)
+        self._protective_button.setMinimumHeight(40)
+        self._protective_button.setToolTip("Simulate a UR protective stop (e.g. an entangled cable)")
+        self._protective_button.clicked.connect(
+            lambda: self._set_protective_stop(not self._protective_stop, "GUI"))
+
         layout.addWidget(self._label)
         layout.addWidget(self._button)
+        layout.addWidget(self._protective_button)
         layout.addWidget(self._status)
 
     def _toggle_estop(self) -> None:
@@ -175,6 +209,16 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._button.setAutoFillBackground(True)
         self._button.update()
         self._button.setChecked(self._estop_pressed)
+        palette = self._protective_button.palette()
+        if self._protective_stop:
+            self._protective_button.setText("PROTECTIVE STOP ACTIVE")
+            palette.setColor(QtGui.QPalette.Button, QtGui.QColor(230, 140, 0))
+        else:
+            self._protective_button.setText("PROTECTIVE STOP: none")
+            palette.setColor(QtGui.QPalette.Button, QtGui.QColor(0, 160, 0))
+        self._protective_button.setPalette(palette)
+        self._protective_button.setAutoFillBackground(True)
+        self._protective_button.setChecked(self._protective_stop)
 
 
 class SimulatedUrDashboardPlugin(Plugin):
