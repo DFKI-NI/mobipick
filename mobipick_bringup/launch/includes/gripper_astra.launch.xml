@@ -23,6 +23,7 @@
     <arg name="depth_camera_info_url" value="package://mobipick_bringup/camera_info/depth_$(arg astra_serial).yaml" />
     <arg name="ir_processing"         value="$(arg ir_processing)" />
     <arg name="load_driver"           value="$(arg load_driver)" />
+    <arg name="respawn"               value="true" />
   </include>
   <param name="eef_main_cam/driver/data_skip" value="9" />
 

@@ -57,7 +57,8 @@
   </node>
 
   <!-- depth image filter -->
-  <node pkg="nodelet" type="nodelet" name="crop_filter_nodelet" args="load astra_depth_filters/CropFilterNodelet $(arg manager)" output="screen">
+  <node pkg="nodelet" type="nodelet" name="crop_filter_nodelet" args="load astra_depth_filters/CropFilterNodelet $(arg manager)" output="screen"
+        respawn="$(arg respawn)">
     <remap from="image_raw" to="$(arg depth)/image_raw_unfiltered" />
     <remap from="image_raw_filtered" to="$(arg depth)/image_raw" />
 
@@ -68,7 +69,8 @@
   </node>
 
   <!-- depth_registered image filter -->
-  <node pkg="nodelet" type="nodelet" name="rcrop_filter_nodelet" args="load astra_depth_filters/CropFilterNodelet $(arg manager)" output="screen">
+  <node pkg="nodelet" type="nodelet" name="rcrop_filter_nodelet" args="load astra_depth_filters/CropFilterNodelet $(arg manager)" output="screen"
+        respawn="$(arg respawn)">
     <remap from="image_raw" to="$(arg depth_registered)/image_raw_unfiltered" />
     <remap from="image_raw_filtered" to="$(arg depth_registered)/image_raw" />
 

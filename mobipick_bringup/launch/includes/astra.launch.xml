@@ -53,7 +53,8 @@
   <arg name="hw_registered_processing"        default="false" unless="$(arg depth_registration)" />
   <arg name="sw_registered_processing"        default="true" unless="$(arg depth_registration)" />
 
-  <!-- Disable bond topics by default -->
+  <!-- respawn: the manager restarts when it dies (e.g. a liborbbec segfault after a USB drop) and every nodelet
+       loader is bonded to it and respawns, so the whole camera stack comes back; false: no bonds, nothing restarts -->
   <arg name="respawn" default="false" />
 
   <!-- Worker threads for the nodelet manager -->
@@ -64,12 +65,11 @@
 
 	  <!-- Start nodelet manager -->
 	  <arg name="manager" value="$(arg camera)_nodelet_manager" />
-	  <arg name="debug" default="false" /> <!-- Run manager in GDB? -->
-	  <include file="$(find rgbd_launch)/launch/includes/manager.launch.xml">
-	    <arg name="name" value="$(arg manager)" />
-	    <arg name="debug" value="$(arg debug)" />
-	    <arg name="num_worker_threads"  value="$(arg num_worker_threads)" />
-	  </include>
+	  <!-- like rgbd_launch includes/manager.launch.xml, which cannot respawn -->
+	  <node pkg="nodelet" type="nodelet" name="$(arg manager)" args="manager" output="screen"
+	        respawn="$(arg respawn)" respawn_delay="5">
+	    <param name="num_worker_threads" value="$(arg num_worker_threads)" />
+	  </node>
 
     <!-- Load driver -->
     <include if="$(arg load_driver)"

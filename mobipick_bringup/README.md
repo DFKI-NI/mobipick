@@ -23,11 +23,12 @@ representation, task planning and object recognition.
 It loads the URDF model of the robot, creates the connection to the MIR base
 and starts camera drivers.
 
-The eef Astra camera gets a relauncher (`nodes/camera_driver_relauncher.py`, arg `relaunch_driver` of
-`gripper_astra.launch.xml`, default on): when no RGB image arrives for 10 s it unloads and reloads the driver
-nodelet, e.g. after a tangled arm cable pulled the USB cable (the driver stays alive but silent). Its state is on
-`/mobipick/eef_main_cam_driver_relauncher/status`. To add it to a running robot without restarting the bringup:
-`roslaunch mobipick_bringup eef_camera_driver_relauncher.launch`.
+The eef Astra camera recovers by itself (`gripper_astra.launch.xml` passes `respawn:=true` to `astra.launch.xml`):
+its nodelet manager respawns when it dies (e.g. a liborbbec segfault after a USB drop) and every camera nodelet
+loader is bonded to it and respawns too. When the driver stays alive but silent (the USB cable was pulled by a
+tangled arm cable), `nodes/camera_driver_relauncher.py` (arg `relaunch_driver`, default on) kills the manager
+after 10 s without RGB images, so the whole stack restarts. Its state is on
+`/mobipick/eef_main_cam_driver_relauncher/status`.
 
 Using the `namespace` and `tf_prefix` arguments you can select the prefixes for
 all nodes and tf frames. TF frames are changed without using the
