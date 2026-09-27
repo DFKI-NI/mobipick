@@ -19,6 +19,8 @@
 
   <build_depend>roslaunch</build_depend>
 
+  <exec_depend>actionlib</exec_depend>
+  <exec_depend>control_msgs</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>controller_manager_msgs</exec_depend>
   <exec_depend>gazebo_msgs</exec_depend>

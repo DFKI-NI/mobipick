@@ -4,14 +4,23 @@
 # emulate the UR brakes: the velocity JTC leaves its last command latched in Gazebo when stopped, so the arm
 # would coast; a JointGroupVelocityController starts with zero commands and the joint motors hold the pose.
 # Usable both as an rqt plugin (SimulatedUrDashboardPlugin) and standalone (nodes/simulated_ur_dashboard.py).
+import math
 import threading
-from typing import List
+from typing import Dict, List, Optional
 
+import actionlib
 import rospy
+from control_msgs.msg import (
+    FollowJointTrajectoryAction,
+    FollowJointTrajectoryActionGoal,
+    FollowJointTrajectoryActionResult,
+    FollowJointTrajectoryGoal,
+)
 from controller_manager_msgs.srv import ListControllers, SwitchController, SwitchControllerRequest
 from python_qt_binding import QtCore, QtGui, QtWidgets
 from rqt_gui_py.plugin import Plugin
-from std_srvs.srv import SetBool, SetBoolRequest, SetBoolResponse
+from sensor_msgs.msg import JointState
+from std_srvs.srv import SetBool, SetBoolRequest, SetBoolResponse, Trigger
 from ur_dashboard_msgs.msg import RobotMode, SafetyMode
 from ur_dashboard_msgs.srv import (
     GetRobotMode,
@@ -52,6 +61,26 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._switch_controller = rospy.ServiceProxy(f"{cm_ns}/switch_controller", SwitchController)
         self._stopped_controllers: List[str] = []
         self._switch_lock = threading.Lock()
+        # "untangle cable" button: while the protective stop is active, the cable monitor
+        # (mobipick_sim_cable_entanglement, #118) moves the wrist joints one at a time until the arm cable has slack
+        # again; the protective stop stays active, the person watches and releases it
+        self._untangle_service = rospy.get_param(
+            "~untangle_service", "/mobipick/cable_entanglement_monitor/untangle")
+        self._untangle_running = False
+        # like the real UR, releasing a protective stop can let the interrupted arm trajectory continue: the rest of
+        # the trajectory that ran when the stop hit is resumed on release, unless the arm was moved meanwhile (e.g.
+        # UNTANGLE CABLE), the e-stop was pressed, or ~resume_trajectory_after_release is false
+        self._resume_after_release = bool(rospy.get_param("~resume_trajectory_after_release", True))
+        self._resume_max_offset = math.radians(float(rospy.get_param("~resume_max_joint_offset_deg", 2.0)))
+        self._traj_action = rospy.get_param("~arm_trajectory_action", f"{self._ns}arm_controller/follow_joint_trajectory")
+        self._active_traj = None  # (goal id, trajectory, start time) of the running arm trajectory
+        self._paused_traj = None  # (trajectory, elapsed s, joint positions) snapshot taken when the stop hit
+        self._joints: Dict[str, float] = {}
+        self._traj_client: Optional[actionlib.SimpleActionClient] = None
+        rospy.Subscriber(f"{self._traj_action}/goal", FollowJointTrajectoryActionGoal, self._on_traj_goal, queue_size=5)
+        rospy.Subscriber(f"{self._traj_action}/result", FollowJointTrajectoryActionResult, self._on_traj_result,
+                         queue_size=5)
+        rospy.Subscriber(f"{self._ns}joint_states", JointState, self._on_joints, queue_size=5)
 
         self._safety_srv = rospy.Service(
             f"{self._ns}ur_hardware_interface/dashboard/get_safety_mode",
@@ -108,6 +137,8 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
 
     def _set_protective_stop(self, active: bool, source: str) -> None:
         was_locked = self._estop_pressed or self._protective_stop
+        if active and not was_locked:
+            self._pause_trajectory()
         self._protective_stop = active
         rospy.loginfo("Simulated protective stop %s via %s", "ACTIVE" if active else "RELEASED", source)
         self._apply_lock_change(was_locked)
@@ -145,9 +176,67 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
                         self._switch(start=self._stopped_controllers)
                     self._stopped_controllers = []
                     self._status_changed.emit("Controllers running")
+                    self._resume_trajectory()
             except (rospy.ServiceException, rospy.ROSException) as exc:
                 rospy.logwarn("Simulated e-stop: controller switch failed: %s", exc)
                 self._status_changed.emit(f"Controller switch failed: {exc}")
+
+    # ------------------------------------------------------------------ interrupted trajectory
+    def _on_traj_goal(self, msg: FollowJointTrajectoryActionGoal) -> None:
+        stamp = msg.goal.trajectory.header.stamp
+        start = stamp if stamp and not stamp.is_zero() else rospy.Time.now()
+        self._active_traj = (msg.goal_id.id, msg.goal.trajectory, start)
+
+    def _on_traj_result(self, msg: FollowJointTrajectoryActionResult) -> None:
+        if self._active_traj and msg.status.goal_id.id == self._active_traj[0]:
+            self._active_traj = None
+
+    def _on_joints(self, msg: JointState) -> None:
+        self._joints.update(zip(msg.name, msg.position))
+
+    def _pause_trajectory(self) -> None:
+        """Snapshot of the running arm trajectory when the protective stop hits (the controller stop aborts it)."""
+        self._paused_traj = None
+        if not self._resume_after_release or self._active_traj is None:
+            return
+        _, traj, start = self._active_traj
+        elapsed = (rospy.Time.now() - start).to_sec()
+        if traj.points and elapsed < traj.points[-1].time_from_start.to_sec():
+            self._paused_traj = (traj, elapsed, {n: self._joints.get(n) for n in traj.joint_names})
+
+    def _resume_trajectory(self) -> None:
+        paused, self._paused_traj = self._paused_traj, None
+        if paused is None or self._estop_pressed or self._protective_stop:
+            return
+        traj, elapsed, q_stop = paused
+        moved = [n for n in traj.joint_names
+                 if q_stop.get(n) is None or abs(self._joints.get(n, 1e9) - q_stop[n]) > self._resume_max_offset]
+        if moved:
+            rospy.loginfo("Simulated dashboard: arm moved during the stop (%s), interrupted trajectory dropped",
+                          ", ".join(moved))
+            return
+        goal = FollowJointTrajectoryGoal()
+        goal.trajectory.joint_names = list(traj.joint_names)
+        lead = 0.3
+        for p in traj.points:
+            t = p.time_from_start.to_sec() - elapsed
+            if t > 0.0:
+                p.time_from_start = rospy.Duration(t + lead)
+                goal.trajectory.points.append(p)
+        if not goal.trajectory.points:
+            return
+        try:
+            if self._traj_client is None:
+                self._traj_client = actionlib.SimpleActionClient(self._traj_action, FollowJointTrajectoryAction)
+            if not self._traj_client.wait_for_server(rospy.Duration(2.0)):
+                raise rospy.ROSException("no trajectory action server")
+            self._traj_client.send_goal(goal)
+            text = (f"Resumed the interrupted arm trajectory ({goal.trajectory.points[-1].time_from_start.to_sec():.1f} s "
+                    "left), like the real UR after a release")
+        except rospy.ROSException as exc:
+            text = f"Could not resume the interrupted trajectory: {exc}"
+        rospy.logwarn("Simulated dashboard: %s", text)
+        self._status_changed.emit(text)
 
     def _switch(self, start: List[str] = (), stop: List[str] = ()) -> None:
         self._switch_controller.wait_for_service(timeout=2.0)
@@ -189,10 +278,38 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._protective_button.clicked.connect(
             lambda: self._set_protective_stop(not self._protective_stop, "GUI"))
 
+        self._untangle_button = QtWidgets.QPushButton("UNTANGLE CABLE")
+        self._untangle_button.setMinimumHeight(40)
+        self._untangle_button.setToolTip(
+            "While the protective stop is active: move the wrist joints one at a time until the arm cable has "
+            "slack again (cable monitor). The protective stop stays active: watch the arm, then release it.")
+        self._untangle_button.clicked.connect(self._start_untangle)
+
         layout.addWidget(self._label)
         layout.addWidget(self._button)
         layout.addWidget(self._protective_button)
+        layout.addWidget(self._untangle_button)
         layout.addWidget(self._status)
+
+    def _start_untangle(self) -> None:
+        if self._untangle_running or not self._protective_stop or self._estop_pressed:
+            return
+        self._untangle_running = True
+        self._state_changed.emit()
+        self._status_changed.emit("Untangling the cable ...")
+        threading.Thread(target=self._untangle, daemon=True).start()
+
+    def _untangle(self) -> None:
+        try:
+            rospy.wait_for_service(self._untangle_service, timeout=2.0)
+            resp = rospy.ServiceProxy(self._untangle_service, Trigger)()
+            text = ("Untangled: " if resp.success else "Untangle failed: ") + resp.message
+        except (rospy.ServiceException, rospy.ROSException) as exc:
+            text = f"Untangle unavailable (is the cable monitor running?): {exc}"
+        rospy.loginfo("Simulated dashboard: %s", text)
+        self._untangle_running = False
+        self._status_changed.emit(text)
+        self._state_changed.emit()
 
     def _toggle_estop(self) -> None:
         self._set_estop(not self._estop_pressed, "GUI")
@@ -219,6 +336,9 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._protective_button.setPalette(palette)
         self._protective_button.setAutoFillBackground(True)
         self._protective_button.setChecked(self._protective_stop)
+        self._untangle_button.setEnabled(self._protective_stop and not self._estop_pressed
+                                         and not self._untangle_running)
+        self._untangle_button.setText("UNTANGLING ..." if self._untangle_running else "UNTANGLE CABLE")
 
 
 class SimulatedUrDashboardPlugin(Plugin):
