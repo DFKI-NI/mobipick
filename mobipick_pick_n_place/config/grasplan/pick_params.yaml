@@ -61,3 +61,8 @@ list_of_disentangle_objects:
     - 'screwdriver'
     - 'bleach'
     - 'mustard'
+
+# open-set (AnyGrasp) grasps whose TCP is lower than this above the support surface are moved back along their
+# approach axis until they are this high: AnyGrasp does not know the Robotiq 140 fingers, whose knuckles hit the
+# table on small objects such as a strawberry (#124). 0 disables it. Same value in the sim and on the real robot.
+open_set_min_grasp_height: 0.035
