@@ -27,8 +27,11 @@ The eef Astra camera recovers by itself (`gripper_astra.launch.xml` passes `resp
 its nodelet manager respawns when it dies (e.g. a liborbbec segfault after a USB drop) and every camera nodelet
 loader is bonded to it and respawns too. When the driver stays alive but silent (the USB cable was pulled by a
 tangled arm cable), `nodes/camera_driver_relauncher.py` (arg `relaunch_driver`, default on) kills the manager
-after 10 s without RGB images, so the whole stack restarts. Its state is on
-`/mobipick/eef_main_cam_driver_relauncher/status`.
+after 10 s without RGB images, so the whole stack restarts. While `lsusb` lists no Orbbec device (param
+`usb_id`, the cable is out) it does not restart but reports `device missing` and restarts once the device is back.
+Its state is on `/mobipick/eef_main_cam_driver_relauncher/status`. For desktop notifications on the laptop when the
+camera goes down or comes back, run `scripts/eef_camera_desktop_notifier.sh` on the host that runs the Mobipick
+Labs GUI (real robot sessions only).
 
 Using the `namespace` and `tf_prefix` arguments you can select the prefixes for
 all nodes and tf frames. TF frames are changed without using the

@@ -9,12 +9,14 @@ to it and respawns, so a manager that dies (e.g. a segfault in liborbbec) brings
 back by itself. This node covers the silent case: when none of ``~topics`` delivered a message
 for ``~silent_s``, it kills ``~manager`` (like ``rosnode kill``) and roslaunch restarts the stack,
 then it waits ``~grace_s`` for images. Unsuccessful restarts are retried with a doubling wait up to
-``~max_backoff_s``; ``~max_attempts`` > 0 limits the restarts per outage. Real robot only
-(started from gripper_astra.launch.xml).
+``~max_backoff_s``; ``~max_attempts`` > 0 limits the restarts per outage. While ``lsusb -d ~usb_id``
+lists no device (the cable is out), a restart cannot help: the node waits for the device instead and
+restarts as soon as it is back. Real robot only (started from gripper_astra.launch.xml).
 
 ``~status`` (latched String): "ok", "silent: ...", "restarting (attempt n)", "restarted, waiting
-for images", "failed: ...". Messages are received as ``rospy.AnyMsg`` and never decoded.
+for images", "device missing: ...", "failed: ...". Messages are received as ``rospy.AnyMsg`` and never decoded.
 """
+import subprocess
 import threading
 
 import rosnode
@@ -30,6 +32,7 @@ class CameraDriverRelauncher:
         self.grace_s = float(rospy.get_param('~grace_s', 30.0))
         self.max_backoff_s = float(rospy.get_param('~max_backoff_s', 120.0))
         self.max_attempts = int(rospy.get_param('~max_attempts', 0))
+        self.usb_id = str(rospy.get_param('~usb_id', '2bc5:'))  # lsusb -d filter, Orbbec by default; '' disables
 
         self.lock = threading.Lock()
         self.last_seen = rospy.get_time()  # the startup counts as seen: the camera gets silent_s to start
@@ -53,6 +56,17 @@ class CameraDriverRelauncher:
         if status != self.status:
             self.status = status
             self.status_pub.publish(String(data=status))
+
+    def device_present(self):
+        """False only when lsusb works and lists no ``~usb_id`` device."""
+        if not self.usb_id:
+            return True
+        try:
+            result = subprocess.run(['lsusb', '-d', self.usb_id], capture_output=True, text=True, timeout=5.0)
+        except (OSError, subprocess.SubprocessError) as exc:
+            rospy.logwarn_throttle(300, 'Camera driver relauncher: lsusb failed (%s), restarting blindly', exc)
+            return True
+        return bool(result.stdout.strip())
 
     def restart(self):
         """Kill the nodelet manager; roslaunch respawns it and its bonded loaders. True when it was killed."""
@@ -78,6 +92,12 @@ class CameraDriverRelauncher:
                 self.set_status('ok')
             elif rospy.get_time() < next_try:
                 pass  # a restarted stack needs time to deliver images
+            elif not self.device_present():
+                if not self.status.startswith('device missing'):
+                    rospy.logerr('Camera driver relauncher: no USB device %s, waiting for it to be plugged in',
+                                 self.usb_id)
+                attempts = 0  # restart right away, with a fresh backoff, once the device is back
+                self.set_status(f'device missing: no USB device {self.usb_id}, replug the camera')
             elif self.max_attempts > 0 and attempts >= self.max_attempts:
                 self.set_status(f'failed: silent for {silence:.0f} s after {attempts} restart(s)')
             else:
