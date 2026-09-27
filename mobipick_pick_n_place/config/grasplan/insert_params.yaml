@@ -21,10 +21,18 @@ poses_to_go_before_insert:
     - 'untangle_cable_guide_1_right'
     - 'untangle_cable_guide_2_right'
 
-# true (default): insert objects in the orientation they were grasped in.
-# false: objects whose collision box is at most comfortable_orientation_max_size long (balls, fruit) are
-# released with the gripper pointing straight down and the wrist turned as little as possible from where it is
-# (after the untangle poses), which avoids the large wrist rotations that wind up the arm cable. Both are read
-# on every insert goal, so they can be changed at runtime with rosparam set.
+# insert_orientation: how the held object is turned over the container; all are read on every insert goal, so
+# they can be changed at runtime with rosparam set:
+# - as_picked: the object keeps the orientation it was grasped in (the container's yaw, or 8 fixed yaws on the
+#   second attempt); after an oblique AnyGrasp grasp this can turn the wrist by 180-210 deg (#103, #106)
+# - free_yaw: the object keeps the roll and pitch it was picked with, its yaw about the vertical is chosen for
+#   the least wrist rotation from where it is (after the untangle poses); any object size (#106). With
+#   insert_sort_by_ik (default true) the yaws are tried in the order of the wrist_3 change an IK solution
+#   needs; in the sim that kept wrist_3 within 15-35 deg instead of 177-197 deg for as_picked
+# - gripper_down: objects whose collision box is at most comfortable_orientation_max_size long (balls, fruit)
+#   are released with the gripper pointing straight down and the wrist turned as little as possible; changes
+#   the object's roll and pitch after an oblique grasp
+# - '' (empty, default): place_same_orientation_as_picked decides, true: as_picked, false: gripper_down
+insert_orientation: ''
 place_same_orientation_as_picked: True
 comfortable_orientation_max_size: 0.15
