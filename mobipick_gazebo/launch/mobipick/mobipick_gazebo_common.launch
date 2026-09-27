@@ -11,6 +11,7 @@
   <arg name="tf_prefix"  default="mobipick" doc="tf_prefix to be used by gazebo plugins and in the robots urdf etc." />
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
   <arg name="robot"      default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="gui" default="true" doc="false: no rqt_sim_gui window (headless sim)" />
   <arg name="gripper_open_position" default="0.120"
        doc="Jaw gap used by pose_teacher's Open Gripper service in simulation [m]" />
 
@@ -89,8 +90,8 @@
 
   <!-- Simulation GUI: teleop (rqt_robot_steering), rqt_joint_trajectory_controller and the simulated
        e-stop (UR dashboard) in a single rqt window. The plugins read their defaults from the private
-       params of the rqt_gui node. -->
-  <node name="rqt_sim_gui" pkg="rqt_gui" type="rqt_gui"
+       params of the rqt_gui node. Not started with gui:=false (headless sim). -->
+  <node if="$(arg gui)" name="rqt_sim_gui" pkg="rqt_gui" type="rqt_gui"
         args="--perspective-file $(find mobipick_gazebo)/config/sim_gui.perspective">
     <param name="default_topic" value="cmd_vel"/>
     <param name="default_vx_max" value="1.0" />
