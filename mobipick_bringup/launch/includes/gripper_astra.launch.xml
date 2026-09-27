@@ -9,6 +9,7 @@
   <arg name="ir_processing" default="false" doc="Whether to publish the rectified IR image of the Astra. Only needed for calibration." />
 
   <arg name="load_driver" default="true" />
+  <arg name="relaunch_driver" default="$(arg load_driver)" doc="Reload the driver nodelet when no images arrive, e.g. after the USB cable was pulled" />
 
   <!-- Astra gripper camera -->
   <include file="$(find mobipick_bringup)/launch/includes/astra.launch.xml">
@@ -24,6 +25,9 @@
     <arg name="load_driver"           value="$(arg load_driver)" />
   </include>
   <param name="eef_main_cam/driver/data_skip" value="9" />
+
+  <!-- A pulled USB cable (tangled arm cable) leaves the driver alive but silent: reload it -->
+  <include file="$(find mobipick_bringup)/launch/includes/eef_camera_driver_relauncher.launch.xml" if="$(arg relaunch_driver)" />
 
 
   <!-- reduced pointcloud to save same wifi bandwidth. -->

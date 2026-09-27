@@ -30,6 +30,7 @@ install(DIRECTORY
 # Mark executable scripts (Python etc.) for installation
 # in contrast to setup.py, you can choose the destination
 install(PROGRAMS
+  nodes/camera_driver_relauncher.py
   nodes/gripper_joint_state_publisher.py
   nodes/initialize_gripper.sh
   nodes/normalize_image

@@ -1,0 +1,21 @@
+<launch>
+  <!-- Reload the eef Astra driver nodelet when its images stop (e.g. the USB cable was pulled by a tangled arm
+       cable, the driver keeps its stale handle). Same remaps as includes/device.launch.xml; the driver parameters
+       stay on the parameter server. Expects to be in the robot namespace (included by gripper_astra.launch.xml). -->
+  <node pkg="mobipick_bringup" type="camera_driver_relauncher.py" name="eef_main_cam_driver_relauncher"
+        output="screen">
+    <param name="manager" value="eef_main_cam/eef_main_cam_nodelet_manager" />
+    <param name="nodelet_name" value="eef_main_cam/driver" />
+    <param name="nodelet_type" value="astra_camera/AstraDriverNodelet" />
+    <rosparam>
+      topics: [eef_main_cam/rgb/image_raw]
+      remaps:
+        eef_main_cam/rgb/image: eef_main_cam/rgb/image_raw
+        eef_main_cam/depth/image: eef_main_cam/depth_registered/image_raw
+        eef_main_cam/depth/image_raw: eef_main_cam/depth/image_raw_unfiltered
+        eef_main_cam/depth_registered/image_raw: eef_main_cam/depth_registered/image_raw_unfiltered
+      silent_s: 10.0
+      grace_s: 20.0
+    </rosparam>
+  </node>
+</launch>

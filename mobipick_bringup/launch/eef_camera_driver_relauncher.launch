@@ -1,0 +1,8 @@
+<launch>
+  <!-- Standalone start of the eef camera driver relauncher on a running robot (mobipick-os-sensor), without
+       restarting the bringup; the bringup starts it itself via gripper_astra.launch.xml -->
+  <arg name="namespace" default="mobipick" />
+  <group ns="$(arg namespace)">
+    <include file="$(find mobipick_bringup)/launch/includes/eef_camera_driver_relauncher.launch.xml" />
+  </group>
+</launch>
