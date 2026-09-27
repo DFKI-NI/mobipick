@@ -66,3 +66,10 @@ list_of_disentangle_objects:
 # approach axis until they are this high: AnyGrasp does not know the Robotiq 140 fingers, whose knuckles hit the
 # table on small objects such as a strawberry (#124). 0 disables it. Same value in the sim and on the real robot.
 open_set_min_grasp_height: 0.035
+# the same for the lowest fingertip point (Robotiq 140 fingertip boxes from the URDF, tilted with the grasp, over
+# the closing motion down to the AnyGrasp width): an oblique grasp dips one finger below the TCP (#134 banana, real
+# robot). Covers ~1 cm error of the table pose. Sideways grasps that are too low are dropped. Sim and real robot.
+open_set_min_fingertip_height: 0.015
+# a grasp is moved back along its approach by at most this for the two limits above; one needing more would close on
+# air (e.g. 45 deg tilted on a lying banana needs 7.5 cm) and is dropped. 0 = no limit. Sim and real robot (#134).
+open_set_max_grasp_backoff: 0.04
