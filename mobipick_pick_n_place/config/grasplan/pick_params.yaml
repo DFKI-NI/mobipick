@@ -73,3 +73,13 @@ open_set_min_fingertip_height: 0.015
 # a grasp is moved back along its approach by at most this for the two limits above; one needing more would close on
 # air (e.g. 45 deg tilted on a lying banana needs 7.5 cm) and is dropped. 0 = no limit. Sim and real robot (#134).
 open_set_max_grasp_backoff: 0.04
+# when AnyGrasp offers no usable grasp of an open-set object (all dropped by the limits above, all failing before the
+# arm moved, or none at all), grasp it straight down from its box: closing across a horizontal box axis at most
+# open_set_topdown_max_width wide (narrow first), the fingertips as low as the limits above allow and at least
+# open_set_topdown_min_overlap below the object top (#148, small objects such as a strawberry). Sim and real robot.
+open_set_topdown_fallback: true
+open_set_topdown_max_width: 0.10
+open_set_topdown_min_overlap: 0.01
+# raise the bottom of a perceived object box that reaches into its table (noisy depth: the strawberry box ~1 cm into table_2)
+# to the table top, so the object does not collide with its support during the lift (#148). Sim and real robot.
+clamp_object_boxes_to_support: true
