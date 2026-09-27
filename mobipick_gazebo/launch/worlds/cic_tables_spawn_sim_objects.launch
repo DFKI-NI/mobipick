@@ -10,10 +10,12 @@
   <arg name="start_paused" default="true" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
+  <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" doc="ur5 joint limits yaml (joint_limits_no_cable_guide.yaml drops the cable guide limits of wrist_1/wrist_3, sim only)" />
   <arg name="open_set_objects" default="true" doc="also spawn the open-set demo objects (apple, banana, tennis ball, ...) from mobipick_open_set_objects (amenable_ws)" />
 
   <!-- start Gazebo with specified world and spawn Mobipick -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
+    <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
     <arg name="robot"           value="$(arg robot)" />
     <arg name="namespace"       value="$(arg namespace)" />
     <arg name="tf_prefix"       value="$(arg tf_prefix)" />
