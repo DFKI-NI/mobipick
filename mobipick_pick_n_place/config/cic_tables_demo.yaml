@@ -13,6 +13,5 @@ poses:
   base_table_1_pose:  [[19.23, 15.40, 0.0], [0.0, 0.0, -0.707, 0.707]]
   base_table_2_pose:  [[19.39, 14.66, 0.0], [0.0, 0.0,  0.0  , 1.0  ]]
   base_table_3_pose:  [[21.01, 14.77, 0.0], [0.0, 0.0,  0.0  , 1.0  ]]
-  base_table_4_pose:  [[21.80, 14.90, 0.0], [0.0, 0.0,  0.707, 0.707]]   # unused
   handover_planned: true # bool
   world_name: "cic"   # TODO: create gazebo launch file with this name

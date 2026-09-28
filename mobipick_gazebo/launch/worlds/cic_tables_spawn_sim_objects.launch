@@ -68,9 +68,6 @@
   <node name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param small_table_description -model table_3 -x 21.165 -y 13.84 -Y 0.0"
         respawn="false" output="screen" />
-  <node name="spawn_model_table_4" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param small_table_description -model table_4 -x 22.70 -y 15.04 -Y 0.0"
-        respawn="false" output="screen" />
   <node name="spawn_model_storage_table" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param small_table_description -model storage_table -x 18.30 -y 13.84 -Y 0.0"
         respawn="false" output="screen" />
@@ -85,18 +82,20 @@
         args="-urdf -param person_standing_description -model person_standing_1 -x 17.5 -y 15.17 -z 0.0 -R 0.0 -P 0.0 -Y 1.5708"
         respawn="false" output="screen" />
 
-  <!-- table 2 objects -->
+  <!-- table 2 objects: a second row behind the open-set front row, within top-down arm reach from base_table_2_pose
+       (the back of the table at y 13.64 is ~1.03 m from the arm base, no IK; #161) -->
   <node name="relay_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param relay_description -model relay_1 -x 19.65 -y 13.64 -z 0.77 -Y 0.1579" />
+        args="-urdf -param relay_description -model relay_1 -x 19.72 -y 13.84 -z 0.77 -Y 0.1579" />
   <node name="hot_glue_gun" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param hot_glue_gun_description -model hot_glue_gun -x 19.38 -y 13.63 -z 0.81 -R -1.5687 -Y -1.3675" />
+        args="-urdf -param hot_glue_gun_description -model hot_glue_gun -x 19.28 -y 13.80 -z 0.81 -R -1.5687 -Y -1.3675" />
+  <!-- screwdriver_1 was behind klt_1 on table 3 (out of top-down reach, no free reachable room there) -->
+  <node name="screwdriver_1" pkg="gazebo_ros" type="spawn_model"
+        args="-urdf -param screwdriver_description -model screwdriver_1 -x 19.50 -y 13.84 -z 0.74 -Y 0.8895" />
 
   <!-- table 3 objects -->
   <node name="spawn_power_drill_with_grip_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param power_drill_with_grip_description -model power_drill_with_grip_1 -x 20.97 -y 14.06 -z 0.83 -R -1.5869 -Y 2.3352"
         respawn="false" output="screen" />
-  <node name="screwdriver_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param screwdriver_description -model screwdriver_1 -x 21.38 -y 13.81 -z 0.74 -Y 0.8895" />
   <node name="klt_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param klt_description -model klt_1 -x 21.25 -y 13.99 -z 0.8 -Y 0.7572"
         respawn="false" output="screen" />
