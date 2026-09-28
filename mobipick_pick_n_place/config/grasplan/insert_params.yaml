@@ -32,7 +32,9 @@ poses_to_go_before_insert:
 # - gripper_down: objects whose collision box is at most comfortable_orientation_max_size long (balls, fruit)
 #   are released with the gripper pointing straight down and the wrist turned as little as possible; changes
 #   the object's roll and pitch after an oblique grasp
-# - '' (empty, default): place_same_orientation_as_picked decides, true: as_picked, false: gripper_down
-insert_orientation: ''
+# - '' (empty): place_same_orientation_as_picked decides, true: as_picked, false: gripper_down
+# free_yaw is the default for sim and real since 2026-09-28 (#106); tables_demo_bringup's launch arg
+# insert_orientation (default free_yaw) overrides this value
+insert_orientation: free_yaw
 place_same_orientation_as_picked: True
 comfortable_orientation_max_size: 0.15
