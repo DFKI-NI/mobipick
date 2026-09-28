@@ -5,22 +5,31 @@
 # Run it on the host (the GUI laptop), not in a container: the GUI blocks containers from the desktop
 # notification service. Leave it running; it waits for a real-robot session and reconnects on its own.
 #
-#   eef_camera_desktop_notifier.sh [status_topic]
+#   eef_camera_desktop_notifier.sh [--any-master] [--dry] [status_topic]
 #   eef_camera_desktop_notifier.sh --stdin   # test: status lines ("data: ...") from stdin, notifications printed
+# Tests in the sim: --any-master also follows a container with a local master (sim), --dry prints the
+# notifications instead of showing them.
 TOPIC=/mobipick/eef_main_cam_driver_relauncher/status
 NOTIFY=(notify-send -a "Mobipick" -i camera-web)
 TEST=""
-case "$1" in
-  --stdin) TEST=1; NOTIFY=(echo NOTIFY) ;;
-  ?*) TOPIC=$1 ;;
-esac
+ANY_MASTER=""
+for arg in "$@"; do
+  case "$arg" in
+    --stdin) TEST=1; NOTIFY=(echo NOTIFY) ;;
+    --dry) NOTIFY=(echo NOTIFY) ;;
+    --any-master) ANY_MASTER=1 ;;
+    ?*) TOPIC=$arg ;;
+  esac
+done
 state=""  # ok | down | missing
 
 real_robot_container() {
   local c master
   for c in $(docker ps --filter name=mpcmd- --format '{{.Names}}'); do
     master=$(docker inspect "$c" --format '{{range .Config.Env}}{{println .}}{{end}}' | sed -n 's/^ROS_MASTER_URI=//p')
-    case "$master" in ""|*localhost*|*127.0.0.1*) ;; *) echo "$c"; return ;; esac
+    [ -n "$ANY_MASTER" ] && { echo "$c"; return; }
+    # the sim's master is the GUI's own roscore container (mobipick-roscore), the real robot's is remote
+    case "$master" in ""|*localhost*|*127.0.0.1*|*mobipick-roscore*) ;; *) echo "$c"; return ;; esac
   done
 }
 
@@ -49,6 +58,9 @@ if [ -n "$TEST" ]; then
   follow
   exit 0
 fi
+# the rostopic echo inside the container outlives the docker exec client: stop it when the notifier exits
+trap '[ -n "$container" ] && docker exec "$container" pkill -f "rostopic echo $TOPIC" >/dev/null 2>&1' EXIT
+trap 'exit 0' INT TERM
 while true; do
   container=$(real_robot_container)
   if [ -n "$container" ]; then
