@@ -103,6 +103,14 @@
     <rosparam param="estop_controllers">[mobile_base_controller, arm_controller, arm_velocity_controller, arm_position_controller]</rosparam>
     <rosparam param="estop_hold_controllers">[arm_velocity_controller]</rosparam>
   </node>
+  <!-- headless sim: the same simulated UR dashboard without a window, under the same node name, so its services
+       (~set_estop, ~set_protective_stop, ur_hardware_interface/dashboard/get_safety_mode and get_robot_mode) exist
+       as with the window; the cable monitor presses the protective stop through it (#159) -->
+  <node unless="$(arg gui)" name="rqt_sim_gui" pkg="mobipick_gazebo" type="simulated_ur_dashboard.py" output="screen">
+    <env name="QT_QPA_PLATFORM" value="offscreen"/>
+    <rosparam param="estop_controllers">[mobile_base_controller, arm_controller, arm_velocity_controller, arm_position_controller]</rosparam>
+    <rosparam param="estop_hold_controllers">[arm_velocity_controller]</rosparam>
+  </node>
 
   <!-- create combined scan topic -->
   <node pkg="topic_tools" type="relay" name="b_scan_relay" args="b_scan scan"/>
