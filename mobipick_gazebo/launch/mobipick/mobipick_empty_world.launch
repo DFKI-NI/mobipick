@@ -18,6 +18,8 @@
   <arg name="main_camera" default="astra"
     doc="Can be 'astra' for Orbbec Astra Mini S, 'intel_d455' for Intel RealSense D455 or 'intel_d435' for Intel RealSense D435, changes the main 3D camera." />
 
+  <arg name="num_robots" default="1" doc="#226: robots in this Gazebo; 2 or 3 add the gzserver remaps of the extra robots' namespaces (namespace plus 2 and 3, spawned by spawn_mobipick.launch)" />
+
   <arg name="start_paused" default="true" />
   <arg name="physics_profile" default="fast" doc="options: slow, fast" />
 
@@ -25,6 +27,12 @@
     <remap from="$(arg namespace)/mobile_base_controller/cmd_vel" to="$(arg namespace)/cmd_vel" />
     <remap from="$(arg namespace)/mobile_base_controller/odom"    to="$(arg namespace)/odom" />
     <remap from="$(arg namespace)/joint_states"                   to="$(arg namespace)/gazebo_joint_states" />
+    <remap if="$(eval int(num_robots) >= 2)" from="$(arg namespace)2/mobile_base_controller/cmd_vel" to="$(arg namespace)2/cmd_vel" />
+    <remap if="$(eval int(num_robots) >= 2)" from="$(arg namespace)2/mobile_base_controller/odom"    to="$(arg namespace)2/odom" />
+    <remap if="$(eval int(num_robots) >= 2)" from="$(arg namespace)2/joint_states"                   to="$(arg namespace)2/gazebo_joint_states" />
+    <remap if="$(eval int(num_robots) >= 3)" from="$(arg namespace)3/mobile_base_controller/cmd_vel" to="$(arg namespace)3/cmd_vel" />
+    <remap if="$(eval int(num_robots) >= 3)" from="$(arg namespace)3/mobile_base_controller/odom"    to="$(arg namespace)3/odom" />
+    <remap if="$(eval int(num_robots) >= 3)" from="$(arg namespace)3/joint_states"                   to="$(arg namespace)3/gazebo_joint_states" />
 
     <include file="$(find gazebo_ros)/launch/empty_world.launch">
       <arg name="world_name" value="$(arg world_name)"/>

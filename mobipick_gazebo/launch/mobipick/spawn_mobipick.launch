@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<launch>
+  <!-- #226: spawn one more Mobipick into a running Gazebo (no gzserver/gzclient): the robot part of
+       mobipick_empty_world.launch under its own namespace and tf prefix. gzserver must have been started with the
+       remaps of this namespace (mobipick_empty_world.launch num_robots). -->
+  <arg name="namespace" default="mobipick2" doc="Namespace (and tf prefix, Gazebo model name) of this robot" />
+  <arg name="robot_x"   default="0.0" />
+  <arg name="robot_y"   default="0.0" />
+  <arg name="robot_yaw" default="0.0" />
+  <arg name="robot"     default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="main_camera" default="astra" />
+  <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
+  <arg name="grasp_fix" default="false" />
+  <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" />
+  <arg name="gui" default="false" doc="false: headless simulated UR dashboard instead of the rqt_sim_gui window" />
+
+  <group ns="$(arg namespace)">
+    <!-- Add passive + mimic joints to joint_states topic -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <rosparam param="source_list">[gazebo_joint_states]</rosparam>
+      <param name="rate" value="60.0" />
+    </node>
+
+    <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_gazebo_common.launch">
+      <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
+      <arg name="robot" value="$(arg robot)" />
+      <arg name="main_camera" value="$(arg main_camera)" />
+      <arg name="arm_controller" value="$(arg arm_controller)" />
+      <arg name="grasp_fix"      value="$(arg grasp_fix)" />
+      <arg name="robot_x"   value="$(arg robot_x)" />
+      <arg name="robot_y"   value="$(arg robot_y)" />
+      <arg name="robot_yaw" value="$(arg robot_yaw)" />
+      <arg name="tf_prefix" value="$(arg namespace)" />
+      <arg name="robot_name" value="$(arg namespace)" />
+      <arg name="gui" value="$(arg gui)" />
+    </include>
+  </group>
+</launch>

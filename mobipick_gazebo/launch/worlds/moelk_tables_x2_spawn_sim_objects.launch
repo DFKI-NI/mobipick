@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- #226: two (num_robots 3: three) identical moelk tables scenes in one Gazebo, 50 m apart along x (beyond the MiR laser range), one
+       Mobipick in each, for parallel experiments. Robot 1 (namespace mobipick) is exactly the robot of
+       moelk_tables_spawn_sim_objects.launch with the same model names; copy 2 prefixes its Gazebo models with
+       "mobipick2__" and robot 2 runs in namespace mobipick2. Its stack (fake localization with its own map frame
+       mobipick2/map, navigation, MoveIt) is started by tables_demo_bringup/launch/includes/extra_mobipick_sim.launch. -->
+  <arg name="namespace" default="mobipick"    doc="Namespace of robot 1; robot 2 gets this name plus 2"/>
+  <arg name="robot"     default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
+  <arg name="physics_profile" default="fast" doc="options: slow, fast" />
+  <arg name="gui" default="true" />
+  <arg name="start_paused" default="true" />
+  <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
+  <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
+  <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" doc="ur5 joint limits yaml (joint_limits_no_cable_guide.yaml drops the cable guide limits of wrist_1/wrist_3, sim only)" />
+  <arg name="copy_offset_x" default="50.0" doc="x offset between neighbouring scene copies [m]" />
+  <arg name="num_robots" default="2" doc="2 or 3 scene copies and robots (moelk_tables_x3_spawn_sim_objects.launch passes 3)" />
+
+  <!-- start Gazebo with both buildings and spawn robot 1 (same pose as in moelk_tables) -->
+  <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
+    <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
+    <arg name="robot"           value="$(arg robot)" />
+    <arg name="namespace"       value="$(arg namespace)" />
+    <arg name="tf_prefix"       value="$(arg namespace)" />
+    <arg name="robot_name"      value="$(arg namespace)" />
+    <arg name="num_robots"      value="$(arg num_robots)" />
+    <arg name="start_paused"    value="$(arg start_paused)" />
+    <arg name="gui"             value="$(arg gui)" />
+    <arg name="arm_controller"  value="$(arg arm_controller)" />
+    <arg name="grasp_fix"       value="$(arg grasp_fix)" />
+    <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk_x$(arg num_robots).sdf"/>
+    <arg name="robot_x"         value="10.30" />
+    <arg name="robot_y"         value="2.40" />
+    <arg name="robot_yaw"       value="3.1415" />
+    <arg name="physics_profile" value="$(arg physics_profile)" />
+  </include>
+
+  <!-- robot 2 in the second copy, same pose plus the offset -->
+  <include file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch">
+    <arg name="namespace"      value="$(arg namespace)2" />
+    <arg name="robot"          value="$(arg robot)" />
+    <arg name="arm_controller" value="$(arg arm_controller)" />
+    <arg name="grasp_fix"      value="$(arg grasp_fix)" />
+    <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
+    <arg name="robot_x"        value="$(eval 10.30 + float(arg('copy_offset_x')))" />
+    <arg name="robot_y"        value="2.40" />
+    <arg name="robot_yaw"      value="3.1415" />
+  </include>
+
+  <!-- robot 3 in the third copy -->
+  <include if="$(eval int(num_robots) >= 3)" file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch">
+    <arg name="namespace"      value="$(arg namespace)3" />
+    <arg name="robot"          value="$(arg robot)" />
+    <arg name="arm_controller" value="$(arg arm_controller)" />
+    <arg name="grasp_fix"      value="$(arg grasp_fix)" />
+    <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
+    <arg name="robot_x"        value="$(eval 10.30 + 2 * float(arg('copy_offset_x')))" />
+    <arg name="robot_y"        value="2.40" />
+    <arg name="robot_yaw"      value="3.1415" />
+  </include>
+
+  <!-- upload urdf models to param server (as in moelk_tables_spawn_sim_objects.launch) -->
+  <param name="table_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'" />
+  <param name="power_drill_with_grip_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/power_drill_with_grip.urdf.xacro'" />
+  <param name="cracker_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/cracker_box.urdf.xacro'" />
+  <param name="sugar_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/sugar_box.urdf.xacro'" />
+  <param name="gelatin_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/gelatin_box.urdf.xacro'" />
+  <param name="klt_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/klt.urdf.xacro'" />
+  <param name="screwdriver_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/screwdriver.urdf.xacro'" />
+  <param name="relay_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
+  <param name="multimeter_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
+  <param name="coke_can_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/coke_can.urdf.xacro'" />
+  <param name="person_standing_description"
+         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/static/static_person_standing.urdf.xacro'" />
+
+  <!-- the two scene copies -->
+  <include file="$(find mobipick_gazebo)/launch/worlds/moelk_tables_scene.launch">
+    <arg name="offset_x" value="0.0" />
+    <arg name="name_prefix" value="" />
+  </include>
+  <include file="$(find mobipick_gazebo)/launch/worlds/moelk_tables_scene.launch">
+    <arg name="offset_x" value="$(arg copy_offset_x)" />
+    <arg name="name_prefix" value="$(arg namespace)2__" />
+  </include>
+  <include if="$(eval int(num_robots) >= 3)" file="$(find mobipick_gazebo)/launch/worlds/moelk_tables_scene.launch">
+    <arg name="offset_x" value="$(eval 2 * float(arg('copy_offset_x')))" />
+    <arg name="name_prefix" value="$(arg namespace)3__" />
+  </include>
+</launch>

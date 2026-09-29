@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- #226: the tables, objects and worker of moelk_tables_spawn_sim_objects.launch, spawned with an x offset and a
+       model/node name prefix so several identical copies of the scene can live in one Gazebo (one per robot).
+       Generated from moelk_tables_spawn_sim_objects.launch (keep the poses in sync). The *_description params are
+       uploaded by the including launch. -->
+  <arg name="offset_x" default="0.0" doc="x offset of this copy [m]" />
+  <arg name="name_prefix" default="" doc="prefix of the Gazebo model and node names of this copy, e.g. mobipick2__" />
+
+  <!-- x of each model in this copy (roslaunch evaluates $(eval) only as a whole attribute) -->
+  <arg name="x_table_1" value="$(eval 13.22 + float(arg('offset_x')))" />
+  <arg name="x_table_2" value="$(eval 12.07 + float(arg('offset_x')))" />
+  <arg name="x_table_3" value="$(eval 10.42 + float(arg('offset_x')))" />
+  <arg name="x_cracker_1" value="$(eval 12.99625343 + float(arg('offset_x')))" />
+  <arg name="x_sugar_1" value="$(eval 13.00900616 + float(arg('offset_x')))" />
+  <arg name="x_gelatin_1" value="$(eval 13.00311756 + float(arg('offset_x')))" />
+  <arg name="x_klt_2" value="$(eval 13.04 + float(arg('offset_x')))" />
+  <arg name="x_power_drill_with_grip_1" value="$(eval 11.89 + float(arg('offset_x')))" />
+  <arg name="x_klt_1" value="$(eval 11.65 + float(arg('offset_x')))" />
+  <arg name="x_person_standing_1" value="$(eval 14.0 + float(arg('offset_x')))" />
+  <arg name="x_screwdriver_1" value="$(eval 10.74 + float(arg('offset_x')))" />
+  <arg name="x_relay_1" value="$(eval 10.54 + float(arg('offset_x')))" />
+  <arg name="x_klt_3" value="$(eval 10.28 + float(arg('offset_x')))" />
+  <arg name="x_multimeter_1" value="$(eval 10.03 + float(arg('offset_x')))" />
+  <arg name="x_coke_can_1" value="$(eval 10.51099763 + float(arg('offset_x')))" />
+
+  <node name="$(arg name_prefix)spawn_model_table_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model $(arg name_prefix)table_1 -x $(arg x_table_1) -y 2.15 -Y 1.5708"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_model_table_2" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model $(arg name_prefix)table_2 -x $(arg x_table_2) -y 3.25 -Y 3.1416"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_model_table_3" pkg="gazebo_ros" type="spawn_model" args="-urdf -param table_description -model $(arg name_prefix)table_3 -x $(arg x_table_3) -y 3.25 -Y 3.1416"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_cracker_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param cracker_description -model $(arg name_prefix)cracker_1 -x $(arg x_cracker_1) -y 1.88448135 -z 0.82669094 -R -1.57079710 -P 0.00035380 -Y 0.77921588"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_sugar_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param sugar_description -model $(arg name_prefix)sugar_1 -x $(arg x_sugar_1) -y 2.25489109 -z 0.80812681 -R -1.57071100 -P -0.00000004 -Y 0.66298518"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_gelatin_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param gelatin_description -model $(arg name_prefix)gelatin_1 -x $(arg x_gelatin_1) -y 2.08 -z 0.73498996 -R -0.00000064 -P 0.0 -Y 0.84905422"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)klt_2" pkg="gazebo_ros" type="spawn_model" args="-urdf -param klt_description -model $(arg name_prefix)klt_2 -x $(arg x_klt_2) -y 2.5 -z 0.81 -R 0.0 -P 0.0 -Y 0.5"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_power_drill_with_grip_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param power_drill_with_grip_description -model $(arg name_prefix)power_drill_with_grip_1 -x $(arg x_power_drill_with_grip_1) -y 3.09 -z 0.84 -R -1.5708 -P 0.0 -Y '-1.11'"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_klt_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param klt_description -model $(arg name_prefix)klt_1 -x $(arg x_klt_1) -y 3.10 -z 0.81 -R 0.0 -P 0.0 -Y -2.22"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_person_standing_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param person_standing_description -model $(arg name_prefix)person_standing_1 -x $(arg x_person_standing_1) -y 2.15 -z 0.0 -R 0.0 -P 0.0 -Y -1.5708"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_screwdriver" pkg="gazebo_ros" type="spawn_model" args="-urdf -param screwdriver_description -model $(arg name_prefix)screwdriver_1 -x $(arg x_screwdriver_1) -y 3.06 -z 0.75 -Y 1.57"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_relay_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param relay_description -model $(arg name_prefix)relay_1 -x $(arg x_relay_1) -y 3.00 -z 0.78 -R 0.0 -P 0.0 -Y -1.57"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)klt_3" pkg="gazebo_ros" type="spawn_model" args="-urdf -param klt_description -model $(arg name_prefix)klt_3 -x $(arg x_klt_3) -y 3.09 -z 0.81 -R 0.0 -P 0.0 -Y 1.57"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_multimeter_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param multimeter_description -model $(arg name_prefix)multimeter_1 -x $(arg x_multimeter_1) -y 3.03 -z 0.75 -Y -1.57"
+        respawn="false" output="screen" />
+  <node name="$(arg name_prefix)spawn_coke_can_1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param coke_can_description -model $(arg name_prefix)coke_can_1 -x $(arg x_coke_can_1) -y 3.15293978 -z 0.71994095 -R -0.01132637 -P 0.00395607 -Y 0.00025381"
+        respawn="false" output="screen" />
+</launch>

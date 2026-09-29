@@ -110,8 +110,12 @@
   </include>
 
   <!-- Sensors Functionality -->
+  <!-- #226: octomap in the robot's own odom frame; /mobipick/odom for an empty prefix as before -->
+  <arg name="octomap_frame_" value="/mobipick/odom"      if="$(eval prefix == '')" />
+  <arg name="octomap_frame_" value="/$(arg prefix_)odom" unless="$(eval prefix == '')" />
   <include ns="move_group" file="$(dirname)/sensor_manager.launch.xml" if="$(arg allow_trajectory_execution)">
     <arg name="moveit_sensor_manager" value="mobipick" />
+    <arg name="octomap_frame" value="$(arg octomap_frame_)" />
     <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
     <arg name="pointcloud_sensor_config" value="$(arg pointcloud_sensor_config)" />
   </include>

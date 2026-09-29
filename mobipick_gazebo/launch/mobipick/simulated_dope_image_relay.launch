@@ -1,10 +1,16 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="image_input_topic" default="/mobipick/eef_main_cam/rgb/image_raw" />
-  <arg name="perception_active_topic" default="/pick_pose_selector_node/perception_active" />
-  <arg name="image_output_topic" default="/mobipick/dope/rgb_points" />
+  <!-- #226: namespace / pose_selector_ns as in tables_demo_bringup/bringup.launch; the defaults give the single-robot
+       names (node /simulated_dope_image_relay, /mobipick/... topics, the global pick pose selector) -->
+  <arg name="namespace" default="mobipick" doc="robot namespace" />
+  <arg name="pose_selector_ns" default="" doc="namespace of the pick pose selector, empty: global" />
+  <arg name="ps" value="$(eval '/' + arg('pose_selector_ns').strip('/') if arg('pose_selector_ns').strip('/') else '')" />
+  <arg name="node_ns" default="$(eval '/' if arg('namespace') == 'mobipick' else '/' + arg('namespace'))" doc="namespace of the relay node: / for robot 1 as before, the robot namespace otherwise" />
+  <arg name="image_input_topic" default="/$(arg namespace)/eef_main_cam/rgb/image_raw" />
+  <arg name="perception_active_topic" default="$(arg ps)/pick_pose_selector_node/perception_active" />
+  <arg name="image_output_topic" default="/$(arg namespace)/dope/rgb_points" />
 
-  <node pkg="mobipick_gazebo" type="simulated_dope_image_relay.py"
+  <node pkg="mobipick_gazebo" type="simulated_dope_image_relay.py" ns="$(arg node_ns)"
         name="simulated_dope_image_relay" output="screen">
     <param name="image_input_topic" value="$(arg image_input_topic)" />
     <param name="perception_active_topic" value="$(arg perception_active_topic)" />

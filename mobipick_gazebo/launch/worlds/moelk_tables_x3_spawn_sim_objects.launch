@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- #226: three identical moelk tables scenes, 50 m apart along x, one Mobipick in each (mobipick, mobipick2,
+       mobipick3); see moelk_tables_x2_spawn_sim_objects.launch -->
+  <arg name="physics_profile" default="fast" />
+  <arg name="gui" default="true" />
+  <arg name="grasp_fix" default="false" />
+  <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" />
+
+  <include file="$(find mobipick_gazebo)/launch/worlds/moelk_tables_x2_spawn_sim_objects.launch">
+    <arg name="num_robots" value="3" />
+    <arg name="physics_profile" value="$(arg physics_profile)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="grasp_fix" value="$(arg grasp_fix)" />
+    <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
+  </include>
+</launch>
