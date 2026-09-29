@@ -29,6 +29,11 @@
              must be lost before the object is detached. -->
         <attach_delay>1.0</attach_delay>
         <detach_delay>0.1</detach_delay>
+        <!-- Also release as soon as the master finger joint (finger_joint: 0 open, ~0.7 closed) has opened this far
+             [rad] from where it closed on the object: the effort-based release alone came 0.37 s after the open
+             command, with the fingers already wide and the object still hanging between them (#209). -->
+        <detach_open_angle>0.03</detach_open_angle>
+        <open_position>0.0</open_position>
 
         <!-- Is the rate at which all contact points are checked against the "gripping criterion".
              Note that in-between such updates, existing contact points may be collected at a higher rate
