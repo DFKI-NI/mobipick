@@ -1,0 +1,43 @@
+# MoveIt Servo (moveit_servo 1.1.16) for the Mobipick UR5, simulation (#200). Loaded into servo_server's private
+# namespace by launch/servo.launch. Commands: geometry_msgs/TwistStamped on servo_server/delta_twist_cmds (m/s, rad/s),
+# control_msgs/JointJog on servo_server/delta_joint_cmds. Output: trajectory_msgs/JointTrajectory to
+# servo_server/command_unguarded, which scripts/cable_guard_relay.py checks with the cable model and passes on to the
+# existing arm_controller: no controller switch, and the trajectory controller holds its pose when servo goes quiet.
+use_gazebo: true
+command_in_type: speed_units
+scale:
+  linear: 0.1        # [m/s] conservative: the sim is slow and the tube must be watched
+  rotational: 0.3    # [rad/s]
+  joint: 0.3         # [rad/s] joint jog
+low_pass_filter_coeff: 2.0
+publish_period: 0.02  # 50 Hz (the sim runs at ~0.5-1 real time factor)
+low_latency_mode: false
+command_out_type: trajectory_msgs/JointTrajectory
+publish_joint_positions: true
+publish_joint_velocities: true
+publish_joint_accelerations: false
+move_group_name: arm
+planning_frame: mobipick/base_link            # must be a link of the model: MoveIt's 'map' is only the parent frame
+                                              # of the floating virtual joint (sim 05:03: "Link 'map' not found")
+ee_frame_name: mobipick/gripper_tcp
+robot_link_command_frame: mobipick/base_link  # twist commands in the robot base frame (x forward, z up)
+incoming_command_timeout: 0.2                 # stop when no command came for this long
+num_outgoing_halt_msgs_to_publish: 4
+lower_singularity_threshold: 17.0
+hard_stop_singularity_threshold: 30.0
+joint_limit_margin: 0.1
+cartesian_command_in_topic: delta_twist_cmds
+joint_command_in_topic: delta_joint_cmds
+joint_topic: /mobipick/joint_states
+status_topic: status
+command_out_topic: command_unguarded
+check_collisions: true
+collision_check_rate: 20.0                    # [Hz] the planning scene is small (tables, pose selector boxes)
+collision_check_type: threshold_distance
+# start decelerating this close [m]. With 0.02 some Mobipick link pair is always inside the self threshold and servo
+# crawled (offline harness: 0.3 cm instead of 5.4 cm for a 2 s jog, status DECELERATE_FOR_COLLISION); 0.005 / 0.02 move
+# like no collision check at all while still stopping at min_allowable_collision_distance
+self_collision_proximity_threshold: 0.005
+scene_collision_proximity_threshold: 0.02
+collision_distance_safety_factor: 1000.0
+min_allowable_collision_distance: 0.01

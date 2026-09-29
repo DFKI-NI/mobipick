@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!-- MoveIt Servo for the Mobipick arm with the cable guard relay (#200). Sim first: `config` defaults to servo_sim.yaml.
+     Jog: rostopic pub -r 20 /mobipick/servo_server/delta_twist_cmds geometry_msgs/TwistStamped
+          '{header: {frame_id: mobipick/base_link}, twist: {linear: {z: -0.05}}}'
+     The relay forwards to arm_controller/command only what the cable model allows (see scripts/cable_guard_relay.py). -->
+<launch>
+  <arg name="namespace" default="mobipick"/>
+  <arg name="config" default="$(find mobipick_servo)/config/servo_sim.yaml"/>
+  <arg name="cable_guard" default="true"/>
+  <arg name="command_out" default="arm_controller/command"/>
+
+  <group ns="$(arg namespace)">
+    <!-- moveit_servo's servo_server plus a tf buffer (src/servo_node.cpp): Mobipick's floating virtual joint -->
+    <node name="servo_server" pkg="mobipick_servo" type="servo_node" output="screen">
+      <rosparam command="load" file="$(arg config)"/>
+      <!-- its scene: move_group/monitored_planning_scene without the octomap (see src/servo_node.cpp) -->
+    </node>
+    <node name="cable_guard_relay" pkg="mobipick_servo" type="cable_guard_relay.py" output="screen">
+      <param name="cable_guard" value="$(arg cable_guard)"/>
+      <param name="command_in" value="servo_server/command_unguarded"/>
+      <param name="command_out" value="$(arg command_out)"/>
+      <param name="joint_states" value="joint_states"/>
+    </node>
+  </group>
+</launch>
