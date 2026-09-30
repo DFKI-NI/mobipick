@@ -76,6 +76,8 @@
 #include <kdl_parser/kdl_parser.hpp>
 #include <kdl/chainiksolvervel_wdls.hpp>
 #include <cmath>
+#include <cstdio>
+#include <cstdlib>
 
 // URDF, SRDF
 #include <urdf_model/model.h>
@@ -625,6 +627,18 @@ bool URKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
   uint16_t num_sols;
 
   int perturb_attempt = 0;
+  // #227 diagnosis (off unless the environment variable UR_POLISHED_DEBUG names a file): per call the attempts, the
+  // analytic branches, the polished (converged) ones and the ones inside the limits, appended as one CSV line
+  int debug_sols = 0, debug_converged = 0, debug_valid = 0;
+  const char *debug_path = std::getenv("UR_POLISHED_DEBUG");
+  auto debug_line = [&](const char *outcome) {
+    if (!debug_path) return;
+    if (FILE *f = std::fopen(debug_path, "a")) {
+      std::fprintf(f, "%s,%d,%d,%d,%d,%.6f,%.6f,%.6f\n", outcome, perturb_attempt + 1, debug_sols, debug_converged,
+                   debug_valid, ik_pose.position.x, ik_pose.position.y, ik_pose.position.z);
+      std::fclose(f);
+    }
+  };
   while(1) {
     if(timedOut(n1, timeout)) {
       ROS_DEBUG_NAMED("kdl","IK timed out");
@@ -687,6 +701,7 @@ bool URKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
     // Do the analytic IK
     num_sols = inverse((double*) homo_ik_pose, (double*) q_ik_sols,
                        jnt_pos_test(ur_joint_inds_start_+5));
+    debug_sols += num_sols;
 
 
     // The closed-form solver uses nominal UR5 geometry. Correct each branch with
@@ -714,33 +729,70 @@ bool URKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
       }
       if (!within_limits) continue;
 
-      bool converged = false;
-      for (int iteration = 0; iteration < 12; ++iteration) {
-        KDL::Frame current;
-        if (calibrated_fk.JntToCart(q, current) < 0) break;
-        const KDL::Twist error = KDL::diff(current, kdl_ik_pose);
-        if (error.vel.Norm() < 1e-4 && error.rot.Norm() < 1e-4) {
-          converged = true;
-          break;
+      // polish against the calibrated URDF chain until the pose error is below 1e-4 m / rad
+      auto polish = [&](KDL::JntArray &qq, KDL::ChainIkSolverVel_wdls &solver) {
+        for (int iteration = 0; iteration < 12; ++iteration) {
+          KDL::Frame current;
+          if (calibrated_fk.JntToCart(qq, current) < 0) return false;
+          const KDL::Twist error = KDL::diff(current, kdl_ik_pose);
+          if (error.vel.Norm() < 1e-4 && error.rot.Norm() < 1e-4) return true;
+          if (solver.CartToJnt(qq, error, step) < 0) return false;
+          for (int j = 0; j < 6; ++j) qq(j) += step(j);
         }
-        if (velocity_solver.CartToJnt(q, error, step) < 0) break;
-        for (int j = 0; j < 6; ++j) q(j) += step(j);
-      }
-      if (!converged) continue;
+        return false;
+      };
+      // each joint wrapped into its limits, nearest the seed; clamp_window > 0 also takes a joint that lies at most
+      // that far beyond a limit, set ON the limit (listed in clamped)
+      auto wrap_into_limits = [&](const KDL::JntArray &qq, std::vector<double> &out, std::vector<int> &clamped,
+                                  double clamp_window) {
+        for (int j = 0; j < 6; ++j) {
+          double best = 0.0, best_distance = std::numeric_limits<double>::infinity();
+          double near = 0.0, near_distance = std::numeric_limits<double>::infinity();
+          for (int turns = -2; turns <= 2; ++turns) {
+            const double wrapped = qq(j) + turns * 2.0 * M_PI;
+            const double distance = std::fabs(wrapped - ik_seed_state[j]);
+            if (wrapped >= joint_min_(j) - 1e-9 && wrapped <= joint_max_(j) + 1e-9) {
+              if (distance < best_distance) { best = wrapped; best_distance = distance; }
+            } else if (wrapped >= joint_min_(j) - clamp_window && wrapped <= joint_max_(j) + clamp_window &&
+                       distance < near_distance) {
+              near = std::min(std::max(wrapped, joint_min_(j)), joint_max_(j));
+              near_distance = distance;
+            }
+          }
+          if (std::isfinite(best_distance)) {
+            out[j] = best;
+          } else if (std::isfinite(near_distance)) {
+            out[j] = near;
+            clamped.push_back(j);
+          } else {
+            return false;
+          }
+        }
+        return true;
+      };
+      if (!polish(q, velocity_solver)) continue;
+      ++debug_converged;
       std::vector<double> candidate(6);
-      for (int j = 0; j < 6; ++j) {
-        double best = 0.0;
-        double best_distance = std::numeric_limits<double>::infinity();
-        for (int turns = -2; turns <= 2; ++turns) {
-          const double wrapped = q(j) + turns * 2.0 * M_PI;
-          if (wrapped < joint_min_(j) - 1e-9 || wrapped > joint_max_(j) + 1e-9) continue;
-          const double distance = std::fabs(wrapped - ik_seed_state[j]);
-          if (distance < best_distance) { best = wrapped; best_distance = distance; }
-        }
-        if (!std::isfinite(best_distance)) { within_limits = false; break; }
-        candidate[j] = best;
+      std::vector<int> clamped;
+      // #227 hard cases: a target that needs a joint exactly ON its limit converges a hair beyond it (the polish stops
+      // at 1e-4). Such a joint (at most joint_clamp_window beyond) is set on the limit and held there while the other
+      // joints are polished again; only an exact result (1e-4 m / rad, all joints within the limits) is accepted.
+      const double joint_clamp_window = 0.01;
+      if (!wrap_into_limits(q, candidate, clamped, joint_clamp_window)) continue;
+      if (!clamped.empty()) {
+        KDL::JntArray held(6);
+        for (int j = 0; j < 6; ++j) held(j) = candidate[j];
+        Eigen::MatrixXd joint_weights = Eigen::MatrixXd::Identity(6, 6);
+        for (int j : clamped) joint_weights(j, j) = 0.0;   // this joint does not move
+        KDL::ChainIkSolverVel_wdls held_solver(kdl_chain_);
+        held_solver.setLambda(1e-4);
+        held_solver.setWeightJS(joint_weights);
+        if (!polish(held, held_solver)) continue;
+        std::vector<int> still_outside;
+        if (!wrap_into_limits(held, candidate, still_outside, 0.0) || !still_outside.empty()) continue;
       }
-      if (within_limits) q_ik_valid_sols.push_back(std::move(candidate));
+      q_ik_valid_sols.push_back(std::move(candidate));
+      ++debug_valid;
     }
 
     // use weighted absolute deviations to determine the solution closest the seed state
@@ -802,6 +854,7 @@ bool URKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
           printf("\n");
         }
 #endif
+        debug_line("ok");
         return true;
       }
     }
@@ -831,6 +884,7 @@ bool URKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
   }
 
   ROS_DEBUG_NAMED("kdl","An IK that satisifes the constraints and is collision free could not be found");
+  debug_line("fail");
   error_code.val = error_code.NO_IK_SOLUTION;
   return false;
 }
