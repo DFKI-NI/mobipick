@@ -1,0 +1,5 @@
+<library path="lib/libur5_polished_kinematics">
+  <class name="ur_polished_kinematics/UR5PolishedKinematicsPlugin" type="ur_polished_kinematics::URKinematicsPlugin" base_class_type="kinematics::KinematicsBase">
+    <description>UR5 analytic branches corrected against the calibrated URDF chain.</description>
+  </class>
+</library>

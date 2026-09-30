@@ -3,6 +3,7 @@
   <arg name="namespace" default="mobipick"         doc="Namespace to push all topics into"/>
   <arg name="tf_prefix" default="$(arg namespace)" doc="tf_prefix to be used" />
 
+  <arg name="use_ur_polished_kinematics" default="false" />
   <arg name="robot_version" default="os" doc="Can be hb or os, changes some parts in the urdf, hardware serials etc." />
 
   <!-- Select the PointCloud2 updater when true, or the depth-image updater when false. -->
@@ -17,6 +18,7 @@
   <group ns="$(arg namespace)">
     <include file="$(dirname)/move_group.launch">
       <arg name="robot_version" value="$(arg robot_version)" />
+      <arg name="use_ur_polished_kinematics" value="$(arg use_ur_polished_kinematics)" />
       <arg name="publish_monitored_planning_scene" value="true" />
       <arg name="info" value="true" />
       <arg name="use_pointcloud" value="$(arg use_pointcloud)" />

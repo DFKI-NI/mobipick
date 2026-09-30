@@ -1,0 +1,5 @@
+arm:
+  kinematics_solver: ur_polished_kinematics/UR5PolishedKinematicsPlugin
+  kinematics_solver_timeout: 0.01
+  position_only_ik: false
+  arm_prefix: $(arg prefix)ur5_

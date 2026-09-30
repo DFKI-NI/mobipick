@@ -33,6 +33,7 @@
   <run_depend>robot_state_publisher</run_depend>
   <run_depend>rviz</run_depend>
   <run_depend>trac_ik_kinematics_plugin</run_depend>
+  <run_depend>ur_polished_kinematics</run_depend>
   <run_depend>trac_ik_lib</run_depend>
   <run_depend>tf2_ros</run_depend>
   <run_depend>xacro</run_depend>
