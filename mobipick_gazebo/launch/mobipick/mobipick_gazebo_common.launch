@@ -102,6 +102,8 @@
          the hold controller runs meanwhile with zero commands so the arm keeps its pose like the UR brakes -->
     <rosparam param="estop_controllers">[mobile_base_controller, arm_controller, arm_velocity_controller, arm_position_controller]</rosparam>
     <rosparam param="estop_hold_controllers">[arm_velocity_controller]</rosparam>
+    <!-- #226: the robot whose controllers, joint states and dashboard services this is (default mobipick) -->
+    <param name="robot_namespace" value="$(arg tf_prefix)" />
   </node>
   <!-- headless sim: the same simulated UR dashboard without a window, under the same node name, so its services
        (~set_estop, ~set_protective_stop, ur_hardware_interface/dashboard/get_safety_mode and get_robot_mode) exist
@@ -110,6 +112,8 @@
     <env name="QT_QPA_PLATFORM" value="offscreen"/>
     <rosparam param="estop_controllers">[mobile_base_controller, arm_controller, arm_velocity_controller, arm_position_controller]</rosparam>
     <rosparam param="estop_hold_controllers">[arm_velocity_controller]</rosparam>
+    <!-- #226: the robot whose controllers, joint states and dashboard services this is (default mobipick) -->
+    <param name="robot_namespace" value="$(arg tf_prefix)" />
   </node>
 
   <!-- create combined scan topic -->
