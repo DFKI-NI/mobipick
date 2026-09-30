@@ -150,13 +150,13 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.obj" />
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.obj" />
         </geometry>
       </collision>
     </link>
@@ -174,13 +174,13 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.obj" />
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.obj" />
         </geometry>
       </collision>
     </link>
@@ -198,13 +198,13 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.obj" />
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.obj" />
         </geometry>
       </collision>
     </link>
@@ -222,13 +222,13 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.obj" />
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.obj" />
         </geometry>
       </collision>
     </link>
@@ -246,13 +246,13 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.obj" />
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.obj" />
         </geometry>
       </collision>
     </link>
@@ -270,13 +270,13 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.obj" />
         </geometry>
       </visual>
       <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.dae" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_top.obj" />
         </geometry>
       </collision>
     </link>

@@ -78,14 +78,14 @@
   <library_effects>
     <effect id="Material-effect">
       <profile_COMMON>
-        <newparam sid="cover_tex_png-surface">
+        <newparam sid="cover_albedo_v2_png-surface">
           <surface type="2D">
-            <init_from>cover_tex_png</init_from>
+            <init_from>cover_albedo_v2_png</init_from>
           </surface>
         </newparam>
-        <newparam sid="cover_tex_png-sampler">
+        <newparam sid="cover_albedo_v2_png-sampler">
           <sampler2D>
-            <source>cover_tex_png-surface</source>
+            <source>cover_albedo_v2_png-surface</source>
           </sampler2D>
         </newparam>
         <technique sid="common">
@@ -94,7 +94,7 @@
               <color sid="emission">0.5 0.5 0.5 1</color>
             </emission>
             <diffuse>
-              <texture texture="cover_tex_png-sampler" texcoord="UVMap"/>
+              <texture texture="cover_albedo_v2_png-sampler" texcoord="UVMap"/>
             </diffuse>
             <index_of_refraction>
               <float sid="ior">1.45</float>
@@ -105,8 +105,8 @@
     </effect>
   </library_effects>
   <library_images>
-    <image id="cover_tex_png" name="cover_tex_png">
-      <init_from>cover_tex.png</init_from>
+    <image id="cover_albedo_v2_png" name="cover_albedo_v2_png">
+      <init_from>cover_albedo_v2.png</init_from>
     </image>
   </library_images>
   <library_materials>
