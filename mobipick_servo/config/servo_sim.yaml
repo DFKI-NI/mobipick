@@ -6,7 +6,7 @@
 use_gazebo: true
 command_in_type: speed_units
 scale:
-  linear: 0.1        # [m/s] conservative: the sim is slow and the tube must be watched
+  linear: 0.1        # [m/s] conservative: the sim is slow and the cable carrier must be watched
   rotational: 0.3    # [rad/s]
   joint: 0.3         # [rad/s] joint jog
 low_pass_filter_coeff: 2.0

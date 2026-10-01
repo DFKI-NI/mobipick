@@ -26,7 +26,7 @@ def q(deg):
 def stretch():
     cable_model = pytest.importorskip('mobipick_sim_cable_entanglement.cable_model')
     cfg = cable_model.config_from_dict(yaml.safe_load(open(os.path.join(CABLE, 'config', 'cable_model.yaml'))))
-    cfg.rope.enabled = False
+    cfg.cable_carrier.enabled = False
     urdf = open(os.path.join(CABLE, 'test', 'mobipick_sim_robot_description.urdf')).read()
     model = cable_model.CableModel(urdf, cfg)
     return lambda joints: model.evaluate(joints).max_stretch

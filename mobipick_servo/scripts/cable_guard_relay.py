@@ -6,7 +6,8 @@
 Servo publishes its joint targets (trajectory_msgs/JointTrajectory) on ~command_in (servo_server/command_unguarded);
 each one goes on to ~command_out (arm_controller/command) only when mobipick_servo.guard allows it with the cable model
 of mobipick_sim_cable_entanglement (geometry only; ~max_stretch -0.115 like grasplan's MTC guard; a wrist_3 window of
-~wrist_3_half_window_deg 170 around the tube's neutral angle). A refused target is replaced by one hold at the current
+~wrist_3_half_window_deg 170 around the cable carrier's neutral angle). A refused target is replaced by one hold at the
+current
 joint state and reported on ~blocked (std_msgs/String). Without the cable model (amenable_ws not sourced) nothing is
 forwarded unless ~cable_guard is false.
 
@@ -66,7 +67,7 @@ class Relay:
             )
             with open(path) as f:
                 cfg = config_from_dict(yaml.safe_load(f))
-            cfg.rope.enabled = False
+            cfg.cable_carrier.enabled = False
             self.model = CableModel(rospy.get_param('robot_description'), cfg)
             wrist_3 = [wj for span in cfg.spans for wj in span.joints if wj.joint.endswith('ur5_wrist_3_joint')]
             neutral = wrist_3[0].neutral if wrist_3 else math.pi - 0.25
