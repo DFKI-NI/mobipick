@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<robot name="tj">
+  <link name="base">
+    <inertial><mass value="20"/><inertia ixx="1" iyy="1" izz="1" ixy="0" ixz="0" iyz="0"/></inertial>
+    <collision><geometry><box size="0.6 0.4 0.2"/></geometry></collision>
+  </link>
+  <link name="arm">
+    <inertial><mass value="2"/><inertia ixx="0.05" iyy="0.05" izz="0.02" ixy="0" ixz="0" iyz="0"/></inertial>
+    <collision><geometry><box size="0.3 0.05 0.05"/></geometry></collision>
+  </link>
+  <joint name="wrist" type="revolute">
+    <parent link="base"/><child link="arm"/><origin xyz="0 0 0.4"/><axis xyz="0 0 1"/>
+    <limit lower="0.5236" upper="4.7997" effort="28" velocity="3.14"/>
+    <dynamics damping="5" friction="0"/>
+  </joint>
+  <transmission name="t"><type>transmission_interface/SimpleTransmission</type>
+    <joint name="wrist"><hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface></joint>
+    <actuator name="m"><mechanicalReduction>1</mechanicalReduction></actuator></transmission>
+  <gazebo><plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    <robotSimType>ROBOT_HW_SIM</robotSimType><legacyModeNS>false</legacyModeNS></plugin></gazebo>
+</robot>

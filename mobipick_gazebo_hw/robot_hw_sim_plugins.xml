@@ -1,0 +1,11 @@
+<library path="lib/libmobipick_robot_hw_sim">
+  <class
+    name="mobipick_gazebo_hw/MobipickRobotHWSim"
+    type="mobipick_gazebo_hw::MobipickRobotHWSim"
+    base_class_type="gazebo_ros_control::RobotHWSim">
+    <description>
+      DefaultRobotHWSim, except that a revolute joint with limits reads Gazebo's absolute angle (no accumulation of shortest
+      angular steps): a jump of more than pi between two controller updates cannot add whole turns to the joint state.
+    </description>
+  </class>
+</library>
