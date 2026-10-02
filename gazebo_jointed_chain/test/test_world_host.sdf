@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!-- gazebo_jointed_chain test (host variant: the plugin in its own model, host_model arm, the obstacle a runtime shape): a toy arm (forearm on a driven z joint, wrist on a driven y joint) with a 0.52 m chain
+     of 15 links between a clamp on the forearm and one on the wrist; an obstacle below it that only the chain collides
+     with (listed in collide_with); physics as the Mobipick sim (ODE quickstep 200 iterations, 3 ms). -->
+<sdf version="1.6">
+<world name="chain_test">
+  <physics type="ode"><max_step_size>0.003</max_step_size><real_time_factor>1</real_time_factor>
+    <real_time_update_rate>0</real_time_update_rate>
+    <ode><solver><type>quick</type><iters>200</iters><sor>1.3</sor></solver>
+      <constraints><cfm>0</cfm><erp>0.2</erp><contact_max_correcting_vel>100</contact_max_correcting_vel>
+        <contact_surface_layer>0.001</contact_surface_layer></constraints></ode></physics>
+  <gravity>0 0 -9.81</gravity>
+  <model name="arm">
+    <link name="base"><pose>-0.5 0 1 0 0 0</pose><inertial><mass>10</mass></inertial>
+      <collision name="base_col"><geometry><box><size>0.1 0.1 0.1</size></box></geometry></collision></link>
+    <joint name="fix_base" type="fixed"><parent>world</parent><child>base</child></joint>
+    <link name="forearm"><pose>0 0 1 0 0 0</pose>
+      <inertial><mass>2</mass><inertia><ixx>0.01</ixx><iyy>0.01</iyy><izz>0.01</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia></inertial>
+      <collision name="forearm_col"><geometry><box><size>0.08 0.08 0.08</size></box></geometry></collision></link>
+    <joint name="drive" type="revolute"><parent>base</parent><child>forearm</child><pose>-0.5 0 0 0 0 0</pose>
+      <axis><xyz>0 0 1</xyz><dynamics><damping>5</damping></dynamics></axis></joint>
+    <link name="wrist"><pose>0.3 0 1 0 0 0</pose>
+      <inertial><mass>1</mass><inertia><ixx>0.005</ixx><iyy>0.005</iyy><izz>0.005</izz><ixy>0</ixy><ixz>0</ixz><iyz>0</iyz></inertia></inertial>
+      <collision name="wrist_col"><geometry><box><size>0.06 0.06 0.06</size></box></geometry></collision></link>
+    <joint name="wrist_drive" type="revolute"><parent>forearm</parent><child>wrist</child>
+      <axis><xyz>0 1 0</xyz><dynamics><damping>2</damping></dynamics></axis></joint>
+  </model>
+  <model name="carrier_holder"><static>true</static>
+    <link name="anchor"><pose>0 0 -5 0 0 0</pose><visual name="v"><geometry><sphere><radius>0.001</radius></sphere></geometry></visual></link>
+    <plugin name="chain" filename="libgazebo_jointed_chain.so">
+      <chain_name>arm_chain</chain_name><host_model>arm</host_model>
+      <parent_link>forearm</parent_link><parent_offset>0 0 0 0 0 0</parent_offset>
+      <child_link>wrist</child_link><child_offset>0 0 0 0 0 0</child_offset>
+      <links>15</links><length>0.52</length><radius>0.0175</radius>
+      <mass_per_link>0.0122</mass_per_link><inertia_scale>8</inertia_scale>
+      <bend_radius>0.10</bend_radius><damping>0.002</damping>
+      <shape><name>obstacle</name><link>forearm</link><type>cylinder</type><pose>0.15 0 -0.2 1.5708 0 0</pose><size>0.03 0.3</size></shape>
+      <reference_link>base</reference_link>
+      <stop_strain>0.02</stop_strain><stop_force>30</stop_force><stop_ticks>3</stop_ticks>
+      <stop_service>/test_stop</stop_service>
+    </plugin>
+  </model>
+</world>
+</sdf>
