@@ -28,3 +28,6 @@ objects:
   coke_can:               {size: [0.06700, 0.06700, 0.12390], center_offset: [0.0, 0.0, 0.06195]}
   # conf_room_table.urdf.xacro defaults: 1.40 x 0.70 x 0.72, origin on the floor
   table:                  {size: [1.40, 0.70, 0.72], center_offset: [0.0, 0.0, 0.36]}
+  # static person_standing (person_standing.urdf.xacro): flat bottom contact
+  # patch 0.50 x 0.35, standing.dae mesh, model origin on the floor
+  person_standing:        {size: [0.50, 0.35, 1.80], center_offset: [0.0, 0.0, 0.90]}
