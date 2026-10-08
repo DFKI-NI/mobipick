@@ -62,7 +62,7 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._stopped_controllers: List[str] = []
         self._switch_lock = threading.Lock()
         # "untangle cable" button: while the protective stop is active, the cable monitor
-        # (mobipick_sim_cable_entanglement, #118) moves the wrist joints one at a time until the arm cable has slack
+        # (mobipick_cable_entanglement, #118) moves the wrist joints one at a time until the arm cable has slack
         # again; the protective stop stays active, the person watches and releases it
         self._untangle_service = rospy.get_param(
             "~untangle_service", "/mobipick/cable_entanglement_monitor/untangle")

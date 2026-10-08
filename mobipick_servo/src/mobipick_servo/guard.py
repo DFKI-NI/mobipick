@@ -2,7 +2,7 @@
 
 Servo streams one joint target per cycle. The camera/FT cable carrier must not be over-stretched (#118), so each target
 is
-checked with the geometric cable model of mobipick_sim_cable_entanglement, the same call as grasplan's MTC cable guard:
+checked with the geometric cable model of mobipick_cable_entanglement, the same call as grasplan's MTC cable guard:
 allowed when its largest span stretch stays at or below ``margin`` (the MTC guard's -0.115), or when it is not tighter
 than the current state, so the operator can always move back out of a tight pose. A wrist_3 window around the cable
 carrier's

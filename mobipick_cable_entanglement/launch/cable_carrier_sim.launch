@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- (sim only, off by default: tables demo launch arg cable_carrier_sim): the cable carrier of the wrist span as
+       a jointed chain in Gazebo (plugin gazebo_jointed_chain, its own repository listed in my.repos), spawned at the robot's
+       current pose in the shape of the cable model's settled carrier link chain, colliding only with the model's
+       fitted shapes. It logs events (strain or clamp force over the limits); it presses the simulated protective stop
+       only with trigger_protective_stop.
+       The chain values are PLACEHOLDERs until someone measures the real carrier (EI first). -->
+  <arg name="namespace" default="mobipick"/>
+  <arg name="config" default="$(find mobipick_cable_entanglement)/config/cable_model.yaml"/>
+  <arg name="trigger_protective_stop" default="false"/>
+  <arg name="event_file" default="" doc="JSON lines, one per event start and end; empty = log only"/>
+  <arg name="bending_stiffness" default="0.03" doc="EI [N m^2], PLACEHOLDER; 0 = free hinges (a rope)"/>
+  <arg name="damping" default="0.3" doc="joint damping [N m s/rad], PLACEHOLDER"/>
+  <group ns="$(arg namespace)">
+    <node name="cable_carrier_sim" pkg="mobipick_cable_entanglement" type="cable_carrier_sim.py" output="screen">
+      <param name="config_file" value="$(arg config)"/>
+      <param name="trigger_protective_stop" value="$(arg trigger_protective_stop)"/>
+      <param name="event_file" value="$(arg event_file)"/>
+      <param name="bending_stiffness" value="$(arg bending_stiffness)"/>
+      <param name="damping" value="$(arg damping)"/>
+    </node>
+  </group>
+</launch>

@@ -23,10 +23,10 @@ measured joint state, which lags one servo cycle). A MoveIt motion works right a
   0.02 m some Mobipick link pair is always that close and servo crawled at ~5 % speed in every pose. Output:
   `servo_server/command_unguarded`.
 - `cable_guard_relay.py`: each target goes on to `arm_controller/command` only when the geometric cable model of
-  `mobipick_sim_cable_entanglement` keeps the largest span stretch at or below `~max_stretch` (-0.115, like grasplan's
+  `mobipick_cable_entanglement` keeps the largest span stretch at or below `~max_stretch` (-0.115, like grasplan's
   MTC guard) or does not make it tighter than now (moving out is always allowed), and wrist_3 stays within
   `~wrist_3_half_window_deg` (170) of the cable carrier's neutral angle. A refused target becomes one hold at the current state
-  and a message on `cable_guard_relay/blocked`. The model comes from the mobipick_sim_cable_entanglement package; without it nothing is
+  and a message on `cable_guard_relay/blocked`. The model comes from the mobipick_cable_entanglement package; without it nothing is
   forwarded (`cable_guard:=false` relays unchecked). 2-3.4 ms per check. Sim: a wrist_3 jog from 218 deg stops at
   about 110 deg with the #211 cable model, the cable monitor stays quiet, jogging back is allowed at once.
   Servo output is forwarded only within `~input_window_s` (0.3 s) of the last twist or joint jog: moveit_servo 1.1.16
@@ -37,4 +37,4 @@ measured joint state, which lags one servo cycle). A MoveIt motion works right a
 - Real robot: not yet. The UR driver's `scaled_pos_joint_traj_controller/command` would take the same output
   (`command_out:=...`); test in the sim first.
 
-Tests: `python3 -m pytest -q test` (the guard with the real cable model; skipped without mobipick_sim_cable_entanglement).
+Tests: `python3 -m pytest -q test` (the guard with the real cable model; skipped without mobipick_cable_entanglement).

@@ -17,6 +17,7 @@ Package overview
 * `mobipick_bringup`: Launch and configuration files for the real Mobipick robot
 * `mobipick_description`: URDF description of the robot
 * `mobipick_gazebo`: Simulation specific launch and configuration files, the simulated hardware interface
+* `mobipick_cable_entanglement`: Model of the arm cable carrier, the entanglement monitor and the simulated carrier chain
 * `mobipick_moveit_config`: MoveIt! launch and configuration files
 * `mobipick_pick_n_place`: Some demo nodes that show off the MoveIt capabilities of the robot
 

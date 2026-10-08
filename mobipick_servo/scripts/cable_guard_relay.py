@@ -5,10 +5,10 @@
 
 Servo publishes its joint targets (trajectory_msgs/JointTrajectory) on ~command_in (servo_server/command_unguarded);
 each one goes on to ~command_out (arm_controller/command) only when mobipick_servo.guard allows it with the cable model
-of mobipick_sim_cable_entanglement (geometry only; ~max_stretch -0.115 like grasplan's MTC guard; a wrist_3 window of
+of mobipick_cable_entanglement (geometry only; ~max_stretch -0.115 like grasplan's MTC guard; a wrist_3 window of
 ~wrist_3_half_window_deg 170 around the cable carrier's neutral angle). A refused target is replaced by one hold at the
 current
-joint state and reported on ~blocked (std_msgs/String). Without the cable model (mobipick_sim_cable_entanglement not built) nothing is
+joint state and reported on ~blocked (std_msgs/String). Without the cable model (mobipick_cable_entanglement not built) nothing is
 forwarded unless ~cable_guard is false.
 
 Servo output is only forwarded while commands arrive (within ~input_window_s, 0.3 s, of the last twist or joint jog on
@@ -60,10 +60,10 @@ class Relay:
 
     def _load_model(self):
         try:
-            from mobipick_sim_cable_entanglement.cable_model import CableModel, config_from_dict  # separate package
+            from mobipick_cable_entanglement.cable_model import CableModel, config_from_dict  # separate package
 
             path = rospy.get_param('~cable_model_config', '') or os.path.join(
-                rospkg.RosPack().get_path('mobipick_sim_cable_entanglement'), 'config', 'cable_model.yaml'
+                rospkg.RosPack().get_path('mobipick_cable_entanglement'), 'config', 'cable_model.yaml'
             )
             with open(path) as f:
                 cfg = config_from_dict(yaml.safe_load(f))

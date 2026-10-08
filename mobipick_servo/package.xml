@@ -25,7 +25,7 @@
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>trajectory_msgs</exec_depend>
   <exec_depend>python3-yaml</exec_depend>
-  <!-- the cable model (mobipick_sim_cable_entanglement) is a separate package, listed in mobipick_labs/my.repos, and is
+  <!-- the cable model (mobipick_cable_entanglement, a package of this repository) is
        imported at runtime, like grasplan's MTC cable guard; without it the relay forwards nothing -->
 
   <test_depend>python3-pytest</test_depend>

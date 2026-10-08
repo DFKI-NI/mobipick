@@ -1,4 +1,4 @@
-"""The servo cable guard (#200) with the real cable model of mobipick_sim_cable_entanglement (skipped
+"""The servo cable guard (#200) with the real cable model of mobipick_cable_entanglement (skipped
 without it) and its test URDF."""
 import math
 import os
@@ -9,8 +9,8 @@ import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..', 'src'))
-# the cable model package: CABLE_PKG, else a sibling checkout in the same workspace
-CABLE = os.environ.get('CABLE_PKG', os.path.join(HERE, '..', '..', '..', 'mobipick_sim_cable_entanglement'))
+# the cable model package: CABLE_PKG, else the sibling package of this repository
+CABLE = os.environ.get('CABLE_PKG', os.path.join(HERE, '..', '..', 'mobipick_cable_entanglement'))
 sys.path.insert(0, os.path.join(CABLE, 'src'))
 
 from mobipick_servo import guard  # noqa: E402
@@ -25,7 +25,7 @@ def q(deg):
 
 @pytest.fixture(scope='module')
 def stretch():
-    cable_model = pytest.importorskip('mobipick_sim_cable_entanglement.cable_model')
+    cable_model = pytest.importorskip('mobipick_cable_entanglement.cable_model')
     cfg = cable_model.config_from_dict(yaml.safe_load(open(os.path.join(CABLE, 'config', 'cable_model.yaml'))))
     cfg.cable_carrier.enabled = False
     urdf = open(os.path.join(CABLE, 'test', 'mobipick_sim_robot_description.urdf')).read()

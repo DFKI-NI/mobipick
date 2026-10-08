@@ -1,0 +1,223 @@
+# Cable model of the Mobipick arm (see doc/cable_model.md). Lengths in m, angles in degrees.
+#
+# The anchors and carrier positions come from mobipick_description/urdf/cable_guide/cable_guide.urdf.xacro (the
+# triflex R size 30 carrier, igus UR clamps TR-911-965-xxx); the free lengths are best guesses from the data we had
+# on 2026-09-26 (scripts/calibrate_cable_model.py) and must be refined on the real robot.
+
+tf_prefix: "mobipick/"
+base_link: ur5_base_link
+cable_carrier_radius: 0.01725
+
+# the cable is assumed untangled here (joint_limits.yaml: "home ... where the cables are least stretched")
+reference_pose_deg: {shoulder_pan: 0.0, shoulder_lift: -149.0, elbow: 139.2, wrist_1: -117.5, wrist_2: -90.0, wrist_3: 179.9}
+# a housing holds the cable only when both span ends are level with it (extent along the joint axis, joint frame,
+# plus this margin); neutral_deg: joint angle at which the cable takes the short way around the joint (fixes the
+# winding branch; the UR joint angles are absolute, so extra turns stay in the model).
+extent_margin: 0.02
+
+# which deciding start the spans with a support_start use: carrier_tip (the calibrated start of the day before),
+# support, or auto = support in the sim (/use_sim_time) and carrier_tip on the real robot until tested there; the global
+# ROS parameter /cable_model/wrist_anchor (carrier_tip | support) overrides auto. Offline scripts and tests:
+# carrier_tip.
+wrist_anchor: auto
+
+spans:
+  # (oscar 2026-09-30): only the wrist span ever entangled; the shoulder and elbow spans are kept but off by default
+  # (not computed at all). `enabled` here; the ROS parameter cable_model/span_<name> (monitor launch args wrist_span,
+  # elbow_span, shoulder_span) overrides it.
+  # forearm carrier (wrist end) -> terminal element carrier on wrist_3; crosses wrist_1, wrist_2, wrist_3.
+  # This is the loop over the wrist in the photo and where every entanglement so far happened.
+  wrist:
+    enabled: true
+    start: {link: cable_guide_forearm_tube_link, xyz: [0, 0, -0.15], direction: [0, 0, -1]}
+    end: {link: cable_guide_wrist_3_tube_link, xyz: [0, 0, -0.04], direction: [0, 0, -1]}
+    free_length: 0.43   # best guess, see doc 'Calibration': taut just past the wrist_3=30 / wrist_1=0 limits of the home family
+    # the simulated carrier (the carrier_* keys: the carrier link chain in RViz, videos, collisions; their names are
+    # older than
+    # the removal of the radius rope, 2026-09-30) uses the measured carrier: 0.48 m free from the edge of the
+    # last forearm bracket (Oscar, tape measure, 2026-09-28; the 30 cm URDF guide link reaches 5.5 cm beyond it).
+    # The deciding geometry above stays until the calibration session: with the measured one, 4 poses just
+    # before the real stops of 2026-09-27 17:58 / 18:32 looked 3-19 points more slack and the MTC guard would pass them.
+    carrier_start: {link: cable_guide_forearm_tube_link, xyz: [0, 0, -0.095], direction: [0, 0, -1]}
+    # (oscar 2026-09-30): the carrier is clamped in the terminal element; the URDF's 8 cm guide link (z -0.04 tip
+    # .. +0.04 base, the element's centre) is MoveIt's mockup of the carrier. The carrier, the carrier link chain and
+    # RViz end at
+    # the element's face (z +0.027; a pin at its centre would sit inside the element's collision shape), leaving
+    # along -z as before until someone measures the direction. The deciding `end` above stays at the tip until a refit
+    # on the real evidence (it feeds the geometry-only stretch and the MTC guard margin).
+    carrier_end: {link: cable_guide_wrist_3_tube_link, xyz: [0, 0, 0.027], direction: [0, 0, -1]}
+    # (oscar 2026-09-30): 0.48 m (tape) was "too tight" in RViz (taut at home with the shapes fitted to the
+    # meshes, carrier link chain strain 2 %), 0.56 m "too much" (the loop hung well below wrist_1, the real one stays
+    # closer):
+    # 0.52 m, the middle and the shortest length that is slack on every route. The
+    # carrier's
+    # length along its centre line is still to be measured.
+    carrier_free_length: 0.52
+    # the deciding start at the real carrier support (the edge of the last forearm bracket, where the carrier
+    # starts),
+    # not at the tip of the URDF guide link, which is longer than the supported section for MoveIt clearance. Used with
+    # wrist_anchor 'support' (below). Its free length is an effective string length refit on the real evidence of
+    # 2026-09-27/28 (temp_code/0211_anchor_refit_scan.py, claude-7e2a's 0211_anchor_refit.py; the tape-measure 0.48 m
+    # would leave every real stop slack): at the MTC guard margin -0.115 it catches the five known taut poses (E1, E2,
+    # E4 at the stop, E3 and T1 one second before; carrier tip 0.43: E2 only), E4 with 3 points of margin, for about
+    # 1 % (claude-7e2a's everyday ticks; 5 % of mine) instead of 0.4 % (3.5 %) of everyday poses above the margin, and
+    # no new stops at the named poses (they get slacker). E5? and the stop instants of E3/T1 stay slack.
+    support_start: {link: cable_guide_forearm_tube_link, xyz: [0, 0, -0.095], direction: [0, 0, -1]}
+    support_free_length: 0.45
+    # untangled, the wrist carrier hangs on the wrist_1 cap side of the arm, in front of the cap (Oscar's photo at home,
+    # 2026-09-28; the start straight down went over the top of the wrist); the forearm link's -z points to that side.
+    # The carrier ended where the URDF's 8 cm wrist_3 guide link ends until : with the old camera capsule (5 cm too
+    # big) a carrier end in the terminal element touched it, which the carrier replay took for a caught loop on 32 of
+    # 255
+    # real motions of 2026-09-27 (every move to observe; ). With the shapes fitted to the meshes it ends in the
+    # terminal element (carrier_end below); the decision diff of checks those motions again.
+    carrier_rest_side: {link: ur5_forearm_link, direction: [0, 0, -1]}
+    lead: 0.03
+    stiffness: 2000.0
+    confidence: medium
+    wrap_joints:
+      - {joint: ur5_wrist_1_joint, radius: 0.045, extent: [-0.14, 0.05], neutral_deg: -90.0}
+      - {joint: ur5_wrist_2_joint, radius: 0.045, extent: [-0.14, 0.05], neutral_deg: 0.0}
+      - {joint: ur5_wrist_3_joint, radius: 0.042, extent: [-0.17, 0.25], neutral_deg: 165.7}
+  # upper arm carrier (elbow end) -> forearm carrier (elbow end); crosses the elbow
+  elbow:
+    enabled: false
+    start: {link: cable_guide_upper_arm_tube_link, xyz: [0, 0, -0.15], direction: [0, 0, -1]}
+    end: {link: cable_guide_forearm_tube_link, xyz: [0, 0, 0.15], direction: [0, 0, 1]}
+    # (oscar 2026-09-30: the free carrier starts at the support edges, not at the guide link tips): the carrier,
+    # the
+    # carrier link chain and RViz run from the elbow-side edge of the upper arm carrier's clamp2 bracket (z -0.1215) to
+    # the
+    # elbow-side edge of the forearm carrier's clamp3 bracket (z +0.1065): URDF bracket centre -/+ 6.5 mm along the
+    # carrier,
+    # the rule that matched oscar's tape at the wrist start within 4 mm. The carrier keeps its slack: its length
+    # grows by the carrier between tip and edge (0.0285 + 0.0435 m). The deciding start / end / free_length stay.
+    carrier_start: {link: cable_guide_upper_arm_tube_link, xyz: [0, 0, -0.1215], direction: [0, 0, -1]}
+    carrier_end: {link: cable_guide_forearm_tube_link, xyz: [0, 0, 0.1065], direction: [0, 0, 1]}
+    carrier_free_length: 0.472
+    # untangled, the elbow carrier runs around the outside of the elbow, past the joint's end (oscar's photo at
+    # home, media/cable/reliable/mobipick_in_home_pose.jpeg); a start straight down put it between upper arm and
+    # forearm, where the shapes fitted to the meshes leave it no room at home (elbow folded 140 deg)
+    carrier_rest_side: {link: ur5_upper_arm_link, direction: [-1, 0, 0]}
+    free_length: 0.40   # the full elbow range needs <= 0.37
+    lead: 0.03
+    stiffness: 2000.0
+    confidence: medium
+    wrap_joints:
+      - {joint: ur5_elbow_joint, radius: 0.058, extent: [-0.05, 0.20], neutral_deg: 0.0}
+  # pedestal -> upper arm carrier (shoulder end); crosses shoulder_pan and shoulder_lift.
+  # The pedestal exit is NOT in the URDF: guessed from the photo, low confidence.
+  shoulder:
+    enabled: false
+    start: {link: ur5_base_link, xyz: [-0.10, 0.14, -0.05], direction: [0, 0, 1]}
+    end: {link: cable_guide_upper_arm_tube_link, xyz: [0, 0, 0.15], direction: [0, 0, 1]}
+    # the carrier's end at the shoulder-side edge of the upper arm carrier's clamp1 bracket (z +0.1065, same rule
+    # as
+    # the elbow span); its start stays at the guessed pedestal exit (no bracket data); length + 0.0435 m (slack kept)
+    carrier_end: {link: cable_guide_upper_arm_tube_link, xyz: [0, 0, 0.1065], direction: [0, 0, 1]}
+    carrier_free_length: 0.5435
+    free_length: 0.50   # low confidence (pedestal exit guessed); named poses need <= 0.445
+    lead: 0.03
+    stiffness: 2000.0
+    confidence: low
+    wrap_joints:
+      - {joint: ur5_shoulder_pan_joint, radius: 0.075, extent: [-0.20, 0.10], neutral_deg: 0.0}
+      - {joint: ur5_shoulder_lift_joint, radius: 0.065, extent: [-0.07, 0.20], neutral_deg: -90.0}
+
+# obstacles for the carrier link chain (radius without the carrier radius, which the model adds). Measured from the UR5
+# collision
+# meshes, the Robotiq FT300 / 2F-140 meshes and the Astra box of the URDF. tool: true = a loop held there is "hooked".
+capsules:
+  # (2026-09-30, oscar: "use cylinders", boxes where box-shaped, tight to the URDF collision meshes, fingers open):
+  # every shape contains its link's collision geometry (no sample more than 1 mm outside). A shape with `edge` and
+  # a, b, radius is a flat-ended cylinder (faces at a and b), one with `box` (xyz, rpy, size) a box, both with edges
+  # rounded by `edge`; else a capsule. Fitted offline from the link meshes (axis seeds per arm link);
+  # overshoot per link in  Notes. The guide links are the carrier itself and have no shape. The camera mount's
+  # shapes (tool_camera_mount_*) collide but are not tool (thinker 14:28: the old model had no hold there; ).
+  - {name: base_1, link: ur5_base_link_inertia, a: [0.0001, -0.0000, -0.0000], b: [0.0001, -0.0000, 0.0240], radius: 0.0739, edge: 0.002}   # ur5_base_link_inertia
+  - {name: base_2, link: ur5_base_link_inertia, a: [-0.0009, 0.0640, 0.0034], b: [-0.0009, 0.0640, 0.0137], radius: 0.0469, edge: 0.002}   # ur5_base_link_inertia
+  - {name: shoulder_1, link: ur5_shoulder_link, a: [0.0002, 0.0002, -0.0652], b: [0.0002, 0.0002, 0.0685], radius: 0.0602, edge: 0.002}   # ur5_shoulder_link
+  - {name: shoulder_2, link: ur5_shoulder_link, a: [0.0000, -0.0705, 0.0000], b: [0.0000, 0.0494, 0.0000], radius: 0.0595, edge: 0.002}   # ur5_shoulder_link
+  - {name: upper_arm_1, link: ur5_upper_arm_link, a: [-0.4693, 0.0007, 0.1355], b: [0.0481, 0.0007, 0.1355], radius: 0.0594, edge: 0.002}   # ur5_upper_arm_link
+  - {name: upper_arm_2, link: ur5_upper_arm_link, a: [-0.0000, 0.0002, 0.0707], b: [-0.0000, 0.0002, 0.2044], radius: 0.0605, edge: 0.002}   # ur5_upper_arm_link
+  - {name: upper_arm_3, link: ur5_upper_arm_link, a: [-0.4251, -0.0001, 0.0707], b: [-0.4251, -0.0001, 0.2044], radius: 0.0600, edge: 0.002}   # ur5_upper_arm_link
+  - {name: forearm_1, link: ur5_forearm_link, a: [-0.4049, 0.0005, 0.0225], b: [0.0080, 0.0005, 0.0225], radius: 0.0461, edge: 0.002}   # ur5_forearm_link
+  - {name: forearm_2, link: ur5_forearm_link, a: [0.0002, -0.0003, -0.0082], b: [0.0002, -0.0003, 0.0710], radius: 0.0590, edge: 0.002}   # ur5_forearm_link
+  - {name: forearm_3, link: ur5_forearm_link, a: [-0.3926, -0.0000, -0.0407], b: [-0.3926, -0.0000, 0.0640], radius: 0.0393, edge: 0.002}   # ur5_forearm_link
+  - {name: wrist_1_1, link: ur5_wrist_1_link, a: [0.0000, -0.0475, 0.0005], b: [0.0000, 0.0572, 0.0005], radius: 0.0391, edge: 0.002}   # ur5_wrist_1_link
+  - {name: wrist_1_2, link: ur5_wrist_1_link, a: [0.0002, -0.0000, -0.0455], b: [0.0002, -0.0000, 0.0323], radius: 0.0380, edge: 0.002}   # ur5_wrist_1_link
+  - {name: wrist_2_1, link: ur5_wrist_2_link, a: [-0.0001, -0.0572, -0.0004], b: [-0.0001, 0.0475, -0.0004], radius: 0.0390, edge: 0.002}   # ur5_wrist_2_link
+  - {name: wrist_2_2, link: ur5_wrist_2_link, a: [0.0000, -0.0000, -0.0459], b: [0.0000, -0.0000, -0.0117], radius: 0.0380, edge: 0.002}   # ur5_wrist_2_link
+  - {name: wrist_3_housing, link: ur5_wrist_3_link, a: [0.0004, -0.0026, -0.0345], b: [0.0004, -0.0026, 0.0000], radius: 0.0406, edge: 0.002}   # ur5_wrist_3_link
+  - {name: tool_camera, link: ur5_wrist_3_link, box: {xyz: [0.0488, 0.0815, 0.0005], rpy: [0.0000, -0.0000, 0.0000], size: [0.0525, 0.1400, 0.0575]}, edge: 0.002, tool: true}   # eef_main_cam_link
+  - {name: tool_camera_mount_1, link: ur5_wrist_3_link, box: {xyz: [0.0082, 0.0393, 0.0257], rpy: [3.1302, 0.0088, -0.2674], size: [0.1189, 0.0669, 0.0150]}, edge: 0.002}   # sensor_mount_link
+  - {name: tool_camera_mount_2, link: ur5_wrist_3_link, box: {xyz: [0.0193, -0.0307, 0.0257], rpy: [0.0302, -0.0051, 0.6898], size: [0.0771, 0.0296, 0.0144]}, edge: 0.002}   # sensor_mount_bracket_link
+  - {name: tool_camera_mount_3, link: ur5_wrist_3_link, box: {xyz: [-0.0349, -0.0134, 0.0258], rpy: [-0.0179, -0.0077, -1.2273], size: [0.0737, 0.0264, 0.0142]}, edge: 0.002}   # sensor_mount_bracket_link
+  - {name: tool_camera_mount_4, link: ur5_wrist_3_link, box: {xyz: [-0.0082, 0.0955, 0.0279], rpy: [3.1375, -0.0024, 3.1262], size: [0.0607, 0.0420, 0.0180]}, edge: 0.002}   # sensor_mount_link
+  - {name: tool_camera_mount_5, link: ur5_wrist_3_link, box: {xyz: [0.0435, 0.0782, 0.0257], rpy: [0.0000, -0.0000, 0.0000], size: [0.0430, 0.0396, 0.0135]}, edge: 0.002}   # sensor_mount_link
+  - {name: tool_fingers_left_1, link: ur5_wrist_3_link, a: [-0.0218, -0.0195, 0.1078], b: [-0.0218, 0.0196, 0.1078], radius: 0.0203, edge: 0.002, tool: true}   # left_outer_knuckle
+  - {name: tool_fingers_left_2, link: ur5_wrist_3_link, a: [-0.0738, -0.0195, 0.1674], b: [-0.0738, 0.0137, 0.1674], radius: 0.0298, edge: 0.002, tool: true}   # left_outer_finger
+  - {name: tool_fingers_left_3, link: ur5_wrist_3_link, a: [-0.0550, -0.0170, 0.1235], b: [-0.0550, 0.0171, 0.1235], radius: 0.0336, edge: 0.002, tool: true}   # left_outer_knuckle
+  - {name: tool_fingers_left_4, link: ur5_wrist_3_link, box: {xyz: [-0.0768, -0.0000, 0.2260], rpy: [0.0000, -0.0000, 0.0000], size: [0.0141, 0.0271, 0.0585]}, edge: 0.002, tool: true}   # left_inner_finger
+  - {name: tool_fingers_right_1, link: ur5_wrist_3_link, box: {xyz: [0.0768, 0.0001, 0.2256], rpy: [0.0000, -0.0000, 0.0000], size: [0.0141, 0.0271, 0.0593]}, edge: 0.002, tool: true}   # right_inner_finger
+  - {name: tool_fingers_right_2, link: ur5_wrist_3_link, a: [0.0584, 0.0000, 0.0908], b: [0.0584, 0.0000, 0.1095], radius: 0.0156, edge: 0.002, tool: true}   # right_outer_finger
+  - {name: tool_fingers_right_3, link: ur5_wrist_3_link, a: [0.0243, -0.0196, 0.1119], b: [0.0243, 0.0195, 0.1119], radius: 0.0245, edge: 0.002, tool: true}   # right_outer_knuckle
+  - {name: tool_fingers_right_4, link: ur5_wrist_3_link, a: [0.0612, -0.0167, 0.1385], b: [0.0612, 0.0166, 0.1385], radius: 0.0312, edge: 0.002, tool: true}   # right_outer_knuckle
+  - {name: tool_fingers_right_5, link: ur5_wrist_3_link, a: [0.0819, -0.0137, 0.1733], b: [0.0819, 0.0195, 0.1733], radius: 0.0226, edge: 0.002, tool: true}   # right_outer_finger
+  - {name: tool_ft300, link: ur5_wrist_3_link, a: [-0.0001, -0.0000, -0.0040], b: [-0.0001, -0.0000, 0.0485], radius: 0.0376, edge: 0.002, tool: true}   # ft300_sensor
+  - {name: tool_gripper_base_1, link: ur5_wrist_3_link, a: [-0.0011, 0.0030, 0.0425], b: [-0.0011, 0.0030, 0.1060], radius: 0.0412, edge: 0.002, tool: true}   # robotiq_arg2f_base_link
+  - {name: tool_gripper_base_2, link: ur5_wrist_3_link, a: [0.0010, 0.0100, 0.0852], b: [0.0027, -0.0275, 0.1106], radius: 0.0454, edge: 0.002, tool: true}   # robotiq_arg2f_base_link
+  - {name: wrist_3_cable_clamp_1, link: ur5_wrist_3_link, a: [-0.0004, 0.0002, -0.0258], b: [-0.0004, 0.0002, -0.0342], radius: 0.0534, edge: 0.002}   # cable_guide_wrist_clamp_link
+  - {name: wrist_3_cable_clamp_2, link: ur5_wrist_3_link, a: [-0.0225, 0.0486, -0.0260], b: [-0.0689, 0.1658, -0.0235], radius: 0.0167, edge: 0.002}   # cable_guide_wrist_clamp_link
+  - {name: wrist_3_cable_clamp_3, link: ur5_wrist_3_link, box: {xyz: [-0.0830, 0.1205, -0.0230], rpy: [3.1416, -0.0000, -1.2108], size: [0.0450, 0.0314, 0.0255]}, edge: 0.002}   # cable_guide_terminal_element_link
+  - {name: wrist_3_cable_clamp_gap_fill, link: ur5_wrist_3_link, box: {xyz: [-0.0387, 0.0896, -0.0030], rpy: [0.0, 0.0, 1.9478], size: [0.0883, 0.0334, 0.0440]}, edge: 0.002}   # (2026-10-01): fills the 27 mm slot between clamp_2 and the camera mount plate; rule: an open slot on the carrier's side narrower than the carrier (disc 35 mm) is filled, the real carrier cannot enter it and the solver wedged the chain there
+
+# the simulated carrier: the carrier link chain (; the radius rope was removed on 2026-09-30, it caught none of the
+# real cable
+# stops). enabled false = the geometric check alone (no chain, no history).
+cable_carrier:
+  enabled: true
+  segment_length: 0.03    # node spacing of the coarse copy whose holds give the chain's length
+  substeps: 2             # with damping: the damping per 0.1 s
+  damping: 0.08
+  contact_tolerance: 0.006
+  tighten_iterations: 40  # relaxation steps before the string pull (slack slides off, real holds stay)
+  evaluate_every: 3       # chain lengths recomputed every n-th update (the chain itself steps every update)
+  decide_on_topology: false  # true: wraps of the chain around the housings also decide (not calibrated yet)
+  max_dt: 0.1
+  link_chain:
+    # approximations (Oscar, 2026-09-30): the real carrier still has to be measured in the lab. Neighbouring
+    # discs touch at 2*atan(gap / diameter) = 16.3 deg per joint = a 3.5 cm bend radius of the centre line.
+    disc_height: 0.005     # thickness of a disc along the carrier
+    disc_gap: 0.005        # free space between two discs on a straight carrier (height + gap = the link pitch)
+    disc_diameter: 0.035
+    substeps: 100          # per update: a chain of short links needs small steps to keep its length
+    passes: 2              # constraint passes per substep
+    gravity: 9.81
+    clamp_taper: 0.1       # how fast a capsule regains its thickness away from a clamp that sits inside it
+    friction: 0.3          # of the carrier on the arm and tool capsules (a guess; 0 = it slides freely)
+    # the links cannot stretch: a chain pulled longer than it is counts as that much stretch of its span, so
+    # decision.stop_stretch predicts the protective stop for a carrier pulled taut along the way it lies
+    decide_on_strain: true
+    strain_tolerance: 0.01   # strain below this is the solver's own slack and says nothing
+    twist_per_link_deg: 10.0   # torsion stop per link (igus triflex R catalogue); the twist is logged, never decides
+    # a reset (the MTC guard: one per path) reuses the chain settled at an earlier reset at the same pose, every
+    # joint rounded to this step [mrad] (a near repeat is glided to the exact pose); 0 = off. Careful flag, off in the
+    # code; ROS parameter cable_model/reset_cache_mrad
+    reset_cache_mrad: 0.0
+
+decision:
+  warn_stretch: -0.04    # less than 4 % slack left -> warning
+  stop_stretch: 0.02     # 2 % over-stretched -> protective stop predicted even without a torque estimate
+  stop_torque:           # extra joint torque [Nm] at which we predict the UR protective stop (guess)
+    shoulder_pan: 15.0
+    shoulder_lift: 15.0
+    elbow: 10.0
+    wrist_1: 4.0
+    wrist_2: 4.0
+    wrist_3: 4.0
+  entangled_ticks: 2     # consecutive predictions before the level is "entangled"
+  # false = the carrier link chain alone decides (the geometric string stays out of the monitor's decision and the MTC
+  # guard's path replay; the guard's geometric margin stage stays); ROS parameter cable_model/geometric_check
+  # (monitor launch arg geometric_check) overrides it (oscar's test of the carrier link chain in isolation, 2026-09-30)
+  geometric_check: true

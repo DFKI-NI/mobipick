@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Observe-only arm cable monitor (doc/cable_model.md).
+       mode auto: sim when /use_sim_time is true, else real robot.
+       sim: presses the simulated UR protective stop when the model predicts an entanglement, no logging.
+       real: never commands anything, logs every tick and an event file per protective stop / prediction. -->
+  <!-- : the robot's namespace (and tf prefix); a second Mobipick in the sim runs its own monitor with mobipick2 -->
+  <arg name="namespace" default="mobipick"/>
+  <arg name="mode" default="auto"/>
+  <arg name="rate" default="10.0"/>
+  <arg name="sim_trigger_protective_stop" default="true"/>
+  <arg name="log_dir" default="$(find mobipick_cable_entanglement)/data/real_robot_logs"/>
+  <arg name="config" default="$(find mobipick_cable_entanglement)/config/cable_model.yaml"/>
+  <!-- (oscar 2026-09-30): which spans of the carrier are modelled. Only the wrist span ever entangled; the
+       shoulder
+       and elbow spans are kept but off by default (not computed at all). Set as parameters cable_model/span_<name>, so
+       every node that builds the cable model (the monitor, the MTC cable guard) follows at its start. -->
+  <!-- 2026-09-30 (oscar: the carrier link chain in isolation): false = the carrier link chain alone decides; the
+       geometric string
+       stays out of the decision (monitor and the MTC guard's path replay; the guard's geometric margin stage stays).
+       Set as the parameter cable_model/geometric_check, read at node start. -->
+  <arg name="geometric_check" default="true"/>
+  <param name="/$(arg namespace)/cable_model/geometric_check" value="$(arg geometric_check)"/>
+  <!-- / (oscar 2026-10-01), careful flags, off here and in code (chain_reset.py): release_after_rest_s > 0 = the
+       chain starts afresh at the rest pose when the arm moves again after resting that long (option R, 10 = the
+       interim policy); reset_at_trajectory_start true = the chain starts afresh when an executed trajectory starts
+       (grasplan announces each executed MTC solution and guarded named move on cable_model/trajectory_start; every
+       executing move_group goal counts too), the shared trajectory initialization with the MTC guard's replay. Set as
+       parameters cable_model/<name>, read at node start. -->
+  <arg name="release_after_rest_s" default="0.0"/>
+  <arg name="reset_at_trajectory_start" default="false"/>
+  <!-- release_during_rest true (with release_after_rest_s > 0): the chain starts afresh once the arm HAS rested that long
+       (still resting, once per rest) instead of at the next motion; with reset_at_trajectory_start the candidate of
+       2026-10-01 (offline: 4 of 5 real stops at the halt, 0.52 % false alarm time). Careful flag, off. -->
+  <arg name="release_during_rest" default="false"/>
+  <param name="/$(arg namespace)/cable_model/release_after_rest_s" value="$(arg release_after_rest_s)"/>
+  <param name="/$(arg namespace)/cable_model/reset_at_trajectory_start" value="$(arg reset_at_trajectory_start)"/>
+  <param name="/$(arg namespace)/cable_model/release_during_rest" value="$(arg release_during_rest)"/>
+  <!-- (oscar 2026-10-01), careful flag, off here and in code: reset_cache_mrad > 0 = the guard's and the monitor's
+       start-pose cache: a reset at a start pose seen before (every joint rounded to that many mrad) reuses the chain
+       settled there (5 = the sim value). Set as the parameter cable_model/reset_cache_mrad, read at node start. -->
+  <arg name="reset_cache_mrad" default="0.0"/>
+  <param name="/$(arg namespace)/cable_model/reset_cache_mrad" value="$(arg reset_cache_mrad)"/>
+  <arg name="wrist_span" default="true"/>
+  <arg name="elbow_span" default="false"/>
+  <arg name="shoulder_span" default="false"/>
+  <!-- : the simulated cable carrier is a link chain (the radius rope was removed on 2026-09-30). Disc sizes [m]:
+       empty =
+       config/cable_model.yaml (cable_carrier.link_chain); set as parameters every node that builds the cable model
+       reads (the
+       monitor, the MTC cable guard), at its start. -->
+  <arg name="disc_height" default=""/>
+  <arg name="disc_gap" default=""/>
+  <arg name="disc_diameter" default=""/>
+  <param name="/$(arg namespace)/cable_model/span_wrist" value="$(arg wrist_span)"/>
+  <param name="/$(arg namespace)/cable_model/span_elbow" value="$(arg elbow_span)"/>
+  <param name="/$(arg namespace)/cable_model/span_shoulder" value="$(arg shoulder_span)"/>
+  <param name="/$(arg namespace)/cable_model/disc_height" value="$(arg disc_height)" if="$(eval str(disc_height) != '')"/>
+  <param name="/$(arg namespace)/cable_model/disc_gap" value="$(arg disc_gap)" if="$(eval str(disc_gap) != '')"/>
+  <param name="/$(arg namespace)/cable_model/disc_diameter" value="$(arg disc_diameter)" if="$(eval str(disc_diameter) != '')"/>
+
+  <node pkg="mobipick_cable_entanglement" type="cable_entanglement_monitor.py" name="cable_entanglement_monitor"
+        ns="$(arg namespace)" output="screen" respawn="true" respawn_delay="5">
+    <!-- the model is small numpy work (~20 ms per tick, one core): the container's OpenBLAS pool (one thread per
+         core) only busy-waits, 3 of its threads burned ~75 % CPU each in the sim -->
+    <env name="OPENBLAS_NUM_THREADS" value="1"/>
+    <env name="OMP_NUM_THREADS" value="1"/>
+    <env name="MKL_NUM_THREADS" value="1"/>
+    <rosparam command="load" file="$(arg config)" ns="model"/>
+    <param name="robot_description" value="/$(arg namespace)/robot_description"/>
+    <param name="mode" value="$(arg mode)"/>
+    <param name="rate" value="$(arg rate)"/>
+    <param name="sim_trigger_protective_stop" value="$(arg sim_trigger_protective_stop)"/>
+    <param name="log_dir" value="$(arg log_dir)"/>
+    <param name="joint_states_topic" value="/$(arg namespace)/joint_states"/>
+    <param name="safety_mode_topic" value="/$(arg namespace)/ur_hardware_interface/safety_mode"/>
+    <param name="safety_mode_service" value="/$(arg namespace)/ur_hardware_interface/dashboard/get_safety_mode"/>
+    <param name="sim_protective_stop_service" value="/$(arg namespace)/rqt_sim_gui/set_protective_stop"/>
+    <param name="trajectory_result_topic" value="/$(arg namespace)/arm_controller/follow_joint_trajectory/result"/>
+    <param name="event_before_s" value="60.0"/>
+    <param name="event_after_s" value="10.0"/>
+  </node>
+</launch>

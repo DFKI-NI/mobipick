@@ -1,0 +1,91 @@
+"""Would the cable monitor stop the arm along a planned joint path?
+
+The MTC cable guard checks the geometry of every path point (stateless). The sim monitor also runs the carrier link
+chain: the carrier with history, which can catch on the tool (camera, F/T sensor) or be pulled taut during a motion,
+which geometry alone cannot see. This replays a planned path through the monitor's own decision (the same CableModel
+update, chain on, the monitor's rate) from a chain hanging freely at the path's start. The monitor's current chain
+shape is not known here, so a loop that is already caught before the path starts is missed. (Until
+2026-09-30 a radius rope ran here; it was removed, the carrier link chain is the only chain model; rope_replay is the
+old name of carrier_replay.)
+"""
+import math
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Sequence, Tuple
+
+Sample = Tuple[float, Dict[str, float]]  # (time in s, joint positions in rad)
+
+
+@dataclass
+class CarrierVerdict:
+    stop: bool                 # the monitor would predict a protective stop somewhere on the path
+    max_stretch: float         # largest stretch along the path (carrier link chain included)
+    span: str
+    # what set it ("carrier link chain (pulled taut)", "carrier link chain (caught on the tool)", a joint, "chord")
+    limiting: str
+    q: Dict[str, float]        # joint positions (rad) at the worst point
+    t: float                   # time along the path of the worst point
+    updates: int
+
+
+def resample(samples: Sequence[Sample], rate: float) -> List[Sample]:
+    """Linear interpolation of a joint path at a fixed rate (the monitor's tick), ending exactly at the last point."""
+    if not samples:
+        return []
+    out = [samples[0]]
+    start, end = samples[0][0], samples[-1][0]
+    i, k = 0, 1
+    while start + k / rate < end - 1e-9:   # times by index: no accumulated rounding
+        t = start + k / rate
+        while samples[i + 1][0] < t:
+            i += 1
+        (t0, q0), (t1, q1) = samples[i], samples[i + 1]
+        a = 0.0 if t1 <= t0 else (t - t0) / (t1 - t0)
+        out.append((t, {j: q0[j] + a * (q1[j] - q0[j]) for j in q0}))
+        k += 1
+    if len(samples) > 1:
+        out.append(samples[-1])
+    return out
+
+
+def start_chain(model, q: Dict[str, float]) -> None:
+    """The settled chain an executed trajectory starts from: the guard's replay of a planned trajectory and the
+    monitor's reset at the start of its execution (chain_reset, the shared trajectory initialization) both start here,
+    with the same model config, shapes and settle."""
+    model.reset(q)
+
+
+def carrier_replay(model, samples: Sequence[Sample], rate: float = 10.0) -> Optional[CarrierVerdict]:
+    """Replay samples (time-ordered) through model.update with the carrier link chain on, from a chain hanging freely at
+    the
+    first sample.
+
+    model is a CableModel whose config has the chain enabled (cable_carrier.enabled) (it is reset here, so use one not
+    shared with a live
+    monitor). None for an empty path.
+    """
+    path = resample(list(samples), rate)
+    if not path:
+        return None
+    start_chain(model, path[0][1])
+    worst, stop, last_t = None, False, path[0][0]
+    for t, q in path:
+        state = model.update(q, max(0.0, t - last_t), use_carrier=True, hysteresis=False, with_gradient=True)
+        last_t = t
+        stop = stop or bool(state.predicted_stop)
+        if worst is None or state.max_stretch > worst[0].max_stretch:
+            worst = (state, t, q)
+    state, t, q = worst
+    return CarrierVerdict(stop=stop, max_stretch=state.max_stretch, span=state.worst_span,
+                       limiting=state.spans[state.worst_span].limiting, q=dict(q), t=t - path[0][0],
+                       updates=len(path))
+
+
+# the old names (deprecated)
+RopeVerdict = CarrierVerdict
+
+
+def rope_replay(model, samples: Sequence[Sample], rate: float = 10.0) -> Optional[CarrierVerdict]:
+    """the old name of carrier_replay"""
+    from .cable_model import deprecated_name
+    deprecated_name("path_check.rope_replay", "path_check.carrier_replay")
+    return carrier_replay(model, samples, rate)

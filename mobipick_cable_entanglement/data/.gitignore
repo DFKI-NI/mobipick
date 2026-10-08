@@ -1,0 +1,4 @@
+# permanent real-robot logs of the cable monitor (see README "Real robot logs"); kept out of git
+*
+!.gitignore
+!README.md
