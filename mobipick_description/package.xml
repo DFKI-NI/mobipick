@@ -27,7 +27,8 @@
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>joint_trajectory_controller</exec_depend>
   <exec_depend>mir_description</exec_depend>
-  <exec_depend>mobipick_gazebo_hw</exec_depend> <!-- sim hardware interface, #250 -->
+  <!-- the simulated hardware interface named in urdf/common.gazebo.xacro (MobipickRobotHWSim) is built by
+       mobipick_gazebo, which launches the simulation and depends on this package; no dependency here (no cycle) -->
   <exec_depend>position_controllers</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>roboticsgroup_upatras_gazebo_plugins</exec_depend>

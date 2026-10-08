@@ -2,8 +2,12 @@ cmake_minimum_required(VERSION 3.5.1)
 project(mobipick_gazebo)
 
 find_package(catkin REQUIRED COMPONENTS
+  gazebo_ros_control
+  pluginlib
+  roscpp
   roslaunch
 )
+find_package(gazebo REQUIRED)
 
 ###################################
 ## catkin specific configuration ##
@@ -12,9 +16,25 @@ catkin_python_setup()
 
 catkin_package()
 
+###########
+## Build ##
+###########
+
+# gazebo_ros_control hardware interface of the simulated Mobipick (see README.md): DefaultRobotHWSim with the
+# absolute Gazebo angle for limited revolute joints
+include_directories(${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS})
+link_directories(${GAZEBO_LIBRARY_DIRS})
+
+add_library(mobipick_robot_hw_sim src/hw/mobipick_robot_hw_sim.cpp)
+target_link_libraries(mobipick_robot_hw_sim ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+
 #############
 ## Install ##
 #############
+
+install(TARGETS mobipick_robot_hw_sim
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+)
 
 # Mark executable scripts (Python etc.) for installation
 install(PROGRAMS
@@ -40,6 +60,7 @@ install(DIRECTORY
 
 install(FILES
   plugin.xml
+  robot_hw_sim_plugins.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

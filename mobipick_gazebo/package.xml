@@ -17,7 +17,11 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <build_depend>gazebo_ros_control</build_depend>
+  <build_depend>pluginlib</build_depend>
+  <build_depend>roscpp</build_depend>
   <build_depend>roslaunch</build_depend>
+  <build_export_depend>gazebo_ros_control</build_export_depend>
 
   <exec_depend>actionlib</exec_depend>
   <exec_depend>control_msgs</exec_depend>
@@ -25,6 +29,7 @@
   <exec_depend>controller_manager_msgs</exec_depend>
   <exec_depend>gazebo_msgs</exec_depend>
   <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gazebo_ros_control</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>mir_description</exec_depend>
@@ -34,10 +39,12 @@
   <exec_depend>mobipick_gripper_effort_controller</exec_depend>
   <exec_depend>pbr_gazebo</exec_depend>
   <exec_depend>pbr_objects</exec_depend>
+  <exec_depend>pluginlib</exec_depend>
   <exec_depend>pose_teacher</exec_depend>
   <exec_depend>python3-yaml</exec_depend>
   <exec_depend>python_qt_binding</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>roscpp</exec_depend>
   <exec_depend>python3-rospkg</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>rostopic</exec_depend>
@@ -55,5 +62,6 @@
   <export>
     <gazebo_ros gazebo_media_path="${prefix}"/>
     <rqt_gui plugin="${prefix}/plugin.xml"/>
+    <gazebo_ros_control plugin="${prefix}/robot_hw_sim_plugins.xml"/>
   </export>
 </package>

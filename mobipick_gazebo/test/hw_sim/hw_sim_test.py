@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""#250: DefaultRobotHWSim vs MobipickRobotHWSim in a one-joint Gazebo model (limits 30..275 deg like wrist_3).
+"""DefaultRobotHWSim vs MobipickRobotHWSim in a one-joint Gazebo model (limits 30..275 deg like wrist_3).
 (a) normal motion: the joint is moved in 2 deg steps (set_model_configuration, 20 ms apart) from 40 to 270 and back: both
     interfaces must report the same angle as Gazebo (max difference printed).
 (b) big jumps: 40 -> 270 -> 40 -> ... in one step (more than 180 deg between two controller updates): the default interface

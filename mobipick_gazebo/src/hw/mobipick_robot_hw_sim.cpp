@@ -1,4 +1,4 @@
-// Sim-only hardware interface: DefaultRobotHWSim with an absolute joint position for limited revolute joints (#250).
+// Sim-only hardware interface: DefaultRobotHWSim with an absolute joint position for limited revolute joints.
 //
 // DefaultRobotHWSim::readSim keeps joint_position_ += shortest_angular_distance(joint_position_, Position(0)) for every
 // joint that is not prismatic. If the arm is flung by more than pi between two controller updates (e.g. a Gazebo
@@ -8,7 +8,7 @@
 // angle is the state; continuous joints keep the accumulation.
 #include <gazebo_ros_control/default_robot_hw_sim.h>
 
-namespace mobipick_gazebo_hw
+namespace mobipick_gazebo
 {
 
 class MobipickRobotHWSim : public gazebo_ros_control::DefaultRobotHWSim
@@ -31,6 +31,6 @@ public:
   }
 };
 
-}  // namespace mobipick_gazebo_hw
+}  // namespace mobipick_gazebo
 
-PLUGINLIB_EXPORT_CLASS(mobipick_gazebo_hw::MobipickRobotHWSim, gazebo_ros_control::RobotHWSim)
+PLUGINLIB_EXPORT_CLASS(mobipick_gazebo::MobipickRobotHWSim, gazebo_ros_control::RobotHWSim)

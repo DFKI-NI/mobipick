@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
 
-  <!-- robot_hw_sim: the gazebo_ros_control hardware interface class; mobipick_gazebo_hw's reads absolute angles for limited
-         revolute joints (#250: DefaultRobotHWSim adds whole turns to /joint_states after a big jump of the arm, e.g. a Gazebo
+  <!-- robot_hw_sim: the gazebo_ros_control hardware interface class; mobipick_gazebo's MobipickRobotHWSim reads absolute angles for limited
+         revolute joints (DefaultRobotHWSim adds whole turns to /joint_states after a big jump of the arm, e.g. a Gazebo
          teleport of the robot); gazebo_ros_control/DefaultRobotHWSim restores the stock behaviour. -->
-  <xacro:macro name="controller_plugin_gazebo" params="robot_namespace robot_hw_sim:=mobipick_gazebo_hw/MobipickRobotHWSim">
+  <xacro:macro name="controller_plugin_gazebo" params="robot_namespace robot_hw_sim:=mobipick_gazebo/MobipickRobotHWSim">
     <gazebo>
       <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
         <xacro:unless value="${robot_namespace == ''}">
