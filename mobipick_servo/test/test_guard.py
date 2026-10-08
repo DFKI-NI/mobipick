@@ -1,4 +1,4 @@
-"""The servo cable guard (#200) with the real cable model of mobipick_sim_cable_entanglement (amenable_ws; skipped
+"""The servo cable guard (#200) with the real cable model of mobipick_sim_cable_entanglement (skipped
 without it) and its test URDF."""
 import math
 import os
@@ -9,7 +9,8 @@ import yaml
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, '..', 'src'))
-CABLE = os.environ.get('CABLE_PKG', os.path.expanduser('~/ros1_ws/amenable_ws/src/mobipick_sim_cable_entanglement'))
+# the cable model package: CABLE_PKG, else a sibling checkout in the same workspace
+CABLE = os.environ.get('CABLE_PKG', os.path.join(HERE, '..', '..', '..', 'mobipick_sim_cable_entanglement'))
 sys.path.insert(0, os.path.join(CABLE, 'src'))
 
 from mobipick_servo import guard  # noqa: E402
