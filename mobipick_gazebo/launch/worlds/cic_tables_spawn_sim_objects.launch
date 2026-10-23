@@ -31,75 +31,8 @@
     <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
 
-  <!-- upload urdf models to param server -->
-  <param name="long_table_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'
-         with_barrier:=false" />
-  <param name="small_table_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/conf_room_table.urdf.xacro'
-         width:=0.8
-         depth:=0.8
-         height:=0.72
-         leg_radius:=0.02
-         leg_offset:=0.0
-         with_barrier:=false" />
-  <param name="power_drill_with_grip_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/power_drill_with_grip.urdf.xacro'" />
-  <param name="klt_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/klt.urdf.xacro'" />
-  <param name="screwdriver_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/screwdriver.urdf.xacro'" />
-  <param name="relay_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/relay.urdf.xacro'" />
-  <param name="multimeter_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/multimeter.urdf.xacro'" />
-  <param name="hot_glue_gun_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/hot_glue_gun.urdf.xacro'" />
-  <param name="person_standing_description"
-         command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/static/static_person_standing.urdf.xacro'" />
-
-  <!-- spawn tables -->
-  <node name="spawn_model_worker_table_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param long_table_description -model table_1 -x 18.30 -y 15.18 -Y -1.5708"
-        respawn="false" output="screen" />
-  <node name="spawn_model_table_2" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param small_table_description -model table_2 -x 19.565 -y 13.76 -Y 0.0"
-        respawn="false" output="screen" />
-  <node name="spawn_model_table_3" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param small_table_description -model table_3 -x 21.165 -y 13.84 -Y 0.0"
-        respawn="false" output="screen" />
-  <node name="spawn_model_storage_table" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param small_table_description -model storage_table -x 18.30 -y 13.84 -Y 0.0"
-        respawn="false" output="screen" />
-
-  <!-- table 1 objects -->
-  <node name="spawn_multimeter_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param multimeter_description -model multimeter_1 -x 18.49 -y 15.52 -z 0.74 -Y -1.7969"
-        respawn="false" output="screen" />
-
-  <!-- spawn worker facing table 1, opposite side of the robot -->
-  <node name="spawn_person_standing_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param person_standing_description -model person_standing_1 -x 17.5 -y 15.17 -z 0.0 -R 0.0 -P 0.0 -Y 1.5708"
-        respawn="false" output="screen" />
-
-  <!-- table 2 objects: a second row behind the open-set front row, within top-down arm reach from base_table_2_pose
-       (the back of the table at y 13.64 is ~1.03 m from the arm base, no IK; #161) -->
-  <node name="relay_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param relay_description -model relay_1 -x 19.72 -y 13.84 -z 0.77 -Y 0.1579" />
-  <node name="hot_glue_gun" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param hot_glue_gun_description -model hot_glue_gun -x 19.28 -y 13.80 -z 0.81 -R -1.5687 -Y -1.3675" />
-  <!-- screwdriver_1 was behind klt_1 on table 3 (out of top-down reach, no free reachable room there) -->
-  <node name="screwdriver_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param screwdriver_description -model screwdriver_1 -x 19.50 -y 13.84 -z 0.74 -Y 0.8895" />
-
-  <!-- table 3 objects -->
-  <node name="spawn_power_drill_with_grip_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param power_drill_with_grip_description -model power_drill_with_grip_1 -x 20.97 -y 14.06 -z 0.83 -R -1.5869 -Y 2.3352"
-        respawn="false" output="screen" />
-  <node name="klt_1" pkg="gazebo_ros" type="spawn_model"
-        args="-urdf -param klt_description -model klt_1 -x 21.25 -y 13.99 -z 0.8 -Y 0.7572"
-        respawn="false" output="screen" />
-
-  <!-- open-set demo objects (YCB-like), fixed poses near the robot's side of tables 1-3 -->
-  <include if="$(arg open_set_objects)" file="$(find mobipick_open_set_objects)/launch/cic_tables_objects.launch" />
+  <!-- tables, objects and worker -->
+  <include file="$(find mobipick_gazebo)/launch/worlds/cic_tables_scene.launch">
+    <arg name="open_set_objects" value="$(arg open_set_objects)" />
+  </include>
 </launch>
