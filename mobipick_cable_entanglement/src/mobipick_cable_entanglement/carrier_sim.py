@@ -44,6 +44,45 @@ def bend_radius_from_config(config: dict) -> float:
     return (height + gap) / (2.0 * math.atan(gap / diameter))
 
 
+def chain_links(length: float, chain: Optional[dict] = None) -> int:
+    """the number of links the plugin gets for a chain of `length` (the same rule as plugin_sdf)"""
+    c = dict(CHAIN_DEFAULTS, **(chain or {}))
+    return int(c["links"]) or max(2, math.ceil(length / float(c["max_link_length"]) - 1e-9))
+
+
+def resample_equal(points: np.ndarray, n: int) -> np.ndarray:
+    """n + 1 points at equal distances along a polyline: what the plugin does with the initial points"""
+    points = np.asarray(points, dtype=float)
+    along = np.concatenate([[0.0], np.cumsum(np.linalg.norm(np.diff(points, axis=0), axis=1))])
+    s = np.linspace(0.0, along[-1], n + 1)
+    return np.stack([np.interp(s, along, points[:, i]) for i in range(3)], axis=1)
+
+
+def joint_bends(points: np.ndarray) -> np.ndarray:
+    """the angle between neighbouring segments at every inner point [rad]"""
+    d = np.diff(points, axis=0)
+    d = d / np.maximum(np.linalg.norm(d, axis=1), 1e-12)[:, None]
+    return np.arccos(np.clip((d[:-1] * d[1:]).sum(axis=1), -1.0, 1.0))
+
+
+def limit_bends(points: np.ndarray, n: int, max_bend: float, iterations: int = 2000, step: float = 0.03) -> np.ndarray:
+    """`points` resampled to n links of equal length, with no joint bent more than `max_bend`: the plugin resamples
+    the model's settled shape the same way, which cuts its corners and bends single joints beyond the model's own
+    minimum bend radius (0.61 rad against 0.51 at the home pose), so the chain would start in its joint limits. A
+    vertex above the limit moves a small step towards the middle of its neighbours (a big one shortens the chain),
+    the ends stay in the clamps; the length is kept by resampling after every pass"""
+    shape = resample_equal(points, n)
+    for _ in range(iterations):
+        bends = joint_bends(shape)
+        over = np.nonzero(bends > max_bend)[0] + 1
+        if len(over) == 0:
+            return shape
+        for i in over:
+            shape[i] += step * ((shape[i - 1] + shape[i + 1]) / 2.0 - shape[i])
+        shape = resample_equal(shape, n)
+    raise ValueError(f"the carrier shape cannot be relaxed to {max_bend:.3f} rad per joint in {iterations} passes")
+
+
 def moving_ancestor(kin: UrdfKinematics, link: str) -> Tuple[str, np.ndarray]:
     """(the first ancestor of `link` that is not hung on a fixed joint, the 4x4 pose of `link` in it): the link
     Gazebo merges `link` into"""
@@ -139,7 +178,7 @@ def plugin_sdf(kin: UrdfKinematics, config: dict, prefix: str, host_model: str, 
     parent, pa = anchor_in_gazebo(kin, prefix, span["carrier_start"])
     child, pb = anchor_in_gazebo(kin, prefix, span["carrier_end"])
     length = float(span["carrier_free_length"])
-    links = int(c["links"]) or max(2, math.ceil(length / float(c["max_link_length"]) - 1e-9))
+    links = chain_links(length, chain)
     radius = float(config.get("cable_carrier_radius", 0.01725))
     reference, T_ref = moving_ancestor(kin, prefix + config.get("base_link", "ur5_base_link"))
 
@@ -173,12 +212,19 @@ def plugin_sdf(kin: UrdfKinematics, config: dict, prefix: str, host_model: str, 
             f'</visual></link>\n    {plugin}\n  </model>\n</sdf>\n')
 
 
-def initial_points_from_model(model, q: Dict[str, float], config: dict, prefix: str) -> np.ndarray:
+def initial_points_from_model(model, q: Dict[str, float], config: dict, prefix: str,
+                              chain: Optional[dict] = None) -> np.ndarray:
     """the cable model's carrier link chain of the wrist span, settled at the joint angles `q` (a fresh reset, as the
-    monitor starts), in the Gazebo link of carrier_start: the chain's initial shape"""
+    monitor starts), in the Gazebo link of carrier_start: the chain's initial shape, resampled to the plugin's links
+    with no joint beyond the plugin's bend limit (link length / bend radius)"""
     model.reset(q, settle_carrier=True)
     points = model.disc_points().get("wrist")
     if points is None or len(points) < 2:
         raise ValueError("the cable model has no carrier link chain for the wrist span (cable_carrier.enabled false?)")
-    parent, _ = anchor_in_gazebo(model.kin, prefix, wrist_span(config["spans"])["carrier_start"])
-    return points_in_link(model.kin, model._full_q(q), model.cfg.tf_prefix + model.cfg.base_link, parent, points)
+    span = wrist_span(config["spans"])
+    parent, _ = anchor_in_gazebo(model.kin, prefix, span["carrier_start"])
+    points = points_in_link(model.kin, model._full_q(q), model.cfg.tf_prefix + model.cfg.base_link, parent, points)
+    length = float(span["carrier_free_length"])
+    links = chain_links(length, chain)
+    radius = float((chain or {}).get("bend_radius") or bend_radius_from_config(config))
+    return limit_bends(points, links, 0.97 * length / links / radius)

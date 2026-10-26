@@ -93,6 +93,25 @@ class Wiring(unittest.TestCase):
             length = np.linalg.norm(np.diff(pts, axis=0), axis=1).sum()
             self.assertAlmostEqual(length, span["carrier_free_length"], delta=0.02)
 
+    def test_initial_shape_keeps_every_joint_within_the_plugins_bend_limit(self):
+        # the plugin resamples the points to equal links; the model's settled shape bent single joints to 0.61 rad at
+        # home against the limit link / bend radius = 0.51 rad, so the chain started inside its joint limits
+        length = CONFIG["spans"]["wrist"]["carrier_free_length"]
+        links = cs.chain_links(length)
+        limit = length / links / cs.bend_radius_from_config(CONFIG)
+        for pose in (HOME, OBSERVE):
+            pts = cs.initial_points_from_model(self.model, q(pose), CONFIG, P)
+            seen = cs.joint_bends(cs.resample_equal(pts, links))
+            self.assertLessEqual(seen.max(), limit, pose)
+
+    def test_limit_bends_keeps_ends_and_length(self):
+        corner = np.array([[0, 0, 0], [0.2, 0, 0], [0.2, 0.002, 0], [0.4, 0.002, 0]], dtype=float)
+        shape = cs.limit_bends(corner, 20, 0.3)
+        self.assertEqual(len(shape), 21)
+        np.testing.assert_allclose(shape[[0, -1]], corner[[0, -1]], atol=1e-9)
+        self.assertLessEqual(cs.joint_bends(shape).max(), 0.3)
+        self.assertAlmostEqual(np.linalg.norm(np.diff(shape, axis=0), axis=1).sum(), 0.4, delta=0.01)
+
     def test_plugin_sdf(self):
         pts = cs.initial_points_from_model(self.model, q(HOME), CONFIG, P)
         root = parse(cs.plugin_sdf(self.kin, CONFIG, P, "mobipick", "mobipick", initial_points=pts,
