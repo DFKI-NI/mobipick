@@ -64,6 +64,33 @@ namespace mobipick
 {
 std::string tf_prefix_ = "mobipick";
 
+// A MoveIt error code as "NAME (value)" for the action's status text, so callers can say why a move failed
+std::string moveitCodeText(const moveit::core::MoveItErrorCode& code)
+{
+  typedef moveit_msgs::MoveItErrorCodes C;
+  const char* name = nullptr;
+  switch (code.val)
+  {
+    case C::PLANNING_FAILED: name = "PLANNING_FAILED: no motion plan was found"; break;
+    case C::INVALID_MOTION_PLAN: name = "INVALID_MOTION_PLAN"; break;
+    case C::MOTION_PLAN_INVALIDATED_BY_ENVIRONMENT_CHANGE: name = "MOTION_PLAN_INVALIDATED_BY_ENVIRONMENT_CHANGE"; break;
+    case C::CONTROL_FAILED: name = "CONTROL_FAILED: the arm controller aborted the motion"; break;
+    case C::TIMED_OUT: name = "TIMED_OUT"; break;
+    case C::PREEMPTED: name = "PREEMPTED: the motion was stopped before its end"; break;
+    case C::START_STATE_IN_COLLISION: name = "START_STATE_IN_COLLISION: the arm starts in collision"; break;
+    case C::GOAL_IN_COLLISION: name = "GOAL_IN_COLLISION"; break;
+    case C::INVALID_GROUP_NAME: name = "INVALID_GROUP_NAME"; break;
+    case C::NO_IK_SOLUTION: name = "NO_IK_SOLUTION"; break;
+    default: break;
+  }
+  std::ostringstream text;
+  if (name)
+    text << name << " (" << code.val << ")";
+  else
+    text << "MoveIt error code " << code.val;
+  return text.str();
+}
+
 struct GrapsPoseDefine
 {
   Eigen::Isometry3d grasp_pose;
@@ -461,6 +488,7 @@ protected:
   std::map<std::string, moveit_function_t> moveit_functions;
   std::string action_name_;
   mobipick_pick_n_place::MoveItMacroResult result_;
+  std::string failure_text_;  // why the goal failed, the status text of setAborted
 
 public:
   explicit MoveItMacroAction(const std::string& name)
@@ -493,7 +521,12 @@ public:
 
   bool hasAttachedObjects()
   {
-    return !planning_scene_interface_ptr->getAttachedObjects().empty();
+    if (planning_scene_interface_ptr->getAttachedObjects().empty())
+    {
+      failure_text_ = "no object is attached to the gripper in the planning scene";
+      return false;
+    }
+    return true;
   }
 
   bool moveArmToTarget(const std::string& target_name)
@@ -502,7 +535,12 @@ public:
     // plan
     group_ptr->setPlannerId("RRTConnect");
     group_ptr->setStartStateToCurrentState();
-    group_ptr->setNamedTarget(target_name);
+    if (!group_ptr->setNamedTarget(target_name))
+    {
+      failure_text_ = "'" + target_name + "' is not a named pose of the " + group_ptr->getName() + " group";
+      ROS_ERROR_STREAM(failure_text_);
+      return false;
+    }
     moveit::core::MoveItErrorCode error_code = group_ptr->plan(*plan_ptr);
     if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
     {
@@ -510,7 +548,8 @@ public:
     }
     else
     {
-      ROS_ERROR_STREAM("Planning to " << target_name << " pose FAILED");
+      failure_text_ = "planning to '" + target_name + "' failed: " + moveitCodeText(error_code);
+      ROS_ERROR_STREAM("Planning to " << target_name << " pose FAILED: " << moveitCodeText(error_code));
       return false;
     }
 
@@ -522,7 +561,8 @@ public:
     }
     else
     {
-      ROS_ERROR_STREAM("Moving to " << target_name << " pose FAILED");
+      failure_text_ = "moving to '" + target_name + "' failed: " + moveitCodeText(error_code);
+      ROS_ERROR_STREAM("Moving to " << target_name << " pose FAILED: " << moveitCodeText(error_code));
       return false;
     }
 
@@ -542,7 +582,8 @@ public:
     }
     else
     {
-      ROS_ERROR("Planning to observation pose FAILED");
+      failure_text_ = "planning to 'observe100cm_right' failed: " + moveitCodeText(error_code);
+      ROS_ERROR_STREAM("Planning to observation pose FAILED: " << moveitCodeText(error_code));
       return false;
     }
 
@@ -554,7 +595,8 @@ public:
     }
     else
     {
-      ROS_ERROR("Moving to observation pose FAILED");
+      failure_text_ = "moving to 'observe100cm_right' failed: " + moveitCodeText(error_code);
+      ROS_ERROR_STREAM("Moving to observation pose FAILED: " << moveitCodeText(error_code));
       return false;
     }
 
@@ -594,7 +636,9 @@ public:
       }
       else
       {
-        ROS_ERROR("Picking FAILED");
+        failure_text_ = "picking failed after " + std::to_string(pickPlanAttempts) +
+                        " attempts: " + moveitCodeText(error_code);
+        ROS_ERROR_STREAM("Picking FAILED: " << moveitCodeText(error_code));
         success = false;
       }
 
@@ -614,13 +658,15 @@ public:
     hand_over_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(1.0, 0.0, 0.0)));
     hand_over_pose.rotate(Eigen::AngleAxisd(M_PI_2, Eigen::Vector3d(0.0, 0.0, 1.0)));
 
-    if (moveToCartPose(*group_ptr, hand_over_pose) == moveit::core::MoveItErrorCode::SUCCESS)
+    moveit::core::MoveItErrorCode error_code = moveToCartPose(*group_ptr, hand_over_pose);
+    if (error_code == moveit::core::MoveItErrorCode::SUCCESS)
     {
       ROS_INFO("Move arm to HANDOVER succeeded");
     }
     else
     {
-      ROS_INFO("Move arm to HANDOVER failed");
+      failure_text_ = "moving the arm to the handover pose failed: " + moveitCodeText(error_code);
+      ROS_ERROR_STREAM("Move arm to HANDOVER failed: " << moveitCodeText(error_code));
       return false;
     }
 
@@ -654,7 +700,8 @@ public:
     }
     else
     {
-      ROS_INFO("Gripper move FAILED");
+      failure_text_ = "opening the gripper failed: the gripper action ended " + gripper_ac_ptr->getState().toString();
+      ROS_ERROR_STREAM("Gripper move FAILED: " << gripper_ac_ptr->getState().toString());
       return false;
     }
 
@@ -694,7 +741,9 @@ public:
       }
       else
       {
-        ROS_ERROR("Placing FAILED");
+        failure_text_ = "placing failed after " + std::to_string(placePlanAttempts) +
+                        " attempts: " + moveitCodeText(error_code);
+        ROS_ERROR_STREAM("Placing FAILED: " << moveitCodeText(error_code));
         success = false;
       }
     } while ((error_code == moveit::core::MoveItErrorCode::PLANNING_FAILED ||
@@ -716,6 +765,7 @@ public:
 
   void executeCallback(const mobipick_pick_n_place::MoveItMacroGoalConstPtr& goal_ptr)
   {
+    failure_text_.clear();
     if (goal_ptr->type == "target")
     {
       result_.result = moveArmToTarget(goal_ptr->name);
@@ -731,12 +781,14 @@ public:
       else
       {
         ROS_ERROR_STREAM("Invalid function name '" << goal_ptr->name << "' in moveit macro.");
+        failure_text_ = "'" + goal_ptr->name + "' is not a moveit_macros function";
         result_.result = false;
       }
     }
     else
     {
       ROS_ERROR_STREAM("Invalid type '" << goal_ptr->type << "' used in moveit macro.");
+      failure_text_ = "'" + goal_ptr->type + "' is not a moveit_macros goal type (target or function)";
       result_.result = false;
     }
     if (result_.result)
@@ -746,7 +798,8 @@ public:
     else
     {
       // Note: There is no setFailed() method. Aborted is the default value used when no result is set.
-      as_.setAborted(result_);
+      // The status text says why; a function that gives no reason falls back to its type and name
+      as_.setAborted(result_, failure_text_.empty() ? goal_ptr->type + " " + goal_ptr->name + " failed" : failure_text_);
     }
   }
 };
