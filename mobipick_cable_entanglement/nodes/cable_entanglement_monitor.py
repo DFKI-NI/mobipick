@@ -59,6 +59,8 @@ SAFETY_NAMES = {0: "UNDEFINED", 1: "NORMAL", 2: "REDUCED", 3: "PROTECTIVE_STOP",
 STOPPED_SAFETY = (3, 5, 12)
 LEVEL_COLORS = {"ok": (0.1, 0.8, 0.2), "warning": (1.0, 0.7, 0.0), "entangled": (1.0, 0.1, 0.1)}
 CARRIER_COLOR = (0.75, 0.0, 1.0)  # vivid purple (Oscar), opaque: stays visible against the planning scene
+# the carrier's discs keep CARRIER_COLOR while the span is ok and take the level colour when it warns or entangles,
+# so the chain itself shows what the monitor decided (also where the markers are drawn in Gazebo)
 
 
 def _short(name: str) -> str:
@@ -264,6 +266,10 @@ class CableEntanglementMonitor:
         self.pub_level = rospy.Publisher("~level", String, queue_size=1, latch=True)
         self.pub_stretch = rospy.Publisher("~max_stretch", Float32, queue_size=1)
         self.pub_markers = rospy.Publisher("~markers", MarkerArray, queue_size=1)
+        # the carrier's discs alone (namespace cable_discs), for a drawing of the tube outside RViz (the tables demo
+        # sim draws them in Gazebo): built only while someone listens, like ~markers, and without the labels and
+        # capsules that only RViz shows
+        self.pub_disc_markers = rospy.Publisher("~disc_markers", MarkerArray, queue_size=1)
         self._markers_cleared = False
         # the model's collision shapes of arm and tool (capsules of config/cable_model.yaml) and the clamps, to
         # compare them in RViz with the robot meshes
@@ -706,11 +712,13 @@ class CableEntanglementMonitor:
 
     # ------------------------------------------------------------------ markers
     def _publish_markers(self, q, state):
-        if self.pub_markers.get_num_connections() == 0:
+        full = self.pub_markers.get_num_connections() > 0
+        discs_wanted = self.pub_disc_markers.get_num_connections() > 0
+        if not (full or discs_wanted):
             return
-        arr = MarkerArray()
+        arr, disc_arr = MarkerArray(), MarkerArray()
         stamp = rospy.Time.now()
-        if not self._markers_cleared:   # markers of an earlier monitor (e.g. the removed radius rope line) go
+        if full and not self._markers_cleared:   # markers of an earlier monitor (e.g. the removed radius rope line) go
             arr.markers.append(Marker(action=Marker.DELETEALL))
             self._markers_cleared = True
         discs = self.model.disc_points()   # the carrier is drawn as its discs (none without the chain)
@@ -718,7 +726,11 @@ class CableEntanglementMonitor:
             span = state.spans[name]
             lvl = "entangled" if span.stretch >= self.cfg.decision.stop_stretch else (
                 "warning" if span.stretch >= self.cfg.decision.warn_stretch or span.hooked_on else "ok")
-            arr.markers.extend(self._disc_markers(i, pts, stamp))
+            markers = self._disc_markers(i, pts, stamp, lvl)
+            disc_arr.markers.extend(m for m in markers if m.ns == "cable_discs")
+            if not full:
+                continue
+            arr.markers.extend(markers)
             t = Marker(type=Marker.TEXT_VIEW_FACING, action=Marker.ADD, id=100 + i, ns="cable_text")
             t.header.frame_id, t.header.stamp = self.frame, stamp
             mid = pts[len(pts) // 2]
@@ -731,13 +743,17 @@ class CableEntanglementMonitor:
             if span.disc_strain is not None and span.disc_strain >= self.cfg.cable_carrier.link_chain.strain_tolerance:
                 t.text += f" chain taut {100 * span.disc_strain:+.0f}%"
             arr.markers.append(t)
+        if discs_wanted:
+            self.pub_disc_markers.publish(disc_arr)
+        if not full:
+            return
         if self.show_capsules:
             arr.markers.extend(self._capsule_markers(q, stamp))
         self.pub_markers.publish(arr)
 
-    def _disc_markers(self, span_index, joints, stamp):
+    def _disc_markers(self, span_index, joints, stamp, level="ok"):
         """one cylinder per link of the carrier link chain (at the middle of the link, across it) and the links as a
-        line"""
+        line; the discs in CARRIER_COLOR while the span is ok, else in the colour of its level"""
         disc = self.cfg.cable_carrier.link_chain
         out = []
         line = Marker(type=Marker.LINE_STRIP, action=Marker.ADD, id=span_index, ns="cable_links")
@@ -759,7 +775,7 @@ class CableEntanglementMonitor:
             m.pose.orientation = _z_onto([v / length for v in axis])
             m.scale.x = m.scale.y = disc.disc_diameter
             m.scale.z = disc.disc_height
-            m.color.r, m.color.g, m.color.b = CARRIER_COLOR
+            m.color.r, m.color.g, m.color.b = CARRIER_COLOR if level == "ok" else LEVEL_COLORS[level]
             m.color.a = 1.0
             out.append(m)
         return out
