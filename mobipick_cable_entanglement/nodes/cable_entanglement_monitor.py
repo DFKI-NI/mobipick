@@ -57,6 +57,7 @@ SAFETY_NAMES = {0: "UNDEFINED", 1: "NORMAL", 2: "REDUCED", 3: "PROTECTIVE_STOP",
                 10: "VALIDATE_JOINT_ID", 11: "UNDEFINED_SAFETY_MODE", 12: "AUTOMATIC_MODE_SAFEGUARD_STOP",
                 13: "SYSTEM_THREE_POSITION_ENABLING_STOP"}
 STOPPED_SAFETY = (3, 5, 12)
+UNTANGLE_JOINTS = ("wrist_3", "wrist_2", "wrist_1")   # the untangle turns only these, one at a time
 LEVEL_COLORS = {"ok": (0.1, 0.8, 0.2), "warning": (1.0, 0.7, 0.0), "entangled": (1.0, 0.1, 0.1)}
 CARRIER_COLOR = (0.75, 0.0, 1.0)  # vivid purple (Oscar), opaque: stays visible against the planning scene
 # the carrier's discs keep CARRIER_COLOR while the span is ok and take the level colour when it warns or entangles,
@@ -225,6 +226,12 @@ class CableEntanglementMonitor:
         else:
             rospy.loginfo("cable model: geometric check only (cable_carrier.enabled false: no carrier link chain)")
         self.model = CableModel(urdf, self.cfg)   # raises when the carrier link chain's solver is missing (no fallback)
+        self._urdf = urdf
+        self._planner = None   # the untangle's planner copy of the model (untangle_with_chain), built on first use
+        self._model_lock = threading.RLock()   # every change of the live chain against the untangle's snapshot
+        self._planner_lock = threading.Lock()   # ~untangle_plan and ~untangle run in their own threads
+        self._chain_untangled = False   # a chain-aware untangle moved the arm during the current stop
+        self._hold_chain = False   # untangle_with_chain during the current stop: no rest release of the chain
         self.rate = float(rospy.get_param("~rate", 10.0))
         self.mode = self._detect_mode(rospy.get_param("~mode", "auto"))
         self.sim_trigger = bool(rospy.get_param("~sim_trigger_protective_stop", True))
@@ -369,6 +376,11 @@ class CableEntanglementMonitor:
         now = time.time()
         if self.logger:
             self.logger.line(now, "safety_mode", mode=mode, name=SAFETY_NAMES.get(mode, str(mode)))
+        if mode in STOPPED_SAFETY and prev not in STOPPED_SAFETY:
+            self._chain_untangled = False   # a new stop: nothing untangled yet
+            # untangle_with_chain: the arm rests because the stop locked it, not because the cable settled; a rest
+            # release (chain_reset) would start the chain afresh at the stop pose and forget the stretch that stopped it
+            self._hold_chain = self.mode == "sim" and bool(self._cable_param("untangle_with_chain", False))
         if mode in STOPPED_SAFETY and self.logger:
             self.logger.event(now, "protective_stop", {
                 "safety_mode": SAFETY_NAMES.get(mode, mode),
@@ -380,14 +392,24 @@ class CableEntanglementMonitor:
             with self._lock:
                 q = dict(self._q) if self._q else None
             self._release_stretch = None
+            # untangle_with_chain: after a chain-aware untangle the carried chain is the cable's real state (the
+            # untangle moved it to slack); a fresh chain at the stop pose would forget why it stopped (a second stop
+            # on the way back). Any other release: the person untangled the cable, the model starts afresh.
+            keep_chain, self._chain_untangled, self._hold_chain = self._chain_untangled, False, False
             if q:
-                self.model.reset(q)
+                if not keep_chain:
+                    with self._model_lock:
+                        self.model.reset(q)
                 self.resets.forget_rest(rospy.get_time(), q, ARM_JOINTS)
-                stretch = self.model.evaluate(q).max_stretch
+                last = self._last_state
+                stretch = (last.max_stretch if keep_chain and last is not None
+                           else self.model.evaluate(q).max_stretch)
                 if stretch >= self.cfg.decision.stop_stretch:
                     self._release_stretch = stretch
             self._stopped_by_us = False
-            rospy.loginfo("cable monitor: stop released, cable model reset (assumed untangled)%s",
+            rospy.loginfo("cable monitor: stop released, %s%s",
+                          "carried chain kept (untangled with the chain)" if keep_chain else
+                          "cable model reset (assumed untangled)",
                           "" if self._release_stretch is None else
                           f"; still over-stretched ({100 * self._release_stretch:+.1f}%): any further pull stops again")
 
@@ -439,18 +461,53 @@ class CableEntanglementMonitor:
         return TriggerResponse(success=True, message="event marked, dump follows in %.0f s" % self.logger.after_s)
 
     # ------------------------------------------------------------------ untangling (sim dashboard button)
-    def _plan_text(self, q, steps, state, ok):
+    def _plan_text(self, q, steps, state, ok, chain=False, start=None):
         moves = ", ".join(f"{j} {math.degrees(q[j]):.1f} -> {math.degrees(v):.1f} deg" for j, v in steps) or "none"
-        return (f"moves: {moves}; cable stretch {100 * self.model.evaluate(q).max_stretch:+.1f}% -> "
-                f"{100 * state.max_stretch:+.1f}%" + ("" if ok else " (still not slack enough)"))
+        if start is None:
+            start = self.model.evaluate(q).max_stretch
+        label = (" (carrier link chain and geometry)" if self.cfg.decision.geometric_check else
+                 " (carrier link chain)") if chain else ""
+        text = (f"moves: {moves}; cable stretch{label} "
+                f"{100 * start:+.1f}% -> {100 * state.max_stretch:+.1f}%")
+        if ok:
+            return text
+        if chain and not steps:
+            return (f"no slack within {self._chain_max_turn_deg():g} deg of {', '.join(UNTANGLE_JOINTS)} from here "
+                    f"(carrier link chain): untangle the cable by hand; " + text)
+        return text + " (still not slack enough)"
+
+    @staticmethod
+    def _chain_max_turn_deg() -> float:
+        return float(rospy.get_param("~untangle_chain_max_turn_deg", 90.0))
+
+    def _untangle_plan(self, q):
+        """(steps, state, ok, text, chain) of the untangle from q, chain True when planned with the chain. untangle_with_chain (safe flag, off in code; private
+        parameter, else cable_model/untangle_with_chain, read on every call): planned from the carried carrier link
+        chain on a planner copy of the model (same robot description and configuration as the live one), each joint at
+        most ~untangle_chain_max_turn_deg (90) each way; off, or without a chain: the geometric plan as before."""
+        if bool(self._cable_param("untangle_with_chain", False)):
+            with self._model_lock:
+                snap = self.model.chain_snapshot()
+                start = self._last_state.max_stretch if self._last_state is not None else None
+            if snap is not None:
+                with self._planner_lock:
+                    if self._planner is None:
+                        self._planner = CableModel(self._urdf, self.cfg)
+                    steps, state, ok = self._planner.untangle_plan(
+                        q, joints=UNTANGLE_JOINTS, chain=snap, max_turn=math.radians(self._chain_max_turn_deg()),
+                        speed=float(rospy.get_param("~untangle_speed", 0.4)))
+                return steps, state, ok, self._plan_text(q, steps, state, ok, chain=True, start=start), True
+            rospy.logwarn("cable monitor: untangle_with_chain: no carrier link chain, planning with the geometry")
+        steps, state, ok = self.model.untangle_plan(q)
+        return steps, state, ok, self._plan_text(q, steps, state, ok), False
 
     def _srv_untangle_plan(self, _req):
         with self._lock:
             q = dict(self._q) if self._q else None
         if not q:
             return TriggerResponse(success=False, message="no joint states yet")
-        steps, state, ok = self.model.untangle_plan(q)
-        return TriggerResponse(success=ok, message=self._plan_text(q, steps, state, ok))
+        steps, state, ok, text, _ = self._untangle_plan(q)
+        return TriggerResponse(success=ok, message=text)
 
     def _srv_untangle(self, _req):
         """Sim only, pressed by a person while the protective stop is active: move the wrist joints one at a time
@@ -477,10 +534,9 @@ class CableEntanglementMonitor:
             q = dict(self._q) if self._q else None
         if not q or not self._joint_names:
             return TriggerResponse(success=False, message="no joint states yet")
-        steps, state, ok = self.model.untangle_plan(q)
-        text = self._plan_text(q, steps, state, ok)
+        steps, state, ok, text, chain = self._untangle_plan(q)
         if not steps:
-            return TriggerResponse(success=True, message="nothing to do, " + text)
+            return TriggerResponse(success=ok, message=("nothing to do, " if ok else "not moving: ") + text)
 
         # the joint-by-joint path, sampled for a collision check (MoveIt state validity, if available)
         waypoints, cur = [], dict(q)
@@ -548,7 +604,13 @@ class CableEntanglementMonitor:
             return TriggerResponse(success=False, message=result_text + "; " + text)
         with self._lock:
             q_now = dict(self._q)
-        self.model.reset(q_now)  # the cable hangs freely again
+        if chain:
+            # untangle_with_chain: the monitor's ticks carried the live chain along the motion to the slack the plan
+            # found; keep it, also at the release that follows (_set_safety)
+            self._chain_untangled = True
+        else:
+            with self._model_lock:
+                self.model.reset(q_now)  # the cable hangs freely again
         return TriggerResponse(success=ok, message="untangled, " + text +
                                "; the protective stop is still active: check the arm, then release it")
 
@@ -587,19 +649,20 @@ class CableEntanglementMonitor:
         now_ros = rospy.get_time()
         dt = 0.0 if self._last_update is None else max(0.0, now_ros - self._last_update)
         self._last_update = now_ros
-        if self.resets.enabled:
-            reset = self.resets.step(now_ros, q, ARM_JOINTS)
-            if reset is not None:
-                try:
-                    self._apply_reset(reset)
-                except Exception as exc:  # keep observing with the old chain
-                    rospy.logerr(f"cable monitor: chain reset failed: {exc}")
-        dt = self._catch_up(stamp, dt)
-        try:
-            state = self.model.update(q, dt)
-        except Exception as exc:  # keep observing even if one tick fails
-            rospy.logerr_throttle(10.0, f"cable monitor: model update failed: {exc}")
-            return
+        with self._model_lock:
+            if self.resets.enabled and not (self._hold_chain and self._safety in STOPPED_SAFETY):
+                reset = self.resets.step(now_ros, q, ARM_JOINTS)
+                if reset is not None:
+                    try:
+                        self._apply_reset(reset)
+                    except Exception as exc:  # keep observing with the old chain
+                        rospy.logerr(f"cable monitor: chain reset failed: {exc}")
+            dt = self._catch_up(stamp, dt)
+            try:
+                state = self.model.update(q, dt)
+            except Exception as exc:  # keep observing even if one tick fails
+                rospy.logerr_throttle(10.0, f"cable monitor: model update failed: {exc}")
+                return
         self._last_state = state
         d = state.to_dict()
         d["q_deg"] = {j: round(math.degrees(v), 2) for j, v in q.items()}

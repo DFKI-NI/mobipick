@@ -36,6 +36,14 @@
   <param name="/$(arg namespace)/cable_model/release_after_rest_s" value="$(arg release_after_rest_s)"/>
   <param name="/$(arg namespace)/cable_model/reset_at_trajectory_start" value="$(arg reset_at_trajectory_start)"/>
   <param name="/$(arg namespace)/cable_model/release_during_rest" value="$(arg release_during_rest)"/>
+  <!-- untangle_with_chain true: the sim untangle service (the dashboard's untangle button) plans from the carried
+       carrier link chain on a copy of the model instead of the geometry alone, keeps that chain after its motion and at
+       the release that follows, and holds the rest release while the protective stop is on; it answers "no slack
+       within N deg" when no wrist turn up to ~untangle_chain_max_turn_deg (90) gives slack. Safe flag, off here and in
+       code (the untangle runs in the simulation only). Set as the parameter cable_model/untangle_with_chain, read on
+       every untangle. -->
+  <arg name="untangle_with_chain" default="false"/>
+  <param name="/$(arg namespace)/cable_model/untangle_with_chain" value="$(arg untangle_with_chain)"/>
   <!-- (oscar 2026-10-01), careful flag, off here and in code: reset_cache_mrad > 0 = the guard's and the monitor's
        start-pose cache: a reset at a start pose seen before (every joint rounded to that many mrad) reuses the chain
        settled there (5 = the sim value). Set as the parameter cable_model/reset_cache_mrad, read at node start. -->

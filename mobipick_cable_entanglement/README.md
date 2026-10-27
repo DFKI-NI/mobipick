@@ -97,6 +97,17 @@ Outputs (namespace `/mobipick/cable_entanglement_monitor/`):
   after a MoveIt collision check of the path (`/mobipick/check_state_validity`); it swaps the dashboard's hold
   controller (`arm_velocity_controller`) for `arm_controller` during the motion and back afterwards. The
   protective stop stays active: watch the arm, then release it in the dashboard
+- `cable_model/untangle_with_chain` (safe flag, off; read on every untangle): `~untangle_plan` and `~untangle` plan
+  from the carried carrier link chain instead of the geometry alone (a stop the chain decided can look slack to the
+  geometry, and the chain gets tighter if the wrist turns the wrong way). The plan runs on a second model built from
+  the same robot description and configuration, from a snapshot of the live chain: one wrist joint at a time, both
+  directions, 2 deg steps, at most `~untangle_chain_max_turn_deg` (90) each way, the nearest angle with slack (the
+  chain, plus the geometry while `geometric_check` is on); none: "no slack within 90 deg ...: untangle the cable by hand" and no motion. After such
+  an untangle the chain carried along the motion is kept, also at the release that follows (no fresh chain at the
+  stop pose, which stopped again on the way back), and during the protective stop a rest does not restart the chain
+  (`release_after_rest_s`). On the real robot (a safe flag, so the GUI turns it on there too) it moves nothing: the
+  untangle runs in the simulation only, and `~untangle_plan` only answers, after 5 to 20 s of CPU for the chain
+  search
 
 ## Real robot logs
 

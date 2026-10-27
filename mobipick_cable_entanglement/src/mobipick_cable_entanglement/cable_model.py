@@ -1536,8 +1536,9 @@ class CableModel:
     # ---------------------------------------------------------------- untangling (sim dashboard button)
     def untangle_plan(self, q: Dict[str, float], joints=("wrist_3", "wrist_2", "wrist_1"),
                       target_stretch: Optional[float] = None, step: float = math.radians(2.0),
-                      max_turn: float = math.pi):
-        """Joint-by-joint motion that gives the cable enough slack again (geometry only, no carrier).
+                      max_turn: float = math.pi, chain: Optional[dict] = None, speed: float = 0.4):
+        """Joint-by-joint motion that gives the cable enough slack again (geometry only, no carrier; with chain, a
+        chain_snapshot() of the live model: see _untangle_plan_with_chain).
 
         Each joint of `joints` in turn gets the angle nearest to its current one (either direction, at most
         max_turn away, within the URDF joint limits) at which the whole cable has target_stretch (default: the
@@ -1548,6 +1549,8 @@ class CableModel:
         """
         if target_stretch is None:
             target_stretch = self.cfg.decision.warn_stretch - 0.02
+        if chain is not None:
+            return self._untangle_plan_with_chain(q, chain, joints, target_stretch, step, max_turn, speed)
         cur = {j: float(v) for j, v in self._full_q(q).items()}
         steps = []
         state = self.evaluate(cur)
@@ -1581,6 +1584,70 @@ class CableModel:
             if found:
                 return steps, state, True
         return steps, self.evaluate(cur), False
+
+    def _untangle_plan_with_chain(self, q, chain, joints, target_stretch, step, max_turn, speed):
+        """untangle_plan from the carried carrier link chain: a stop decided by the chain (pulled taut, caught on the
+        tool) can look slack to the geometry alone, and the chain only gets tighter in some directions. Run on a
+        planner copy of the live model (same configuration; this model's own chain is replaced by the snapshot), so
+        the live chain is never touched. Each joint of `joints` in turn, from the stop pose, is turned in either
+        direction in `step` steps up to max_turn, the chain stepped along at `speed` (rad/s, the untangle motion's);
+        the nearest angle at which the stretch (the chain, and the geometry while geometric_check is on) reaches
+        target_stretch wins. A joint without one leaves the
+        pose as it was for the next joint (no partial moves). Returns (steps, final_state, ok): one step when found,
+        else no steps, the stop pose's state and ok False ("no slack within max_turn")."""
+        cur = {j: float(v) for j, v in self._full_q(q).items()}
+        self.chain_restore(chain)
+        start = self.update(cur, 0.0, hysteresis=False, with_gradient=False)
+        if start.max_stretch <= target_stretch:
+            return [], start, True
+        dt = step / max(speed, 1e-3)
+        best = None   # (k, joint, angle, state)
+        for j in joints:
+            name = self.arm_joint_names[j]
+            joint = self.kin.joints[name]
+            for sgn in (1.0, -1.0):
+                self.chain_restore(chain)
+                # the other direction only searches as far as the slack already found (only a nearer one can win)
+                for k in range(1, (int(round(max_turn / step)) if best is None else best[0] - 1) + 1):
+                    angle = cur[name] + sgn * k * step
+                    if not joint.lower <= angle <= joint.upper:
+                        break
+                    trial = dict(cur)
+                    trial[name] = angle
+                    st = self.update(trial, dt, hysteresis=False, with_gradient=False)
+                    if st.max_stretch <= target_stretch:
+                        best = (k, j, angle, st)
+                        break
+            if best is not None:
+                return [(best[1], best[2])], best[3], True
+        return [], start, False
+
+    def chain_snapshot(self) -> Optional[dict]:
+        """the carried carrier link chain (copies of its nodes, strain, twist and last capsule poses) for chain_restore
+        on a CableModel built from the same configuration; None while there is no chain. The native solver cannot be
+        copied, so the restore builds a new one from these arrays (as the reset cache does)."""
+        d = self._disc
+        if d is None or self._last_q is None:
+            return None
+        copied = lambda a: None if a is None else a.copy()  # noqa: E731
+        return {"q": dict(self._last_q), "x": d.x.copy(), "x_prev": d.x_prev.copy(), "strain": d.strain.copy(),
+                "last_pins": copied(d._last_pins), "last_caps": copied(d._last_caps), "twist": dict(self._twist),
+                "twist_zero": self._twist_zero,
+                "cap_T": None if self._disc_cap_T is None else [T.copy() for T in self._disc_cap_T]}
+
+    def chain_restore(self, snap: dict) -> None:
+        """this model's chain becomes the snapshot's (chain_snapshot), the decision history starts afresh"""
+        self._disc = self._carrier_link_chains()
+        d = self._disc
+        d.x, d.x_prev, d.strain = snap["x"].copy(), snap["x_prev"].copy(), snap["strain"].copy()
+        d._last_pins = None if snap["last_pins"] is None else snap["last_pins"].copy()
+        d._last_caps = None if snap["last_caps"] is None else snap["last_caps"].copy()
+        self._twist, self._twist_zero = dict(snap["twist"]), snap["twist_zero"]
+        self._disc_cap_T = None if snap["cap_T"] is None else [T.copy() for T in snap["cap_T"]]
+        self._disc_cache, self._tick = {}, 0
+        self._entangled_count, self.level = 0, "ok"
+        self._last_q = dict(snap["q"])
+        self._frames(self._last_q)
 
     # ---------------------------------------------------------------- introspection (markers, logs)
     def disc_points(self) -> Dict[str, np.ndarray]:
