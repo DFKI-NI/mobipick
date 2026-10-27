@@ -218,7 +218,7 @@ class Tick(unittest.TestCase):
         m._q_stamp, m._last_update, m._marker_t, m._armed, m._last_level = 100.0, None, 1e9, True, "ok"
         m.resets = mock.Mock(enabled=True)
         m.resets.step.return_value = None
-        m._catch_up = lambda _stamp, dt: dt
+        m._catch_up = lambda _stamp, dt, _since=None: dt
         tick_state = types.SimpleNamespace(max_stretch=-0.06, level="ok", predicted_stop=False, to_dict=dict)
         m.model.update.return_value = tick_state
         m.pub_state, m.pub_stretch, m.pub_level, m._poll_safety = mock.Mock(), mock.Mock(), mock.Mock(), mock.Mock()

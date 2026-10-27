@@ -12,6 +12,7 @@ predicts an entanglement, an arm trajectory aborts, or someone calls ~mark_event
 lack to calibrate the model.
 """
 import collections
+import dataclasses
 import datetime
 import gzip
 import json
@@ -414,25 +415,34 @@ class CableEntanglementMonitor:
                           f"; still over-stretched ({100 * self._release_stretch:+.1f}%): any further pull stops again")
 
     def _on_trajectory_start(self, source: str):
+        # the pose and time of the announcement: the next tick resets the chain there and replays the joint states
+        # since, so a late tick does not start the chain in the middle of a fast swing (the guard starts it before)
+        with self._lock:
+            q = dict(self._q) if self._q else None
+            stamp = self._q_stamp
         self._trajectory_source = source
-        self.resets.trajectory_started()
+        self.resets.trajectory_started(stamp, q)
 
     def _on_move_group_goal(self, msg):
         if not msg.goal.planning_options.plan_only:
             self._on_trajectory_start("move_group goal")
 
-    def _apply_reset(self, reset):
-        """the chain starts afresh (chain_reset), logged with pose and time"""
+    def _apply_reset(self, reset, lag: float = 0.0):
+        """the chain starts afresh (chain_reset), logged with pose and time; lag: how old the pose is (an announced
+        reset applied by a later tick)"""
         start_chain(self.model, reset.q)
         why = ((f"after {reset.rest_s:.1f} s of rest"
                 + (" (during the rest)" if self.resets.release_during_rest else "")) if reset.why == "rest" else
                f"executed trajectory starts ({self._trajectory_source})")
         q_deg = {j: round(math.degrees(v), 1) for j, v in reset.q.items()}
-        rospy.loginfo("cable monitor: chain starts afresh, %s, at %s", why, q_deg)
+        since = ""
+        if reset.announced:   # the pose of the announcement, applied by this tick
+            since = f" (reset pose from {lag:.2f} s ago{', the joint states since are replayed' if lag > 0 else ''})"
+        rospy.loginfo("cable monitor: chain starts afresh, %s, at %s%s", why, q_deg, since)
         if self.logger:
             self.logger.line(time.time(), "chain_reset", why=reset.why, rest_s=round(reset.rest_s, 1),
                              source=self._trajectory_source if reset.why == "trajectory" else "",
-                             q_deg=q_deg)
+                             q_deg=q_deg, lag_s=round(lag, 3))
 
     def _on_trajectory_result(self, msg):
         status = msg.status.status
@@ -649,15 +659,26 @@ class CableEntanglementMonitor:
         now_ros = rospy.get_time()
         dt = 0.0 if self._last_update is None else max(0.0, now_ros - self._last_update)
         self._last_update = now_ros
+        since = None   # a chain reset at an announced pose: the joint states after it are replayed
         with self._model_lock:
             if self.resets.enabled and not (self._hold_chain and self._safety in STOPPED_SAFETY):
                 reset = self.resets.step(now_ros, q, ARM_JOINTS)
+                if reset is not None and reset.announced:
+                    with self._lock:
+                        oldest = self._q_hist[0][0] if self._q_hist else None
+                    if oldest is None or stamp is None or reset.t < oldest:   # the joint states since are gone
+                        rospy.logwarn("cable monitor: the announced reset pose is older than the joint history, "
+                                      "the chain starts afresh at the current pose")
+                        reset = dataclasses.replace(reset, t=now_ros, q=dict(q), announced=False)
                 if reset is not None:
+                    lag = max(0.0, stamp - reset.t) if reset.announced else 0.0
                     try:
-                        self._apply_reset(reset)
+                        self._apply_reset(reset, lag)
+                        if reset.announced:
+                            since = reset.t
                     except Exception as exc:  # keep observing with the old chain
                         rospy.logerr(f"cable monitor: chain reset failed: {exc}")
-            dt = self._catch_up(stamp, dt)
+            dt = self._catch_up(stamp, dt, since)
             try:
                 state = self.model.update(q, dt)
             except Exception as exc:  # keep observing even if one tick fails
@@ -706,13 +727,18 @@ class CableEntanglementMonitor:
             self._marker_t = now_ros
             self._publish_markers(q, state)
 
-    def _catch_up(self, stamp, dt):
+    def _catch_up(self, stamp, dt, since=None):
         """after a late tick: one model update per 0.1 s of the joint states received since the last update (the
         tick's own update follows with the latest pose); a single update over a large joint jump pulls the chain taut
-        (+37 % after the 2.4 s reset settle at the observe pose in the sim, 2026-10-01). Returns the dt left for the
-        tick's own update."""
+        (+37 % after the 2.4 s reset settle at the observe pose in the sim, 2026-10-01). since: the time of a chain
+        reset at an announced pose, the joint states after it are replayed however short the lag. Returns the dt left
+        for the tick's own update."""
         last, self._last_stamp = self._last_stamp, stamp
-        if last is None or stamp is None or stamp - last <= self._catch_up_after:
+        if since is not None and stamp is not None:
+            last = since
+            if stamp - last <= 0.0:   # no joint state after the reset pose: the tick's update as without a lag
+                return dt
+        elif last is None or stamp is None or stamp - last <= self._catch_up_after:
             return dt
         with self._lock:
             hist = [(t, q) for t, q in self._q_hist if last < t < stamp]

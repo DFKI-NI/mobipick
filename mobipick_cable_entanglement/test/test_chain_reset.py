@@ -67,6 +67,18 @@ def test_trajectory_start_resets_once_at_the_current_pose_only_when_enabled():
     assert [(i, r.why) for i, r in resets] == [(5, "trajectory")] and resets[0][1].q == moved(1)
 
 
+def test_an_announced_pose_is_where_the_trajectory_reset_lands_whatever_the_step_sees():
+    p = ChainResetPolicy(reset_at_trajectory_start=True)
+    p.step(0.0, REST, J)
+    p.trajectory_started(0.05, REST)                 # the announcement, at the pose before the swing
+    r = p.step(0.6, moved(40), J)                    # the step comes 0.55 s later, mid-swing
+    assert (r.t, r.q, r.why, r.announced) == (0.05, REST, "trajectory", True)
+    p.trajectory_started()                           # an announcement without a pose: the step's pose as before
+    r = p.step(0.7, moved(45), J)
+    assert (r.t, r.q, r.announced) == (0.7, moved(45), False)
+    assert p.step(0.8, moved(50), J) is None         # each announcement resets once
+
+
 def test_history_is_kept_within_a_trajectory_and_both_switches_combine():
     p = ChainResetPolicy(release_after_rest_s=10.0, reset_at_trajectory_start=True)
     poses = [(REST, True)] + [(REST, False)] * 119              # trajectory start, then 11.9 s still
