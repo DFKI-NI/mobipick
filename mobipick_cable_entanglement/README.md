@@ -82,13 +82,15 @@ Outputs (namespace `/mobipick/cable_entanglement_monitor/`):
 - `level` (`std_msgs/String`, latched): `ok`, `warning`, `entangled`
 - `max_stretch` (`std_msgs/Float32`)
 - `markers` (`visualization_msgs/MarkerArray`, frame `mobipick/ur5_base_link`): the simulated tube per span in
-  purple while the span is ok, orange when it warns and red when it is entangled, with its stretch as a label
+  green while the span is ok, orange when it warns and red when it is entangled, with its stretch as a label
   coloured green/orange/red by level; with `~show_capsules` (default true)
   also the model's collision capsules of arm and tool (namespace `collision_capsules`, housing radius) and the
   clamps (`clamps`), to compare them with the robot meshes in RViz
 - `disc_markers` (`visualization_msgs/MarkerArray`, same frame): only the carrier's discs (namespace `cable_discs`,
   same colours), built only while someone listens; the tables demo sim draws them in Gazebo with the package
-  gazebo_marker_visuals (seen by gzclient and the experiment camera, not by the robot's cameras)
+  gazebo_marker_visuals (seen by gzclient and the experiment camera, not by the robot's cameras). In the sim the
+  monitor warns once when nobody listens here `~cable_drawing_check_s` (30, 0 = off) after its start: Gazebo then
+  shows no cable, most often because gazebo_marker_visuals was never built (`catkin build gazebo_marker_visuals`)
 - services `~reset` (the cable was untangled by hand; also automatic when a protective stop is released) and
   `~mark_event` (real robot: "it just tangled", writes an event file)
 - `~untangle_plan` (any mode, no motion): which wrist joints would move where to give the cable slack again

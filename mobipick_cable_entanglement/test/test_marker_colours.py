@@ -1,5 +1,5 @@
-"""The monitor's carrier discs keep the carrier colour while a span is ok and take the level colour when it warns or
-entangles (the markers are also what the sim draws of the cable in Gazebo)."""
+"""The monitor's carrier discs show their span's level as a traffic light: green while it is ok, orange when it warns,
+red when it is entangled (the markers are also what the sim draws of the cable in Gazebo)."""
 import importlib.util
 import os
 import sys
@@ -33,13 +33,13 @@ class DiscColours(unittest.TestCase):
         self.assertEqual(len(discs), len(JOINTS) - 1)
         return {(round(m.color.r, 3), round(m.color.g, 3), round(m.color.b, 3)) for m in discs}
 
-    def test_ok_keeps_the_carrier_colour(self):
-        self.assertEqual(self.colours(), {monitor.CARRIER_COLOR})
-        self.assertEqual(self.colours("ok"), {monitor.CARRIER_COLOR})
+    def test_ok_is_green(self):
+        self.assertEqual(self.colours(), {(0.1, 0.8, 0.2)})
+        self.assertEqual(self.colours("ok"), {(0.1, 0.8, 0.2)})
 
-    def test_warning_and_entangled_take_the_level_colour(self):
-        for level in ("warning", "entangled"):
-            self.assertEqual(self.colours(level), {monitor.LEVEL_COLORS[level]})
+    def test_warning_is_orange_and_entangled_red(self):
+        self.assertEqual(self.colours("warning"), {(1.0, 0.7, 0.0)})
+        self.assertEqual(self.colours("entangled"), {(1.0, 0.1, 0.1)})
 
     def test_the_line_stays_dark(self):
         line = [m for m in stub()._disc_markers(0, JOINTS, None, "entangled") if m.ns == "cable_links"]
@@ -100,6 +100,29 @@ class DiscTopic(unittest.TestCase):
         (arr,) = m.pub_markers.sent
         self.assertEqual({x.ns for x in arr.markers}, {"cable_discs", "cable_links", "cable_text", "collision_capsules"})
         self.assertEqual(m.pub_disc_markers.sent, [])
+
+
+class CableDrawnCheck(unittest.TestCase):
+    """in the sim the monitor warns once when nothing draws the cable in Gazebo"""
+
+    def check(self, listeners):
+        m = stub()
+        m.pub_disc_markers = Pub(listeners)
+        m.pub_disc_markers.resolved_name = "/mobipick/cable_entanglement_monitor/disc_markers"
+        with mock.patch.object(monitor.rospy, "logwarn") as warn:
+            drawn = m._check_cable_drawn()
+        return drawn, warn
+
+    def test_no_drawing_warns(self):
+        drawn, warn = self.check(0)
+        self.assertFalse(drawn)
+        warn.assert_called_once()
+        self.assertIn("gazebo_marker_visuals", warn.call_args[0][0])
+
+    def test_a_drawing_is_quiet(self):
+        drawn, warn = self.check(1)
+        self.assertTrue(drawn)
+        warn.assert_not_called()
 
 
 if __name__ == "__main__":

@@ -60,9 +60,9 @@ SAFETY_NAMES = {0: "UNDEFINED", 1: "NORMAL", 2: "REDUCED", 3: "PROTECTIVE_STOP",
 STOPPED_SAFETY = (3, 5, 12)
 UNTANGLE_JOINTS = ("wrist_3", "wrist_2", "wrist_1")   # the untangle turns only these, one at a time
 LEVEL_COLORS = {"ok": (0.1, 0.8, 0.2), "warning": (1.0, 0.7, 0.0), "entangled": (1.0, 0.1, 0.1)}
-CARRIER_COLOR = (0.75, 0.0, 1.0)  # vivid purple (Oscar), opaque: stays visible against the planning scene
-# the carrier's discs keep CARRIER_COLOR while the span is ok and take the level colour when it warns or entangles,
-# so the chain itself shows what the monitor decided (also where the markers are drawn in Gazebo)
+# the carrier's discs take the colour of their span's level, a traffic light (green, orange, red), opaque so they stay
+# visible against the planning scene: the chain itself shows what the monitor decided (also where the markers are
+# drawn in Gazebo)
 
 
 def _short(name: str) -> str:
@@ -335,6 +335,9 @@ class CableEntanglementMonitor:
         self._safety_poll_t = 0.0
         self._marker_t = 0.0
         rospy.Timer(rospy.Duration(1.0 / self.rate), self._tick)
+        drawing_check = float(rospy.get_param("~cable_drawing_check_s", 30.0))
+        if self.mode == "sim" and drawing_check > 0.0:
+            rospy.Timer(rospy.Duration(drawing_check), self._check_cable_drawn, oneshot=True)
         rospy.on_shutdown(self._shutdown)
 
     # ------------------------------------------------------------------ setup
@@ -800,6 +803,16 @@ class CableEntanglementMonitor:
         return snap
 
     # ------------------------------------------------------------------ markers
+    def _check_cable_drawn(self, _evt=None) -> bool:
+        """sim: the Gazebo drawing of the cable listens on ~disc_markers; nobody there means Gazebo shows no cable
+        (most often its plugin package was never built), so a stop of the simulated cable would look unexplained"""
+        if self.pub_disc_markers.get_num_connections() > 0:
+            return True
+        rospy.logwarn("cable monitor: Gazebo draws no cable: nobody subscribes to %s. Is gazebo_marker_visuals built "
+                      "(catkin build gazebo_marker_visuals, then restart the sim) and its drawing launched?",
+                      self.pub_disc_markers.resolved_name)
+        return False
+
     def _publish_markers(self, q, state):
         full = self.pub_markers.get_num_connections() > 0
         discs_wanted = self.pub_disc_markers.get_num_connections() > 0
@@ -842,7 +855,7 @@ class CableEntanglementMonitor:
 
     def _disc_markers(self, span_index, joints, stamp, level="ok"):
         """one cylinder per link of the carrier link chain (at the middle of the link, across it) and the links as a
-        line; the discs in CARRIER_COLOR while the span is ok, else in the colour of its level"""
+        line; the discs in the colour of its level"""
         disc = self.cfg.cable_carrier.link_chain
         out = []
         line = Marker(type=Marker.LINE_STRIP, action=Marker.ADD, id=span_index, ns="cable_links")
@@ -864,7 +877,7 @@ class CableEntanglementMonitor:
             m.pose.orientation = _z_onto([v / length for v in axis])
             m.scale.x = m.scale.y = disc.disc_diameter
             m.scale.z = disc.disc_height
-            m.color.r, m.color.g, m.color.b = CARRIER_COLOR if level == "ok" else LEVEL_COLORS[level]
+            m.color.r, m.color.g, m.color.b = LEVEL_COLORS[level]
             m.color.a = 1.0
             out.append(m)
         return out
