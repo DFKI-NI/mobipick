@@ -94,6 +94,10 @@ Outputs (namespace `/mobipick/cable_entanglement_monitor/`):
 - services `~reset` (the cable was untangled by hand; also automatic when a protective stop is released) and
   `~mark_event` (real robot: "it just tangled", writes an event file)
 - `~untangle_plan` (any mode, no motion): which wrist joints would move where to give the cable slack again
+- `~chain_state` (`std_srvs/Trigger`, any mode): the model's chain after the last tick as JSON in `message`
+  (`CableModel.chain_state()` plus `stamp`, its ROS time, and `reset_at_trajectory_start`): the MTC guard's chain
+  replay of a planned path goes on from it instead of a fresh chain (grasplan `~mtc_cable_replay_live_state`), so it
+  sees what the motions before the path did to the chain; about 40 KB, built only on request
 - `~untangle` (**sim only**, only while the sim protective stop is active; meant for an "untangle cable" button in the
   simulated UR dashboard): moves wrist_3, then wrist_2, then wrist_1 one at a time, each only as far as needed,
   after a MoveIt collision check of the path (`/mobipick/check_state_validity`); it swaps the dashboard's hold

@@ -114,7 +114,14 @@ stayed there (+16.5 mm along the wrist_1 axis; the photo's band -38 to -78 mm); 
 Measured 2026-09-30: a start at the spawn pose, at observe or at transport, then home: -41 mm, strain below 0.3 %
 (started at the pose itself, observe -> home was pulled to +9.3 %). This happens at the node start, after every
 released protective stop (a person untangled it), on `~reset` and at the start of every replay of a planned path
-(MTC guard). A reset takes 0.6-2.6 s.
+(MTC guard). A reset takes 0.6-2.6 s. With grasplan's `~mtc_cable_replay_live_state` the guard's replay starts from
+the monitor's live chain instead (`CableModel.chain_state` / `restore_chain_state`, the monitor's `~chain_state`
+service): a fresh chain forgets what the motions before the path did, so after a motion that caught or pulled the
+chain the replay was optimistic (a drill pick: replay +1.2 %, monitor +2.8 %). The live state is used only when it is
+under 1 s old, taken within 0.02 rad of the path's first joint positions and from a model with the same config and
+robot description (`CableModel.fingerprint`), and not while the monitor starts its chain afresh at every trajectory
+start (`reset_at_trajectory_start`): that monitor does what the fresh replay does. Otherwise the replay starts fresh
+and says why.
 
 **Spans of the chain**: the chain runs between the support edges of the clamps, not the tips of the URDF
 guide tubes, and ends in the terminal element on wrist_3. Wrist: from the edge of the last forearm bracket (z −0.095)

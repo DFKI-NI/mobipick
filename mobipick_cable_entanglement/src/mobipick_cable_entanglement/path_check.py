@@ -3,8 +3,11 @@
 The MTC cable guard checks the geometry of every path point (stateless). The sim monitor also runs the carrier link
 chain: the carrier with history, which can catch on the tool (camera, F/T sensor) or be pulled taut during a motion,
 which geometry alone cannot see. This replays a planned path through the monitor's own decision (the same CableModel
-update, chain on, the monitor's rate) from a chain hanging freely at the path's start. The monitor's current chain
-shape is not known here, so a loop that is already caught before the path starts is missed. (Until
+update, chain on, the monitor's rate) from a chain hanging freely at the path's start. That fresh chain forgets what
+the motions before the path did to the monitor's chain, so a loop that is already caught or pulled before the path
+starts is missed; given the monitor's live chain state (CableModel.chain_state, checked with live_state_problem) the
+replay goes on from it instead. A monitor that starts its chain afresh at every trajectory start
+(reset_at_trajectory_start) does what the fresh replay does: there the fresh chain is its model. (Until
 2026-09-30 a radius rope ran here; it was removed, the carrier link chain is the only chain model; rope_replay is the
 old name of carrier_replay.)
 """
@@ -13,6 +16,10 @@ from dataclasses import dataclass
 from typing import Dict, List, Optional, Sequence, Tuple
 
 Sample = Tuple[float, Dict[str, float]]  # (time in s, joint positions in rad)
+
+# a live chain state seeds a replay only when it is this fresh and was taken at the path's first joint positions
+LIVE_STATE_MAX_AGE_S = 1.0
+LIVE_STATE_Q_TOLERANCE = 0.02   # rad, every arm joint
 
 
 @dataclass
@@ -54,10 +61,42 @@ def start_chain(model, q: Dict[str, float]) -> None:
     model.reset(q)
 
 
-def carrier_replay(model, samples: Sequence[Sample], rate: float = 10.0) -> Optional[CarrierVerdict]:
+def _arm_joint(name: str) -> str:
+    return name.split("/")[-1].replace("ur5_", "").replace("_joint", "")
+
+
+def live_state_problem(model, state: Optional[dict], q0: Dict[str, float], now: float,
+                       max_age: float = LIVE_STATE_MAX_AGE_S,
+                       q_tolerance: float = LIVE_STATE_Q_TOLERANCE) -> Optional[str]:
+    """Why the monitor's chain state (CableModel.chain_state plus the monitor's "stamp", its time in s, and
+    "reset_at_trajectory_start") cannot be the start of a replay of a path that starts at q0 at time now, or None when
+    it can: none, a monitor that starts its chain afresh at the trajectory start anyway, another model config, stale,
+    or taken at other joint positions (the arm moved since, or the path does not start where the arm is)."""
+    if not state:
+        return "no chain state"
+    if state.get("reset_at_trajectory_start"):
+        return "the monitor starts its chain afresh when the trajectory starts, as the fresh replay does"
+    if state.get("fingerprint") != model.fingerprint():
+        return "the monitor's cable model differs from the guard's (config or robot description)"
+    stamp = state.get("stamp")
+    if stamp is None or now - float(stamp) > max_age:
+        return "stale" if stamp is None else f"stale ({now - float(stamp):.1f} s old)"
+    live = {_arm_joint(j): v for j, v in state.get("q", {}).items()}
+    start = {_arm_joint(j): v for j, v in q0.items()}
+    common = [j for j in start if j in live]
+    if not common:
+        return "no common joints"
+    worst = max(common, key=lambda j: abs(live[j] - start[j]))
+    if abs(live[worst] - start[worst]) > q_tolerance:
+        return f"the arm is elsewhere ({worst} {math.degrees(live[worst] - start[worst]):+.1f} deg from the path start)"
+    return None
+
+
+def carrier_replay(model, samples: Sequence[Sample], rate: float = 10.0,
+                   start_state: Optional[dict] = None) -> Optional[CarrierVerdict]:
     """Replay samples (time-ordered) through model.update with the carrier link chain on, from a chain hanging freely at
-    the
-    first sample.
+    the first sample, or with start_state (a CableModel.chain_state of the same config, see live_state_problem) from
+    that chain.
 
     model is a CableModel whose config has the chain enabled (cable_carrier.enabled) (it is reset here, so use one not
     shared with a live
@@ -66,7 +105,10 @@ def carrier_replay(model, samples: Sequence[Sample], rate: float = 10.0) -> Opti
     path = resample(list(samples), rate)
     if not path:
         return None
-    start_chain(model, path[0][1])
+    if start_state is None:
+        start_chain(model, path[0][1])
+    else:
+        model.restore_chain_state(start_state)
     worst, stop, last_t = None, False, path[0][0]
     for t, q in path:
         state = model.update(q, max(0.0, t - last_t), use_carrier=True, hysteresis=False, with_gradient=True)

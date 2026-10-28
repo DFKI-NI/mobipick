@@ -23,6 +23,9 @@ solver) hangs
 The model is observe-only: it reads joint positions, never commands the robot. See doc/cable_model.md.
 """
 import ctypes
+import dataclasses
+import hashlib
+import json
 import math
 from collections import OrderedDict
 from dataclasses import dataclass, field
@@ -973,6 +976,8 @@ class CableModel:
     def __init__(self, urdf_xml: str, cfg: ModelConfig):
         self.cfg = cfg
         self.kin = UrdfKinematics(urdf_xml)
+        self._urdf_digest = hashlib.sha1(urdf_xml.encode()).hexdigest()
+        self._fingerprint: Optional[str] = None
         p = cfg.tf_prefix
         self._base = p + cfg.base_link
         self.arm_joint_names = {j: f"{p}ur5_{j}_joint" for j in ARM_JOINTS}
@@ -1648,6 +1653,58 @@ class CableModel:
         self._entangled_count, self.level = 0, "ok"
         self._last_q = dict(snap["q"])
         self._frames(self._last_q)
+
+    # ---------------------------------------------------------------- chain state across processes
+    def fingerprint(self) -> str:
+        """hash of the effective model config and the robot description: a chain state means the same only in a model
+        with the same fingerprint (another yaml, span switch, disc size or URDF gives another chain)"""
+        if self._fingerprint is None:
+            def plain(o):
+                if isinstance(o, np.ndarray):
+                    return o.tolist()
+                if isinstance(o, np.generic):
+                    return o.item()
+                raise TypeError(f"{type(o).__name__} in the cable model config")
+            text = json.dumps(dataclasses.asdict(self.cfg), sort_keys=True, default=plain)
+            self._fingerprint = hashlib.sha1((text + self._urdf_digest).encode()).hexdigest()
+        return self._fingerprint
+
+    def chain_state(self, snap: Optional[dict] = None) -> Optional[dict]:
+        """chain_snapshot() (or snap, an earlier one of this model) in plain JSON types plus this model's fingerprint,
+        for another process to go on from with restore_chain_state(): the MTC guard's replay of a planned path from
+        the monitor's live chain. None while there is no chain."""
+        snap = self.chain_snapshot() if snap is None else snap
+        if snap is None:
+            return None
+
+        def plain(a):
+            return None if a is None else np.asarray(a, dtype=float).tolist()
+        return {"fingerprint": self.fingerprint(), "q": {k: float(v) for k, v in snap["q"].items()},
+                "x": plain(snap["x"]), "x_prev": plain(snap["x_prev"]), "strain": plain(snap["strain"]),
+                "last_pins": plain(snap["last_pins"]), "last_caps": plain(snap["last_caps"]),
+                "twist": {k: float(v) for k, v in snap["twist"].items()},
+                "twist_zero": None if snap["twist_zero"] is None else
+                {k: [float(v) for v in pair] for k, pair in snap["twist_zero"].items()},
+                "cap_T": None if snap["cap_T"] is None else [plain(T) for T in snap["cap_T"]]}
+
+    def restore_chain_state(self, state: dict) -> None:
+        """go on from another model's chain_state() (chain_restore); ValueError when it comes from a model with another
+        fingerprint or another number of chain nodes"""
+        if state.get("fingerprint") != self.fingerprint():
+            raise ValueError("the chain state comes from another cable model (config or robot description differ)")
+
+        def array(a):
+            return None if a is None else np.array(a, dtype=float)
+        snap = {k: array(state[k]) for k in ("x", "x_prev", "strain", "last_pins", "last_caps")}
+        nodes = self._carrier_link_chains().x.shape
+        if snap["x"].shape != nodes or snap["x_prev"].shape != nodes:
+            raise ValueError(f"the chain state has {snap['x'].shape[0]} chain nodes, this model {nodes[0]}")
+        snap["q"] = dict(state["q"])
+        snap["twist"] = dict(state["twist"])
+        snap["twist_zero"] = None if state["twist_zero"] is None else \
+            {k: tuple(pair) for k, pair in state["twist_zero"].items()}
+        snap["cap_T"] = None if state["cap_T"] is None else [np.array(T, dtype=float) for T in state["cap_T"]]
+        self.chain_restore(snap)
 
     # ---------------------------------------------------------------- introspection (markers, logs)
     def disc_points(self) -> Dict[str, np.ndarray]:

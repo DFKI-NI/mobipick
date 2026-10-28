@@ -286,6 +286,9 @@ class CableEntanglementMonitor:
         rospy.Service("~mark_event", Trigger, self._srv_mark)
         rospy.Service("~untangle_plan", Trigger, self._srv_untangle_plan)
         rospy.Service("~untangle", Trigger, self._srv_untangle)
+        # (ROS time, chain snapshot) of the last tick, for the MTC guard's replay of a planned path from the live chain
+        self._chain_state = None
+        rospy.Service("~chain_state", Trigger, self._srv_chain_state)
         self._joint_names = {}  # short arm joint name -> name used in joint_states
         self._untangle_lock = threading.Lock()
 
@@ -466,6 +469,18 @@ class CableEntanglementMonitor:
         self.resets.forget_rest(rospy.get_time(), q, ARM_JOINTS)
         self._armed = True
         return TriggerResponse(success=True, message="cable model reset: cable assumed untangled")
+
+    def _srv_chain_state(self, _req):
+        """the model's chain after the last tick as JSON (CableModel.chain_state plus "stamp", its ROS time, and
+        "reset_at_trajectory_start", whether this monitor starts its chain afresh at every trajectory start): the MTC
+        guard's chain replay goes on from it instead of a fresh chain (grasplan ~mtc_cable_replay_live_state)"""
+        stamp, snap = self._chain_state or (None, None)
+        if snap is None:
+            return TriggerResponse(success=False, message="no carrier link chain yet")
+        state = self.model.chain_state(snap)   # plain JSON, about 40 KB, built only on request
+        state["stamp"] = stamp
+        state["reset_at_trajectory_start"] = bool(self.resets.reset_at_trajectory_start)
+        return TriggerResponse(success=True, message=json.dumps(state))
 
     def _srv_mark(self, _req):
         if not self.logger:
@@ -687,6 +702,7 @@ class CableEntanglementMonitor:
             except Exception as exc:  # keep observing even if one tick fails
                 rospy.logerr_throttle(10.0, f"cable monitor: model update failed: {exc}")
                 return
+            self._chain_state = (now_ros, self.model.chain_snapshot())   # copies of the chain arrays, for ~chain_state
         self._last_state = state
         d = state.to_dict()
         d["q_deg"] = {j: round(math.degrees(v), 2) for j, v in q.items()}
