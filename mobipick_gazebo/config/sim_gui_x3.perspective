@@ -5,7 +5,7 @@
       "keys": {
         "running-plugins": {
           "type": "repr",
-          "repr": "{'rqt_robot_steering/RobotSteering': [1, 2, 3], 'rqt_joint_trajectory_controller/JointTrajectoryController': [1, 2, 3], 'mobipick_gazebo/SimulatedUrDashboard': [1, 2, 3]}"
+          "repr": "{'rqt_robot_steering/RobotSteering': [1], 'rqt_joint_trajectory_controller/JointTrajectoryController': [1], 'mobipick_gazebo/SimulatedUrDashboard': [1], 'mobipick_gazebo/RobotSelector': [1]}"
         }
       },
       "groups": {
@@ -16,7 +16,7 @@
               "keys": {
                 "dock_widget_title": {
                   "type": "repr",
-                  "repr": "'Robot Steering (mobipick)'"
+                  "repr": "'Robot Steering'"
                 },
                 "dockable": {
                   "type": "repr",
@@ -40,68 +40,6 @@
             }
           }
         },
-        "plugin__rqt_robot_steering__RobotSteering__2": {
-          "keys": {},
-          "groups": {
-            "dock_widget__RobotSteeringUi": {
-              "keys": {
-                "dock_widget_title": {
-                  "type": "repr",
-                  "repr": "'Robot Steering (mobipick2)'"
-                },
-                "dockable": {
-                  "type": "repr",
-                  "repr": "True"
-                },
-                "parent": {
-                  "type": "repr",
-                  "repr": "None"
-                }
-              },
-              "groups": {}
-            },
-            "plugin": {
-              "keys": {
-                "topic": {
-                  "type": "repr",
-                  "repr": "'/mobipick2/cmd_vel'"
-                }
-              },
-              "groups": {}
-            }
-          }
-        },
-        "plugin__rqt_robot_steering__RobotSteering__3": {
-          "keys": {},
-          "groups": {
-            "dock_widget__RobotSteeringUi": {
-              "keys": {
-                "dock_widget_title": {
-                  "type": "repr",
-                  "repr": "'Robot Steering (mobipick3)'"
-                },
-                "dockable": {
-                  "type": "repr",
-                  "repr": "True"
-                },
-                "parent": {
-                  "type": "repr",
-                  "repr": "None"
-                }
-              },
-              "groups": {}
-            },
-            "plugin": {
-              "keys": {
-                "topic": {
-                  "type": "repr",
-                  "repr": "'/mobipick3/cmd_vel'"
-                }
-              },
-              "groups": {}
-            }
-          }
-        },
         "plugin__rqt_joint_trajectory_controller__JointTrajectoryController__1": {
           "keys": {},
           "groups": {
@@ -109,7 +47,7 @@
               "keys": {
                 "dock_widget_title": {
                   "type": "repr",
-                  "repr": "'Joint trajectory controller (mobipick)'"
+                  "repr": "'Joint trajectory controller'"
                 },
                 "dockable": {
                   "type": "repr",
@@ -133,68 +71,6 @@
             }
           }
         },
-        "plugin__rqt_joint_trajectory_controller__JointTrajectoryController__2": {
-          "keys": {},
-          "groups": {
-            "dock_widget__JointTrajectoryControllerUi": {
-              "keys": {
-                "dock_widget_title": {
-                  "type": "repr",
-                  "repr": "'Joint trajectory controller (mobipick2)'"
-                },
-                "dockable": {
-                  "type": "repr",
-                  "repr": "True"
-                },
-                "parent": {
-                  "type": "repr",
-                  "repr": "None"
-                }
-              },
-              "groups": {}
-            },
-            "plugin": {
-              "keys": {
-                "cm_ns": {
-                  "type": "repr",
-                  "repr": "'/mobipick2/controller_manager'"
-                }
-              },
-              "groups": {}
-            }
-          }
-        },
-        "plugin__rqt_joint_trajectory_controller__JointTrajectoryController__3": {
-          "keys": {},
-          "groups": {
-            "dock_widget__JointTrajectoryControllerUi": {
-              "keys": {
-                "dock_widget_title": {
-                  "type": "repr",
-                  "repr": "'Joint trajectory controller (mobipick3)'"
-                },
-                "dockable": {
-                  "type": "repr",
-                  "repr": "True"
-                },
-                "parent": {
-                  "type": "repr",
-                  "repr": "None"
-                }
-              },
-              "groups": {}
-            },
-            "plugin": {
-              "keys": {
-                "cm_ns": {
-                  "type": "repr",
-                  "repr": "'/mobipick3/controller_manager'"
-                }
-              },
-              "groups": {}
-            }
-          }
-        },
         "plugin__mobipick_gazebo__SimulatedUrDashboard__1": {
           "keys": {},
           "groups": {
@@ -202,7 +78,7 @@
               "keys": {
                 "dock_widget_title": {
                   "type": "repr",
-                  "repr": "'Simulated E-Stop (mobipick)'"
+                  "repr": "'Simulated E-Stop'"
                 },
                 "dockable": {
                   "type": "repr",
@@ -217,23 +93,32 @@
             },
             "plugin": {
               "keys": {
-                "robot_namespace": {
+                "robots": {
+                  "type": "repr",
+                  "repr": "'mobipick,mobipick2,mobipick3'"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__mobipick_gazebo__RobotSelector__1": {
+          "keys": {},
+          "groups": {
+            "plugin": {
+              "keys": {
+                "robot": {
                   "type": "repr",
                   "repr": "'mobipick'"
                 }
               },
               "groups": {}
-            }
-          }
-        },
-        "plugin__mobipick_gazebo__SimulatedUrDashboard__2": {
-          "keys": {},
-          "groups": {
-            "dock_widget__SimulatedUrDashboardUi": {
+            },
+            "dock_widget__RobotSelectorUi": {
               "keys": {
                 "dock_widget_title": {
                   "type": "repr",
-                  "repr": "'Simulated E-Stop (mobipick2)'"
+                  "repr": "'Robot selector'"
                 },
                 "dockable": {
                   "type": "repr",
@@ -242,46 +127,6 @@
                 "parent": {
                   "type": "repr",
                   "repr": "None"
-                }
-              },
-              "groups": {}
-            },
-            "plugin": {
-              "keys": {
-                "robot_namespace": {
-                  "type": "repr",
-                  "repr": "'mobipick2'"
-                }
-              },
-              "groups": {}
-            }
-          }
-        },
-        "plugin__mobipick_gazebo__SimulatedUrDashboard__3": {
-          "keys": {},
-          "groups": {
-            "dock_widget__SimulatedUrDashboardUi": {
-              "keys": {
-                "dock_widget_title": {
-                  "type": "repr",
-                  "repr": "'Simulated E-Stop (mobipick3)'"
-                },
-                "dockable": {
-                  "type": "repr",
-                  "repr": "True"
-                },
-                "parent": {
-                  "type": "repr",
-                  "repr": "None"
-                }
-              },
-              "groups": {}
-            },
-            "plugin": {
-              "keys": {
-                "robot_namespace": {
-                  "type": "repr",
-                  "repr": "'mobipick3'"
                 }
               },
               "groups": {}

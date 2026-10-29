@@ -11,4 +11,17 @@
       <statustip>Toggle the simulated UR e-stop.</statustip>
     </qtgui>
   </class>
+  <class name="RobotSelector" type="mobipick_gazebo.robot_selector.RobotSelectorPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      The one robot selector of the sim GUI: publishes the chosen robot on /selected_robot and points the steering
+      and joint trajectory controller panels at it.
+    </description>
+    <qtgui>
+      <group>
+        <label>Mobipick</label>
+      </group>
+      <label>Robot selector</label>
+      <statustip>Choose the robot every panel acts on.</statustip>
+    </qtgui>
+  </class>
 </library>

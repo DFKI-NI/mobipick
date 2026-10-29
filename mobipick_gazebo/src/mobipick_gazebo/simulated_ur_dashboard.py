@@ -20,6 +20,7 @@ from controller_manager_msgs.srv import ListControllers, SwitchController, Switc
 from python_qt_binding import QtCore, QtGui, QtWidgets
 from rqt_gui_py.plugin import Plugin
 from sensor_msgs.msg import JointState
+from std_msgs.msg import String
 from std_srvs.srv import SetBool, SetBoolRequest, SetBoolResponse, Trigger
 from ur_dashboard_msgs.msg import RobotMode, SafetyMode
 from ur_dashboard_msgs.srv import (
@@ -348,10 +349,45 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         self._untangle_button.setText("UNTANGLING ..." if self._untangle_running else "UNTANGLE CABLE")
 
 
+class SimulatedUrDashboardStack(QtWidgets.QWidget):
+    """The dashboards of several robots in one panel: every robot keeps its own dashboard running (the cable monitor
+    of each robot presses its protective stop through it), the panel shows the one of the robot chosen on
+    /selected_robot (see robot_selector.py)."""
+
+    _robot_selected = QtCore.pyqtSignal(str)
+
+    def __init__(self, namespaces: List[str]):
+        super().__init__()
+        self.setWindowTitle("Simulated E-Stop")
+        self._pages: Dict[str, SimulatedUrDashboard] = {}
+        self._stack = QtWidgets.QStackedLayout(self)
+        for namespace in namespaces:
+            page = SimulatedUrDashboard(namespace)
+            self._pages[namespace.strip("/")] = page
+            self._stack.addWidget(page)
+        self._robot_selected.connect(self._show_robot)
+        self._subscriber = rospy.Subscriber("/selected_robot", String, lambda msg: self._robot_selected.emit(msg.data))
+
+    def _show_robot(self, namespace: str) -> None:
+        page = self._pages.get(namespace.strip("/"))
+        if page is not None:
+            self._stack.setCurrentWidget(page)
+            self.setWindowTitle(f"Simulated E-Stop ({namespace.strip('/')})")
+
+    def current_robot(self) -> str:
+        current = self._stack.currentWidget()
+        return next((ns for ns, page in self._pages.items() if page is current), "")
+
+    def shutdown(self) -> None:
+        self._subscriber.unregister()
+        for page in self._pages.values():
+            page.shutdown()
+
+
 class SimulatedUrDashboardPlugin(Plugin):
-    """One panel per plugin instance. The robot of the instance is its saved setting `robot_namespace` (several
-    instances with different namespaces in one window; the perspective file holds them), else the private
-    param ~robot_namespace of the rqt node (one robot per window)."""
+    """One panel per plugin instance. Its saved setting `robots` (comma separated namespaces) makes it a panel for
+    several robots that follows the robot selector; else `robot_namespace` is the one robot of the instance, else
+    the private param ~robot_namespace of the rqt node (one robot per window)."""
 
     def __init__(self, context):
         super().__init__(context)
@@ -359,8 +395,8 @@ class SimulatedUrDashboardPlugin(Plugin):
         self._context = context
         self._widget = None
 
-    def _build(self, namespace):
-        self._widget = SimulatedUrDashboard(namespace)
+    def _build(self, namespace, robots=()):
+        self._widget = SimulatedUrDashboardStack(list(robots)) if robots else SimulatedUrDashboard(namespace)
         self._widget.setObjectName("SimulatedUrDashboardUi")
         title = self._widget.windowTitle()
         if self._context.serial_number() > 1 and not namespace:
@@ -369,10 +405,11 @@ class SimulatedUrDashboardPlugin(Plugin):
 
     def restore_settings(self, plugin_settings, instance_settings):
         namespace = instance_settings.value("robot_namespace")
-        self._build(str(namespace) if namespace else None)
+        robots = [name.strip() for name in str(instance_settings.value("robots") or "").split(",") if name.strip()]
+        self._build(str(namespace) if namespace else None, robots)
 
     def save_settings(self, plugin_settings, instance_settings):
-        if self._widget is not None and self._widget._explicit_ns:
+        if self._widget is not None and getattr(self._widget, "_explicit_ns", False):
             instance_settings.set_value("robot_namespace", self._widget._ns.strip("/"))
 
     def shutdown_plugin(self):

@@ -41,10 +41,12 @@
     <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
 
-  <!-- ONE sim GUI window for all robots (with gui:=true): per robot a teleop, a joint trajectory controller and
-       a simulated e-stop panel, labelled by namespace (config/sim_gui_x<N>.perspective, made by
-       scripts/make_sim_gui_perspective.py); each panel serves <ns>/rqt_sim_gui/set_estop and set_protective_stop like
-       a per-robot window. With gui:=false each robot starts its own headless dashboard as before. -->
+  <!-- ONE sim GUI window for all robots (with gui:=true) with ONE robot selector: a selector panel, a teleop, a
+       joint trajectory controller and a simulated e-stop panel (config/sim_gui_x<N>.perspective, made by
+       nodes/make_sim_gui_perspective.py). The chosen robot is published latched on /selected_robot and every panel
+       (and the RQT tables demo) acts on it. The e-stop panel serves <ns>/rqt_sim_gui/set_estop and
+       set_protective_stop of every robot, like a per-robot window. With gui:=false each robot starts its own headless
+       dashboard as before. -->
   <node if="$(arg gui)" name="rqt_sim_gui_all" pkg="rqt_gui" type="rqt_gui"
         args="--perspective-file $(find mobipick_gazebo)/config/sim_gui_x$(arg num_robots).perspective">
     <param name="default_vx_max" value="1.0" />
