@@ -21,9 +21,10 @@ sensors:
     # and objects removed there left permanent ghosts. 2.0 m covers a whole table with
     # margin and stays well inside the camera far clip of 3.5 m.
     max_range: 2.0
-    # matches the 3 Hz the simulated camera is now asked for; anything lower here
-    # would throw the extra frames away before they reach the octomap
-    max_update_rate: 3.0
+    # 1 Hz like the real yaml (sensors_gripper_cam_pointcloud.yaml): the real camera publishes 3 Hz
+    # with data_skip 9 and its octomap takes one cloud per second, so the sim camera stays at 3 Hz and
+    # the octomap takes 1 per second (the earlier 3 Hz was for faster ghost clearing)
+    max_update_rate: 1.0
     frame_subsample: 1
     point_subsample: 2
     # The mask is applied with this padding to every collision object too, including
