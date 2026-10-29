@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- #226: two (num_robots 3: three) identical moelk tables scenes in one Gazebo, 50 m apart along x (beyond the MiR laser range), one
-       Mobipick in each, for parallel experiments. Robot 1 (namespace mobipick) is exactly the robot of
+  <!-- two (num_robots 3: three) identical moelk tables scenes in one Gazebo, side by side along x with a
+       gap of copy_gap (1 m) between their bounding boxes, one Mobipick in each, for parallel experiments. Robot 1 (namespace mobipick) is exactly the robot of
        moelk_tables_spawn_sim_objects.launch with the same model names; copy 2 prefixes its Gazebo models with
        "mobipick2__" and robot 2 runs in namespace mobipick2. Its stack (fake localization with its own map frame
-       mobipick2/map, navigation, MoveIt) is started by tables_demo_bringup/launch/includes/extra_mobipick_sim.launch. -->
+       mobipick2/map, navigation, MoveIt) is started by tables_demo_bringup/launch/includes/robot_stack_sim.launch. -->
   <arg name="namespace" default="mobipick"    doc="Namespace of robot 1; robot 2 gets this name plus 2"/>
   <arg name="robot"     default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
   <arg name="physics_profile" default="fast" doc="options: slow, fast" />
@@ -13,10 +13,15 @@
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" doc="ur5 joint limits yaml (joint_limits_no_cable_guide.yaml drops the cable guide limits of wrist_1/wrist_3, sim only)" />
-  <arg name="copy_offset_x" default="50.0" doc="x offset between neighbouring scene copies [m]" />
+  <!-- one scene copy takes scene_size_x along x (the bounding box of the moelk building, with the tables and objects
+       inside: pbr_gazebo/Media/models/pbr_robot_lab.stl spans x 8.95 .. 24.85); the next copy starts copy_gap after it.
+       tables_demo_bringup/launch/demo_sim.launch derives the same offset for the robots' map frames. -->
+  <arg name="scene_size_x" default="15.9" doc="x extent of one scene copy, the bounding box of the moelk building [m]" />
+  <arg name="copy_gap" default="1.0" doc="gap between the bounding boxes of neighbouring scene copies [m]" />
+  <arg name="copy_offset_x" default="$(eval float(arg('scene_size_x')) + float(arg('copy_gap')))" doc="x offset between neighbouring scene copies [m]" />
   <arg name="num_robots" default="2" doc="2 or 3 scene copies and robots (moelk_tables_x3_spawn_sim_objects.launch passes 3)" />
 
-  <!-- start Gazebo with both buildings and spawn robot 1 (same pose as in moelk_tables) -->
+  <!-- start Gazebo with the building of copy 1 and spawn robot 1 (same pose as in moelk_tables) -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
     <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
     <arg name="robot"           value="$(arg robot)" />
@@ -29,7 +34,7 @@
     <arg name="merged_gui"      value="$(arg gui)" />
     <arg name="arm_controller"  value="$(arg arm_controller)" />
     <arg name="grasp_fix"       value="$(arg grasp_fix)" />
-    <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk_x$(arg num_robots).sdf"/>
+    <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk.sdf"/>
     <arg name="robot_x"         value="10.30" />
     <arg name="robot_y"         value="2.40" />
     <arg name="robot_yaw"       value="3.1415" />
@@ -100,7 +105,14 @@
   <param name="person_standing_description"
          command="$(find xacro)/xacro '$(find mobipick_gazebo)/urdf/static/static_person_standing.urdf.xacro'" />
 
-  <!-- the two scene copies -->
+  <arg name="copy_offset_x_3" value="$(eval 2 * float(arg('copy_offset_x')))" />
+  <!-- the buildings of copies 2 and 3 (named with the robot prefix so the logical camera skips them like pbr_moelk) -->
+  <node name="$(arg namespace)2__spawn_pbr_moelk" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-sdf -file $(find mobipick_gazebo)/worlds/moelk_building.sdf -model $(arg namespace)2__pbr_moelk -x $(arg copy_offset_x)" />
+  <node if="$(eval int(num_robots) >= 3)" name="$(arg namespace)3__spawn_pbr_moelk" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-sdf -file $(find mobipick_gazebo)/worlds/moelk_building.sdf -model $(arg namespace)3__pbr_moelk -x $(arg copy_offset_x_3)" />
+
+  <!-- the scene copies -->
   <include file="$(find mobipick_gazebo)/launch/worlds/moelk_tables_scene.launch">
     <arg name="offset_x" value="0.0" />
     <arg name="name_prefix" value="" />

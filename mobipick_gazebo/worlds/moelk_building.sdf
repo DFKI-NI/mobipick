@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!-- the moelk building of pbr_gazebo/worlds/pbr_moelk.sdf as a model of its own, spawned by
+     launch/worlds/moelk_tables_x2_spawn_sim_objects.launch once per extra scene copy at the copy's x offset, so the
+     offset is one launch value instead of a number baked into a world file per robot count. Keep the link in sync
+     with pbr_moelk.sdf. -->
+<sdf version="1.5">
+  <model name="pbr_moelk">
+    <static>true</static>
+    <link name="pbr_moelk_link">
+      <pose>0 0 0 0 0 0</pose>
+      <collision name="pbr_moelk_collision">
+        <geometry>
+          <mesh>
+            <uri>file://pbr_robot_lab.stl</uri>
+            <scale>1.0 1.0 1.0</scale>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name="pbr_moelk_visual">
+        <cast_shadows>false</cast_shadows>
+        <geometry>
+          <mesh>
+            <uri>file://pbr_robot_lab.stl</uri>
+            <scale>1.0 1.0 1.0</scale>
+          </mesh>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>

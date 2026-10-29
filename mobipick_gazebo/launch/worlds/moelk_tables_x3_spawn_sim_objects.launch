@@ -1,9 +1,11 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- #226: three identical moelk tables scenes, 50 m apart along x, one Mobipick in each (mobipick, mobipick2,
+  <!-- three identical moelk tables scenes side by side along x (1 m between their bounding boxes), one Mobipick in each (mobipick, mobipick2,
        mobipick3); see moelk_tables_x2_spawn_sim_objects.launch -->
   <arg name="physics_profile" default="fast" />
   <arg name="gui" default="true" />
+  <arg name="scene_size_x" default="15.9" doc="x extent of one scene copy [m], see moelk_tables_x2_spawn_sim_objects.launch" />
+  <arg name="copy_gap" default="1.0" doc="gap between the bounding boxes of neighbouring scene copies [m]" />
   <arg name="grasp_fix" default="false" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" />
 
@@ -11,6 +13,8 @@
     <arg name="num_robots" value="3" />
     <arg name="physics_profile" value="$(arg physics_profile)" />
     <arg name="gui" value="$(arg gui)" />
+    <arg name="scene_size_x" value="$(arg scene_size_x)" />
+    <arg name="copy_gap" value="$(arg copy_gap)" />
     <arg name="grasp_fix" value="$(arg grasp_fix)" />
     <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
   </include>
