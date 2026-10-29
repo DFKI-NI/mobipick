@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- #226: namespace / pose_selector_ns as in tables_demo_bringup/bringup.launch; the defaults give the single-robot
+  <!-- namespace / pose_selector_ns as in tables_demo_bringup/bringup.launch; the defaults give the single-robot
        names (node /simulated_dope_image_relay, /mobipick/... topics, the global pick pose selector) -->
   <arg name="namespace" default="mobipick" doc="robot namespace" />
   <arg name="pose_selector_ns" default="" doc="namespace of the pick pose selector, empty: global" />

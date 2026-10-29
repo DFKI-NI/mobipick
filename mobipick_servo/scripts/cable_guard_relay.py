@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Cable guard relay between MoveIt Servo and the arm controller (#200).
+"""Cable guard relay between MoveIt Servo and the arm controller.
 
     roslaunch mobipick_servo servo.launch   (starts it next to servo_server)
 

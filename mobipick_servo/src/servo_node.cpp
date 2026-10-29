@@ -1,4 +1,4 @@
-// MoveIt Servo for Mobipick (#200): moveit_servo's servo_server with a tf buffer for the planning scene monitor.
+// MoveIt Servo for Mobipick: moveit_servo's servo_server with a tf buffer for the planning scene monitor.
 //
 // moveit_servo 1.1.16's servo_server builds its PlanningSceneMonitor without tf, which suits fixed-base arms. Mobipick's
 // SRDF has a floating virtual joint map -> base_footprint that only tf can fill, so there the robot state stays
@@ -7,7 +7,7 @@
 //
 // Its scene comes from move_group's monitored_planning_scene without the octomap: servo checks distances, which is slow
 // against octree voxels (loop overruns of 0.05-0.1 s), and in the sim the octomap holds phantom voxels of the arm itself
-// (the self filter misses it, #198), so servo decelerated "close to a collision" all the time. Boxes (tables, pose
+// (the self filter misses it), so servo decelerated "close to a collision" all the time. Boxes (tables, pose
 // selector objects) and the robot itself stay in the check.
 #include <memory>
 

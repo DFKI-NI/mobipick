@@ -627,7 +627,7 @@ bool URKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
   uint16_t num_sols;
 
   int perturb_attempt = 0;
-  // #227 diagnosis (off unless the environment variable UR_POLISHED_DEBUG names a file): per call the attempts, the
+  // diagnosis (off unless the environment variable UR_POLISHED_DEBUG names a file): per call the attempts, the
   // analytic branches, the polished (converged) ones and the ones inside the limits, appended as one CSV line
   int debug_sols = 0, debug_converged = 0, debug_valid = 0;
   const char *debug_path = std::getenv("UR_POLISHED_DEBUG");
@@ -774,7 +774,7 @@ bool URKinematicsPlugin::searchPositionIK(const geometry_msgs::Pose &ik_pose,
       ++debug_converged;
       std::vector<double> candidate(6);
       std::vector<int> clamped;
-      // #227 hard cases: a target that needs a joint exactly ON its limit converges a hair beyond it (the polish stops
+      // hard cases: a target that needs a joint exactly ON its limit converges a hair beyond it (the polish stops
       // at 1e-4). Such a joint (at most joint_clamp_window beyond) is set on the limit and held there while the other
       // joints are polished again; only an exact result (1e-4 m / rad, all joints within the limits) is accepted.
       const double joint_clamp_window = 0.01;

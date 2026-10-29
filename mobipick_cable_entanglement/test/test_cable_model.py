@@ -83,7 +83,7 @@ class TestStatelessModel(unittest.TestCase):
 
     def test_large_wrist_3_turn_from_observe_is_entangled(self):
         pose = list(OBSERVE)
-        pose[5] = 120.0  # about 150 deg below observe, like the grasp-orientation inserts of issue 
+        pose[5] = 120.0  # about 150 deg below observe, like the grasp-orientation inserts
         st = self.model.evaluate(q(pose))
         self.assertTrue(st.predicted_stop, st.reason)
         self.assertEqual(st.worst_span, "wrist")

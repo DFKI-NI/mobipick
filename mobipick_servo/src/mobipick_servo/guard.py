@@ -1,6 +1,6 @@
-"""Cable guard for MoveIt Servo: pass a commanded arm state on only when the cable model allows it (#200).
+"""Cable guard for MoveIt Servo: pass a commanded arm state on only when the cable model allows it.
 
-Servo streams one joint target per cycle. The camera/FT cable carrier must not be over-stretched (#118), so each target
+Servo streams one joint target per cycle. The camera/FT cable carrier must not be over-stretched, so each target
 is
 checked with the geometric cable model of mobipick_cable_entanglement, the same call as grasplan's MTC cable guard:
 allowed when its largest span stretch stays at or below ``margin`` (the MTC guard's -0.115), or when it is not tighter

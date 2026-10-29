@@ -1,4 +1,4 @@
-# MoveIt Servo (moveit_servo 1.1.16) for the Mobipick UR5, simulation (#200). Loaded into servo_server's private
+# MoveIt Servo (moveit_servo 1.1.16) for the Mobipick UR5, simulation. Loaded into servo_server's private
 # namespace by launch/servo.launch. Commands: geometry_msgs/TwistStamped on servo_server/delta_twist_cmds (m/s, rad/s),
 # control_msgs/JointJog on servo_server/delta_joint_cmds. Output: trajectory_msgs/JointTrajectory to
 # servo_server/command_unguarded, which scripts/cable_guard_relay.py checks with the cable model and passes on to the

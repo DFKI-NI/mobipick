@@ -6,7 +6,7 @@
        default="$(find mobipick_moveit_config)/config/sensors_gripper_cam_pointcloud.yaml"/>
 
   <!-- Params for the octomap monitor -->
-  <arg name="octomap_frame" default="/mobipick/odom" doc="#226: the robot's odom frame" />
+  <arg name="octomap_frame" default="/mobipick/odom" doc="the robot's odom frame" />
   <param name="octomap_frame" type="string" value="$(arg octomap_frame)" />
   <param name="octomap_resolution" type="double" value="0.025" />
   <param name="max_range" type="double" value="1.0" />

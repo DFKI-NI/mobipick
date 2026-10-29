@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!-- MoveIt Servo for the Mobipick arm with the cable guard relay (#200). Sim first: `config` defaults to servo_sim.yaml.
+<!-- MoveIt Servo for the Mobipick arm with the cable guard relay. Sim first: `config` defaults to servo_sim.yaml.
      Jog: rostopic pub -r 20 /mobipick/servo_server/delta_twist_cmds geometry_msgs/TwistStamped
           '{header: {frame_id: mobipick/base_link}, twist: {linear: {z: -0.05}}}'
      The relay forwards to arm_controller/command only what the cable model allows (see scripts/cable_guard_relay.py). -->

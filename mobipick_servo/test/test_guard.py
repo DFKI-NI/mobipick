@@ -1,4 +1,4 @@
-"""The servo cable guard (#200) with the real cable model of mobipick_cable_entanglement (skipped
+"""The servo cable guard with the real cable model of mobipick_cable_entanglement (skipped
 without it) and its test URDF."""
 import math
 import os

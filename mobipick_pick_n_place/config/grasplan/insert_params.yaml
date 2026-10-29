@@ -24,16 +24,16 @@ poses_to_go_before_insert:
 # insert_orientation: how the held object is turned over the container; all are read on every insert goal, so
 # they can be changed at runtime with rosparam set:
 # - as_picked: the object keeps the orientation it was grasped in (the container's yaw, or 8 fixed yaws on the
-#   second attempt); after an oblique AnyGrasp grasp this can turn the wrist by 180-210 deg (#103, #106)
+#   second attempt); after an oblique AnyGrasp grasp this can turn the wrist by 180-210 deg
 # - free_yaw: the object keeps the roll and pitch it was picked with, its yaw about the vertical is chosen for
-#   the least wrist rotation from where it is (after the untangle poses); any object size (#106). With
+#   the least wrist rotation from where it is (after the untangle poses); any object size. With
 #   insert_sort_by_ik (default true) the yaws are tried in the order of the wrist_3 change an IK solution
 #   needs; in the sim that kept wrist_3 within 15-35 deg instead of 177-197 deg for as_picked
 # - gripper_down: objects whose collision box is at most comfortable_orientation_max_size long (balls, fruit)
 #   are released with the gripper pointing straight down and the wrist turned as little as possible; changes
 #   the object's roll and pitch after an oblique grasp
 # - '' (empty): place_same_orientation_as_picked decides, true: as_picked, false: gripper_down
-# free_yaw is the default for sim and real since 2026-09-28 (#106); tables_demo_bringup's launch arg
+# free_yaw is the default for sim and real since 2026-09-28; tables_demo_bringup's launch arg
 # insert_orientation (default free_yaw) overrides this value
 insert_orientation: free_yaw
 place_same_orientation_as_picked: True

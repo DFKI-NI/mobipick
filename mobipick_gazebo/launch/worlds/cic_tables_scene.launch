@@ -56,7 +56,7 @@
         respawn="false" output="screen" />
 
   <!-- table 2 objects: a second row behind the open-set front row, within top-down arm reach from base_table_2_pose
-       (the back of the table at y 13.64 is ~1.03 m from the arm base, no IK; #161) -->
+       (the back of the table at y 13.64 is ~1.03 m from the arm base, no IK) -->
   <node name="relay_1" pkg="gazebo_ros" type="spawn_model"
         args="-urdf -param relay_description -model relay_1 -x 19.72 -y 13.84 -z 0.77 -Y 0.1579" />
   <node name="hot_glue_gun" pkg="gazebo_ros" type="spawn_model"

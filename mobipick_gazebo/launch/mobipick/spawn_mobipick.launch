@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <launch>
-  <!-- #226: spawn one more Mobipick into a running Gazebo (no gzserver/gzclient): the robot part of
+  <!-- spawn one more Mobipick into a running Gazebo (no gzserver/gzclient): the robot part of
        mobipick_empty_world.launch under its own namespace and tf prefix. gzserver must have been started with the
        remaps of this namespace (mobipick_empty_world.launch num_robots). -->
   <arg name="namespace" default="mobipick2" doc="Namespace (and tf prefix, Gazebo model name) of this robot" />

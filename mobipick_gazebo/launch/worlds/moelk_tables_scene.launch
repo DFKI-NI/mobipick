@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- #226: the tables, objects and worker of moelk_tables_spawn_sim_objects.launch, spawned with an x offset and a
+  <!-- the tables, objects and worker of moelk_tables_spawn_sim_objects.launch, spawned with an x offset and a
        model/node name prefix so several identical copies of the scene can live in one Gazebo (one per robot).
        Generated from moelk_tables_spawn_sim_objects.launch (keep the poses in sync). The *_description params are
        uploaded by the including launch. -->
