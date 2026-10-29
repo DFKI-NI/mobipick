@@ -733,10 +733,11 @@ class CableEntanglementMonitor:
                 "hooked": sorted({h for s in state.spans.values() for h in s.hooked_on}),
                 "tau": [round(state.torques[j], 3) for j in ARM_JOINTS]}
             if any(s.l_disc is not None for s in state.spans.values()):
-                # per span [L_disc, L_disc_topology, twist deg, strain] and the tool parts the carrier link chain
-                # is caught on
+                # per span [L_disc, L_disc_topology, twist deg, strain, twist along the chain deg] and the tool
+                # parts the carrier link chain is caught on (the twist is the clamps', the chain's value appended)
                 tick["disc"] = {n: [round(s.l_disc, 4), round(s.l_disc_topology, 4), round(s.twist_deg, 1),
-                                    round(s.disc_strain, 4)]
+                                    round(s.disc_strain, 4),
+                                    None if s.twist_chain_deg is None else round(s.twist_chain_deg, 1)]
                                 for n, s in state.spans.items() if s.l_disc is not None}
                 tick["disc_hooked"] = sorted({h for s in state.spans.values() for h in (s.disc_hooked_on or [])})
             self.logger.add_tick(now, tick)

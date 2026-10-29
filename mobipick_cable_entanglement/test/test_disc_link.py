@@ -156,9 +156,54 @@ class TestDiscChain(unittest.TestCase):
         self.assertTrue(all(b.level != "entangled" for b in self.states))
 
     def test_twist_is_reported_within_a_few_turns(self):
-        # logged only: the value still jumps by tens of degrees between ticks while the chain moves
         for b in self.states:
             self.assertLess(abs(b.spans["wrist"].twist_deg), 3 * 360.0)
+
+    def test_twist_follows_the_clamps_smoothly_and_returns_at_the_same_pose(self):
+        # the logged twist is the clamps' (continuous in the joints); at 4 deg per tick no step of more than
+        # about the wrist joints' own turn, and home -> observe -> transport -> home ends where it started
+        for name in ("wrist", "elbow", "shoulder"):
+            values = [b.spans[name].twist_deg for b in self.states]
+            steps = np.abs(np.diff(values))
+            self.assertLess(float(steps.max()), 12.0, name)
+            self.assertIsNotNone(self.states[-1].spans[name].twist_chain_deg)
+        model = load(FITTING_TUBE)
+        model.reset(q(HOME))
+        start = model.update(q(HOME), 0.1).spans
+        for pose in loop(HOME, OBSERVE, TRANSPORT, HOME):
+            end = model.update(pose, 0.1).spans
+        for name in ("wrist", "elbow", "shoulder"):
+            self.assertAlmostEqual(start[name].twist_deg, end[name].twist_deg, delta=0.5, msg=name)
+
+
+# the 60 s before a recorded real-robot halt, ticks about 0.15 s apart: the twist along the chain stepped by +90 and
+# +112 deg at the 4th and 5th tick, the arm's joints by at most 14 deg
+E4_TICKS = [
+    [-56.34, -74.91, 94.54, -107.47, -106.23, 178.77],
+    [-55.46, -80.78, 99.55, -107.01, -103.42, 185.83],
+    [-53.75, -92.15, 109.30, -106.09, -97.99, 199.54],
+    [-52.98, -97.26, 113.65, -105.68, -95.55, 205.69],
+    [-51.97, -103.95, 119.39, -105.15, -92.33, 213.78],
+    [-51.68, -105.91, 121.05, -104.99, -91.39, 216.14],
+    [-51.40, -107.75, 122.63, -104.86, -90.52, 218.34]]
+
+
+class TestTwistContinuity(unittest.TestCase):
+    def test_the_recorded_e4_jump_is_gone_from_the_logged_twist(self):
+        model = load()
+        model.reset(q(E4_TICKS[0]))
+        values = [model.update(q(pose), 0.15).spans["wrist"].twist_deg for pose in E4_TICKS]
+        steps = np.abs(np.diff(values))
+        self.assertLess(float(steps.max()), 25.0, values)
+
+    def test_a_standing_arm_keeps_its_twist_while_the_chain_settles(self):
+        model = load()
+        model.reset(q(TRANSPORT))
+        for pose in loop(TRANSPORT, OBSERVE, deg_per_tick=8.0, rest=1):
+            model.update(pose, 0.1)
+        still = [model.update(q(OBSERVE), 0.1).spans["wrist"] for _ in range(15)]
+        self.assertEqual(len({round(s.twist_deg, 9) for s in still}), 1)   # the clamps do not move
+        self.assertTrue(all(s.twist_chain_deg is not None for s in still))
 
 
 class TestTautChain(unittest.TestCase):

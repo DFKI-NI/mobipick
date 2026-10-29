@@ -178,10 +178,14 @@ the **taut-chain stop**: `decision.stop_stretch` (+2 %) then predicts the protec
 strain, twist). The monitor names the disc sizes in its start line, logs the disc values per tick on the real robot
 (`l` keeps $L_{geo}$ only), and draws links and discs in RViz (`cable_discs`, `cable_links`).
 
-**Twist** is logged only, never decides: the turn of the end clamp against the start clamp about the cable carrier, carried
-along the chain, zero at the reference pose, against links × 10°. It is repeatable for the wrist and elbow spans
-on a pose loop; the shoulder span's value drifts (its pedestal exit is a guess and the chain is coiled there) and
-jumps by tens of degrees while the chain moves: do not use it.
+**Twist** is logged only, never decides: the turn of the end clamp against the start clamp about the cable carrier
+(`twist_deg`), against links × 10°. It comes from the clamps alone: the twist of the straight carrier
+between them (leads included), followed from tick to tick and counted from the reference pose after a reset. It is
+continuous in the joint angles (at most the wrist joints' own turn per tick), the same whenever the arm stands still,
+and back at its start value after a pose loop. The value carried along the chain's shape (parallel transport) is
+still logged as `twist_chain_deg`, for diagnosis only: the carrier link chain has no torsion, so it coils and sways
+freely, and that value moved by up to 110° in 0.15 s with the arm standing still (real halt E4); a real tube's
+torsion resists that. Neither is checked against the real tube yet.
 
 **Cost**: the C++ solver takes about 7.5 ms per update (numpy: 44 ms with 48 substeps); a whole model update about
 14.5 ms on the laptop (2026-09-30, with the removed rope next to it 20.3 ms), 10 Hz monitor.

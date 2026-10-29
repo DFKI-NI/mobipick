@@ -531,8 +531,9 @@ class SpanState:
     l_disc_topology: Optional[float] = None
     disc_hooked_on: Optional[List[str]] = None
     disc_strain: Optional[float] = None   # chain length over its nominal length minus one
-    twist_deg: Optional[float] = None
+    twist_deg: Optional[float] = None   # the end clamp turned about the carrier against the start clamp
     twist_limit_deg: Optional[float] = None
+    twist_chain_deg: Optional[float] = None   # the same along the chain's shape (diagnostic, sways with it)
 
 
 @dataclass
@@ -553,7 +554,8 @@ class CableState:
                     "l": round(s.l_disc, 4), "l_topology": round(s.l_disc_topology, 4), "hooked_on": s.disc_hooked_on,
                     "strain": round(s.disc_strain, 4),
                     "twist_deg": None if s.twist_deg is None else round(s.twist_deg, 1),
-                    "twist_limit_deg": None if s.twist_limit_deg is None else round(s.twist_limit_deg, 1)}
+                    "twist_limit_deg": None if s.twist_limit_deg is None else round(s.twist_limit_deg, 1),
+                    "twist_chain_deg": None if s.twist_chain_deg is None else round(s.twist_chain_deg, 1)}
         return d
 
     def _to_dict(self) -> dict:
@@ -1010,7 +1012,8 @@ class CableModel:
         # the carrier link chains, their lengths and the twist of each span
         self._disc: Optional[CarrierLinkChains] = None
         self._disc_cache: Dict[str, tuple] = {}
-        self._twist: Dict[str, float] = {}
+        self._twist: Dict[str, float] = {}   # per span the twist along the chain (twist_chain_deg)
+        self._twist_clamps: Dict[str, float] = {}   # per span the clamps' twist (twist_deg)
         self._twist_zero: Optional[Dict[str, float]] = None
         self._disc_cap_T = None   # link pose of every capsule at the last step of the carrier link chain (friction)
         self._disc_ref = None     # settled carrier link chain at the reference pose (x, x_prev), for _disc_reset_sweep
@@ -1167,7 +1170,7 @@ class CableModel:
         q = self._full_q(q)
         self._disc = None
         self._disc_cap_T = None
-        self._disc_cache, self._twist = {}, {}
+        self._disc_cache, self._twist, self._twist_clamps = {}, {}, {}
         self._tick = 0
         if self.cfg.cable_carrier.enabled and settle_carrier:
             try:
@@ -1195,6 +1198,22 @@ class CableModel:
         lead = self.cfg.spans[c].lead
         return polyline_twist(np.array([a, a + lead * ta, b + lead * tb, b]), *self._carrier_refs[c])
 
+    def _clamp_twists(self, q: Dict[str, float]) -> Dict[str, float]:
+        """per span the twist [rad] by which the end clamp has turned about the carrier against the start clamp
+        since the reference pose: the straight carrier's twist (_chord_twist, from the clamps alone) followed from tick
+        to tick (a whole turn never in one tick), counted from the reference pose after a reset (_twist_guess). The
+        chain's own shape is left out on purpose: the carrier link chain has no torsion, so its free coiling and
+        swaying moved the twist along it by up to 110 deg per 0.15 s with the arm standing still (a recorded real-robot halt), which a
+        real tube's torsion does not do. Needs _frames(q) of this tick."""
+        now = {s.name: self._chord_twist(c) - self._twist_zero[s.name][1] for c, s in enumerate(self.cfg.spans)}
+        if not self._twist_clamps or set(self._twist_clamps) != set(now):
+            self._twist_clamps = self._twist_guess(q)   # leaves _frames at q again
+            return dict(self._twist_clamps)
+        for name, raw in now.items():
+            prev = self._twist_clamps[name]
+            self._twist_clamps[name] = raw + 2.0 * math.pi * round((prev - raw) / (2.0 * math.pi))
+        return dict(self._twist_clamps)
+
     def _twist_reference(self) -> Dict[str, tuple]:
         """per span (twist of the settled carrier link chain, twist of the straight carrier) at the reference pose,
         where the
@@ -1219,6 +1238,7 @@ class CableModel:
         LinkChainConfig.reset_cache_mrad a start at a pose seen before reuses that settled chain"""
         if self._twist_zero is None:
             self._twist_zero = self._twist_reference()
+        self._twist_clamps = {}   # counted again from the reference pose at the next update
         key = self._reset_key(q)
         if key is not None and key in self._reset_cache:
             self._reset_cache.move_to_end(key)
@@ -1395,6 +1415,7 @@ class CableModel:
                 self._disc_failed(exc, q)
         anchors, caps, poses = self._frames(q)
         disc = use_carrier and self._disc is not None
+        clamps = self._clamp_twists(q) if disc and self._twist_zero is not None else {}   # leaves _frames at q
         caps_disc = self._disc_capsules(caps) if disc else None
         refresh = False
         if disc:
@@ -1414,7 +1435,7 @@ class CableModel:
         torques = {j: 0.0 for j in ARM_JOINTS}
         for c, span in enumerate(self.cfg.spans):
             l_geo, chord, limiting, winding, wrapped = self._geo(span, q, anchors, poses)
-            l_disc, disc_hooked, l_disc_topo, twist, strain = None, None, None, None, None
+            l_disc, disc_hooked, l_disc_topo, twist, twist_chain, strain = None, None, None, None, None, None
             if disc and refresh:
                 try:
                     self._disc_cache[span.name] = self._disc_state(c, span, caps_disc)
@@ -1422,7 +1443,8 @@ class CableModel:
                     self._disc_failed(exc, q)
                     disc = False
             if disc:
-                l_disc, disc_hooked, l_disc_topo, twist = self._disc_cache[span.name]
+                l_disc, disc_hooked, l_disc_topo, twist_chain = self._disc_cache[span.name]
+                twist = clamps.get(span.name)
                 scale = span.free_length / span.carrier_length   # chain lengths in the units of the deciding geometry
                 l_disc, l_disc_topo = l_disc * scale, l_disc_topo * scale
                 strain = float(self._disc.strain[c])
@@ -1454,7 +1476,8 @@ class CableModel:
                 limiting=limiting.replace("ur5_", "").replace("_joint", ""), hooked_on=hooked, gradient=gradient,
                 l_disc=l_disc, l_disc_topology=l_disc_topo, disc_hooked_on=disc_hooked, disc_strain=strain,
                 twist_deg=None if twist is None else math.degrees(twist),
-                twist_limit_deg=None if twist is None else self._twist_limit_deg(c))
+                twist_limit_deg=None if twist is None else self._twist_limit_deg(c),
+                twist_chain_deg=None if twist_chain is None else math.degrees(twist_chain))
         if keep_state:
             self._last_q = q
         return self._decide(spans, torques, hysteresis)
