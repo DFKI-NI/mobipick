@@ -37,10 +37,12 @@ The world launches `moelk_tables_spawn_sim_objects.launch`, `cic_tables_spawn_si
 `moelk_tables_x2_spawn_sim_objects.launch` and `moelk_tables_x3_spawn_sim_objects.launch` take `robot_colours`
 (default `false`: everything looks as before). With `robot_colours:=true`:
 
-- the four side covers of robot k are painted in its Gazebo material (xacro arg `robot_colour_index` of
+- the four side covers of robot k show its colour around the unchanged DFKI logo (xacro arg `robot_colour_index` of
   `mobipick_v1_model.urdf.xacro`, passed down by `upload_mobipick_description.launch`,
   `mobipick_gazebo_common.launch`, `mobipick_empty_world.launch` and `spawn_mobipick.launch`; 0 = unpainted, the
-  default, which the real robot always uses);
+  default, which the real robot always uses). The painted cover textures and meshes in
+  `mobipick_description/meshes/structure/visual/v2/robot_colours/` are made from the cover texture and the colour
+  table by `mobipick_description/scripts/make_robot_colour_covers.py`: run it again after changing either;
 - `nodes/spawn_wall_stripe.py` (one per robot, in the robot's namespace) spawns a static, visual-only model
   `<namespace>__wall_stripe`: a band of thin boxes in the robot's colour just in front of every vertical wall face of
   that robot's copy of the world mesh, by default from 0.6 m to 0.2 m below the wall top (moelk: 2.0 to 2.4 m), so

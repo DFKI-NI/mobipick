@@ -12,7 +12,11 @@
        - v1: The original Mobipick in Bremen, built for the Hybr-iT project
        - v2: The newer Mobipicks: one in Osnabrueck, two in Bremen for the UPLINX project
   -->
-  <xacro:macro name="structure" params="prefix height variant='v1'">
+  <!-- colour: a robot colour name of config/robot_colours.yaml (multi-robot simulation): the side covers show the
+       painted texture of meshes/structure/visual/v2/robot_colours (the logo stays); empty (default): the plain covers -->
+  <xacro:macro name="structure" params="prefix height variant='v1' colour=''">
+    <xacro:property name="cover_visual" value="${'robot_colours/' if colour else ''}" />
+    <xacro:property name="cover_colour" value="${'_' + colour if colour else ''}" />
     <link name="${prefix}part_down">
       <inertial>
         <origin xyz="0 0 0.3278534031" rpy="${1.5 * pi} ${0.5 * pi} ${0.5 * pi}" />
@@ -150,7 +154,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.obj" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/${cover_visual}cover_short_side${cover_colour}.obj" />
         </geometry>
       </visual>
       <collision>
@@ -174,7 +178,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_short_side.obj" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/${cover_visual}cover_short_side${cover_colour}.obj" />
         </geometry>
       </visual>
       <collision>
@@ -198,7 +202,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.obj" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/${cover_visual}cover_long_side${cover_colour}.obj" />
         </geometry>
       </visual>
       <collision>
@@ -222,7 +226,7 @@
       <visual>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/cover_long_side.obj" />
+          <mesh filename="package://mobipick_description/meshes/structure/visual/v2/${cover_visual}cover_long_side${cover_colour}.obj" />
         </geometry>
       </visual>
       <collision>
