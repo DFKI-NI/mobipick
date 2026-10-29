@@ -69,6 +69,26 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(topic.text(), "/mobipick2/cmd_vel")
         self.assertEqual(managers.currentText(), "/mobipick2/controller_manager")
 
+    def test_the_joint_panel_reads_the_model_of_the_chosen_robot_when_there_is_no_global_one(self):
+        key = self.sel.description_key
+        self.assertEqual(key("robot_description", "mobipick2", lambda _: False), "/mobipick2/robot_description")
+        self.assertEqual(key("robot_description", "mobipick2", lambda _: True), "robot_description")
+        self.assertEqual(key("/mobipick/robot_description", "mobipick2", lambda _: False),
+                         "/mobipick/robot_description")
+
+    def test_a_manager_already_shown_is_still_reported_to_the_panel_once(self):
+        managers = self.qt.QComboBox()
+        managers.setObjectName("cm_combo")
+        managers.blockSignals(True)  # the panel fills its combo like this
+        managers.addItems(["/mobipick/controller_manager", "/mobipick2/controller_manager"])
+        managers.setCurrentIndex(1)
+        managers.blockSignals(False)
+        heard = []
+        managers.currentIndexChanged[str].connect(heard.append)
+        self.sel.apply_to_panels("mobipick2", [managers])
+        self.sel.apply_to_panels("mobipick2", [managers])
+        self.assertEqual(heard, ["/mobipick2/controller_manager"])
+
     def test_a_controller_manager_not_yet_listed_is_retried(self):
         managers = self.qt.QComboBox()
         managers.setObjectName("cm_combo")

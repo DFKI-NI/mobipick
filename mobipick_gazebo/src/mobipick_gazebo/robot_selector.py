@@ -35,6 +35,51 @@ def robots_from_topics(topic_names, current=DEFAULT_ROBOT):
     return sorted(robots, key=lambda r: (_number(r), r))
 
 
+def published_robot(timeout=0.7):
+    """the robot another selector already published (the topic is latched), None when nobody did: a second window or
+    a restarted panel must not overwrite the choice with its own default"""
+    try:
+        return normalize(rospy.wait_for_message(SELECTED_ROBOT_TOPIC, String, timeout=timeout).data)
+    except rospy.ROSException:
+        return None
+
+
+def description_key(key, namespace, has_param):
+    """where the joint trajectory panel finds the robot model: the global key when it exists, else the chosen robot's"""
+    if key != "robot_description" or has_param(key):
+        return key
+    return f"/{normalize(namespace)}/robot_description"
+
+
+_selected = [DEFAULT_ROBOT]
+
+
+def _read_joint_limits_of_the_selected_robot():
+    """the joint trajectory panel reads the joint limits from the global robot_description, which a namespaced robot
+    does not have (its model is /<ns>/robot_description): without it the panel's controller list stays empty"""
+    try:
+        from rqt_joint_trajectory_controller import joint_trajectory_controller as panel
+    except ImportError:
+        return
+    original = panel.get_joint_limits
+    if getattr(original, "follows_selected_robot", False):
+        return
+
+    def get_joint_limits(key="robot_description", *args, **kwargs):
+        if key != "robot_description" or rospy.has_param(key):
+            return original(key, *args, **kwargs)
+        # the panel reads the limits once and keeps them for every robot it is pointed at later: take the joints of
+        # every robot model in the sim (their names carry the robot namespace)
+        limits = {}
+        for name in sorted(rospy.get_param_names()):
+            if re.fullmatch(r"/[^/]+/robot_description", name):
+                limits.update(original(name, *args, **kwargs))
+        return limits or original(description_key(key, _selected[0], rospy.has_param), *args, **kwargs)
+
+    get_joint_limits.follows_selected_robot = True
+    panel.get_joint_limits = get_joint_limits
+
+
 def apply_to_panels(namespace, widgets):
     """point the third-party panels among `widgets` at the robot: the steering topic line and the joint trajectory
     controller's controller manager (when that manager is already listed). True when every panel found follows."""
@@ -51,8 +96,14 @@ def apply_to_panels(namespace, widgets):
             index = widget.findText(wanted)
             if index < 0:
                 done = False
-            elif widget.currentIndex() != index:
-                widget.setCurrentIndex(index)
+            elif widget.property("selector_applied") != wanted or widget.currentIndex() != index:
+                if widget.currentIndex() != index:
+                    widget.setCurrentIndex(index)  # reports the manager to the panel
+                else:
+                    # the panel fills this combo with its signals blocked, so a manager that is already shown was
+                    # never reported to it and its controller list stays empty: report it
+                    widget.currentIndexChanged[str].emit(wanted)
+                widget.setProperty("selector_applied", wanted)
     return done
 
 
@@ -63,6 +114,8 @@ class RobotSelectorPlugin(Plugin):
         super().__init__(context)
         self.setObjectName("RobotSelector")
         self._robot = DEFAULT_ROBOT
+        self._adopted = published_robot()  # before this selector publishes anything itself
+        _read_joint_limits_of_the_selected_robot()
         self._widget = QtWidgets.QWidget()
         self._widget.setObjectName("RobotSelectorUi")
         self._widget.setWindowTitle("Robot")
@@ -80,7 +133,7 @@ class RobotSelectorPlugin(Plugin):
         self._timer.start(3000)
         context.add_widget(self._widget)
         self._refresh()
-        self.select(self._robot)
+        self.select(self._adopted or self._robot)
 
     def _refresh(self):
         """the robot list follows the running robots; panels not yet ready (controller manager list) are retried"""
@@ -99,6 +152,7 @@ class RobotSelectorPlugin(Plugin):
 
     def select(self, namespace):
         self._robot = normalize(namespace)
+        _selected[0] = self._robot
         self._combo.setCurrentIndex(max(self._combo.findData(self._robot), 0))
         self._publisher.publish(String(data=self._robot))
         apply_to_panels(self._robot, QtWidgets.QApplication.allWidgets())
@@ -107,7 +161,7 @@ class RobotSelectorPlugin(Plugin):
         instance_settings.set_value("robot", self._robot)
 
     def restore_settings(self, plugin_settings, instance_settings):
-        self.select(str(instance_settings.value("robot") or DEFAULT_ROBOT))
+        self.select(self._adopted or str(instance_settings.value("robot") or DEFAULT_ROBOT))
 
     def shutdown_plugin(self):
         self._timer.stop()
