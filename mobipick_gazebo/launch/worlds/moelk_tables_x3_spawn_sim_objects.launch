@@ -8,6 +8,7 @@
   <arg name="copy_gap" default="1.0" doc="gap between the bounding boxes of neighbouring scene copies [m]" />
   <arg name="grasp_fix" default="false" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" />
+  <arg name="robot_colours" default="false" doc="Tell the robots apart by colour: robot k is painted in the k-th colour of mobipick_description/config/robot_colours.yaml (1 blue, 2 orange, 3 green, 4 purple) and a broad stripe of that colour runs high along the walls of its copy of the world (visual only, above what the table cameras and base lasers see). false: today's look" />
 
   <include file="$(find mobipick_gazebo)/launch/worlds/moelk_tables_x2_spawn_sim_objects.launch">
     <arg name="num_robots" value="3" />
@@ -17,5 +18,6 @@
     <arg name="copy_gap" value="$(arg copy_gap)" />
     <arg name="grasp_fix" value="$(arg grasp_fix)" />
     <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
+    <arg name="robot_colours" value="$(arg robot_colours)" />
   </include>
 </launch>

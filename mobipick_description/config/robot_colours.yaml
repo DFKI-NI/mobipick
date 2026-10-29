@@ -1,0 +1,24 @@
+# Robot colours of a multi-robot simulation, by the robot's order: robot 1 takes the first entry, robot 2 the second,
+# and so on. One source for the robot description (xacro: painted body covers) and for the Python tools
+# (mobipick_gazebo.robot_colours: display names, GUI dots, the coloured stripe on the walls of each robot's room).
+#   name:            colour word shown to people
+#   hex:             '#rrggbb' for GUI dots
+#   rgba:            'r g b a' (0..1) for SDF materials
+#   gazebo_material: material script name in Gazebo's gazebo.material
+colours:
+  - name: blue
+    hex: '#1f6fd1'
+    rgba: '0.12 0.44 0.82 1'
+    gazebo_material: Gazebo/Blue
+  - name: orange
+    hex: '#f07d14'
+    rgba: '0.94 0.49 0.08 1'
+    gazebo_material: Gazebo/Orange
+  - name: green
+    hex: '#2ea043'
+    rgba: '0.18 0.63 0.26 1'
+    gazebo_material: Gazebo/Green
+  - name: purple
+    hex: '#8a3ab9'
+    rgba: '0.54 0.23 0.73 1'
+    gazebo_material: Gazebo/Purple

@@ -11,6 +11,7 @@
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" doc="ur5 joint limits yaml (joint_limits_no_cable_guide.yaml drops the cable guide limits of wrist_1/wrist_3, sim only)" />
+  <arg name="robot_colours" default="false" doc="Tell the robots apart by colour: robot k is painted in the k-th colour of mobipick_description/config/robot_colours.yaml (1 blue, 2 orange, 3 green, 4 purple) and a broad stripe of that colour runs high along the walls of its copy of the world (visual only, above what the table cameras and base lasers see). false: today's look" />
   <arg name="open_set_objects" default="true" doc="also spawn the open-set demo objects (apple, banana, tennis ball, ...) from the mobipick_open_set_objects package (a separate repository)" />
 
   <!-- start Gazebo with specified world and spawn Mobipick -->
@@ -24,12 +25,20 @@
     <arg name="gui"             value="$(arg gui)" />
     <arg name="arm_controller"  value="$(arg arm_controller)" />
     <arg name="grasp_fix"       value="$(arg grasp_fix)" />
+    <arg name="robot_colour_index" value="$(eval 1 if arg('robot_colours') else 0)" />
     <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_cic.sdf"/>
     <arg name="robot_x"         value="20.50" />
     <arg name="robot_y"         value="15.20" />
     <arg name="robot_yaw"       value="0.0" />
     <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
+
+  <!-- robot_colours: the robot's colour as a stripe high along the walls -->
+  <node if="$(arg robot_colours)" ns="$(arg namespace)" name="spawn_wall_stripe" pkg="mobipick_gazebo" type="spawn_wall_stripe.py" output="screen">
+    <param name="mesh" value="package://pbr_gazebo/Media/models/pbr_cic.stl" />
+    <param name="colour" value="1" />
+    <param name="model_name" value="$(arg namespace)__wall_stripe" />
+  </node>
 
   <!-- tables, objects and worker -->
   <include file="$(find mobipick_gazebo)/launch/worlds/cic_tables_scene.launch">

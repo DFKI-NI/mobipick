@@ -24,3 +24,32 @@ real robot does not use it. Build it with the workspace (`catkin build mobipick_
 Test (one-joint Gazebo, no robot stack): `test/hw_sim/hw_sim_test.py` with `test/hw_sim/hw_sim_test.urdf` (replace
 `ROBOT_HW_SIM` in the urdf by the interface under test): normal motion is identical, a jump of more than 180 degrees
 winds the stock interface (-360 deg) and not this one.
+
+## Robot colours in a multi-robot sim (`robot_colours`)
+
+With several Mobipicks in one Gazebo (`moelk_tables_x2_spawn_sim_objects.launch`, `..._x3_...`) every robot is told
+apart by a colour that follows its order: robot 1 blue, robot 2 orange, robot 3 green, robot 4 purple. The table lives
+in one file, `mobipick_description/config/robot_colours.yaml`, read by the robot description (xacro) and by the Python
+module `mobipick_gazebo.robot_colours` (display names such as "orange Mobipick", GUI dots,
+`python3 -m mobipick_gazebo.robot_colours <namespace|index> [name|hex|rgba|gazebo_material|display_name|title]`).
+
+The world launches `moelk_tables_spawn_sim_objects.launch`, `cic_tables_spawn_sim_objects.launch`,
+`moelk_tables_x2_spawn_sim_objects.launch` and `moelk_tables_x3_spawn_sim_objects.launch` take `robot_colours`
+(default `false`: everything looks as before). With `robot_colours:=true`:
+
+- the four side covers of robot k are painted in its Gazebo material (xacro arg `robot_colour_index` of
+  `mobipick_v1_model.urdf.xacro`, passed down by `upload_mobipick_description.launch`,
+  `mobipick_gazebo_common.launch`, `mobipick_empty_world.launch` and `spawn_mobipick.launch`; 0 = unpainted, the
+  default, which the real robot always uses);
+- `nodes/spawn_wall_stripe.py` (one per robot, in the robot's namespace) spawns a static, visual-only model
+  `<namespace>__wall_stripe`: a band of thin boxes in the robot's colour just in front of every vertical wall face of
+  that robot's copy of the world mesh, by default from 0.6 m to 0.2 m below the wall top (moelk: 2.0 to 2.4 m), so
+  cameras looking at the tables and the base lasers do not see it. It has no collision; the floor stays as it is.
+
+`spawn_wall_stripe.py` works with any static STL world. Private parameters: `~mesh` (package:// URI, file:// URI or
+path, binary or ASCII STL), `~offset_x`/`~offset_y` (where this copy of the mesh is placed), `~z_low`/`~z_high`
+(override the band), `~colour` (robot index or namespace, default the node's namespace), `~inset` (0.006 m),
+`~thickness` (0.01 m), `~model_name`, `~wait_timeout` (seconds to wait for `/gazebo/spawn_sdf_model`, 0 = no limit).
+The geometry (`mobipick_gazebo.wall_stripe`) is tested by `test/test_wall_stripe.py`:
+
+    cd mobipick_gazebo && python3 -m pytest -q test/test_robot_colours.py test/test_wall_stripe.py

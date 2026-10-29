@@ -20,6 +20,7 @@
   <arg name="copy_gap" default="1.0" doc="gap between the bounding boxes of neighbouring scene copies [m]" />
   <arg name="copy_offset_x" default="$(eval float(arg('scene_size_x')) + float(arg('copy_gap')))" doc="x offset between neighbouring scene copies [m]" />
   <arg name="num_robots" default="2" doc="2 or 3 scene copies and robots (moelk_tables_x3_spawn_sim_objects.launch passes 3)" />
+  <arg name="robot_colours" default="false" doc="Tell the robots apart by colour: robot k is painted in the k-th colour of mobipick_description/config/robot_colours.yaml (1 blue, 2 orange, 3 green, 4 purple) and a broad stripe of that colour runs high along the walls of its copy of the world (visual only, above what the table cameras and base lasers see). false: today's look" />
 
   <!-- start Gazebo with the building of copy 1 and spawn robot 1 (same pose as in moelk_tables) -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/mobipick_empty_world.launch">
@@ -34,6 +35,7 @@
     <arg name="merged_gui"      value="$(arg gui)" />
     <arg name="arm_controller"  value="$(arg arm_controller)" />
     <arg name="grasp_fix"       value="$(arg grasp_fix)" />
+    <arg name="robot_colour_index" value="$(eval 1 if arg('robot_colours') else 0)" />
     <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk.sdf"/>
     <arg name="robot_x"         value="10.30" />
     <arg name="robot_y"         value="2.40" />
@@ -61,6 +63,7 @@
   <include file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch">
     <arg name="namespace"      value="$(arg namespace)2" />
     <arg name="robot"          value="$(arg robot)" />
+    <arg name="robot_colour_index" value="$(eval 2 if arg('robot_colours') else 0)" />
     <arg name="arm_controller" value="$(arg arm_controller)" />
     <arg name="merged_gui"     value="$(arg gui)" />
     <arg name="grasp_fix"      value="$(arg grasp_fix)" />
@@ -74,6 +77,7 @@
   <include if="$(eval int(num_robots) >= 3)" file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch">
     <arg name="namespace"      value="$(arg namespace)3" />
     <arg name="robot"          value="$(arg robot)" />
+    <arg name="robot_colour_index" value="$(eval 3 if arg('robot_colours') else 0)" />
     <arg name="arm_controller" value="$(arg arm_controller)" />
     <arg name="merged_gui"     value="$(arg gui)" />
     <arg name="grasp_fix"      value="$(arg grasp_fix)" />
@@ -127,4 +131,24 @@
     <arg name="offset_x" value="$(eval 2 * float(arg('copy_offset_x')))" />
     <arg name="name_prefix" value="$(arg namespace)3__" />
   </include>
+
+  <!-- robot_colours: each robot's colour as a stripe high along the walls of its copy -->
+  <node if="$(arg robot_colours)" ns="$(arg namespace)" name="spawn_wall_stripe" pkg="mobipick_gazebo" type="spawn_wall_stripe.py" output="screen">
+    <param name="mesh" value="package://pbr_gazebo/Media/models/pbr_robot_lab.stl" />
+    <param name="offset_x" value="0.0" />
+    <param name="colour" value="1" />
+    <param name="model_name" value="$(arg namespace)__wall_stripe" />
+  </node>
+  <node if="$(arg robot_colours)" ns="$(arg namespace)2" name="spawn_wall_stripe" pkg="mobipick_gazebo" type="spawn_wall_stripe.py" output="screen">
+    <param name="mesh" value="package://pbr_gazebo/Media/models/pbr_robot_lab.stl" />
+    <param name="offset_x" value="$(arg copy_offset_x)" />
+    <param name="colour" value="2" />
+    <param name="model_name" value="$(arg namespace)2__wall_stripe" />
+  </node>
+  <node if="$(eval arg('robot_colours') and int(arg('num_robots')) >= 3)" ns="$(arg namespace)3" name="spawn_wall_stripe" pkg="mobipick_gazebo" type="spawn_wall_stripe.py" output="screen">
+    <param name="mesh" value="package://pbr_gazebo/Media/models/pbr_robot_lab.stl" />
+    <param name="offset_x" value="$(eval 2 * float(arg('copy_offset_x')))" />
+    <param name="colour" value="3" />
+    <param name="model_name" value="$(arg namespace)3__wall_stripe" />
+  </node>
 </launch>

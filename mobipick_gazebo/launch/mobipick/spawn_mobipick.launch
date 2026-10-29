@@ -12,6 +12,7 @@
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" />
+  <arg name="robot_colour_index" default="0" doc="Multi-robot sim: paint the side covers of the body in the colour of robot k (1-based, mobipick_description/config/robot_colours.yaml: 1 blue, 2 orange, 3 green, 4 purple); 0: unpainted (default)" />
   <arg name="gui" default="false" doc="false: headless simulated UR dashboard instead of the rqt_sim_gui window" />
   <arg name="merged_gui" default="false" doc="this robot's panels are in the one window of the multi-robot launch: no headless dashboard either" />
 
@@ -28,6 +29,7 @@
       <arg name="main_camera" value="$(arg main_camera)" />
       <arg name="arm_controller" value="$(arg arm_controller)" />
       <arg name="grasp_fix"      value="$(arg grasp_fix)" />
+      <arg name="robot_colour_index" value="$(arg robot_colour_index)" />
       <arg name="robot_x"   value="$(arg robot_x)" />
       <arg name="robot_y"   value="$(arg robot_y)" />
       <arg name="robot_yaw" value="$(arg robot_yaw)" />

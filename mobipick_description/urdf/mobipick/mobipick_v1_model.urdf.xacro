@@ -52,6 +52,27 @@
     <xacro:structure prefix="${prefix}structure_" height="0.058" variant="v2" />
   </xacro:if>
 
+  <!-- Robot colour of a multi-robot simulation: robot k (1-based) gets the k-th entry of config/robot_colours.yaml and
+       its four side covers are painted in that Gazebo material, so the robots can be told apart. 0 (default) or an
+       index past the table: covers keep their textured look. Gazebo only, the real robot never sets it. -->
+  <xacro:arg name="robot_colour_index" default="0" />
+  <xacro:property name="robot_colour_index" value="${int('$(arg robot_colour_index)')}" />
+  <xacro:if value="${robot_colour_index > 0}">
+    <xacro:property name="robot_colours" value="${xacro.load_yaml('$(find mobipick_description)/config/robot_colours.yaml')['colours']}" />
+    <xacro:if value="${robot_colour_index &lt;= len(robot_colours)}">
+      <xacro:property name="robot_colour_material" value="${robot_colours[robot_colour_index - 1]['gazebo_material']}" />
+      <xacro:macro name="robot_colour_cover" params="side">
+        <gazebo reference="${prefix}structure_cover_${side}_link">
+          <material>${robot_colour_material}</material>
+        </gazebo>
+      </xacro:macro>
+      <xacro:robot_colour_cover side="front" />
+      <xacro:robot_colour_cover side="back" />
+      <xacro:robot_colour_cover side="left" />
+      <xacro:robot_colour_cover side="right" />
+    </xacro:if>
+  </xacro:if>
+
   <!-- ############### UR5 ARM ################ -->
   <xacro:include filename="$(find ur_description)/urdf/inc/ur5_macro.xacro" />
 
