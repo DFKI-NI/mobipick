@@ -144,6 +144,10 @@ int disc_chain_step(double* x, double* x_prev, const double* inv_mass, int n_nod
   std::vector<double> clamp_dist(2 * n_caps);
   std::vector<int> near;
   near.reserve(n_caps);
+  // per shape a ball holding its core (centre, squared radius + sweep radius + margin): a node outside it
+  // cannot touch the shape, so its exact distance is skipped; the skipped test could never have hit (see below)
+  std::vector<V3> ball_c(n_caps);
+  std::vector<double> ball_r2(n_caps);
 
   for (int k = 0; k < substeps; ++k) {
     const double alpha = (k + 1.0) / substeps;
@@ -254,6 +258,11 @@ int disc_chain_step(double* x, double* x_prev, const double* inv_mass, int n_nod
               std::min(cm.a.z, cm.b.z) - reach > hi.z || std::max(cm.a.z, cm.b.z) + reach < lo.z)
             continue;
           near.push_back(m);
+          const double half = norm(V3{cm.half[0], cm.half[1], cm.half[2]});
+          const double core = cm.half[0] > 0.0 ? half : 0.5 * norm(cm.b - cm.a) + cm.core;
+          const double out = core + cm.r + 1e-6;
+          ball_c[m] = cm.half[0] > 0.0 ? cm.a : (cm.a + cm.b) * 0.5;
+          ball_r2[m] = out * out;
         }
         for (int m : near) {
           clamp_dist[2 * m] = std::max(0.0, core_distance(caps[m], get(x, s0 + 1), &unused));
@@ -266,6 +275,10 @@ int disc_chain_step(double* x, double* x_prev, const double* inv_mass, int n_nod
           V3 worst_nrm{0, 0, 1};
           int hit = -1;
           for (int m : near) {
+            // outside the ball: core distance >= |p - centre| - core > sweep radius >= r (the taper only lowers r), so
+            // dist - r > 0 >= worst and the test below is false: skipping it changes nothing
+            const V3 dc = p - ball_c[m];
+            if (dot(dc, dc) > ball_r2[m]) continue;
             V3 nrm_m;
             const double dist = core_distance(caps[m], p, &nrm_m);
             double r = caps[m].r;

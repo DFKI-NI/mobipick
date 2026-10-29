@@ -583,6 +583,17 @@ def shape_records(caps) -> np.ndarray:
     return np.ascontiguousarray(np.c_[caps[0], caps[1], caps[2], core, box], dtype=float)
 
 
+def _hom(xyz) -> np.ndarray:
+    """(x, y, z, 1): np.r_[xyz, 1.0] without its index machinery (the replay builds these thousands of times)"""
+    return np.concatenate((np.asarray(xyz, dtype=float), (1.0,)))
+
+
+def _motion_row(T: np.ndarray) -> np.ndarray:
+    """rotation (row by row) and translation of a 4 x 4 transform, the 12 numbers per shape the solver's friction
+    takes"""
+    return np.concatenate((T[:3, :3].ravel(), T[:3, 3]))
+
+
 def _norm(v: np.ndarray) -> np.ndarray:
     return np.sqrt(np.einsum("...k,...k->...", v, v))
 
@@ -1048,12 +1059,12 @@ class CableModel:
         anchors, self._carrier_pins, self._carrier_sides, self._carrier_refs = {}, [], [], []
         for s in self.cfg.spans:
             Ts, Te, Tr = poses[p + s.start.link], poses[p + s.end.link], poses[p + s.carrier_anchor.link]
-            a = (Ts @ np.r_[s.start.xyz, 1.0])[:3]
-            b = (Te @ np.r_[s.end.xyz, 1.0])[:3]
+            a = (Ts @ _hom(s.start.xyz))[:3]
+            b = (Te @ _hom(s.end.xyz))[:3]
             anchors[s.name] = (a, Ts[:3, :3] @ s.start.direction, b, Te[:3, :3] @ s.end.direction)
-            ar = (Tr @ np.r_[s.carrier_anchor.xyz, 1.0])[:3]
+            ar = (Tr @ _hom(s.carrier_anchor.xyz))[:3]
             Tre = poses[p + s.carrier_end_anchor.link]
-            br = (Tre @ np.r_[s.carrier_end_anchor.xyz, 1.0])[:3]
+            br = (Tre @ _hom(s.carrier_end_anchor.xyz))[:3]
             self._carrier_pins.append((ar, Tr[:3, :3] @ s.carrier_anchor.direction, br,
                                        Tre[:3, :3] @ s.carrier_end_anchor.direction))
             # a direction across the carrier fixed to each clamp
@@ -1067,8 +1078,8 @@ class CableModel:
             T = poses[p + c.link]
             ca, cb, sweep, core_radius, box = c.core()
             if box[0] > 0.0:   # the box axes into the frame of the arm base
-                box = np.r_[box[:3], (T[:3, :3] @ box[3:].reshape(3, 3)).ravel()]
-            caps.append(((T @ np.r_[ca, 1.0])[:3], (T @ np.r_[cb, 1.0])[:3], sweep + self.cfg.cable_carrier_radius,
+                box = np.concatenate((box[:3], (T[:3, :3] @ box[3:].reshape(3, 3)).ravel()))
+            caps.append(((T @ _hom(ca))[:3], (T @ _hom(cb))[:3], sweep + self.cfg.cable_carrier_radius,
                          core_radius, box))
         return anchors, caps, poses
 
@@ -1245,7 +1256,7 @@ class CableModel:
                 qi = dict(q)
                 qi.update({j: q0[j] + (q[j] - q0[j]) * i / n for j in joints})
                 _, caps, _ = self._frames(qi)
-                motion = np.array([np.r_[T[:3, :3].ravel(), T[:3, 3]]
+                motion = np.array([_motion_row(T)
                                    for T in (now @ np.linalg.inv(last) for now, last in zip(self._cap_T, last_T))])
                 d.step(0.1, self._carrier_pins, self._down(), self._disc_capsules(caps), motion)
                 last_T = self._cap_T
@@ -1326,7 +1337,7 @@ class CableModel:
             qi = dict(q)
             qi.update({j: ref[j] + (q[j] - ref[j]) * min(1.0, i / steps) for j in joints})
             _, caps, _ = self._frames(qi)
-            motion = np.array([np.r_[T[:3, :3].ravel(), T[:3, 3]]
+            motion = np.array([_motion_row(T)
                                for T in (now @ np.linalg.inv(last) for now, last in zip(self._cap_T, last_T))])
             swept.step(0.1, self._carrier_pins, self._down(), self._disc_capsules(caps), motion)
             last_T = self._cap_T
@@ -1391,7 +1402,7 @@ class CableModel:
                 motion = None
                 if self._disc_cap_T is not None:   # how every capsule's link moved since the last step
                     moved = [now @ np.linalg.inv(last) for now, last in zip(self._cap_T, self._disc_cap_T)]
-                    motion = np.array([np.r_[T[:3, :3].ravel(), T[:3, 3]] for T in moved])
+                    motion = np.array([_motion_row(T) for T in moved])
                 self._disc.step(dt, self._carrier_pins, self._down(), caps_disc, motion)
                 self._disc_cap_T = self._cap_T
             except Exception as exc:  # noqa: BLE001 - the geometric check goes on deciding
