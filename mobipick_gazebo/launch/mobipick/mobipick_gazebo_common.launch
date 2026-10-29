@@ -12,6 +12,7 @@
   <arg name="robot_name" default="mobipick" doc="Sets the name of the robot in gazebo" />
   <arg name="robot"      default="mobipick-os" doc="Which variant of the mobipick? Can be 'mobipick-hb' or 'mobipick-os'" />
   <arg name="gui" default="true" doc="false: no rqt_sim_gui window (headless sim)" />
+  <arg name="merged_gui" default="false" doc="true: this robot's panels are in the one window of the multi-robot launch, so neither its own window nor its headless dashboard starts" />
   <arg name="gripper_open_position" default="0.120"
        doc="Jaw gap used by pose_teacher's Open Gripper service in simulation [m]" />
 
@@ -91,7 +92,7 @@
   <!-- Simulation GUI: teleop (rqt_robot_steering), rqt_joint_trajectory_controller and the simulated
        e-stop (UR dashboard) in a single rqt window. The plugins read their defaults from the private
        params of the rqt_gui node. Not started with gui:=false (headless sim). -->
-  <node if="$(arg gui)" name="rqt_sim_gui" pkg="rqt_gui" type="rqt_gui"
+  <node if="$(eval arg('gui') and not arg('merged_gui'))" name="rqt_sim_gui" pkg="rqt_gui" type="rqt_gui"
         args="--perspective-file $(find mobipick_gazebo)/config/sim_gui.perspective">
     <param name="default_topic" value="cmd_vel"/>
     <param name="default_vx_max" value="1.0" />
@@ -108,7 +109,7 @@
   <!-- headless sim: the same simulated UR dashboard without a window, under the same node name, so its services
        (~set_estop, ~set_protective_stop, ur_hardware_interface/dashboard/get_safety_mode and get_robot_mode) exist
        as with the window; the cable monitor presses the protective stop through it (#159) -->
-  <node unless="$(arg gui)" name="rqt_sim_gui" pkg="mobipick_gazebo" type="simulated_ur_dashboard.py" output="screen">
+  <node if="$(eval not arg('gui') and not arg('merged_gui'))" name="rqt_sim_gui" pkg="mobipick_gazebo" type="simulated_ur_dashboard.py" output="screen">
     <env name="QT_QPA_PLATFORM" value="offscreen"/>
     <rosparam param="estop_controllers">[mobile_base_controller, arm_controller, arm_velocity_controller, arm_position_controller]</rosparam>
     <rosparam param="estop_hold_controllers">[arm_velocity_controller]</rosparam>

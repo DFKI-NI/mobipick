@@ -42,13 +42,16 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
     _state_changed = QtCore.pyqtSignal()
     _status_changed = QtCore.pyqtSignal(str)
 
-    def __init__(self):
+    def __init__(self, namespace: Optional[str] = None):
+        """namespace: the robot of this panel; None: ~robot_namespace and the
+        services under the node's own name, as for one robot per rqt window"""
         super().__init__()
         self._estop_pressed = False
         # protective stop (e.g. an entangled cable on the real arm): the arm is locked like with the e-stop, but
         # the robot stays powered and get_safety_mode reports PROTECTIVE_STOP
         self._protective_stop = False
-        self._ns = _normalize_ns(rospy.get_param("~robot_namespace", "mobipick"))
+        self._ns = _normalize_ns(namespace if namespace else rospy.get_param("~robot_namespace", "mobipick"))
+        self._explicit_ns = bool(namespace)
         # controllers to stop while the e-stop is pressed (only the ones currently running are touched)
         self._estop_controllers: List[str] = rospy.get_param(
             "~estop_controllers",
@@ -92,8 +95,12 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
             GetRobotMode,
             self._handle_get_robot_mode,
         )
-        self._set_estop_srv = rospy.Service("~set_estop", SetBool, self._handle_set_estop)
-        self._set_protective_srv = rospy.Service("~set_protective_stop", SetBool, self._handle_set_protective_stop)
+        # the names a per-robot rqt_sim_gui node serves (the cable monitor presses the protective stop through them):
+        # <ns>/rqt_sim_gui/set_estop and set_protective_stop; an explicit namespace gives them absolute
+        stop_names = ("~set_estop", "~set_protective_stop") if not self._explicit_ns else \
+            (f"{self._ns}rqt_sim_gui/set_estop", f"{self._ns}rqt_sim_gui/set_protective_stop")
+        self._set_estop_srv = rospy.Service(stop_names[0], SetBool, self._handle_set_estop)
+        self._set_protective_srv = rospy.Service(stop_names[1], SetBool, self._handle_set_protective_stop)
 
         self._build_ui()
         self._state_changed.connect(self._update_button)
@@ -251,7 +258,7 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         rospy.loginfo("Simulated e-stop: started %s, stopped %s", list(start), list(stop))
 
     def _build_ui(self) -> None:
-        self.setWindowTitle("Simulated UR Dashboard - E-Stop")
+        self.setWindowTitle("Simulated UR Dashboard - E-Stop" + (f" ({self._ns.strip('/')})" if self._explicit_ns else ""))
         self.resize(240, 140)
         layout = QtWidgets.QVBoxLayout(self)
 
@@ -342,14 +349,32 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
 
 
 class SimulatedUrDashboardPlugin(Plugin):
+    """One panel per plugin instance. The robot of the instance is its saved setting `robot_namespace` (several
+    instances with different namespaces in one window; the perspective file holds them), else the private
+    param ~robot_namespace of the rqt node (one robot per window)."""
+
     def __init__(self, context):
         super().__init__(context)
         self.setObjectName("SimulatedUrDashboard")
-        self._widget = SimulatedUrDashboard()
+        self._context = context
+        self._widget = None
+
+    def _build(self, namespace):
+        self._widget = SimulatedUrDashboard(namespace)
         self._widget.setObjectName("SimulatedUrDashboardUi")
-        if context.serial_number() > 1:
-            self._widget.setWindowTitle(f"{self._widget.windowTitle()} ({context.serial_number()})")
-        context.add_widget(self._widget)
+        title = self._widget.windowTitle()
+        if self._context.serial_number() > 1 and not namespace:
+            self._widget.setWindowTitle(f"{title} ({self._context.serial_number()})")
+        self._context.add_widget(self._widget)
+
+    def restore_settings(self, plugin_settings, instance_settings):
+        namespace = instance_settings.value("robot_namespace")
+        self._build(str(namespace) if namespace else None)
+
+    def save_settings(self, plugin_settings, instance_settings):
+        if self._widget is not None and self._widget._explicit_ns:
+            instance_settings.set_value("robot_namespace", self._widget._ns.strip("/"))
 
     def shutdown_plugin(self):
-        self._widget.shutdown()
+        if self._widget is not None:
+            self._widget.shutdown()

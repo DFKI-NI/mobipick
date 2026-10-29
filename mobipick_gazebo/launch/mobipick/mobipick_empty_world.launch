@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
   <arg name="gui" default="true" />
+  <arg name="merged_gui" default="false" doc="robot 1's sim GUI panels are in the one window of the multi-robot launch" />
   <arg name="gui_delay" default="5" doc="Seconds to wait before starting gzclient. gzclient segfaults intermittently when it connects while gzserver is still spawning models; a short delay lets the spawn burst finish first. 0 disables the delay." />
   <arg name="world_name" default="worlds/empty.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable, but can also be an absolute path -->
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
@@ -70,6 +71,7 @@
       <arg name="tf_prefix" value="$(arg tf_prefix)" />
       <arg name="robot_name" value="$(arg robot_name)" />
       <arg name="gui" value="$(arg gui)" />
+      <arg name="merged_gui" value="$(arg merged_gui)" />
     </include>
   </group>
 

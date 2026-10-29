@@ -13,6 +13,7 @@
   <arg name="grasp_fix" default="false" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" />
   <arg name="gui" default="false" doc="false: headless simulated UR dashboard instead of the rqt_sim_gui window" />
+  <arg name="merged_gui" default="false" doc="this robot's panels are in the one window of the multi-robot launch: no headless dashboard either" />
 
   <group ns="$(arg namespace)">
     <!-- Add passive + mimic joints to joint_states topic -->
@@ -33,6 +34,7 @@
       <arg name="tf_prefix" value="$(arg namespace)" />
       <arg name="robot_name" value="$(arg namespace)" />
       <arg name="gui" value="$(arg gui)" />
+      <arg name="merged_gui" value="$(arg merged_gui)" />
     </include>
   </group>
 </launch>

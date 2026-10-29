@@ -26,6 +26,7 @@
     <arg name="num_robots"      value="$(arg num_robots)" />
     <arg name="start_paused"    value="$(arg start_paused)" />
     <arg name="gui"             value="$(arg gui)" />
+    <arg name="merged_gui"      value="$(arg gui)" />
     <arg name="arm_controller"  value="$(arg arm_controller)" />
     <arg name="grasp_fix"       value="$(arg grasp_fix)" />
     <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk_x$(arg num_robots).sdf"/>
@@ -35,11 +36,26 @@
     <arg name="physics_profile" value="$(arg physics_profile)" />
   </include>
 
+  <!-- ONE sim GUI window for all robots (with gui:=true): per robot a teleop, a joint trajectory controller and
+       a simulated e-stop panel, labelled by namespace (config/sim_gui_x<N>.perspective, made by
+       scripts/make_sim_gui_perspective.py); each panel serves <ns>/rqt_sim_gui/set_estop and set_protective_stop like
+       a per-robot window. With gui:=false each robot starts its own headless dashboard as before. -->
+  <node if="$(arg gui)" name="rqt_sim_gui_all" pkg="rqt_gui" type="rqt_gui"
+        args="--perspective-file $(find mobipick_gazebo)/config/sim_gui_x$(arg num_robots).perspective">
+    <param name="default_vx_max" value="1.0" />
+    <param name="default_vx_min" value="-1.0" />
+    <param name="default_vw_max" value="1.5" />
+    <param name="default_vw_min" value="-1.5" />
+    <rosparam param="estop_controllers">[mobile_base_controller, arm_controller, arm_velocity_controller, arm_position_controller]</rosparam>
+    <rosparam param="estop_hold_controllers">[arm_velocity_controller]</rosparam>
+  </node>
+
   <!-- robot 2 in the second copy, same pose plus the offset -->
   <include file="$(find mobipick_gazebo)/launch/mobipick/spawn_mobipick.launch">
     <arg name="namespace"      value="$(arg namespace)2" />
     <arg name="robot"          value="$(arg robot)" />
     <arg name="arm_controller" value="$(arg arm_controller)" />
+    <arg name="merged_gui"     value="$(arg gui)" />
     <arg name="grasp_fix"      value="$(arg grasp_fix)" />
     <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
     <arg name="robot_x"        value="$(eval 10.30 + float(arg('copy_offset_x')))" />
@@ -52,6 +68,7 @@
     <arg name="namespace"      value="$(arg namespace)3" />
     <arg name="robot"          value="$(arg robot)" />
     <arg name="arm_controller" value="$(arg arm_controller)" />
+    <arg name="merged_gui"     value="$(arg gui)" />
     <arg name="grasp_fix"      value="$(arg grasp_fix)" />
     <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
     <arg name="robot_x"        value="$(eval 10.30 + 2 * float(arg('copy_offset_x')))" />
