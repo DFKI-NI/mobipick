@@ -5,9 +5,11 @@ import re
 
 import rosgraph
 import rospy
-from python_qt_binding import QtCore, QtWidgets
+from python_qt_binding import QtCore, QtGui, QtWidgets
 from rqt_gui_py.plugin import Plugin
 from std_msgs.msg import String
+
+from mobipick_gazebo.robot_colours import colour_icon, display_name
 
 SELECTED_ROBOT_TOPIC = "/selected_robot"
 DEFAULT_ROBOT = "mobipick"
@@ -67,8 +69,10 @@ class RobotSelectorPlugin(Plugin):
         row = QtWidgets.QHBoxLayout(self._widget)
         row.addWidget(QtWidgets.QLabel("Robot:"))
         self._combo = QtWidgets.QComboBox()
+        self._combo.setSizeAdjustPolicy(QtWidgets.QComboBox.AdjustToContents)
+        self._combo.setMinimumContentsLength(16)  # 'orange Mobipick' in full
         self._combo.setToolTip("the robot every panel of this window and the RQT tables demo act on")
-        self._combo.activated.connect(lambda _: self.select(self._combo.currentText()))
+        self._combo.activated.connect(lambda _: self.select(self._combo.currentData()))
         row.addWidget(self._combo, 1)
         self._publisher = rospy.Publisher(SELECTED_ROBOT_TOPIC, String, queue_size=1, latch=True)
         self._timer = QtCore.QTimer(self._widget)
@@ -86,15 +90,16 @@ class RobotSelectorPlugin(Plugin):
             rospy.logwarn_throttle(30, f"could not list the robots: {exc}")
             topics = []
         robots = robots_from_topics(topics, self._robot)
-        if robots != [self._combo.itemText(i) for i in range(self._combo.count())]:
+        if robots != [self._combo.itemData(i) for i in range(self._combo.count())]:
             self._combo.clear()
-            self._combo.addItems(robots)
-        self._combo.setCurrentText(self._robot)
+            for namespace in robots:  # the colour name people see; the namespace stays the item data
+                self._combo.addItem(colour_icon(namespace) or QtGui.QIcon(), display_name(namespace), namespace)
+        self._combo.setCurrentIndex(max(self._combo.findData(self._robot), 0))
         apply_to_panels(self._robot, QtWidgets.QApplication.allWidgets())
 
     def select(self, namespace):
         self._robot = normalize(namespace)
-        self._combo.setCurrentText(self._robot)
+        self._combo.setCurrentIndex(max(self._combo.findData(self._robot), 0))
         self._publisher.publish(String(data=self._robot))
         apply_to_panels(self._robot, QtWidgets.QApplication.allWidgets())
 
