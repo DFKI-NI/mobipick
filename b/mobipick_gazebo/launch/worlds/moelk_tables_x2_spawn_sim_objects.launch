@@ -46,7 +46,7 @@
   <!-- ONE sim GUI window for all robots (with gui:=true) with ONE robot selector: a selector panel, a teleop, a
        joint trajectory controller and a simulated e-stop panel (config/sim_gui_x<N>.perspective, made by
        nodes/make_sim_gui_perspective.py). The chosen robot is published latched on /selected_robot and every panel
-       (and the RQT tables demo) acts on it. The e-stop panel serves <ns>/rqt_sim_gui/set_estop and
+       of this window acts on it. The RQT tables demo does not follow it: start it per robot with its namespace argument. The e-stop panel serves <ns>/rqt_sim_gui/set_estop and
        set_protective_stop of every robot, like a per-robot window. With gui:=false each robot starts its own headless
        dashboard as before. -->
   <node if="$(arg gui)" name="rqt_sim_gui_all" pkg="rqt_gui" type="rqt_gui"
