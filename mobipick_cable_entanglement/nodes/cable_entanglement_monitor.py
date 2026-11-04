@@ -284,8 +284,13 @@ class CableEntanglementMonitor:
         self.show_capsules = bool(rospy.get_param("~show_capsules", True))
         rospy.Service("~reset", Trigger, self._srv_reset)
         rospy.Service("~mark_event", Trigger, self._srv_mark)
-        rospy.Service("~untangle_plan", Trigger, self._srv_untangle_plan)
-        rospy.Service("~untangle", Trigger, self._srv_untangle)
+        if self.mode == "sim":
+            # the untangle moves the arm and exists in the simulation only: on the real robot neither service is
+            # offered, so nothing there spends seconds planning an untangle (untangle_with_chain is ignored)
+            rospy.Service("~untangle_plan", Trigger, self._srv_untangle_plan)
+            rospy.Service("~untangle", Trigger, self._srv_untangle)
+        else:
+            rospy.loginfo("cable monitor: real robot, no untangle services (simulation only)")
         # (ROS time, chain snapshot) of the last tick, for the MTC guard's replay of a planned path from the live chain
         self._chain_state = None
         rospy.Service("~chain_state", Trigger, self._srv_chain_state)
@@ -513,7 +518,7 @@ class CableEntanglementMonitor:
         parameter, else cable_model/untangle_with_chain, read on every call): planned from the carried carrier link
         chain on a planner copy of the model (same robot description and configuration as the live one), each joint at
         most ~untangle_chain_max_turn_deg (90) each way; off, or without a chain: the geometric plan as before."""
-        if bool(self._cable_param("untangle_with_chain", False)):
+        if self.mode == "sim" and bool(self._cable_param("untangle_with_chain", False)):
             with self._model_lock:
                 snap = self.model.chain_snapshot()
                 start = self._last_state.max_stretch if self._last_state is not None else None

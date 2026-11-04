@@ -61,6 +61,15 @@ class Plan(unittest.TestCase):
         self.assertFalse(chain)
         self.assertNotIn("carrier link chain", text)
 
+    def test_real_robot_ignores_the_flag(self):
+        m = stub(True)
+        m.mode = "real"
+        m.model.untangle_plan.return_value = ([], state(-0.107), True)
+        steps, _, ok, text, chain = m._untangle_plan(Q)
+        m.model.untangle_plan.assert_called_once_with(Q)
+        m._planner.untangle_plan.assert_not_called()
+        self.assertFalse(chain)
+
     def test_on_plans_on_the_copy_from_the_live_chain_and_names_the_model(self):
         m = stub(True)
         m._planner.untangle_plan.return_value = ([("wrist_3", math.radians(232.6))], state(-0.063), True)

@@ -93,7 +93,7 @@ Outputs (namespace `/mobipick/cable_entanglement_monitor/`):
   shows no cable, most often because gazebo_marker_visuals was never built (`catkin build gazebo_marker_visuals`)
 - services `~reset` (the cable was untangled by hand; also automatic when a protective stop is released) and
   `~mark_event` (real robot: "it just tangled", writes an event file)
-- `~untangle_plan` (any mode, no motion): which wrist joints would move where to give the cable slack again
+- `~untangle_plan` (**sim only**, no motion): which wrist joints would move where to give the cable slack again
 - `~chain_state` (`std_srvs/Trigger`, any mode): the model's chain after the last tick as JSON in `message`
   (`CableModel.chain_state()` plus `stamp`, its ROS time, and `reset_at_trajectory_start`): the MTC guard's chain
   replay of a planned path goes on from it instead of a fresh chain (grasplan `~mtc_cable_replay_live_state`), so it
@@ -111,9 +111,8 @@ Outputs (namespace `/mobipick/cable_entanglement_monitor/`):
   chain, plus the geometry while `geometric_check` is on); none: "no slack within 90 deg ...: untangle the cable by hand" and no motion. After such
   an untangle the chain carried along the motion is kept, also at the release that follows (no fresh chain at the
   stop pose, which stopped again on the way back), and during the protective stop a rest does not restart the chain
-  (`release_after_rest_s`). On the real robot (a safe flag, so the GUI turns it on there too) it moves nothing: the
-  untangle runs in the simulation only, and `~untangle_plan` only answers, after 5 to 20 s of CPU for the chain
-  search
+  (`release_after_rest_s`). The untangle runs in the simulation only: on the real robot (mode `real`) the monitor
+  offers neither `~untangle_plan` nor `~untangle` and ignores this flag, so it spends no CPU on an untangle there
 
 ## Real robot logs
 
