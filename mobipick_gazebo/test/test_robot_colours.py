@@ -26,6 +26,12 @@ def test_past_the_last_colour_the_namespace_stays():
     assert rc.colour_icon('mobipick5') is None
 
 
+def test_a_single_robot_is_shown_without_a_colour():
+    assert rc.robot_label('mobipick', 1) == 'mobipick'
+    assert rc.robot_label('/mobipick/', 1) == 'mobipick'
+    assert [rc.robot_label(ns, 2) for ns in ('mobipick', 'mobipick2')] == ['blue Mobipick', 'orange Mobipick']
+
+
 def test_video_title_part():
     assert rc.title_slug('mobipick') == 'blue-mobipick'
     assert rc.title_slug('mobipick3') == 'green-mobipick'

@@ -70,6 +70,12 @@ def display_name(namespace: str) -> str:
     return f'{colour.name} {base[:1].upper()}{base[1:]}' if colour and base else ns
 
 
+def robot_label(namespace: str, robot_count: int) -> str:
+    """What a GUI calls one of robot_count running robots: its colour name ('blue Mobipick') when there are two or
+    more to tell apart; a single robot is shown by its namespace, with no colour anywhere."""
+    return display_name(namespace) if robot_count > 1 else namespace.strip('/')
+
+
 def title_slug(namespace: str) -> str:
     """Video title part: 'blue-mobipick' (a-z, 0-9 and '-' only)."""
     return re.sub(r'[^a-z0-9]+', '-', display_name(namespace).lower()).strip('-')

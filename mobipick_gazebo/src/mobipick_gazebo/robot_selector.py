@@ -9,7 +9,7 @@ from python_qt_binding import QtCore, QtGui, QtWidgets
 from rqt_gui_py.plugin import Plugin
 from std_msgs.msg import String
 
-from mobipick_gazebo.robot_colours import colour_icon, display_name
+from mobipick_gazebo.robot_colours import colour_icon, robot_label
 
 SELECTED_ROBOT_TOPIC = "/selected_robot"
 DEFAULT_ROBOT = "mobipick"
@@ -146,7 +146,8 @@ class RobotSelectorPlugin(Plugin):
         if robots != [self._combo.itemData(i) for i in range(self._combo.count())]:
             self._combo.clear()
             for namespace in robots:  # the colour name people see; the namespace stays the item data
-                self._combo.addItem(colour_icon(namespace) or QtGui.QIcon(), display_name(namespace), namespace)
+                icon = colour_icon(namespace) if len(robots) > 1 else None  # one robot: no colour dot
+                self._combo.addItem(icon or QtGui.QIcon(), robot_label(namespace, len(robots)), namespace)
         self._combo.setCurrentIndex(max(self._combo.findData(self._robot), 0))
         apply_to_panels(self._robot, QtWidgets.QApplication.allWidgets())
 

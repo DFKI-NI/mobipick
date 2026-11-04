@@ -17,7 +17,7 @@ from control_msgs.msg import (
     FollowJointTrajectoryGoal,
 )
 from controller_manager_msgs.srv import ListControllers, SwitchController, SwitchControllerRequest
-from mobipick_gazebo.robot_colours import display_name
+from mobipick_gazebo.robot_colours import robot_label
 from python_qt_binding import QtCore, QtGui, QtWidgets
 from rqt_gui_py.plugin import Plugin
 from sensor_msgs.msg import JointState
@@ -373,7 +373,7 @@ class SimulatedUrDashboardStack(QtWidgets.QWidget):
         page = self._pages.get(namespace.strip("/"))
         if page is not None:
             self._stack.setCurrentWidget(page)
-            self.setWindowTitle(f"Simulated E-Stop ({display_name(namespace)})")
+            self.setWindowTitle(f"Simulated E-Stop ({robot_label(namespace, len(self._pages))})")
 
     def current_robot(self) -> str:
         current = self._stack.currentWidget()
