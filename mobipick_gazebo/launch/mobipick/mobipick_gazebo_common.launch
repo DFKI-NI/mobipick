@@ -91,6 +91,10 @@
   <!-- Robot state publisher -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen" />
 
+  <!-- the MiR's robot_state as the real robot's mir_bridge forwards it (Ready; its set_docked service simulates a
+       charging robot), for software that refuses base motion while the robot charges -->
+  <node name="fake_mir_robot_state" pkg="mir_gazebo" type="fake_mir_robot_state.py" output="screen" />
+
   <!-- Simulation GUI: teleop (rqt_robot_steering), rqt_joint_trajectory_controller and the simulated
        e-stop (UR dashboard) in a single rqt window. The plugins read their defaults from the private
        params of the rqt_gui node. Not started with gui:=false (headless sim). -->
