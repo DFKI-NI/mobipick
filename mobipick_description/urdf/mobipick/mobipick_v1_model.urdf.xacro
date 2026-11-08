@@ -190,4 +190,16 @@
   <!-- ################ GAZEBO ################ -->
   <xacro:include filename="$(find mobipick_description)/urdf/mobipick/mobipick.gazebo.xacro" />
   <xacro:mobipick_gazebo prefix="${prefix}" robot_namespace="" />
+
+  <!-- Simulation only: the base brakes while it gets no drive command and stands still, as the real base does when
+       idle (Gazebo's soft wheel contacts let a parked base creep with every arm motion). The plugin holds the model's
+       root link and reads the drive commands in the namespace of the node that spawns the robot. -->
+  <xacro:arg name="parking_brake" default="false" />
+  <xacro:if value="$(arg parking_brake)">
+    <gazebo>
+      <plugin name="parking_brake" filename="libgazebo_parking_brake.so">
+        <command_topic>mobile_base_controller/cmd_vel</command_topic>
+      </plugin>
+    </gazebo>
+  </xacro:if>
 </robot>

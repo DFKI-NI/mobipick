@@ -10,6 +10,7 @@
   <arg name="start_paused" default="true" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
+  <arg name="parking_brake" default="true" doc="Hold the parked base with the gazebo_parking_brake plugin while it gets no drive command and stands still, as the real base brakes when idle (without it the base creeps a few mm with every arm motion); false only to debug" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" doc="ur5 joint limits yaml (joint_limits_no_cable_guide.yaml drops the cable guide limits of wrist_1/wrist_3, sim only)" />
   <arg name="robot_colours" default="false" doc="Tell the robots apart by colour: robot k is painted in the k-th colour of mobipick_description/config/robot_colours.yaml (1 blue, 2 orange, 3 green, 4 purple) and a broad stripe of that colour runs high along the walls of its copy of the world (visual only, above what the table cameras and base lasers see). false: today's look" />
 
@@ -24,6 +25,7 @@
     <arg name="gui"             value="$(arg gui)" />
     <arg name="arm_controller"  value="$(arg arm_controller)" />
     <arg name="grasp_fix"       value="$(arg grasp_fix)" />
+    <arg name="parking_brake"   value="$(arg parking_brake)" />
     <arg name="robot_colour_index" value="$(eval 1 if arg('robot_colours') else 0)" />
     <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk.sdf"/>
     <arg name="robot_x"         value="10.30" />

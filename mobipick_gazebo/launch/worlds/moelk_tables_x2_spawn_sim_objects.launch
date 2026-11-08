@@ -12,6 +12,7 @@
   <arg name="start_paused" default="true" />
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
+  <arg name="parking_brake" default="true" doc="Hold the parked base with the gazebo_parking_brake plugin while it gets no drive command and stands still, as the real base brakes when idle (without it the base creeps a few mm with every arm motion); false only to debug" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" doc="ur5 joint limits yaml (joint_limits_no_cable_guide.yaml drops the cable guide limits of wrist_1/wrist_3, sim only)" />
   <!-- one scene copy takes scene_size_x along x (the bounding box of the moelk building, with the tables and objects
        inside: pbr_gazebo/Media/models/pbr_robot_lab.stl spans x 8.95 .. 24.85); the next copy starts copy_gap after it.
@@ -35,6 +36,7 @@
     <arg name="merged_gui"      value="$(arg gui)" />
     <arg name="arm_controller"  value="$(arg arm_controller)" />
     <arg name="grasp_fix"       value="$(arg grasp_fix)" />
+    <arg name="parking_brake"   value="$(arg parking_brake)" />
     <arg name="robot_colour_index" value="$(eval 1 if arg('robot_colours') else 0)" />
     <arg name="world_name"      value="$(find pbr_gazebo)/worlds/pbr_moelk.sdf"/>
     <arg name="robot_x"         value="10.30" />
@@ -67,6 +69,7 @@
     <arg name="arm_controller" value="$(arg arm_controller)" />
     <arg name="merged_gui"     value="$(arg gui)" />
     <arg name="grasp_fix"      value="$(arg grasp_fix)" />
+    <arg name="parking_brake"  value="$(arg parking_brake)" />
     <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
     <arg name="robot_x"        value="$(eval 10.30 + float(arg('copy_offset_x')))" />
     <arg name="robot_y"        value="2.40" />
@@ -81,6 +84,7 @@
     <arg name="arm_controller" value="$(arg arm_controller)" />
     <arg name="merged_gui"     value="$(arg gui)" />
     <arg name="grasp_fix"      value="$(arg grasp_fix)" />
+    <arg name="parking_brake"  value="$(arg parking_brake)" />
     <arg name="joint_limits_parameters_file" value="$(arg joint_limits_parameters_file)" />
     <arg name="robot_x"        value="$(eval 10.30 + 2 * float(arg('copy_offset_x')))" />
     <arg name="robot_y"        value="2.40" />

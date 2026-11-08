@@ -2,6 +2,7 @@
 <launch>
   <arg name="arm_controller" default="trajectory" doc="Which arm controller to start. Options are trajectory, velocity, position" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
+  <arg name="parking_brake" default="true" doc="Hold the parked base with the gazebo_parking_brake plugin while it gets no drive command and stands still, as the real base brakes when idle (without it the base creeps a few mm with every arm motion); false only to debug" />
   <arg name="joint_limits_parameters_file" default="$(find mobipick_description)/config/joint_limits.yaml" doc="ur5 joint limits yaml (joint_limits_no_cable_guide.yaml drops the cable guide limits of wrist_1/wrist_3, sim only)" />
   <arg name="robot_colour_index" default="0" doc="Multi-robot sim: paint the side covers of the body in the colour of robot k (1-based, mobipick_description/config/robot_colours.yaml: 1 blue, 2 orange, 3 green, 4 purple); 0: unpainted (default)" />
 
@@ -31,6 +32,7 @@
     <arg name="main_camera" value="$(arg main_camera)" />
     <arg name="tf_prefix" value="$(arg tf_prefix)" />
     <arg name="grasp_fix" value="$(arg grasp_fix)" />
+    <arg name="parking_brake" value="$(arg parking_brake)" />
     <arg name="robot_colour_index" value="$(arg robot_colour_index)" />
     <arg unless="$(eval arm_controller=='position')" name="transmission_hw_interface" value="hardware_interface/VelocityJointInterface" />
     <arg if="$(eval arm_controller=='position')"     name="transmission_hw_interface" value="hardware_interface/PositionJointInterface" />
