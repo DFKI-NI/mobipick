@@ -57,7 +57,7 @@ spans:
     # starts),
     # not at the tip of the URDF guide link, which is longer than the supported section for MoveIt clearance. Used with
     # wrist_anchor 'support' (below). Its free length is an effective string length refit on the real evidence of
-    # 2026-09-27/28 (temp_code/0211_anchor_refit_scan.py, claude-7e2a's 0211_anchor_refit.py; the tape-measure 0.48 m
+    # 2026-09-27/28 (a scan over the logged real stops; the tape-measure 0.48 m
     # would leave every real stop slack): at the MTC guard margin -0.115 it catches the five known taut poses (E1, E2,
     # E4 at the stop, E3 and T1 one second before; carrier tip 0.43: E2 only), E4 with 3 points of margin, for about
     # 1 % (claude-7e2a's everyday ticks; 5 % of mine) instead of 0.4 % (3.5 %) of everyday poses above the margin, and

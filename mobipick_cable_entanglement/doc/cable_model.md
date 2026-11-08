@@ -131,9 +131,9 @@ with 0.52 m of cable carrier; elbow 0.472 m, shoulder
 **Gap fill**: between `wrist_3_cable_clamp_2` and the camera mount plate there is a 27 mm slot.
 The real cable carrier (34.5 mm) cannot enter it, but the solver pushed chain nodes in from both sides and friction held
 them there: on the real days of 2026-09-27/28 the chain stayed wedged and taut for hours, also at home
-(`temp_code/0241_stuck_chain_dump.py`; friction 0 freed it). The box `wrist_3_cable_clamp_gap_fill` fills that
+(a dump of the stuck chain; friction 0 freed it). The box `wrist_3_cable_clamp_gap_fill` fills that
 slot. The rule: an open slot on the cable carrier's side that is narrower than the cable carrier is filled. Filling all eleven such
-slots of the shapes (`temp_code/0241_shape_slots.py`) made new traps between the boxes, so only this one is filled.
+slots of the shapes made new traps between the boxes, so only this one is filled.
 
 **Start-pose cache**: a reset at a start pose seen before (every joint rounded to that step) reuses the chain settled
 there, and glides it over `reset_cache_glide_steps` steps from the cached pose to the exact one; at most
@@ -237,7 +237,7 @@ clearance with it and it stays as is), so the wrist span's deciding start at its
 tube as clamped. `support_start` (z −0.095, the edge of the last forearm bracket, where the rope starts) with
 `support_free_length` decides instead when the config is built with `wrist_anchor: support`; `auto` (the config's
 setting) uses it in the sim and keeps the carrier tip (old name: tube tip) on the real robot until tested there. Refit on the real evidence of
-2026-09-27/28 (`temp_code/0211_anchor_refit_scan.py`, 8649 normal ticks = every 50th, > 5 s before a stop):
+2026-09-27/28 (a scan over the real logs, 8649 normal ticks = every 50th, > 5 s before a stop):
 
 | wrist start, $L_{free}$ | E1 | E2 | E3 | E4 | E5? | T1 | normal ticks ≥ −0.115 | normal max |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -283,8 +283,8 @@ and the thresholds are unchanged.
   hand-measured (the arm capsules were refit to the meshes on 2026-09-27).
 - The disc size launch args (`disc_height`, `disc_gap`, `disc_diameter`) exist on the monitor launch only; they
   are not passed through `demo_sim.launch`, `bringup.launch` or the GUI profile.
-- **The chain on the real stops of 2026-09-27/28** (; disc chain alone, `geometric_check` false, replay
-  of the real logs; scores in `big_outputs/0241_disc_isolation/`):
+- **The chain on the real stops of 2026-09-27/28** (disc chain alone, `geometric_check` false, replay
+  of the real logs):
   - MTC cable guard (a freshly settled chain per planned path): rejects 4 of the 5 real stop paths (E3 missed)
     and 44 of 618 paths the real robot moved without a stop (7.1 %); the gap fill does not change this.
   - Monitor (the chain carried through the whole day): false alarms on 31.7 % of the ticks before the gap fill,

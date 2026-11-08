@@ -17,7 +17,7 @@ no built library is found). (The radius rope it drew until 2026-09-30 was remove
 Two-panel video (real | discs) of Oscar's phone video of 2026-09-27 (sync: video t = bag t + 8.0 s; the phone video
 is portrait, stored rotated, ffmpeg turns it upright by itself). Heavy job: nice, OMP_NUM_THREADS=2.
 
-  D=big_outputs/0142_video_sync
+  D=<folder with the bag's arm path CSV and the phone video>
   nice env OMP_NUM_THREADS=2 render_cable_video.py --urdf robot.urdf --csv $D/video_sync_*.bag.arm_path.csv \
     --views "0,-80" --figsize 5.4,9.6 --zoom 1.5 --out model_disc_link.mp4
   ffmpeg -ss 8 -t 113 -i $D/IMG_4114.MOV -i model_disc_link.mp4 -filter_complex \
@@ -62,7 +62,7 @@ def samples_from_event(path):
 
 
 def samples_from_csv(path):
-    """(t, q) list from a CSV with columns t, the six UR5 joints in degrees[, ...] (temp_code/0137_teach_analysis)"""
+    """(t, q) list from a CSV with columns t, the six UR5 joints in degrees[, ...]"""
     import csv
 
     rows = list(csv.reader(open(path)))[1:]
