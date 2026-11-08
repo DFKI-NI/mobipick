@@ -60,7 +60,7 @@ spans:
     # 2026-09-27/28 (a scan over the logged real stops; the tape-measure 0.48 m
     # would leave every real stop slack): at the MTC guard margin -0.115 it catches the five known taut poses (E1, E2,
     # E4 at the stop, E3 and T1 one second before; carrier tip 0.43: E2 only), E4 with 3 points of margin, for about
-    # 1 % (claude-7e2a's everyday ticks; 5 % of mine) instead of 0.4 % (3.5 %) of everyday poses above the margin, and
+    # 1 % (one everyday tick set; 5 % on a second one) instead of 0.4 % (3.5 %) of everyday poses above the margin, and
     # no new stops at the named poses (they get slacker). E5? and the stop instants of E3/T1 stay slack.
     support_start: {link: cable_guide_forearm_tube_link, xyz: [0, 0, -0.095], direction: [0, 0, -1]}
     support_free_length: 0.45

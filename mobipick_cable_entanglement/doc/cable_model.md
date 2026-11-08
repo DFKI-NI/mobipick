@@ -246,17 +246,17 @@ setting) uses it in the sim and keeps the carrier tip (old name: tube tip) on th
 | support, 0.465 | −0.099 | −0.068 | −0.324 | −0.112 | −0.326 | −0.238 | 4.6 % | −0.069 |
 
 One second before the stop E3 and T1 are at −0.065 / −0.067 with 0.45 (tube tip −0.131 / −0.136); at the stop instant
-their span is chord-limited, and the guard, which checks whole paths, rejects the way in. Chosen **0.45** (claude-7e2a's
+their span is chord-limited, and the guard, which checks whole paths, rejects the way in. Chosen **0.45** (a
 refit): the guard margin −0.115 catches all five known taut poses (tube tip: E2 only), E4 with 3 points of margin
-(0.465: 0.3 points), for about 1 % instead of 0.4 % of everyday poses above the margin on claude-7e2a's tick set (5.2 % /
-3.5 % on mine, which counts long stand-stills many times); the named poses get slacker (observe100cm_right −0.18 →
+(0.465: 0.3 points), for about 1 % instead of 0.4 % of everyday poses above the margin on one everyday tick set (5.2 % /
+3.5 % on a second one, which counts long stand-stills many times); the named poses get slacker (observe100cm_right −0.18 →
 −0.30, anygrasp −0.19 → −0.31). No normal tick reaches the stop threshold. Widening the wrist_1/wrist_2 extent to −0.20
 only changes E3's stop instant (still slack here) and costs 1.1 points: not taken. E5? is not explained by the length,
 and the thresholds are unchanged.
 
 ## 5. Limits of the model (what the real-robot logs must settle)
 
-- **Findings of (claude-10a4, 2026-09-30), they change how the rope results are read:**
+- **Findings of 2026-09-30, they change how the rope results are read:**
   1. For point masses on fixed segments, today's bend constraint (distance between every second node) already is a
      ball-joint stop; the disc idea changes numbers, not the principle. New are the fine pitch, a harder stop
      (3.5 cm), the tube not passing through itself, friction and the twist.

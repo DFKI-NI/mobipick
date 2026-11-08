@@ -23,7 +23,7 @@ from mobipick_cable_entanglement.cable_model import CableModel, config_from_dict
 J = ["shoulder_pan", "shoulder_lift", "elbow", "wrist_1", "wrist_2", "wrist_3"]
 # joint poses (deg) at the real cable stops (event files, UTC): 2026-09-27 E1 17:58:26 and E2 18:32:29 (wrist_2), E4
 # 20:31:06 (wrist_3, inside a guarded MTC insert); one second before the stop for E3 19:44:17 and 2026-09-28 T1 13:36:50
-# (at the stop instant their span is chord-limited, the guard checks the whole path and catches the way in, claude-7e2a)
+# (at the stop instant their span is chord-limited, the guard checks the whole path and catches the way in)
 STOPS = {"E1": (-54.2, -48.5, 130.1, -144.0, 103.1, 246.9), "E2": (-64.1, -70.7, 137.2, -128.3, 105.0, 241.2),
          "E4": (-75.4, -36.1, 43.9, -96.8, -118.8, 113.8), "E3 -1 s": (-52.8, -50.0, 115.0, -54.4, 41.1, 269.9),
          "T1 -1 s": (-86.5, -82.6, 110.9, -76.9, 30.4, 217.6)}
