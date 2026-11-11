@@ -70,7 +70,7 @@ class SimulatedUrDashboard(QtWidgets.QWidget):
         # (mobipick_cable_entanglement) moves the wrist joints one at a time until the arm cable has slack
         # again; the protective stop stays active, the person watches and releases it
         self._untangle_service = rospy.get_param(
-            "~untangle_service", "/mobipick/cable_entanglement_monitor/untangle")
+            "~untangle_service", f"{self._ns}cable_entanglement_monitor/untangle")   # this robot's monitor
         self._untangle_running = False
         # like the real UR, releasing a protective stop can let the interrupted arm trajectory continue: the rest of
         # the trajectory that ran when the stop hit is resumed on release, unless the arm was moved meanwhile (e.g.
