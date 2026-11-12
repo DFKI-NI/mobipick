@@ -331,8 +331,9 @@ def _new_anchor_name(choice):
 
 
 def resolve_wrist_anchor(choice: str) -> str:
-    """'carrier_tip' or 'support' for a wrist_anchor choice. 'auto': the global ROS parameter /cable_model/wrist_anchor if it names one, else 'support'
-    with /use_sim_time and 'carrier_tip' without; 'carrier_tip' outside a ROS node (offline scripts and tests)."""
+    """'carrier_tip' or 'support' for a wrist_anchor choice. 'auto': the ROS parameter cable_model/wrist_anchor (relative to
+    the node, then the global /cable_model/wrist_anchor) if it names one, else 'carrier_tip' (the clock plays no part);
+    'carrier_tip' outside a ROS node (offline scripts and tests)."""
     choice = _new_anchor_name(choice)
     if choice not in WRIST_ANCHORS:
         raise ValueError(f"wrist_anchor {choice!r} is not one of {WRIST_ANCHORS}")
@@ -347,7 +348,7 @@ def resolve_wrist_anchor(choice: str) -> str:
         override = _new_anchor_name(override)
         if override in ("carrier_tip", "support"):
             return override
-        return "support" if rospy.get_param("/use_sim_time", False) else "carrier_tip"
+        return "carrier_tip"
     except Exception:  # noqa: BLE001 - no ROS: the calibrated default
         return "carrier_tip"
 

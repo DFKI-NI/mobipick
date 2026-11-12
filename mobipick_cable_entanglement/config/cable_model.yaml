@@ -16,9 +16,8 @@ reference_pose_deg: {shoulder_pan: 0.0, shoulder_lift: -149.0, elbow: 139.2, wri
 extent_margin: 0.02
 
 # which deciding start the spans with a support_start use: carrier_tip (the calibrated start of the day before),
-# support, or auto = support in the sim (/use_sim_time) and carrier_tip on the real robot until tested there; the global
-# ROS parameter /cable_model/wrist_anchor (carrier_tip | support) overrides auto. Offline scripts and tests:
-# carrier_tip.
+# support, or auto = carrier_tip unless the ROS parameter cable_model/wrist_anchor (relative to the node, then the
+# global /cable_model/wrist_anchor; carrier_tip | support) names one. Offline scripts and tests: carrier_tip.
 wrist_anchor: auto
 
 spans:

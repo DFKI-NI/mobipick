@@ -236,7 +236,8 @@ The 30 cm forearm guide tube of the URDF is longer than the supported section of
 clearance with it and it stays as is), so the wrist span's deciding start at its tip (z −0.15) counted 5.5 cm of free
 tube as clamped. `support_start` (z −0.095, the edge of the last forearm bracket, where the rope starts) with
 `support_free_length` decides instead when the config is built with `wrist_anchor: support`; `auto` (the config's
-setting) uses it in the sim and keeps the carrier tip (old name: tube tip) on the real robot until tested there. Refit on the real evidence of
+setting) keeps the carrier tip (old name: tube tip) unless the ROS parameter `/cable_model/wrist_anchor` is set to `support`
+(a launch argument of the demo launch files does that). Refit on the real evidence of
 2026-09-27/28 (a scan over the real logs, 8649 normal ticks = every 50th, > 5 s before a stop):
 
 | wrist start, $L_{free}$ | E1 | E2 | E3 | E4 | E5? | T1 | normal ticks ≥ −0.115 | normal max |

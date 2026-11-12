@@ -72,11 +72,12 @@ class TestAnchorChoice(unittest.TestCase):
         fake = types.SimpleNamespace(core=types.SimpleNamespace(is_initialized=lambda: True),
                                      get_param=lambda name, default=None: params.get(name, default))
         with mock.patch.dict(sys.modules, {"rospy": fake}):
-            params["/use_sim_time"] = True
-            self.assertEqual(resolve_wrist_anchor("auto"), "support")
-            params["/use_sim_time"] = False
-            self.assertEqual(resolve_wrist_anchor("auto"), "carrier_tip")      # the real robot until tested there
-            params.update({"/use_sim_time": True, "/cable_model/wrist_anchor": "carrier_tip"})
+            for clock in (True, False):
+                params["/use_sim_time"] = clock
+                self.assertEqual(resolve_wrist_anchor("auto"), "carrier_tip")  # the clock plays no part
+            params.update({"/use_sim_time": True, "/cable_model/wrist_anchor": "support"})
+            self.assertEqual(resolve_wrist_anchor("auto"), "support")          # the global parameter
+            params.update({"/use_sim_time": False, "/cable_model/wrist_anchor": "carrier_tip"})
             self.assertEqual(resolve_wrist_anchor("auto"), "carrier_tip")      # the global override
             self.assertEqual(resolve_wrist_anchor("support"), "support")    # an explicit choice is not overridden
 
