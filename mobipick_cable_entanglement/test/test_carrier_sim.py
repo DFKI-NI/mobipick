@@ -173,6 +173,14 @@ class Wiring(unittest.TestCase):
                                      chain={"bend_radius": 0.1})).find("model/plugin")
         self.assertEqual(float(plugin.find("bend_radius").text), 0.1)
 
+    def test_chain_drawn_see_through(self):
+        # the chain is drawn over the cable monitor's drawing of the same span: see-through by default, overridable
+        plugin = parse(cs.plugin_sdf(self.kin, CONFIG, P, "mobipick", "mobipick")).find("model/plugin")
+        self.assertEqual(float(plugin.find("transparency").text), 0.4)
+        plugin = parse(cs.plugin_sdf(self.kin, CONFIG, P, "mobipick", "mobipick",
+                                     chain={"transparency": 0.0})).find("model/plugin")
+        self.assertEqual(float(plugin.find("transparency").text), 0.0)
+
 
 if __name__ == "__main__":
     unittest.main()

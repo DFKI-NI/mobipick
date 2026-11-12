@@ -12,6 +12,8 @@ it as a static holder model through /gazebo/spawn_sdf_model. Then it watches <ns
 Chain values (~bending_stiffness, ~damping, ~inertia_scale, ~mass_per_metre, ~links, ~max_link_length, ~friction)
 default to carrier_sim.CHAIN_DEFAULTS, PLACEHOLDERs until someone measures the real carrier; ~bend_radius 0 = the cable
 model's (from its link_chain disc sizes, 3.5 cm), so both describe the same carrier.
+~transparency (default 0.4) draws the chain see-through, so it can be told apart from the cable monitor's drawing of
+the same span when both run.
 """
 import json
 import os

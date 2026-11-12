@@ -32,6 +32,7 @@ CHAIN_DEFAULTS = {
     "friction": 0.3,             # the cable model's friction guess (cable_carrier.link_chain.friction)
     "collide_bitmask": 0x8000,
     "rate": 10.0,
+    "transparency": 0.4,         # see-through, so the chain is told apart from the monitor's drawing of the span
 }
 
 
@@ -202,7 +203,7 @@ def plugin_sdf(kin: UrdfKinematics, config: dict, prefix: str, host_model: str, 
             tag("bend_radius", f"{float(c.get('bend_radius') or bend_radius_from_config(config)):.6f}"),
             tag("bending_stiffness", c["bending_stiffness"]), tag("damping", c["damping"]),
             tag("friction", c["friction"]), tag("collide_bitmask", int(c["collide_bitmask"])),
-            tag("exclusive", "true"), tag("rate", c["rate"]),
+            tag("exclusive", "true"), tag("rate", c["rate"]), tag("transparency", c["transparency"]),
             tag("reference_link", reference), tag("reference_offset", pose_text(T_ref))]
     if stop_service:
         body += [tag("stop_service", stop_service), tag("stop_strain", stop_strain), tag("stop_force", stop_force),
