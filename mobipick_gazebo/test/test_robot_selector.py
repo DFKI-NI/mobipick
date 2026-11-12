@@ -58,6 +58,11 @@ class SelectionTest(unittest.TestCase):
         self.assertEqual(self.sel.robots_from_topics(topics), ["mobipick", "mobipick2", "mobipick10"])
         self.assertEqual(self.sel.robots_from_topics([], "/mobipick2/"), ["mobipick2"])
 
+    def test_a_robot_chosen_in_another_gui_is_followed_once(self):
+        self.assertEqual(self.sel.to_follow("mobipick", "/mobipick2"), "mobipick2")
+        self.assertIsNone(self.sel.to_follow("mobipick2", "mobipick2/"))  # its own message comes back: no echo loop
+        self.assertEqual(self.sel.to_follow("mobipick2", ""), "mobipick")
+
     def test_the_steering_and_controller_panels_follow_the_selection(self):
         qt = self.qt
         topic = qt.QLineEdit()

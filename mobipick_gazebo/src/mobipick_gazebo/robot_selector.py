@@ -1,6 +1,9 @@
-# The single robot selector of the sim GUI: one combo box in the one rqt window; the chosen robot is published
-# latched as std_msgs/String on /selected_robot (the only place a robot is chosen: every GUI reads that topic)
-# and applied to the third-party panels of the same window (steering topic, joint trajectory controller manager).
+# The single robot selector of the sim GUI: one combo box in the one rqt window. The chosen robot lives on the latched
+# std_msgs/String /selected_robot (every GUI reads that topic); its one writer is the owner node
+# (nodes/selected_robot.py), which this combo asks on /selected_robot/request. The combo, the steering topic and the
+# joint trajectory controller manager of the same window follow /selected_robot, also when another switch changed it.
+# Without an owner node (an older launch) the selector publishes /selected_robot itself and publishes a choice made
+# in another GUI again, so every latched message names the same robot.
 import re
 
 import rosgraph
@@ -10,29 +13,8 @@ from rqt_gui_py.plugin import Plugin
 from std_msgs.msg import String
 
 from mobipick_gazebo.robot_colours import colour_icon, robot_label
-
-SELECTED_ROBOT_TOPIC = "/selected_robot"
-DEFAULT_ROBOT = "mobipick"
-_NAV_STATUS = re.compile(r"^/([^/]+)/move_base/status$")
-
-
-def normalize(namespace):
-    return (namespace or "").strip("/") or DEFAULT_ROBOT
-
-
-def _number(namespace):
-    match = re.search(r"(\d+)$", namespace)
-    return int(match.group(1)) if match else 1
-
-
-def robots_from_topics(topic_names, current=DEFAULT_ROBOT):
-    """robot namespaces with a running move_base (from the published topic names), natural order, plus `current`"""
-    robots = {normalize(current)}
-    for topic in topic_names:
-        match = _NAV_STATUS.match(topic)
-        if match:
-            robots.add(match.group(1))
-    return sorted(robots, key=lambda r: (_number(r), r))
+from mobipick_gazebo.selected_robot import (DEFAULT_ROBOT, REQUEST_TOPIC, SELECTED_ROBOT_TOPIC,  # noqa: F401
+                                            normalize, owner_running, robots_from_topics)
 
 
 def published_robot(timeout=0.7):
@@ -42,6 +24,15 @@ def published_robot(timeout=0.7):
         return normalize(rospy.wait_for_message(SELECTED_ROBOT_TOPIC, String, timeout=timeout).data)
     except rospy.ROSException:
         return None
+
+
+def to_follow(current, heard):
+    """the robot to switch to when /selected_robot carries `heard`, None when it is the robot already chosen. Without
+    an owner node every GUI that publishes the topic adopts a choice made elsewhere and publishes it again, so the
+    latched message of every publisher names the same robot and a window opened later reads that robot from all of
+    them."""
+    heard = normalize(heard)
+    return None if heard == normalize(current) else heard
 
 
 def description_key(key, namespace, has_param):
@@ -108,7 +99,10 @@ def apply_to_panels(namespace, widgets):
 
 
 class RobotSelectorPlugin(Plugin):
-    """The one robot selector. Setting `robot` is the robot chosen last (default mobipick)."""
+    """The one robot selector. Setting `robot` is the robot chosen last (default mobipick); it is used only without an
+    owner node, which otherwise decides the robot."""
+
+    _robot_published = QtCore.pyqtSignal(str)  # /selected_robot arrives in a rospy thread
 
     def __init__(self, context):
         super().__init__(context)
@@ -127,18 +121,37 @@ class RobotSelectorPlugin(Plugin):
         self._combo.setToolTip("the robot every panel of this window and the RQT tables demo act on")
         self._combo.activated.connect(lambda _: self.select(self._combo.currentData()))
         row.addWidget(self._combo, 1)
-        self._publisher = rospy.Publisher(SELECTED_ROBOT_TOPIC, String, queue_size=1, latch=True)
+        self._master = rosgraph.Master("/robot_selector")
+        self._publisher = None  # /selected_robot, only while no owner node runs
+        self._requests = rospy.Publisher(REQUEST_TOPIC, String, queue_size=1)
+        self._robot_published.connect(self._follow)
+        self._subscriber = rospy.Subscriber(SELECTED_ROBOT_TOPIC, String,
+                                            lambda msg: self._robot_published.emit(msg.data))
         self._timer = QtCore.QTimer(self._widget)
         self._timer.timeout.connect(self._refresh)
         self._timer.start(3000)
         context.add_widget(self._widget)
         self._refresh()
-        self.select(self._adopted or self._robot)
+        if self._adopted:
+            self._follow(self._adopted)
+        elif not self._owner_running():  # with an owner, its latched choice arrives on the subscriber
+            self.select(self._robot)
+
+    def _owner_running(self):
+        """True when the owner node decides the robot; this window then stops writing /selected_robot itself"""
+        try:
+            running = owner_running(self._master.getSystemState())
+        except Exception:  # no master answer: act alone, as without an owner
+            return False
+        if running and self._publisher is not None:  # the owner came up after this window: it is the only writer now
+            self._publisher.unregister()
+            self._publisher = None
+        return running
 
     def _refresh(self):
         """the robot list follows the running robots; panels not yet ready (controller manager list) are retried"""
         try:
-            topics = [name for name, _ in rosgraph.Master("/robot_selector").getPublishedTopics("/")]
+            topics = [name for name, _ in self._master.getPublishedTopics("/")]
         except Exception as exc:  # no master answer: keep the list
             rospy.logwarn_throttle(30, f"could not list the robots: {exc}")
             topics = []
@@ -152,18 +165,42 @@ class RobotSelectorPlugin(Plugin):
         apply_to_panels(self._robot, QtWidgets.QApplication.allWidgets())
 
     def select(self, namespace):
+        """a pick in this selector: ask the owner node; without one, publish the robot and follow it at once"""
+        namespace = normalize(namespace)
+        if self._owner_running():
+            # the combo shows the asked robot only when /selected_robot says so (the owner may refuse it)
+            self._combo.setCurrentIndex(max(self._combo.findData(self._robot), 0))
+            self._requests.publish(String(data=namespace))
+            return
+        if self._publisher is None:
+            self._publisher = rospy.Publisher(SELECTED_ROBOT_TOPIC, String, queue_size=1, latch=True)
+        self._publisher.publish(String(data=namespace))
+        self._robot = namespace  # chosen here: nothing to publish again when it comes back
+        self._follow(namespace)
+
+    def _follow(self, namespace):
+        """show and apply the robot /selected_robot names, whoever chose it"""
+        if self._publisher is not None and to_follow(self._robot, namespace) is not None and not self._owner_running():
+            self._publisher.publish(String(data=normalize(namespace)))  # no owner: agree with the other writers
         self._robot = normalize(namespace)
         _selected[0] = self._robot
+        if self._combo.findData(self._robot) < 0:
+            self._refresh()  # a robot this list has not seen yet
         self._combo.setCurrentIndex(max(self._combo.findData(self._robot), 0))
-        self._publisher.publish(String(data=self._robot))
         apply_to_panels(self._robot, QtWidgets.QApplication.allWidgets())
 
     def save_settings(self, plugin_settings, instance_settings):
         instance_settings.set_value("robot", self._robot)
 
     def restore_settings(self, plugin_settings, instance_settings):
-        self.select(self._adopted or str(instance_settings.value("robot") or DEFAULT_ROBOT))
+        if self._adopted:
+            self._follow(self._adopted)
+        elif not self._owner_running():
+            self.select(str(instance_settings.value("robot") or DEFAULT_ROBOT))
 
     def shutdown_plugin(self):
         self._timer.stop()
-        self._publisher.unregister()
+        self._subscriber.unregister()
+        self._requests.unregister()
+        if self._publisher is not None:
+            self._publisher.unregister()

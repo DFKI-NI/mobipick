@@ -47,10 +47,17 @@
 
   <!-- ONE sim GUI window for all robots (with gui:=true) with ONE robot selector: a selector panel, a teleop, a
        joint trajectory controller and a simulated e-stop panel (config/sim_gui_x<N>.perspective, made by
-       nodes/make_sim_gui_perspective.py). The chosen robot is published latched on /selected_robot and every panel
-       of this window acts on it. The RQT tables demo does not follow it: start it per robot with its namespace argument. The e-stop panel serves <ns>/rqt_sim_gui/set_estop and
+       nodes/make_sim_gui_perspective.py). The chosen robot is published latched on /selected_robot by the owner node
+       below and every panel (and the RQT tables demo) acts on it. The e-stop panel serves <ns>/rqt_sim_gui/set_estop and
        set_protective_stop of every robot, like a per-robot window. With gui:=false each robot starts its own headless
        dashboard as before. -->
+  <!-- the one owner of the selected robot (also headless, gui:=false): the only writer of the latched
+       /selected_robot (std_msgs/String, starts on robot 1); every switch asks it on /selected_robot/request and it
+       refuses a robot that does not run -->
+  <node name="selected_robot_owner" pkg="mobipick_gazebo" type="selected_robot.py" output="screen">
+    <param name="initial_robot" value="$(arg namespace)" />
+  </node>
+
   <node if="$(arg gui)" name="rqt_sim_gui_all" pkg="rqt_gui" type="rqt_gui"
         args="--perspective-file $(find mobipick_gazebo)/config/sim_gui_x$(arg num_robots).perspective">
     <param name="default_vx_max" value="1.0" />

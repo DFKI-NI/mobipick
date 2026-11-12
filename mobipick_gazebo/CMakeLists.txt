@@ -44,6 +44,7 @@ install(PROGRAMS
   nodes/simulated_dope_image_relay.py
   nodes/simulated_ur_dashboard.py
   nodes/make_sim_gui_perspective.py
+  nodes/selected_robot.py
   nodes/spawn_wall_stripe.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
