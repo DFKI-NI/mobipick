@@ -4,6 +4,7 @@
 # only when /selected_robot says so. A single writer matters: ROS 1 hands a late subscriber the latched message of
 # every publisher of a topic in no defined order, so two writers can leave a window on the older choice.
 import re
+import threading
 
 SELECTED_ROBOT_TOPIC = "/selected_robot"
 REQUEST_TOPIC = "/selected_robot/request"
@@ -39,18 +40,25 @@ def owner_running(system_state):
 
 class SelectedRobotOwner:
     """Keeps the selected robot. `publish(namespace)` sends the choice (latched), `topic_names()` lists the published
-    topics, `warn(text)` logs why a request was refused."""
+    topics, `warn(text)` logs why a request was refused. Requests may come in from several threads at once (rospy runs
+    one thread per connected publisher): each one decides and publishes under one lock, so the last message sent, the
+    one a late subscriber gets, is always the stored choice."""
 
     def __init__(self, publish, topic_names, warn, initial=DEFAULT_ROBOT):
         self._publish = publish
         self._topic_names = topic_names
         self._warn = warn
+        self._lock = threading.Lock()
         self.robot = normalize(initial)
         self._publish(self.robot)
 
     def request(self, namespace):
         """switch to `namespace` when that robot runs; otherwise say why and send the current choice again, so the
         switch that asked snaps back. Returns the robot selected afterwards."""
+        with self._lock:
+            return self._request(namespace)
+
+    def _request(self, namespace):
         wanted = (namespace or "").strip("/")
         if not wanted:
             self._warn(f"selected robot: empty request ignored; still {self.robot}")

@@ -1,5 +1,6 @@
 import os
 import sys
+import threading
 import unittest
 from unittest import mock
 
@@ -50,6 +51,61 @@ class OwnerTest(unittest.TestCase):
         owner.request("mobipick3")
         self.assertEqual(owner.robot, "mobipick3")
         self.assertEqual(self.sent[-1], "mobipick3")
+
+    def test_two_requests_at_the_same_time_publish_the_stored_choice_last(self):
+        # request A (mobipick2) is held inside its publish while request B (mobipick3) comes in from another thread;
+        # without a lock B publishes first and A's late publish leaves /selected_robot on mobipick2 while the owner
+        # holds mobipick3
+        sent, warned = [], []
+        a_publishing, release_a = threading.Event(), threading.Event()
+
+        def publish(robot):
+            if robot == "mobipick2" and not release_a.is_set():
+                a_publishing.set()
+                release_a.wait(5)
+            sent.append(robot)
+
+        owner = selected_robot.SelectedRobotOwner(publish, lambda: RUNNING + ["/mobipick3/move_base/status"],
+                                                  warned.append, "mobipick")
+        a = threading.Thread(target=owner.request, args=("mobipick2",))
+        b = threading.Thread(target=owner.request, args=("mobipick3",))
+        a.start()
+        self.assertTrue(a_publishing.wait(5))
+        b.start()
+        b.join(0.3)
+        self.assertTrue(b.is_alive(), "request B ran while request A was still publishing")
+        release_a.set()
+        a.join(5)
+        b.join(5)
+        self.assertEqual(sent, ["mobipick", "mobipick2", "mobipick3"])
+        self.assertEqual(owner.robot, sent[-1])  # a late subscriber gets the latched last message: the stored choice
+        self.assertEqual(warned, [])
+
+    def test_a_refused_request_at_the_same_time_snaps_back_to_the_stored_choice(self):
+        sent, warned = [], []
+        a_publishing, release_a = threading.Event(), threading.Event()
+
+        def publish(robot):
+            if robot == "mobipick2" and not release_a.is_set():
+                a_publishing.set()
+                release_a.wait(5)
+            sent.append(robot)
+
+        owner = selected_robot.SelectedRobotOwner(publish, lambda: RUNNING, warned.append, "mobipick")
+        a = threading.Thread(target=owner.request, args=("mobipick2",))
+        b = threading.Thread(target=owner.request, args=("mobipick7",))
+        a.start()
+        self.assertTrue(a_publishing.wait(5))
+        b.start()
+        b.join(0.3)
+        self.assertTrue(b.is_alive())
+        release_a.set()
+        a.join(5)
+        b.join(5)
+        self.assertEqual(sent, ["mobipick", "mobipick2", "mobipick2"])
+        self.assertEqual(owner.robot, "mobipick2")
+        self.assertEqual(len(warned), 1)
+        self.assertIn("still mobipick2", warned[0])
 
     def test_the_owner_is_found_by_its_request_subscriber(self):
         state = ([], [[selected_robot.REQUEST_TOPIC, ["/selected_robot_owner"]], ["/selected_robot", ["/a"]]], [])
