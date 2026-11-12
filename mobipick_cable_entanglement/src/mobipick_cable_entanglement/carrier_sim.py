@@ -50,6 +50,14 @@ def chain_links(length: float, chain: Optional[dict] = None) -> int:
     return int(c["links"]) or max(2, math.ceil(length / float(c["max_link_length"]) - 1e-9))
 
 
+def arm_joint_state(names, positions, arm_joints) -> Optional[Dict[str, float]]:
+    """{joint: angle} of one JointState message (`names`, `positions`) when it carries every joint of `arm_joints`,
+    else None (a message of another part of the robot, e.g. only the gripper)"""
+    q = {n: float(p) for n, p in zip(names, positions)}
+    have = {n.split("/")[-1] for n in q}   # with or without the robot's prefix
+    return q if all(j.split("/")[-1] in have for j in arm_joints) else None
+
+
 def resample_equal(points: np.ndarray, n: int) -> np.ndarray:
     """n + 1 points at equal distances along a polyline: what the plugin does with the initial points"""
     points = np.asarray(points, dtype=float)

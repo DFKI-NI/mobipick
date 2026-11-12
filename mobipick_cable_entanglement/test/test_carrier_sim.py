@@ -93,6 +93,29 @@ class Wiring(unittest.TestCase):
             length = np.linalg.norm(np.diff(pts, axis=0), axis=1).sum()
             self.assertAlmostEqual(length, span["carrier_free_length"], delta=0.02)
 
+    def test_arm_joint_state_needs_every_arm_joint(self):
+        arm = list(self.model.arm_joint_names.values())
+        self.assertIsNone(cs.arm_joint_state([P + "gripper_finger_joint"], [0.1], arm))
+        self.assertIsNone(cs.arm_joint_state(arm[:-1], [0.0] * 5, arm))
+        q = cs.arm_joint_state(arm + [P + "gripper_finger_joint"], [0.5] * 7, arm)
+        self.assertEqual(q[arm[0]], 0.5)
+        self.assertIsNotNone(cs.arm_joint_state([a.split("/")[-1] for a in arm], [0.0] * 6, arm))   # no prefix
+
+    def test_the_publisher_default_pose_misses_the_spawn_clamp(self):
+        # what went wrong in the sim: the merged joint_states first carry the joint_state_publisher's default pose
+        # (zeros, wrist 3 at the middle of its limits); a shape for that pose ends far from the wrist clamp at the
+        # spawn pose, so the plugin refused it
+        span = CONFIG["spans"]["wrist"]
+        spawn = {P + "ur5_" + j + "_joint": v for j, v in zip(
+            ("shoulder_pan", "shoulder_lift", "elbow", "wrist_1", "wrist_2", "wrist_3"), (0, -2.10, 2.43, -2.05, -1.57, 3.14))}
+        default = dict({k: 0.0 for k in spawn}, **{P + "ur5_wrist_3_joint": 2.662})
+        parent, _ = cs.anchor_in_gazebo(self.kin, P, span["carrier_start"])
+        child, pb = cs.anchor_in_gazebo(self.kin, P, span["carrier_end"])
+        poses = self.kin.link_poses([parent, child], self.model._full_q(spawn))
+        clamp_b = (np.linalg.inv(poses[parent]) @ poses[child] @ np.append(pb, 1.0))[:3]
+        self.assertLess(np.linalg.norm(cs.initial_points_from_model(self.model, spawn, CONFIG, P)[-1] - clamp_b), 0.02)
+        self.assertGreater(np.linalg.norm(cs.initial_points_from_model(self.model, default, CONFIG, P)[-1] - clamp_b), 0.02)
+
     def test_initial_shape_keeps_every_joint_within_the_plugins_bend_limit(self):
         # the plugin resamples the points to equal links; the model's settled shape bent single joints to 0.61 rad at
         # home against the limit link / bend radius = 0.51 rad, so the chain started inside its joint limits

@@ -48,9 +48,23 @@ class CableCarrierSim:
         self._in_event = False
         self._peak = None
 
+    def arm_joints(self, timeout=120.0):
+        """the arm's joint angles from Gazebo itself (<ns>/gazebo_joint_states, the source the joint_state_publisher
+        merges): the merged <ns>/joint_states starts with the publisher's default pose (zeros, a joint whose limits
+        exclude zero at their middle) until Gazebo's first message arrives, and a shape computed for that pose misses
+        the wrist clamp, so the plugin dropped it and the chain started stretched in the fallback arc"""
+        topic = rospy.get_param("~joint_states_topic", self.ns + "/gazebo_joint_states")
+        deadline = time.time() + timeout
+        while not rospy.is_shutdown() and time.time() < deadline:
+            msg = rospy.wait_for_message(topic, JointState, max(1.0, deadline - time.time()))
+            q = carrier_sim.arm_joint_state(msg.name, msg.position, self.model.arm_joint_names.values())
+            if q is not None:
+                return q
+        raise RuntimeError("cable carrier sim: no message on %s with every arm joint (%s) in %.0f s"
+                           % (topic, ", ".join(self.model.arm_joint_names.values()), timeout))
+
     def spawn(self):
-        msg = rospy.wait_for_message(rospy.get_param("~joint_states_topic", self.ns + "/joint_states"), JointState)
-        q = dict(zip(msg.name, msg.position))
+        q = self.arm_joints()
         t0 = time.time()
         points = carrier_sim.initial_points_from_model(self.model, q, self.config, self.prefix)
         trigger = bool(rospy.get_param("~trigger_protective_stop", False))
@@ -61,8 +75,10 @@ class CableCarrierSim:
                           if trigger else ""),
             stop_strain=self.event_strain, stop_force=self.event_force, stop_ticks=self.event_ticks,
             holder_name=self.chain_name + "_holder", chain_name=self.chain_name)
-        rospy.loginfo("cable carrier sim: initial shape settled in %.1f s (%d points), EI %.3g N m^2, damping %.3g "
-                      ", protective stop %s", time.time() - t0, len(points),
+        rospy.loginfo("cable carrier sim: initial shape settled in %.1f s (%d points) at arm joints %s, EI %.3g N m^2, "
+                      "damping %.3g, protective stop %s", time.time() - t0, len(points),
+                      " ".join("%.3f" % v for k, v in sorted(self.model._full_q(q).items())
+                               if k in self.model.arm_joint_names.values()),
                       self.chain["bending_stiffness"], self.chain["damping"], "ON" if trigger else "off (events only)")
         service = rospy.get_param("~spawn_service", "/gazebo/spawn_sdf_model")
         rospy.wait_for_service(service)
