@@ -470,8 +470,12 @@ class CableEntanglementMonitor:
             q = dict(self._q) if self._q else None
         if not q:
             return TriggerResponse(success=False, message="no joint states yet")
-        self.model.reset(q)
-        self.resets.forget_rest(rospy.get_time(), q, ARM_JOINTS)
+        # under the model lock like every other change of the live chain: the service runs in its own thread, and a
+        # tick updating the chain while the reset rebuilds it read a half-built chain (a failed chain, then a jump to
+        # +75 % stretch and a sim protective stop with the arm standing still)
+        with self._model_lock:
+            self.model.reset(q)
+            self.resets.forget_rest(rospy.get_time(), q, ARM_JOINTS)
         self._armed = True
         return TriggerResponse(success=True, message="cable model reset: cable assumed untangled")
 
