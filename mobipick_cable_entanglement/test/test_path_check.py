@@ -12,7 +12,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "..", "src"))
 
 from test_cable_model import ANYGRASP, HOME, OBSERVE, load  # noqa: E402
-from mobipick_cable_entanglement.path_check import resample, carrier_replay  # noqa: E402
+from mobipick_cable_entanglement.path_check import ReplayStopped, STOP_CHECK_TICKS, resample, carrier_replay  # noqa: E402
 
 J = ["shoulder_pan", "shoulder_lift", "elbow", "wrist_1", "wrist_2", "wrist_3"]
 PLACE_END = [-90.4, -131.3, 140.3, -148.3, -91.0, 83.5]      # tennis ball place end, 02:03 (wrist_3 83.5)
@@ -52,6 +52,39 @@ class TestChainReplay(unittest.TestCase):
         for target in (ANYGRASP, OBSERVE):
             v = carrier_replay(load(carrier=True), path(HOME, target, target, seconds=3.0))
             self.assertFalse(v.stop, f"{target}: {v.limiting} {v.max_stretch:+.3f}")
+
+    def test_a_stop_ends_the_replay_at_once(self):
+        # the callable is asked every STOP_CHECK_TICKS ticks: a True ends the replay with ReplayStopped, long before
+        # the end of a path that takes seconds
+        model, asked = load(carrier=True), []
+        updates = []
+        update = model.update
+        model.update = lambda *a, **k: updates.append(1) or update(*a, **k)
+
+        def should_stop():
+            asked.append(len(updates))
+            return len(asked) == 3
+
+        with self.assertRaises(ReplayStopped):
+            carrier_replay(model, path(HOME, ANYGRASP, seconds=10.0), should_stop=should_stop)
+        # asked once before the chain is settled, then at ticks 0, STOP_CHECK_TICKS, ...: the third ask stops the replay
+        self.assertEqual(asked, [0, 0, STOP_CHECK_TICKS])
+        self.assertLessEqual(len(updates), STOP_CHECK_TICKS)
+        # every tick: a tick takes about 60 ms on one CPU and 140 ms in the sim, every 8th tick was up to 1.1 s late
+        self.assertEqual(STOP_CHECK_TICKS, 1)
+
+    def test_a_stop_before_the_settle_does_not_even_settle_the_chain(self):
+        model, resets = load(carrier=True), []
+        reset = model.reset
+        model.reset = lambda *a, **k: resets.append(1) or reset(*a, **k)
+        with self.assertRaises(ReplayStopped):
+            carrier_replay(model, path(HOME, OBSERVE, seconds=3.0), should_stop=lambda: True)
+        self.assertEqual(resets, [])
+
+    def test_a_stop_flag_that_stays_false_changes_nothing(self):
+        plain = carrier_replay(load(carrier=True), path(HOME, OBSERVE, seconds=3.0))
+        asked = carrier_replay(load(carrier=True), path(HOME, OBSERVE, seconds=3.0), should_stop=lambda: False)
+        self.assertEqual((plain.stop, plain.max_stretch, plain.updates), (asked.stop, asked.max_stretch, asked.updates))
 
     def test_empty_path(self):
         self.assertIsNone(carrier_replay(load(carrier=True), []))

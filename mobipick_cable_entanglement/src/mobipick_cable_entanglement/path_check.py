@@ -13,13 +13,22 @@ old name of carrier_replay.)
 """
 import math
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Callable, Dict, List, Optional, Sequence, Tuple
 
 Sample = Tuple[float, Dict[str, float]]  # (time in s, joint positions in rad)
 
 # a live chain state seeds a replay only when it is this fresh and was taken at the path's first joint positions
 LIVE_STATE_MAX_AGE_S = 1.0
 LIVE_STATE_Q_TOLERANCE = 0.02   # rad, every arm joint
+
+
+# a replay asks its should_stop callable every this many ticks (one tick is a CableModel.update, 60 ms offline and about
+# 140 ms in the sim; the check is a flag read, so every tick)
+STOP_CHECK_TICKS = 1
+
+
+class ReplayStopped(Exception):
+    """carrier_replay was asked to stop (its should_stop returned True) before it reached the end of the path."""
 
 
 @dataclass
@@ -93,7 +102,8 @@ def live_state_problem(model, state: Optional[dict], q0: Dict[str, float], now: 
 
 
 def carrier_replay(model, samples: Sequence[Sample], rate: float = 10.0,
-                   start_state: Optional[dict] = None) -> Optional[CarrierVerdict]:
+                   start_state: Optional[dict] = None,
+                   should_stop: Optional[Callable[[], bool]] = None) -> Optional[CarrierVerdict]:
     """Replay samples (time-ordered) through model.update with the carrier link chain on, from a chain hanging freely at
     the first sample, or with start_state (a CableModel.chain_state of the same config, see live_state_problem) from
     that chain.
@@ -101,16 +111,24 @@ def carrier_replay(model, samples: Sequence[Sample], rate: float = 10.0,
     model is a CableModel whose config has the chain enabled (cable_carrier.enabled) (it is reset here, so use one not
     shared with a live
     monitor). None for an empty path.
+
+    should_stop: called before the chain is settled and then every STOP_CHECK_TICKS ticks; when it returns True the replay
+    ends at once with ReplayStopped (a long path takes seconds, and a caller whose goal was cancelled must not wait for
+    the verdict). The settling of the start chain (about 60 model steps) itself is not interrupted.
     """
     path = resample(list(samples), rate)
     if not path:
         return None
+    if should_stop is not None and should_stop():
+        raise ReplayStopped("stopped before the chain was settled")
     if start_state is None:
         start_chain(model, path[0][1])
     else:
         model.restore_chain_state(start_state)
     worst, stop, last_t = None, False, path[0][0]
-    for t, q in path:
+    for tick, (t, q) in enumerate(path):
+        if should_stop is not None and tick % STOP_CHECK_TICKS == 0 and should_stop():
+            raise ReplayStopped(f"stopped at tick {tick} of {len(path)}")
         state = model.update(q, max(0.0, t - last_t), use_carrier=True, hysteresis=False, with_gradient=True)
         last_t = t
         stop = stop or bool(state.predicted_stop)
