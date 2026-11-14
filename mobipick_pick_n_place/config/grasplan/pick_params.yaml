@@ -83,3 +83,8 @@ open_set_topdown_min_overlap: 0.01
 # raise the bottom of a perceived object box that reaches into its table (noisy depth: the strawberry box ~1 cm into table_2)
 # to the table top, so the object does not collide with its support during the lift. Sim and real robot.
 clamp_object_boxes_to_support: true
+# lift_sunk_target_to_support (off in the code; set by the tables demo launch option, not here: this file is loaded after
+# the launch arguments and would override them) raises a closed-set pick target whose box bottom reaches into its support
+# until it stands 1 mm above the support top: a lift of at most this far (m) including the 1 mm clearance (a sink of up
+# to 29 mm); a deeper one stays as perceived
+lift_sunk_target_max: 0.03
