@@ -1,0 +1,70 @@
+# extra soup grasps, used only with ~extra_grasp_sets (off by default): the radial ring of
+# handcoded_grasp_planner_soup.yaml (8 directions x 2 flips) with the hand turned 90 deg about its approach
+# axis, so the fingers close along the can axis on its two flat ends (a can lying on its side next to
+# another object). Appended after the stored grasps; generated, do not edit by hand
+soup:
+  grasp_poses:
+    # from stored grasp 0
+    -
+      translation: [0.000052, -0.000115, 0.006935]
+      rotation: [0.707107, 0.000000, -0.707107, 0.000000]
+    # from stored grasp 3
+    -
+      translation: [0.000052, -0.000115, 0.006935]
+      rotation: [-0.000000, 0.707107, 0.000000, 0.707107]
+    # from stored grasp 4
+    -
+      translation: [0.004941, -0.000115, 0.004867]
+      rotation: [0.382684, 0.000000, -0.923879, 0.000000]
+    # from stored grasp 5
+    -
+      translation: [0.006935, -0.000115, -0.000052]
+      rotation: [0.000000, 0.000000, -1.000000, 0.000000]
+    # from stored grasp 6
+    -
+      translation: [0.004867, -0.000115, -0.004941]
+      rotation: [-0.382684, 0.000000, -0.923879, -0.000000]
+    # from stored grasp 7
+    -
+      translation: [-0.000052, -0.000115, -0.006935]
+      rotation: [-0.707107, 0.000000, -0.707107, -0.000000]
+    # from stored grasp 8
+    -
+      translation: [-0.004941, -0.000115, -0.004867]
+      rotation: [-0.923879, 0.000000, -0.382684, -0.000000]
+    # from stored grasp 9
+    -
+      translation: [-0.006935, -0.000115, 0.000052]
+      rotation: [-1.000000, 0.000000, -0.000000, -0.000000]
+    # from stored grasp 10
+    -
+      translation: [-0.004867, -0.000115, 0.004941]
+      rotation: [-0.923879, -0.000000, 0.382684, -0.000000]
+    # from stored grasp 11
+    -
+      translation: [0.004941, -0.000115, 0.004867]
+      rotation: [-0.000000, 0.923879, 0.000000, 0.382684]
+    # from stored grasp 12
+    -
+      translation: [0.006935, -0.000115, -0.000052]
+      rotation: [0.000000, 1.000000, 0.000000, 0.000000]
+    # from stored grasp 13
+    -
+      translation: [0.004867, -0.000115, -0.004941]
+      rotation: [0.000000, 0.923879, 0.000000, -0.382684]
+    # from stored grasp 14
+    -
+      translation: [-0.000052, -0.000115, -0.006935]
+      rotation: [0.000000, 0.707107, 0.000000, -0.707107]
+    # from stored grasp 15
+    -
+      translation: [-0.004941, -0.000115, -0.004867]
+      rotation: [0.000000, 0.382684, 0.000000, -0.923879]
+    # from stored grasp 16
+    -
+      translation: [-0.006935, -0.000115, 0.000052]
+      rotation: [0.000000, 0.000000, 0.000000, -1.000000]
+    # from stored grasp 17
+    -
+      translation: [-0.004867, -0.000115, 0.004941]
+      rotation: [0.000000, -0.382684, -0.000000, -0.923879]
