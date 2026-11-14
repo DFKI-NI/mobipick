@@ -88,3 +88,6 @@ clamp_object_boxes_to_support: true
 # until it stands 1 mm above the support top: a lift of at most this far (m) including the 1 mm clearance (a sink of up
 # to 29 mm); a deeper one stays as perceived
 lift_sunk_target_max: 0.03
+# drop_unknown_copy_of_target (careful, off in the code; set by the tables demo launch option, not here: this file is
+# loaded after the launch arguments and would override them): a closed-set pick leaves out of its planning scene an
+# entry without stored grasps that may be the target itself, found a second time by the search for unknown objects
