@@ -9,6 +9,7 @@
   <arg name="ur5_kinematics_file" default="$(find mobipick_description)/config/ur5_calibration.yaml"/>
   <arg name="transmission_hw_interface" default="hardware_interface/VelocityJointInterface" />
   <arg name="grasp_fix" default="false" doc="Attach grasped objects with the gazebo_grasp_fix plugin instead of relying on friction (legacy hack, off by default)" />
+  <arg name="pad_torsional_friction" default="true" doc="Simulation only: torsional friction on the gripper pads (gazebo_contact_surface_tuner plugin), so a round object gripped off the pad centre does not swing about the closing axis; false leaves it out" />
   <arg name="parking_brake" default="false" doc="Simulation only: add the gazebo_parking_brake plugin, which holds the base while it gets no drive command and stands still, as the real base brakes when idle" />
   <arg name="robot_colour_index" default="0" doc="Multi-robot sim: paint the side covers of the body in the colour of robot k (1-based, mobipick_description/config/robot_colours.yaml: 1 blue, 2 orange, 3 green, 4 purple); 0: unpainted (default)" />
 
@@ -20,6 +21,7 @@
     kinematics_config:=$(arg ur5_kinematics_file)
     transmission_hw_interface:=$(arg transmission_hw_interface)
     grasp_fix:=$(arg grasp_fix)
+    pad_torsional_friction:=$(arg pad_torsional_friction)
     parking_brake:=$(arg parking_brake)
     robot_colour_index:=$(arg robot_colour_index)" />
 </launch>
