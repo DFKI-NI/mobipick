@@ -14,7 +14,8 @@
 
   <link name="tomato_soup_can">
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
+      <!-- rotated like the collision cylinder, so the small axial inertia (izz of the macro) lies on the can axis (link y) -->
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
       <mass value="${mass}" />
       <xacro:cylinder_inertia m="${mass}" r="${radius}" h="${height}" />
     </inertial>
