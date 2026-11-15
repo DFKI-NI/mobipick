@@ -22,6 +22,14 @@
   <xacro:property name="fingertip_min_depth" default="0.002" />
   <xacro:property name="fingertip_max_vel" default="0.01" /> <!-- ODE default -->
 
+  <!-- Torsional friction of the pads (ODE), set by the gazebo_contact_surface_tuner plugin because Gazebo's URDF reader
+       cannot put a torsional block under a collision. Without it a round object gripped off its centre line (a can
+       lying across the pads) swings about the closing axis. The sim only: the real gripper has soft pads. Switch off
+       with the xacro arg pad_torsional_friction:=false. patch_radius is about half the pad width (27.1 mm). -->
+  <xacro:arg name="pad_torsional_friction" default="true" />
+  <xacro:property name="fingertip_torsional_coefficient" default="1.0" />
+  <xacro:property name="fingertip_patch_radius" default="0.0135" />
+
   <xacro:macro name="robotiq_fingertip_65mm" params="prefix fingerprefix stroke">
     <link name="${prefix}${fingerprefix}_robotiq_fingertip_65mm">
       <inertial>
@@ -61,6 +69,16 @@
       <minDepth>${fingertip_min_depth}</minDepth>
       <maxVel>${fingertip_max_vel}</maxVel>
     </gazebo>
+    <xacro:if value="$(arg pad_torsional_friction)">
+      <gazebo>
+        <plugin name="${prefix}${fingerprefix}_pad_torsional_friction" filename="libgazebo_contact_surface_tuner.so">
+          <collision_regex>${fingerprefix}_robotiq_fingertip_65mm_collision</collision_regex>
+          <torsional_coefficient>${fingertip_torsional_coefficient}</torsional_coefficient>
+          <use_patch_radius>true</use_patch_radius>
+          <patch_radius>${fingertip_patch_radius}</patch_radius>
+        </plugin>
+      </gazebo>
+    </xacro:if>
   </xacro:macro>
 
   <xacro:macro name="fingertip_joint" params="prefix fingerprefix">
