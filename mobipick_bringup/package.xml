@@ -19,6 +19,7 @@
   <exec_depend>astra_depth_filters</exec_depend>
   <exec_depend>cv_bridge</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>laser_filters</exec_depend>
   <exec_depend>mir_driver</exec_depend>
   <exec_depend>mobipick_description</exec_depend>
   <exec_depend>mobipick_moveit_config</exec_depend>

@@ -33,6 +33,7 @@
   <exec_depend>gazebo_ros_control</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>laser_filters</exec_depend>
   <exec_depend>mir_description</exec_depend>
   <exec_depend>mir_driver</exec_depend>
   <exec_depend>mir_gazebo</exec_depend>
