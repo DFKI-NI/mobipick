@@ -9,11 +9,13 @@
 
   <arg name="use_ur_polished_kinematics" default="false" />
   <arg name="robot_version" default="os" doc="Which variant of the mobipick? Can be 'hb' or 'os'" />
+  <arg name="arm_max_acceleration" default="2.0" doc="rad/s^2, max_acceleration of the six arm joints in joint_limits.yaml (time parameterization of every arm plan); 2.0 = the tested value" />
 
   <include file="$(dirname)/planning_context.launch">
     <arg name="tf_prefix" value="$(arg prefix)" />
     <arg name="robot_version" value="$(arg robot_version)" />
     <arg name="use_ur_polished_kinematics" value="$(arg use_ur_polished_kinematics)" />
+    <arg name="arm_max_acceleration" value="$(arg arm_max_acceleration)" />
   </include>
 
   <!-- GDB Debug Option -->
@@ -68,6 +70,7 @@
     <arg name="load_robot_description" value="$(arg load_robot_description)" />
     <arg name="robot_version" value="$(arg robot_version)" />
     <arg name="use_ur_polished_kinematics" value="$(arg use_ur_polished_kinematics)" />
+    <arg name="arm_max_acceleration" value="$(arg arm_max_acceleration)" />
     <arg name="tf_prefix" value="$(arg prefix)" />
   </include>
 

@@ -5,37 +5,39 @@ default_acceleration_scaling_factor: 1.0
 
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
+# The six arm joints take max_acceleration from the launch arg arm_max_acceleration (planning_context.launch,
+# default 2.0 rad/s^2); the gripper joint keeps its own value.
 joint_limits:
   $(arg prefix)ur5_shoulder_pan_joint:
     has_velocity_limits: true
     max_velocity: 1.50
     has_acceleration_limits: true
-    max_acceleration: 2.0
+    max_acceleration: $(arg arm_max_acceleration)
   $(arg prefix)ur5_shoulder_lift_joint:
     has_velocity_limits: true
     max_velocity: 1.50
     has_acceleration_limits: true
-    max_acceleration: 2.0
+    max_acceleration: $(arg arm_max_acceleration)
   $(arg prefix)ur5_elbow_joint:
     has_velocity_limits: true
     max_velocity: 1.50
     has_acceleration_limits: true
-    max_acceleration: 2.0
+    max_acceleration: $(arg arm_max_acceleration)
   $(arg prefix)ur5_wrist_1_joint:
     has_velocity_limits: true
     max_velocity: 1.50
     has_acceleration_limits: true
-    max_acceleration: 2.0
+    max_acceleration: $(arg arm_max_acceleration)
   $(arg prefix)ur5_wrist_2_joint:
     has_velocity_limits: true
     max_velocity: 1.50
     has_acceleration_limits: true
-    max_acceleration: 2.0
+    max_acceleration: $(arg arm_max_acceleration)
   $(arg prefix)ur5_wrist_3_joint:
     has_velocity_limits: true
     max_velocity: 1.50
     has_acceleration_limits: true
-    max_acceleration: 2.0
+    max_acceleration: $(arg arm_max_acceleration)
   $(arg prefix)gripper_finger_joint:
     has_velocity_limits: true
     max_velocity: 1.50

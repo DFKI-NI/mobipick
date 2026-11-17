@@ -6,6 +6,7 @@
   <arg name="robot_description" default="robot_description"/>
   <arg name="robot_version" default="os" />
   <arg name="use_ur_polished_kinematics" default="false" />
+  <arg name="arm_max_acceleration" default="2.0" doc="rad/s^2, max_acceleration of the six arm joints in joint_limits.yaml (time parameterization of every arm plan); 2.0 = the tested value" />
 
   <!-- The wrist camera point cloud can arrive while Gazebo is CPU-bound by
        grasp planning.  Allow the robot-state TF cache to catch up before
