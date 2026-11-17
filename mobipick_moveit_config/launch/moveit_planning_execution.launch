@@ -5,6 +5,7 @@
 
   <arg name="use_ur_polished_kinematics" default="false" />
   <arg name="arm_max_acceleration" default="2.0" doc="rad/s^2, max_acceleration of the six arm joints for MoveIt (see mobipick_moveit_config planning_context.launch); 2.0 = the tested value" />
+  <arg name="wrist_max_velocity" default="1.5" doc="rad/s, max_velocity of the three wrist joints for MoveIt (see mobipick_moveit_config planning_context.launch); 1.5 = the tested value" />
   <arg name="robot_version" default="os" doc="Can be hb or os, changes some parts in the urdf, hardware serials etc." />
 
   <!-- Select the PointCloud2 updater when true, or the depth-image updater when false. -->
@@ -21,6 +22,7 @@
       <arg name="robot_version" value="$(arg robot_version)" />
       <arg name="use_ur_polished_kinematics" value="$(arg use_ur_polished_kinematics)" />
       <arg name="arm_max_acceleration" value="$(arg arm_max_acceleration)" />
+      <arg name="wrist_max_velocity" value="$(arg wrist_max_velocity)" />
       <arg name="publish_monitored_planning_scene" value="true" />
       <arg name="info" value="true" />
       <arg name="use_pointcloud" value="$(arg use_pointcloud)" />
